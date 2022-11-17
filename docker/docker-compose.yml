@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  db:
+    image: mariadb:latest
+    env_file:
+      - ../docker.env
+    ports:
+      - ${DB_PORT_MAP:-3306}:3306
+    volumes:
+      - db:/var/lib/mysql
+      - ../wp-data:/docker-entrypoint-initdb.d
+
+  wordpress:
+    build:
+      context: .
+      dockerfile: wp.Dockerfile
+    depends_on:
+      - db
+    env_file:
+      - ../docker.env
+    environment:
+      WORDPRESS_DB_HOST: db
+    ports:
+      - ${WP_PORT_MAP:-8080}:80
+    volumes:
+      - wordpress:/var/www/html
+      - ..:/var/www/html/wp-content/${PROJECT_TYPE}s/${PROJECT_NAME}
+      - ./php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
+    command: apache2-wpsetup
+
+volumes:
+  wordpress:
+  db:

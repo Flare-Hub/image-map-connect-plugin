@@ -1,0 +1,30 @@
+{
+  "name": "your-plugin",
+  "version": "1.0.0",
+  "description": "Template for developing a wordpress plugin in a docker container using wp-scripts and react.",
+  "scripts": {
+    "start": "npm-run-all --parallel dockerup watch sync",
+    "sync": "node browser-sync.js",
+    "build": "wp-scripts build",
+    "watch": "wp-scripts start",
+    "dockerup": "docker compose --env-file docker.env --file ./docker/docker-compose.yml up",
+    "dockerdown": "docker compose --env-file docker.env --file ./docker/docker-compose.yml down",
+    "wp": "docker compose --env-file docker.env --file ./docker/docker-compose.yml exec wordpress wp"
+  },
+  "keywords": [
+    "wordpress",
+    "docker",
+    "docker-compose",
+    "react",
+    "wp-scripts"
+  ],
+  "author": "Igor Honhoff",
+  "license": "MIT",
+  "devDependencies": {
+    "@wordpress/scripts": "^24.6.0",
+    "browser-sync": "^2.27.10",
+    "dotenv": "^16.0.3",
+    "npm-run-all": "^4.1.5",
+    "wait-on": "^6.0.1"
+  }
+}

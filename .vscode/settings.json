@@ -1,0 +1,19 @@
+{
+  "php.suggest.basic": false,
+  "phpsab.snifferShowSources": true,
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MariaDB",
+      "name": "wordpress",
+      "database": "wordpress",
+      "username": "wordpress",
+      "password": "wordpress"
+    }
+  ],
+}
