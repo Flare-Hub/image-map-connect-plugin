@@ -42,6 +42,12 @@ class Plugin {
 	 **/
 	public function plugins_loaded() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+
+		$image_map = new ImageMap();
+		add_action( 'init', array( $image_map, 'register_image_map' ) );
+
+		$marker = new Marker();
+		add_action( 'init', array( $marker, 'register_marker_cpt' ) );
 	}
 
 	/**
