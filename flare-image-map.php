@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name:     Flare Image Map
- * Plugin URI:			https://github.com/dutchigor/flare-image-map-plugin
- * Description:			Create floor plans or event maps and place posts on them.
- * Author:					Igor Honhoff
- * Author URI:			https://github.com/dutchigor
+ * Plugin URI:      https://github.com/dutchigor/flare-image-map-plugin
+ * Description:     Create floor plans or event maps and place posts on them.
+ * Author:          Igor Honhoff
+ * Author URI:      https://github.com/dutchigor
  * Text Domain:     flare-im
  * Domain Path:     /languages
  * Version:         0.1.0
