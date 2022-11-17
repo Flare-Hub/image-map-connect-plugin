@@ -10,8 +10,15 @@
       "request": "launch",
       "port": 9003,
       "pathMappings": {
-        "/var/www/html/wp-content/plugins/your-plugin": "${workspaceFolder}"
+        "/var/www/html/wp-content/plugins/flare-image-map": "${workspaceFolder}"
       },
-    }
+    },
+    {
+      "name": "Attach to Edge",
+      "type": "msedge",
+      "port": 9222,
+      "request": "attach",
+      "webRoot": "${workspaceFolder}"
+    },
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "your-plugin",
+  "name": "flare-image-map",
   "version": "1.0.0",
   "description": "Template for developing a wordpress plugin in a docker container using wp-scripts and react.",
   "scripts": {

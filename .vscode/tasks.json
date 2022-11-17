@@ -1,0 +1,88 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Launch Docker",
+      "type": "shell",
+      "hide": true,
+      "options": {
+        "cwd": "C:/Program Files/Docker/Docker/",
+        "shell": {
+          "executable": "powershell.exe"
+        }
+      },
+      "command": "Start-Process 'Docker Desktop'",
+      "presentation": {
+        "reveal": "never",
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "Serve",
+      "detail": "Start docker, BrowserSync and WebPack",
+      "type": "npm",
+      "script": "start",
+      "options": {
+        "env": {
+          "BROWSERS": "none",
+        }
+      },
+      "problemMatcher": [],
+      "promptOnClose": true,
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "close": true
+      }
+    },
+    {
+      "label": "wait-for-server",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "wait-on",
+        "http://localhost:3000"
+      ],
+      "hide": true,
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared",
+        "close": false,
+      }
+    },
+    {
+      "label": "Open Edge",
+      "detail": "Open Edge browser in debug mode after server is up",
+      "type": "shell",
+      "command": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge",
+      "args": [
+        "--remote-debugging-port=9222",
+        "--user-data-dir=C:/Users/IgorH/AppData/Roaming/edge/remote-debug-profile",
+        "http://localhost:3000/wp-admin/"
+      ],
+      "dependsOn": "wait-for-server",
+      "presentation": {
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "close": false,
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start",
+      "detail": "Start WP server and open Edge",
+      "dependsOn": [
+        "Open Edge",
+        "Serve"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

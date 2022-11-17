@@ -1,6 +1,6 @@
 <?php
 
-namespace YourOrg\YourPlugin;
+namespace Flare\ImageMap;
 
 /**
  * Create classes for the different features of your plugin.
@@ -21,8 +21,8 @@ class Dummy {
 		$this->app = new ReactApp( 'demo-app', 'dummy-menu' );
 
 		add_menu_page(
-			__( 'Dummy page', 'your-plugin' ),
-			__( 'Dummy menu', 'your-plugin' ),
+			__( 'Dummy page', 'flare-image-map' ),
+			__( 'Dummy menu', 'flare-image-map' ),
 			'manage_options',
 			'dummy-page',
 			array( $this->app, 'load_app' ),

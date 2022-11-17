@@ -1,6 +1,6 @@
 <?php
 
-namespace YourOrg\YourPlugin;
+namespace Flare\ImageMap;
 
 /**
  * Backend management of a react app.
@@ -91,8 +91,15 @@ class ReactApp {
 	 **/
 	public function load_app( $post ) {
 		$this->enqueue_style();
+
+		$div_attr = "class=\"hide-if-no-js\" id=\"$this->id\"";
+
+		if ( $post ) {
+			$div_attr .= " data-post=\"$post->ID\"";
+		}
+
 		?>
-			<div id='<?php echo esc_attr( $this->id ); ?>' data-post='<?php echo esc_attr( $post->ID ); ?>' class="hide-if-no-js">
+			<div <?php echo wp_kses_data( $div_attr ); ?>>
 				<img src="/wp-admin/images/spinner-2x.gif" alt="Loading" class="center-img">
 			</div>
 			<noscript>This metabox requires javascript</noscript>

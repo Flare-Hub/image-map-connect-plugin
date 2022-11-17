@@ -1,6 +1,6 @@
 <?php
 
-namespace YourOrg\YourPlugin;
+namespace Flare\ImageMap;
 
 /**
  * Provide plugin lifecycle functions

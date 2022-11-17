@@ -1,10 +1,10 @@
 {
-  "name": "yourorg/your-plugin",
+  "name": "flare/image-map",
   "type": "wordpress-plugin",
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "YourOrg\\YourPlugin\\": "inc/"
+      "Flare\\ImageMap\\": "inc/"
     }
   },
   "require-dev": {

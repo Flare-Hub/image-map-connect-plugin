@@ -8,6 +8,7 @@
     "johnbillion.vscode-wordpress-hooks",
     "mtxr.sqltools",
     "mtxr.sqltools-driver-mysql",
-    "rapidapi.vscode-rapidapi-client"
+    "rapidapi.vscode-rapidapi-client",
+    "ms-edgedevtools.vscode-edge-devtools"
   ]
 }

@@ -10,7 +10,7 @@ RUN pecl install "xdebug" && docker-php-ext-enable xdebug
 
 # Prepare installation script
 RUN apt-get -q update && apt-get -qy install netcat
-COPY wait-for /usr/local/bin/
+COPY wait-for.sh /usr/local/bin/wait-for
 COPY wp-setup.sh /usr/local/bin/apache2-wpsetup
 RUN chmod +x /usr/local/bin/apache2-wpsetup \
 	&& chmod +rx /usr/local/bin/wait-for

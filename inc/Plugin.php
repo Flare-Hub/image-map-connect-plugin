@@ -1,6 +1,6 @@
 <?php
 
-namespace YourOrg\YourPlugin;
+namespace Flare\ImageMap;
 
 /**
  * Initialize the plugin
@@ -9,10 +9,10 @@ namespace YourOrg\YourPlugin;
  */
 class Plugin {
 
-	use \YourOrg\YourPlugin\Traits\Singleton;
+	use \Flare\ImageMap\Traits\Singleton;
 
 	/** @var string name */
-	const NAME = 'your-plugin';
+	const NAME = 'flare-image-map';
 
 	/** @var string version */
 	const VERSION = '0.1.0';
