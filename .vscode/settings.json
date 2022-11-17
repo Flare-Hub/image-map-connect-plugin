@@ -16,4 +16,5 @@
       "password": "wordpress"
     }
   ],
+  "task.allowAutomaticTasks": "on",
 }

@@ -21,6 +21,9 @@ services:
       - ../docker.env
     environment:
       WORDPRESS_DB_HOST: db
+      WORDPRESS_CONFIG_EXTRA: >
+        define( 'WP_SITEURL', 'http://localhost:${WP_PORT_MAP}' );
+        define( 'WP_HOME', 'http://localhost:${WP_PORT_MAP}' );
     ports:
       - ${WP_PORT_MAP:-8080}:80
     volumes:
