@@ -7,7 +7,7 @@ namespace Flare\ImageMap;
  *
  * @since 0.1.0
  */
-class Dummy {
+class ImageMapMenu {
 
 	/** @var ReactApp $app React app handler. */
 	public $app;
@@ -18,15 +18,15 @@ class Dummy {
 	 * @since 0.1.0
 	 **/
 	public function init() {
-		$this->app = new ReactApp( 'demo-app', 'dummy-menu' );
+		$this->app = new ReactApp( 'image-map', 'image-map' );
 
 		add_menu_page(
-			__( 'Dummy page', 'flare-im' ),
-			__( 'Dummy menu', 'flare-im' ),
-			'manage_options',
-			'dummy-page',
+			__( 'Image Maps', 'flare-im' ),
+			__( 'Image Maps', 'flare-im' ),
+			'manage_categories',
+			'image-maps',
 			array( $this->app, 'load_app' ),
-			'dashicons-controls-play',
+			'dashicons-location-alt',
 			6
 		);
 	}

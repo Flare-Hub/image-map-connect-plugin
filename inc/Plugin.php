@@ -52,9 +52,9 @@ class Plugin {
 	 * @since 0.1.0
 	 **/
 	public function admin_menu() {
-		$dummy = new Dummy();
-		$dummy->init();
-		add_action( 'admin_enqueue_scripts', array( $dummy->app, 'enqueue_script' ) );
+		$map_menu = new ImageMapMenu();
+		$map_menu->init();
+		add_action( 'admin_enqueue_scripts', array( $map_menu->app, 'register_script' ) );
 	}
 
 	/**

@@ -43,13 +43,13 @@ class ReactApp {
 	 *
 	 * @since 0.1.0
 	 **/
-	public function enqueue_script() {
+	public function register_script() {
 		$imports = $this->asset_path->get_dependencies();
 		if ( ! $imports ) {
 			return false;
 		}
 
-		wp_enqueue_script(
+		wp_register_script(
 			$this->id,
 			$this->asset_path->get_url( 'js' ),
 			array_merge( $this->script_deps, $imports['dependencies'] ),
@@ -90,6 +90,7 @@ class ReactApp {
 	 * @since 0.1.0
 	 **/
 	public function load_app( $post ) {
+		wp_enqueue_script( $this->id );
 		$this->enqueue_style();
 
 		$div_attr = "class=\"hide-if-no-js\" id=\"$this->id\"";

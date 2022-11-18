@@ -32,7 +32,7 @@ class ImageMap {
 				'description'        => __( 'Image Maps', 'flare-im' ),
 				'hierarchical'       => true,
 				'public'             => true,
-				'publicly_queryable' => true,
+				'publicly_queryable' => false,
 				'show_ui'            => true,
 				'show_in_menu'       => true,
 				'show_in_nav_menus'  => false,
