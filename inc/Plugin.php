@@ -20,19 +20,13 @@ class Plugin {
 	/**
 	 * Register plugin to primary and lifecycle hooks.
 	 *
-	 * @param string $base_file Path to the base file of the plugin.
 	 * @since 0.1.0
 	 **/
-	public function __construct( $base_file ) {
+	public function __construct() {
 		// Register primary hooks.
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
-
-		// Register lifecycle hooks.
-		register_activation_hook( $base_file, array( $this, 'activate' ) );
-		register_deactivation_hook( $base_file, array( $this, 'deactivate' ) );
-		register_uninstall_hook( $base_file, array( $this, 'uninstall' ) );
 	}
 
 	/**
@@ -43,9 +37,11 @@ class Plugin {
 	public function plugins_loaded() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 
+		// Hook Image Map functions.
 		$image_map = new ImageMap();
 		add_action( 'init', array( $image_map, 'register_image_map' ) );
 
+		// Hook Marker functions.
 		$marker = new Marker();
 		add_action( 'init', array( $marker, 'register_marker_cpt' ) );
 	}
@@ -79,32 +75,5 @@ class Plugin {
 		$deps = $dir->get_dependencies();
 
 		wp_enqueue_style( 'plugin-styles', $dir->get_url( 'css' ), array(), $deps['version'] );
-	}
-
-	/**
-	 * Activate plugin.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function activate() {
-		Lifecycle::activate();
-	}
-
-	/**
-	 * Deactivate plugin.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function deactivate() {
-		Lifecycle::deactivate();
-	}
-
-	/**
-	 * Uninstall plugin.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function uninstall() {
-		Lifecycle::uninstall();
 	}
 }

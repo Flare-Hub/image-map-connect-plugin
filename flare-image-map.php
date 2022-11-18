@@ -12,9 +12,15 @@
  * @package         flare-im
  */
 
+defined( 'ABSPATH' ) || exit;
+
+use Flare\ImageMap\Lifecycle;
 use Flare\ImageMap\Plugin;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+// Register lifecycle hooks.
+Lifecycle::register( __FILE__ );
+
 /** @var Plugin Initialize the plugin. */
-$imagemap = Plugin::get_instance( __FILE__ );
+$imagemap = Plugin::get_instance();
