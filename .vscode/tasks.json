@@ -71,7 +71,7 @@
         "reveal": "always",
         "focus": false,
         "panel": "shared",
-        "close": false,
+        "close": true,
       },
       "problemMatcher": []
     },

@@ -1,6 +1,4 @@
-import { useContext } from '@wordpress/element'
-import { RouterCtx } from './contexts/router'
-
+import { Link } from '../router'
 
 import cls from './list-row.module.scss'
 
@@ -14,22 +12,15 @@ import cls from './list-row.module.scss'
  * @param {number} props.map.count
  */
 export default function ListRow({ map }) {
-	const [_, setPage] = useContext(RouterCtx)
-
-	function editMap(e) {
-		e.preventDefault()
-		setPage('edit-map')
-	}
-
 	return (
 		<tr id="tag-2" className="level-0">
 			<td className="name column-name has-row-actions column-primary" data-colname={map.name}>
 				<strong>
-					<a className="row-title" onClick={editMap} href="#" aria-label="“Meklu” (Edit)">{map.name}</a>
+					<Link className="row-title" query={{ action: 'edit-map' }} aria-label={`“${map.name} (Edit)”`}>Edit</Link>
 				</strong>
 				<div className="row-actions">
 					<span className="edit">
-						<a href="#" onClick={editMap} aria-label={`Edit “${map.name}”`}>Edit</a>
+						<Link query={{ action: 'edit-map' }} aria-label={`Edit “${map.name}”`}>Edit</Link>
 					</span>
 					<span className={cls.separator}>|</span>
 					<span className="delete">
