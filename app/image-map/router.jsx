@@ -1,8 +1,32 @@
-import { useState, useEffect, Children } from '@wordpress/element'
+import { useReducer, useEffect, Children } from '@wordpress/element'
 import { createBrowserHistory } from 'history'
 
 // Create client-side routing manager
-export const history = createBrowserHistory()
+const history = createBrowserHistory()
+
+/**
+ * Create a URL from existing and new query parameters
+ *
+ * @param {object} query The query parameters to change.
+ */
+function createUrl(query) {
+	const search = new URLSearchParams(history.location.search)
+	for (const param in query) {
+		search.set(param, query[param])
+	}
+	return '?' + search.toString()
+}
+
+/**
+ * Navigate to new query parameters using client side routing.
+ *
+ * @param {object} query The query parameters to change.
+ * @param {object} state Any state to pass to the next page.
+ */
+export function navigate(query, state) {
+	const route = createUrl(query)
+	history.push(route, state)
+}
 
 /**
  * Anchor tag that uses the router to navigate.
@@ -16,11 +40,7 @@ export function Link(props) {
 	const { query, state, children, ...attr } = props
 
 	// Determine the url to link to
-	const search = new URLSearchParams(history.location.search)
-	for (const param in query) {
-		search.set(param, query[param])
-	}
-	const route = '?' + search.toString()
+	const route = createUrl(query)
 
 	// Update the url with the new query parameters
 	function setQuery(e) {
@@ -52,7 +72,7 @@ export function Route({ path, children }) {
 */
 export function Router({ param, rootPath, errorPath, children }) {
 	// Get current query parameters.
-	const search = new URLSearchParams(history.location.search)
+	let search = new URLSearchParams(history.location.search)
 
 	// Set routing query parameter to the root parameter if it has no value.
 	if (!search.get(param)) {
@@ -62,7 +82,8 @@ export function Router({ param, rootPath, errorPath, children }) {
 
 	// Filter the child Route components to provide only the route matching the routing parameter.
 	// Fall back to the error route if no route can be found.
-	function filterRoutes(path) {
+	function setRoute(_, newSearch) {
+		const path = newSearch.get(param)
 		const childArr = Children.toArray(children)
 
 		return childArr.find(child => child.props.path && child.props.path === path)
@@ -70,15 +91,15 @@ export function Router({ param, rootPath, errorPath, children }) {
 	}
 
 	// Set the content to show in the router
-	// TODO: refactor to useReducer
-	let [route, setRoute] = useState(filterRoutes(search.get(param)))
+	let [route, dispatchRoute] = useReducer(setRoute, setRoute(null, search))
 
 	// Update the router content if the routing parameter value has changed.
 	useEffect(() => {
 		return history.listen(({ location }) => {
 			const newSearch = new URLSearchParams(location.search)
 			if (newSearch.get(param) !== search.get(param)) {
-				setRoute(filterRoutes(newSearch.get(param)))
+				dispatchRoute(newSearch)
+				search = newSearch
 			}
 		})
 	})
