@@ -1,3 +1,24 @@
-.title {
-	margin-bottom: 1rem;
+:global(#wpcontent) {
+	background-color: white;
+	padding: 0;
+}
+
+:global(#wpbody-content) {
+	padding-bottom: 30px;
+}
+
+:global(#image-map) {
+	height: calc(100vh - 32px);
+}
+
+.app {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.title h1 {
+	padding: 0;
+	margin: .5rem 1rem;
+	line-height: normal;
 }

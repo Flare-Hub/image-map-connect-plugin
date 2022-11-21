@@ -16,7 +16,7 @@ export default function ListRow({ map }) {
 		<tr id="tag-2" className="level-0">
 			<td className="name column-name has-row-actions column-primary" data-colname={map.name}>
 				<strong>
-					<Link className="row-title" query={{ action: 'edit-map' }} aria-label={`“${map.name} (Edit)”`}>Edit</Link>
+					<Link className="row-title" query={{ action: 'edit-map' }} aria-label={`“${map.name} (Edit)”`}>{map.name}</Link>
 				</strong>
 				<div className="row-actions">
 					<span className="edit">

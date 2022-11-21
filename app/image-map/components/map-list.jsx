@@ -32,7 +32,7 @@ export default function MapList() {
 				<tr>
 					<ListHeader name="Name" slug="name" />
 					<ListHeader name="Description" slug="description" />
-					<ListHeader name="Count" slug="posts" />
+					<ListHeader name="Markers" slug="posts" />
 				</tr>
 			</thead>
 			<tbody id="the-list" data-wp-lists="list:tag">

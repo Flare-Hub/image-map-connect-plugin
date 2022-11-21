@@ -35,7 +35,7 @@ class Plugin {
 	 * @since 0.1.0
 	 **/
 	public function plugins_loaded() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 
 		// Hook Image Map functions.
 		$image_map = new ImageMap();

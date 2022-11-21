@@ -89,7 +89,7 @@ class ReactApp {
 	 * @param \WP_Post $post Description.
 	 * @since 0.1.0
 	 **/
-	public function load_app( $post ) {
+	public function load_app( $post = null ) {
 		wp_enqueue_script( $this->id );
 		$this->enqueue_style();
 
