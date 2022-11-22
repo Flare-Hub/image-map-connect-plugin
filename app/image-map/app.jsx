@@ -1,6 +1,6 @@
 import { TabPanel, Icon, CardDivider } from '@wordpress/components'
 
-import { useRouter } from './router'
+import { useRouter } from './contexts/router'
 import Maps from './components/maps'
 import forceChildUpdate from './utils/forceChildUpdate'
 

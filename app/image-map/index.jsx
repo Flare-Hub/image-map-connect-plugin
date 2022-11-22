@@ -1,6 +1,6 @@
 import { render } from '@wordpress/element'
 
-import { RouterProvider } from './router'
+import { RouterProvider } from './contexts/router'
 import App from './app'
 
 const appDiv = document.getElementById('image-map')

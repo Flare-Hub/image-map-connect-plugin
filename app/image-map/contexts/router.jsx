@@ -8,19 +8,21 @@ const globalHistory = createBrowserHistory()
  * @typedef RouteContext
  * @property {object} query The Query parameters currently in the url.
  * @property {import('history').BrowserHistory} history
- *   @see https://github.com/remix-run/history/blob/main/docs/api-reference.md
- * @property {navigate} navigate Function to navigate to new query parameters. */
+ *   See https://github.com/remix-run/history/blob/main/docs/api-reference.md
+ * @property {navigate} navigate Function to navigate to new query parameters.
+ * @property {createUrl} createUrl Function to generate url with updated query parameters
+ */
 
 /** @type {import('react').Context<RouteContext>} Create router context */
 const routeContext = createContext(null)
 
 /**
- * Create a URL from existing and new query parameters
+ * Create a URL with updated query parameters.
  *
  * @param {object} query The query parameters to change.
  */
 function createUrl(query) {
-	const search = new URLSearchParams(window.location.search)
+	const search = new URLSearchParams(globalHistory.location.search)
 	for (const param in query) {
 		search.set(param, query[param])
 	}
@@ -37,27 +39,6 @@ function createUrl(query) {
 function navigate(query, state, replace) {
 	const route = createUrl(query)
 	replace ? globalHistory.replace(route, state) : globalHistory.push(route, state)
-}
-
-/**
- * Anchor tag that uses the router to navigate.
- *
- * @param {object} props
- * @param {object} props.query The query parameters to change.
- * @param {object} props.state Any state to pass to the next page.
- * @returns Link component
- */
-export function Link({ query, state, children, ...attr }) {
-	// Determine the url to link to
-	const route = createUrl(query)
-
-	// Update the url with the new query parameters
-	function setQuery(e) {
-		e.preventDefault()
-		globalHistory.push(route, state)
-	}
-
-	return <a href={route} onClick={setQuery} {...attr}>{children}</a>
 }
 
 /**
@@ -89,7 +70,7 @@ export function RouterProvider({ children }) {
 	}, [])
 
 	return (
-		<routeContext.Provider value={{ query: state.query, history: state.history, navigate }}>
+		<routeContext.Provider value={{ query: state.query, history: state.history, navigate, createUrl }}>
 			{children}
 		</routeContext.Provider>
 	)

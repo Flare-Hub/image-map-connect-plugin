@@ -1,9 +1,9 @@
 import { Card, CardBody, CardDivider } from '@wordpress/components'
 import { useState, useEffect } from '@wordpress/element'
 import apiFetch from '@wordpress/api-fetch'
-import { useRouter } from '../router'
 
 import cls from './maps.module.scss'
+import { Link } from './link'
 
 /**
  * List of maps with details of selected map
@@ -13,7 +13,7 @@ export default function Maps() {
 	const [errorMgs, setErrorMsg] = useState(null)
 	const [selected, setSelected] = useState({})
 
-	const ctx = useRouter()
+
 
 	useEffect(async () => {
 		try {
@@ -46,7 +46,7 @@ export default function Maps() {
 					: <><CardBody size="extraSmall"><div className={cls.placeholder}></div></CardBody><CardDivider /></>
 				}
 			</Card>
-			<Card className={`${cls.details} col-9`}><CardBody>Test</CardBody></Card>
+			<Card className={`${cls.details} col-9`}><CardBody><Link query={{ tab: 'layers' }}>Go to Layers</Link></CardBody></Card>
 		</div >
 	)
 }
