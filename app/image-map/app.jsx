@@ -1,14 +1,17 @@
 import { TabPanel, Icon, CardDivider } from '@wordpress/components'
 
-import { Router, Route, navigate } from './router'
+import { useRouter } from './router'
 import Maps from './components/maps'
-import EditMap from './components/edit-map'
+import forceChildUpdate from './utils/forceChildUpdate'
 
 import cls from './app.module.scss'
 
 export default function App() {
-	// TODO: Fix tab navigation on back button.
-	const search = new URLSearchParams(location.search)
+	// Get reactive url query parameters
+	const { query, navigate } = useRouter()
+
+	// Ensure that the tabs panel is refreshed when query is updated
+	const tabsKey = forceChildUpdate([query])
 
 	return (
 		<div className={cls.app}>
@@ -18,24 +21,23 @@ export default function App() {
 			<CardDivider />
 			<TabPanel
 				tabs={[
-					{ name: 'maps', title: 'Maps' },
-					{ name: 'layers', title: 'Layers' },
-					{ name: 'markers', title: 'Markers' },
-					{ name: 'info', title: <Icon icon="info" /> }
+					{ name: 'maps', title: 'Maps', content: <Maps /> },
+					{ name: 'layers', title: 'Layers', content: <h2>404: Page not found.</h2> },
+					{ name: 'markers', title: 'Markers', content: <h2>404: Page not found.</h2> },
+					{ name: 'info', title: <Icon icon="info" />, content: <h2>404: Page not found.</h2> }
 				]}
 				onSelect={tab => navigate({ tab })}
-				initialTabName={search.get('tab')}
+				initialTabName={query.tab}
+				key={tabsKey}
+				className={cls.tabPanel}
 			>
-				{() => { }}
+				{tab => (
+					<>
+						<CardDivider />
+						{tab.content}
+					</>
+				)}
 			</TabPanel >
-			<CardDivider />
-			<Router param='tab' rootPath='maps' errorPath='error'>
-				<Route path='maps'>
-					<Maps />
-				</Route>
-				<Route path='edit-map'><EditMap /></Route>
-				<Route path='error'><h2>404: Page not found.</h2></Route>
-			</Router>
 		</div >
 	)
 }
