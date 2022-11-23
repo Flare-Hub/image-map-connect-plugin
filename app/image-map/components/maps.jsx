@@ -1,52 +1,35 @@
-import { Card, CardBody, CardDivider } from '@wordpress/components'
-import { useState, useEffect } from '@wordpress/element'
-import apiFetch from '@wordpress/api-fetch'
+import { useEffect } from '@wordpress/element'
 
-import cls from './maps.module.scss'
-import { Link } from './link'
+import Layout from './layout'
+import { useGlobalContext } from '../contexts/global'
+import { getCollection } from '../utils/wp-fetch'
 
 /**
  * List of maps with details of selected map
  */
 export default function Maps() {
-	const [maps, setMaps] = useState([])
-	const [errorMgs, setErrorMsg] = useState(null)
-	const [selected, setSelected] = useState({})
-
-
+	const { dispatch, maps } = useGlobalContext()
 
 	useEffect(async () => {
-		try {
-			const newMaps = await apiFetch({
-				path: '/wp/v2/imagemaps/',
-				method: 'GET',
-			})
+		// Get image maps from rest api and store the results
+		const { body, totalPages } = await getCollection('/wp/v2/imagemaps/', { page: maps.page })
 
-			setMaps(newMaps)
-		} catch (e) {
-			setErrorMsg(e.message)
-		}
+		dispatch({
+			type: 'setMapList',
+			payload: { list: body, totalPages }
+		})
 	}, [])
 
+	const setSelected = map => dispatch({ type: 'selectMap', payload: map })
+
 	return (
-		<div className={`${cls.tab} grid-bleed`}>
-			<Card as="aside" className={`${cls.menu} col-3`}>
-				{maps.length
-					? maps.map(map => (
-						<div key={map.id}>
-							<CardBody
-								size='extraSmall'
-								className={cls.menuItem}
-								onClick={() => setSelected(map)}
-								isShady={map === selected}
-							>{map.name}</CardBody>
-							<CardDivider />
-						</div>
-					))
-					: <><CardBody size="extraSmall"><div className={cls.placeholder}></div></CardBody><CardDivider /></>
-				}
-			</Card>
-			<Card className={`${cls.details} col-9`}><CardBody><Link query={{ tab: 'layers' }}>Go to Layers</Link></CardBody></Card>
-		</div >
+		<Layout
+			list={maps.list}
+			titleAttr="name"
+			selected={maps.selected}
+			selectItem={setSelected}
+		>
+			<p>Details here!</p>
+		</Layout>
 	)
 }
