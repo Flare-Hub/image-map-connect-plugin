@@ -30,7 +30,7 @@ export async function wpFetch(path, method = 'GET', body, query = {}) {
 
 	// Send request
 	const response = await apiFetch({
-		path: path + '?' + query.toString(),
+		path: path + '?' + params.toString(),
 		parse: false,
 		method,
 		body,
@@ -60,4 +60,15 @@ export async function getCollection(path, query) {
 		totalPages: Number(response.headers.get('X-WP-TotalPages')),
 		response
 	}
+}
+
+/**
+ * Request a collection from the Wordpress rest API.
+ *
+ * @param {string} path Path to the endpoint
+ * @param {Object.<string, string>} query Query parameters to append to the endpoint.
+ * @returns {WpResponse & CollectionResponse} The response from Wordpress.
+ */
+export async function getItem(path, query) {
+	return await wpFetch(path, 'GET', null, query)
 }

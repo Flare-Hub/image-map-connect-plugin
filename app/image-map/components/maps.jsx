@@ -1,4 +1,4 @@
-import { useEffect } from '@wordpress/element'
+import { useEffect, useState } from '@wordpress/element'
 
 import Layout from './layout'
 import { useGlobalContext } from '../contexts/global'
@@ -9,18 +9,26 @@ import { getCollection } from '../utils/wp-fetch'
  */
 export default function Maps() {
 	const { dispatch, maps } = useGlobalContext()
+	const [loading, setLoading] = useState(true)
 
 	useEffect(async () => {
-		// Get image maps from rest api and store the results
-		const { body, totalPages } = await getCollection('/wp/v2/imagemaps/', { page: maps.page })
+		if (!maps.list.length) {
+			// Get image maps from rest api and store the results
+			const { body, totalPages } = await getCollection(
+				'/wp/v2/imagemaps/',
+				{ page: maps.page, parent: 0 }
+			)
 
-		dispatch({
-			type: 'setMapList',
-			payload: { list: body, totalPages }
-		})
+			dispatch({
+				type: 'setMapList',
+				payload: { list: body, totalPages }
+			})
+		}
+
+		setLoading(false)
 	}, [])
 
-	const setSelected = map => dispatch({ type: 'selectMap', payload: map })
+	const setSelected = map => { dispatch({ type: 'selectMap', payload: map }) }
 
 	return (
 		<Layout
@@ -28,6 +36,7 @@ export default function Maps() {
 			titleAttr="name"
 			selected={maps.selected}
 			selectItem={setSelected}
+			loading={loading}
 		>
 			<p>Details here!</p>
 		</Layout>

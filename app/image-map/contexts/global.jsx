@@ -1,4 +1,5 @@
 import { useContext, createContext, useReducer } from '@wordpress/element'
+import { navigate } from './router'
 
 /**
  * @typedef WpCollection
@@ -41,18 +42,38 @@ const globalContext = createContext(null)
 
 /** @type {Object.<string, doAction>} */
 const actions = {
+	/** Update the list of maps */
 	setMapList(state, maps) {
 		return { ...state, maps: { ...state.maps, ...maps } }
 	},
+
+	/** Set all selected items */
+	setSelected(state, selected) {
+		const newState = { ...state }
+		for (const [obj, item] of selected) {
+			newState[obj].selected = item
+		}
+
+		return newState
+	},
+
+	/** Update the selected map and set the map query parameter accordingly  */
 	selectMap(state, map) {
+		navigate({ map: map.id })
 		return { ...state, maps: { ...state.maps, selected: map } }
 	},
+
+	/** Update the selected map and set the layer query parameter accordingly  */
 	selectLayer(state, layer) {
 		return { ...state, layers: { ...state.layers, selected: layer } }
 	},
+
+	/** Update the selected map and set the marker query parameter accordingly  */
 	selectMarker(state, marker) {
 		return { ...state, markers: { ...state.markers, selected: marker } }
 	},
+
+	/** Add a new error message */
 	setError(state, errorMsg) {
 		return { ...state, errors: [...state.errors, errorMsg] }
 	},
@@ -71,7 +92,11 @@ function reducer(state, action) {
 	return newState
 }
 
+/**
+ * Context provider for the global state
+ */
 export function GlobalProvider({ children }) {
+	// Use a reducer for teh global state.
 	const [state, dispatch] = useReducer(reducer, {
 		maps: { list: [], page: 1, selected: {} },
 		layers: { list: [], page: 1, selected: {} },
@@ -86,6 +111,9 @@ export function GlobalProvider({ children }) {
 	)
 }
 
+/**
+ * Access the global state
+ */
 export function useGlobalContext() {
 	return useContext(globalContext)
 }

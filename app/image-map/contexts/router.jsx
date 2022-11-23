@@ -36,7 +36,7 @@ function createUrl(query) {
  * @param {object} state Any state to pass to the next page.
  * @param {boolean} replace Replace url in history instead of pushing a new entry.
  */
-function navigate(query, state, replace) {
+export function navigate(query, state, replace) {
 	const route = createUrl(query)
 	replace ? globalHistory.replace(route, state) : globalHistory.push(route, state)
 }
