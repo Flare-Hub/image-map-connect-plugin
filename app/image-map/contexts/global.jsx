@@ -4,9 +4,10 @@ import { navigate } from './router'
 /**
  * @typedef WpCollection
  * @prop {Array.<object>} list
+ * @prop {number} parent
  * @prop {number} page
  * @prop {number} totalPages
- * @prop {object} selected
+ * @prop {number | 'new'} selected
  */
 
 /**
@@ -42,35 +43,80 @@ const globalContext = createContext(null)
 
 /** @type {Object.<string, doAction>} */
 const actions = {
-	/** Update the list of maps */
-	setMapList(state, maps) {
-		return { ...state, maps: { ...state.maps, ...maps } }
-	},
-
 	/** Set all selected items */
 	setSelected(state, selected) {
 		const newState = { ...state }
-		for (const [obj, item] of selected) {
-			newState[obj].selected = item
+		for (const item in selected) {
+			newState[item].selected = selected[item]
 		}
 
 		return newState
 	},
 
+	/** Update the list of maps */
+	setMapList(state, maps) {
+		return { ...state, maps: { ...state.maps, ...maps } }
+	},
+
 	/** Update the selected map and set the map query parameter accordingly  */
-	selectMap(state, map) {
-		navigate({ map: map.id })
-		return { ...state, maps: { ...state.maps, selected: map } }
+	selectMap(state, mapId) {
+		navigate({ map: mapId })
+		return { ...state, maps: { ...state.maps, selected: mapId } }
 	},
 
-	/** Update the selected map and set the layer query parameter accordingly  */
-	selectLayer(state, layer) {
-		return { ...state, layers: { ...state.layers, selected: layer } }
+	/** Update a map in the list */
+	updateMap(state, newMap) {
+		// Get position of updated map in the map list
+		const mapPos = state.maps.list.findIndex(map => map.id === newMap.id)
+
+		// Create new list with updated map and return state with the new list
+		const newList = Object.assign([], state.maps.list, { [mapPos]: newMap })
+		return { ...state, maps: { ...state.maps, list: newList } }
 	},
 
-	/** Update the selected map and set the marker query parameter accordingly  */
-	selectMarker(state, marker) {
-		return { ...state, markers: { ...state.markers, selected: marker } }
+	/** Add a new map to the list and select it if required. */
+	addMap(state, payload) {
+		if (payload.select) state = actions.selectMap(state, payload.map.id)
+		return { ...state, maps: { ...state.maps, list: [...state.maps.list, payload.map] } }
+	},
+
+	/** Remove a collection from the list */
+	deleteMap(state, mapId) {
+		const newList = state.maps.list.filter(map => map.id !== mapId)
+		return { ...state, maps: { ...state.maps, list: newList } }
+	},
+
+	/** Update the list of maps */
+	setLayerList(state, layers) {
+		return { ...state, layers: { ...state.layers, ...layers } }
+	},
+
+	/** Update the selected map and set the map query parameter accordingly  */
+	selectLayer(state, layerId) {
+		navigate({ layer: layerId })
+		return { ...state, layers: { ...state.layers, selected: layerId } }
+	},
+
+	/** Update a map in the list */
+	updateLayer(state, newLayer) {
+		// Get position of updated map in the map list
+		const layerPos = state.layers.list.findIndex(layer => layer.id === newLayer.id)
+
+		// Create new list with updated map and return state with the new list
+		const newList = Object.assign([], state.layers.list, { [layerPos]: newLayer })
+		return { ...state, layers: { ...state.layers, list: newList } }
+	},
+
+	/** Add a new map to the list and select it if required. */
+	addLayer(state, payload) {
+		if (payload.select) state = actions.selectLayer(state, payload.layer.id)
+		return { ...state, layers: { ...state.layers, list: [...state.layers.list, payload.layer] } }
+	},
+
+	/** Remove a collection from the list */
+	deleteLayer(state, layerId) {
+		const newList = state.layers.list.filter(layer => layer.id !== layerId)
+		return { ...state, layers: { ...state.layers, list: newList } }
 	},
 
 	/** Add a new error message */
@@ -98,9 +144,9 @@ function reducer(state, action) {
 export function GlobalProvider({ children }) {
 	// Use a reducer for teh global state.
 	const [state, dispatch] = useReducer(reducer, {
-		maps: { list: [], page: 1, selected: {} },
-		layers: { list: [], page: 1, selected: {} },
-		markers: { list: [], page: 1, selected: {} },
+		maps: { list: [], page: 1, selected: 0 },
+		layers: { list: [], page: 1, selected: 0 },
+		markers: { list: [], page: 1, selected: 0 },
 		errors: []
 	})
 

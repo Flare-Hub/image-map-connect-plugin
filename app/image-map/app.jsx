@@ -4,8 +4,8 @@ import { useEffect } from '@wordpress/element'
 import { useRouter } from './contexts/router'
 import { useGlobalContext } from './contexts/global'
 import Maps from './components/maps'
+import Layers from './components/layers'
 import forceChildUpdate from './utils/forceChildUpdate'
-import { getItem } from './utils/wp-fetch'
 
 import cls from './app.module.scss'
 
@@ -18,25 +18,21 @@ export default function App() {
 	const tabsKey = forceChildUpdate([query])
 
 	useEffect(async () => {
-		const responses = []
+		const selected = {}
 		if (query.map) {
-			responses.push(Promise.all(['maps', getItem('/wp/v2/imagemaps/' + query.map)]))
+			selected.maps = Number(query.map)
 		}
 		if (query.layer) {
-			responses.push(Promise.all(['layers', getItem('/wp/v2/imagemaps/' + query.layer)]))
+			selected.layers = Number(query.layer)
 		}
 		if (query.marker) {
-			responses.push(Promise.all(['markers', getItem('/wp/v2/markers/' + query.marker)]))
+			selected.markers = Number(query.marker)
 		}
 
-		if (responses.length) {
-			const selected = await Promise.all(responses)
-
-			dispatch({
-				type: 'setSelected',
-				payload: selected.map(([obj, item]) => [obj, item.body])
-			})
-		}
+		dispatch({
+			type: 'setSelected',
+			payload: selected
+		})
 	}, [])
 
 	return (
@@ -48,7 +44,7 @@ export default function App() {
 			<TabPanel
 				tabs={[
 					{ name: 'maps', title: 'Maps', content: <Maps /> },
-					{ name: 'layers', title: 'Layers', content: <h2>404: Page not found.</h2> },
+					{ name: 'layers', title: 'Layers', content: <Layers /> },
 					{ name: 'markers', title: 'Markers', content: <h2>404: Page not found.</h2> },
 					{ name: 'info', title: <Icon icon="info" />, content: <h2>404: Page not found.</h2> }
 				]}

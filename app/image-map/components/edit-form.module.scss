@@ -1,0 +1,21 @@
+.input {
+	>div {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+	}
+
+	label {
+		flex: 0 1 100px;
+	}
+
+	input,
+	textarea {
+		flex: 1 1 100px;
+	}
+}
+
+.dropzone {
+	background-color: lightgray;
+	width: fit-content;
+}

@@ -52,7 +52,7 @@ class Plugin {
 	 * @since 0.1.0
 	 **/
 	public function admin_menu() {
-		$map_menu = new ImageMapMenu();
+		$map_menu = new AdminMenu();
 		$map_menu->init();
 		add_action( 'admin_enqueue_scripts', array( $map_menu->app, 'register_script' ) );
 	}

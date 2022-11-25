@@ -19,7 +19,7 @@ import apiFetch from '@wordpress/api-fetch'
  * @param {'GET'|'POST'|'PUT'|'DELETE'} method The http method.
  * @param {object} body The content of the message. Will be stringified.
  * @param {Object.<string, string>} query Query parameters to append to the endpoint.
- * @returns {WpResponse} The response from Wordpress.
+ * @returns {Promise<WpResponse>} The response from Wordpress.
  */
 export async function wpFetch(path, method = 'GET', body, query = {}) {
 	// Create the full query path
@@ -33,7 +33,7 @@ export async function wpFetch(path, method = 'GET', body, query = {}) {
 		path: path + '?' + params.toString(),
 		parse: false,
 		method,
-		body,
+		data: body,
 	})
 
 	// Return response parsed
@@ -47,11 +47,12 @@ export async function wpFetch(path, method = 'GET', body, query = {}) {
 /**
  * Request a collection from the Wordpress rest API.
  *
- * @param {string} path Path to the endpoint
+ * @param {string} collection The type of wordpress objects to get.
  * @param {Object.<string, string>} query Query parameters to append to the endpoint.
- * @returns {WpResponse & CollectionResponse} The response from Wordpress.
+ * @returns {Promise<WpResponse & CollectionResponse>} The response from Wordpress.
  */
-export async function getCollection(path, query) {
+export async function getCollection(collection, query) {
+	const path = `/wp/v2/${collection}/`
 	const { body, response } = await wpFetch(path, 'GET', null, query)
 
 	return {
@@ -65,10 +66,47 @@ export async function getCollection(path, query) {
 /**
  * Request a collection from the Wordpress rest API.
  *
- * @param {string} path Path to the endpoint
+ * @param {string} collection The type of wordpress object to get.
+ * @param {string} id The ID of the object.
  * @param {Object.<string, string>} query Query parameters to append to the endpoint.
- * @returns {WpResponse & CollectionResponse} The response from Wordpress.
  */
-export async function getItem(path, query) {
-	return await wpFetch(path, 'GET', null, query)
+export function getItem(collection, id, query) {
+	const path = `/wp/v2/${collection}/${id}`
+	return wpFetch(path, 'GET', null, query)
+}
+
+/**
+ * Add an object to Wordpress through the rest API.
+ *
+ * @param {string} collection The type of wordpress object to get.
+ * @param {string} id The ID of the object.
+ * @param {object} body The content of the message. Will be stringified.
+ */
+export function createItem(collection, body) {
+	const path = `/wp/v2/${collection}/`
+	return wpFetch(path, 'POST', body)
+}
+
+/**
+ * Update an object to Wordpress through the rest API.
+ *
+ * @param {string} collection The type of wordpress object to get.
+ * @param {string} id The ID of the object.
+ * @param {object} body The content of the message. Will be stringified.
+ */
+export function postItem(collection, id, body) {
+	const path = `/wp/v2/${collection}/${id}`
+	return wpFetch(path, 'POST', body)
+}
+
+/**
+ * Remove an object from Wordpress through the rest API.
+ *
+ * @param {string} collection The type of wordpress object to get.
+ * @param {string} id The ID of the object.
+ * @param {object} body The content of the message. Will be stringified.
+ */
+export function deleteItem(collection, id, body) {
+	const path = `/wp/v2/${collection}/${id}`
+	return wpFetch(path, 'DELETE', body)
 }

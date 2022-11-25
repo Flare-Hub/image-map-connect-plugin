@@ -1,1 +1,21 @@
 @use 'node_modules/reflex-grid/scss/reflex.scss';
+
+.components-button {
+	justify-content: center;
+
+	&.short {
+		width: 60px;
+	}
+
+	&.medium {
+		width: 100px;
+	}
+
+	&.long {
+		width: 150px;
+	}
+
+	&.full-width {
+		width: 100%;
+	}
+}

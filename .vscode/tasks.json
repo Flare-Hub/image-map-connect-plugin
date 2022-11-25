@@ -16,6 +16,7 @@
       "command": "Start-Process 'Docker Desktop'",
       "presentation": {
         "reveal": "never",
+        "close": true,
       },
       "runOptions": {
         "runOn": "folderOpen"
