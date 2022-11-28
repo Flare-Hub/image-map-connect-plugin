@@ -70,6 +70,7 @@ class Plugin {
 		// Hook Image Map functions.
 		$this->image_map->register_image();
 		$this->image_map->register_connected_post_types();
+		add_action( 'rest_prepare_imagemap', array( $this->image_map, 'add_image_link' ), 10, 2 );
 
 		// Hook Post Type Route functions.
 		$types = new PostTypesRoute();

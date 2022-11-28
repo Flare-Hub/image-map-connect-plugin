@@ -6,6 +6,7 @@
 	}
 
 	label,
+	.label,
 	:global(.components-base-control__label) {
 		flex: 0 1 100px;
 	}
@@ -15,9 +16,4 @@
 	.input {
 		flex: 1 1 100px;
 	}
-}
-
-.dropzone {
-	background-color: lightgray;
-	width: fit-content;
 }

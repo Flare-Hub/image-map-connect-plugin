@@ -61,6 +61,22 @@ class ImageMap {
 	}
 
 	/**
+	 * Get the image field link for the rest API.
+	 *
+	 * @param \WP_REST_Response $response The response object to send.
+	 * @param \WP_Term          $item The original term object.
+	 * @return \WP_REST_Response The ID of the image attachment
+	 * @since 0.1.0
+	 **/
+	public function add_image_link( \WP_REST_Response $response, \WP_Term $item ) {
+		$media = get_term_meta( $item->term_id, 'image', true );
+		if ( $media ) {
+			$response->add_link( 'flare:image', rest_url( "/wp/v2/media/{$media}" ), array( 'embeddable' => true ) );
+		}
+		return $response;
+	}
+
+	/**
 	 * Register Image Map's post types field with the rest API.
 	 *
 	 * @since 0.1.0

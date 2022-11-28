@@ -1,4 +1,4 @@
-import { TextControl, Button } from '@wordpress/components'
+import { TextControl, Button, BaseControl } from '@wordpress/components'
 import { useEffect, useState } from '@wordpress/element'
 
 import { useGlobalContext } from "../contexts/global"
@@ -22,10 +22,19 @@ export default function EditLayer() {
 	}
 	const [layer, setLayer] = useState()
 	const [mediaMgr, setMediaMgr] = useState()
+	const [image, setImage] = useState({})
 
-	// Update layer to the selected layer
-	useEffect(() => {
-		setLayer(getSelected())
+	// Set layer and image as mount.
+	useEffect(async () => {
+		// Update layer to the selected layer.
+		const newLayer = getSelected()
+		setLayer(newLayer)
+
+		// Get image for the stored image ID.
+		if (newLayer && newLayer.meta.image) {
+			const newImage = await window.wp.media.attachment(newLayer.meta.image).fetch()
+			setImage(newImage)
+		}
 	}, [layers])
 
 	// Load media manager
@@ -38,8 +47,14 @@ export default function EditLayer() {
 		})
 		setMediaMgr(mm)
 
+		// Update image and set the new image ID in the layer
 		function getImage() {
-			console.log(mm.state().get('selection').first())
+			const newImage = mm.state().get('selection').first()
+			setImage(newImage.attributes)
+			setLayer(oldLayer => ({
+				...oldLayer,
+				meta: { ...oldLayer.meta, image: newImage.attributes.id }
+			}))
 		}
 
 		// Action to take when selecting an image.
@@ -78,7 +93,17 @@ export default function EditLayer() {
 					onChange={val => setLayer({ ...layer, name: val })}
 					className={cls.field}
 				/>
-				<Button variant='secondary' onClick={() => mediaMgr.open()}>Select image</Button>
+				<BaseControl label='Image' className={cls.field}>
+					<Button variant='secondary' onClick={() => mediaMgr.open()}>Select image</Button>
+				</BaseControl>
+				<div className={cls.field}>
+					<div>
+						<div className={cls.label}></div>
+						<div className={cls.input}>
+							<img src={image.url} alt={image.alt} width="100%" />
+						</div>
+					</div>
+				</div>
 			</div>
 			<div className="col-xs-3">
 				<LifeCycleButtons onSave={onSave} onDelete={onDelete} />

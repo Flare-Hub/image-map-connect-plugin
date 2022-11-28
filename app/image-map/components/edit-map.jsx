@@ -8,6 +8,8 @@ import LifeCycleButtons from './lifecycle-buttons'
 import cls from './edit-form.module.scss'
 import PostTypesSelect from './post-types-select'
 
+/** Default values for an empty map */
+
 /**
  * Map details form.
  *
@@ -17,8 +19,9 @@ export default function EditMap() {
 	const { maps, dispatch } = useGlobalContext()
 
 	function getSelected() {
-		if (maps.selected === 'new') return { name: '', description: '' }
-		return maps.list.find(map => map.id === maps.selected)
+		if (maps.selected === 'new') return { name: '', description: '', meta: { post_types: [] } }
+		const foundMap = maps.list.find(map => map.id === maps.selected)
+		return foundMap ? foundMap : {}
 	}
 
 	const [map, setMap] = useState({})
@@ -43,7 +46,7 @@ export default function EditMap() {
 		dispatch({ type: 'deleteMap', payload: map.id })
 	}
 
-	if (!map) return <div></div>
+	if (map.name === undefined) return <div></div>
 
 	return (
 		<>
