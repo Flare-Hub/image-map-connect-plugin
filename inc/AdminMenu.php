@@ -9,6 +9,9 @@ namespace Flare\ImageMap;
  */
 class AdminMenu {
 
+	/** @var string $capability The Capability needed to manage this plugin. */
+	public static $capability = 'manage_categories';
+
 	/** @var ReactApp $app React app handler. */
 	public $app;
 
@@ -24,7 +27,7 @@ class AdminMenu {
 		add_menu_page(
 			__( 'Image Maps', 'flare-im' ),
 			__( 'Image Maps', 'flare-im' ),
-			'manage_categories',
+			self::$capability,
 			'image-maps',
 			array( $this, 'load_app' ),
 			'dashicons-location-alt',

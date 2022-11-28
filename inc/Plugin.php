@@ -17,6 +17,9 @@ class Plugin {
 	/** @var string version */
 	const VERSION = '0.1.0';
 
+	/** @var \Flare\ImageMap\ImageMap $image_map The image map Taxonomy management object. */
+	protected $image_map;
+
 	/**
 	 * Register plugin to primary and lifecycle hooks.
 	 *
@@ -38,8 +41,8 @@ class Plugin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 
 		// Hook Image Map functions.
-		$image_map = new ImageMap();
-		add_action( 'init', array( $image_map, 'register_image_map' ) );
+		$this->image_map = new ImageMap();
+		add_action( 'init', array( $this->image_map, 'register_image_map' ) );
 
 		// Hook Marker functions.
 		$marker = new Marker();
@@ -52,6 +55,7 @@ class Plugin {
 	 * @since 0.1.0
 	 **/
 	public function admin_menu() {
+		// Hook admin menu functions.
 		$map_menu = new AdminMenu();
 		$map_menu->init();
 		add_action( 'admin_enqueue_scripts', array( $map_menu->app, 'register_script' ) );
@@ -63,6 +67,13 @@ class Plugin {
 	 * @since 0.1.0
 	 **/
 	public function rest_api_init() {
+		// Hook Image Map functions.
+		$this->image_map->register_image();
+		$this->image_map->register_connected_post_types();
+
+		// Hook Post Type Route functions.
+		$types = new PostTypesRoute();
+		$types->register_route();
 	}
 
 	/**

@@ -6,6 +6,7 @@ import { postItem, deleteItem, createItem } from '../utils/wp-fetch'
 import LifeCycleButtons from './lifecycle-buttons'
 
 import cls from './edit-form.module.scss'
+import PostTypesSelect from './post-types-select'
 
 /**
  * Map details form.
@@ -19,7 +20,8 @@ export default function EditMap() {
 		if (maps.selected === 'new') return { name: '', description: '' }
 		return maps.list.find(map => map.id === maps.selected)
 	}
-	const [map, setMap] = useState()
+
+	const [map, setMap] = useState({})
 
 	useEffect(() => {
 		setMap(getSelected())
@@ -50,14 +52,22 @@ export default function EditMap() {
 					label="Name"
 					value={map.name}
 					onChange={val => setMap({ ...map, name: val })}
-					className={cls.input}
+					className={cls.field}
 				/>
 				<TextareaControl
 					label="Description"
 					value={map.description}
-					className={cls.input}
+					className={cls.field}
 					onChange={val => setMap({ ...map, description: val })}
 				/>
+				{map.meta &&
+					<PostTypesSelect
+						selected={map.meta.post_types}
+						onSelect={types => setMap(map => ({ ...map, meta: { ...map.meta, post_types: types } }))}
+						baseClass={cls.field}
+						inputClass={cls.input}
+					/>
+				}
 			</div>
 			<div className="col-xs-3">
 				<LifeCycleButtons onSave={onSave} onDelete={onDelete} />

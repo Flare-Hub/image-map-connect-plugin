@@ -1,16 +1,18 @@
-.input {
+.field {
 	>div {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: baseline;
 	}
 
-	label {
+	label,
+	:global(.components-base-control__label) {
 		flex: 0 1 100px;
 	}
 
 	input,
-	textarea {
+	textarea,
+	.input {
 		flex: 1 1 100px;
 	}
 }

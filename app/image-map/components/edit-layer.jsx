@@ -76,7 +76,7 @@ export default function EditLayer() {
 					label="Name"
 					value={layer.name}
 					onChange={val => setLayer({ ...layer, name: val })}
-					className={cls.input}
+					className={cls.field}
 				/>
 				<Button variant='secondary' onClick={() => mediaMgr.open()}>Select image</Button>
 			</div>
