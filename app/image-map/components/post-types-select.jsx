@@ -3,6 +3,8 @@ import { useEffect, useState } from '@wordpress/element'
 
 import { wpFetch } from '../utils/wp-fetch'
 
+import cls from './post-types-select.module.scss'
+
 /**
  * Post type selector.
  *
@@ -37,6 +39,7 @@ export default function PostTypesSelect({ selected, onSelect, baseClass, inputCl
 						label={type}
 						checked={selected.includes(type)}
 						onChange={checked => onChange(checked, type)}
+						className={cls.checkbox}
 					/>
 				))}
 			</div>

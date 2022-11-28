@@ -41,11 +41,13 @@ export default function Layers() {
 			selected={layers.selected}
 			selectItem={setSelected}
 			loading={loading}
-			addButton={<Button
-				variant='primary'
-				className='medium'
-				onClick={() => setSelected('new')}>Add Map
-			</Button>}
+			addButton={
+				<Button
+					variant='primary'
+					className='medium'
+					onClick={() => setSelected('new')}
+				>Add Layer</Button>
+			}
 		>
 			<EditLayer />
 		</Layout>
