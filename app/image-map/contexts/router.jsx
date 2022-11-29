@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useContext, createContext } from '@wordpress/element'
+import { useReducer, useEffect, useMemo, useContext, createContext, Children } from '@wordpress/element'
 import { createBrowserHistory } from 'history'
 
 /** Create client-side routing manager */
@@ -81,4 +81,46 @@ export function RouterProvider({ children }) {
  */
 export function useRouter() {
 	return useContext(routeContext)
+}
+
+/**
+ * Display only the children of the child route component that has a path matching the provided query parameter.
+ *
+ * @param {object} props
+ * @param {string} props.param The query parameter to use for routing.
+ * @param {string} props.rootPath The path to route to if the query parameter has no value.
+ * @param {string} props.errorPath The path to route to if the query parameter value can not be matched to a path.
+ * @returns The Router provider wrapper.
+*/
+export function Router({ param, rootPath, errorPath, children }) {
+	// Get current query parameters.
+	const { query } = useRouter()
+
+	// Set routing query parameter to the root parameter if it has no value.
+
+	useEffect(() => {
+		if (!query[param]) {
+			navigate({ [param]: rootPath }, null, true)
+		}
+	}, [])
+
+	// Get route component that corresponds to the route in the current query.
+	const route = useMemo(() => {
+		const routeParam = query[param] ?? rootPath
+		const childArr = Children.toArray(children)
+		return childArr.find(child => child.props.path && child.props.path === routeParam)
+			?? childArr.find(child => child.props.path && child.props.path === errorPath)
+	}, [query])
+
+	return route.props.children
+}
+
+/**
+ * A component to allow the router to filter by route.
+ * @param {object} props
+ * @param {string} props.path The route to filter by
+ * @returns The Route component
+ */
+export function Route({ path, children }) {
+	return <></>
 }

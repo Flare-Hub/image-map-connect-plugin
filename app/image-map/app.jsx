@@ -1,7 +1,7 @@
 import { TabPanel, Icon, CardDivider } from '@wordpress/components'
 import { useEffect } from '@wordpress/element'
 
-import { useRouter } from './contexts/router'
+import { useRouter, Router, Route } from './contexts/router'
 import { useGlobalContext } from './contexts/global'
 import Maps from './components/maps'
 import Layers from './components/layers'
@@ -37,23 +37,21 @@ export default function App() {
 			<CardDivider />
 			<TabPanel
 				tabs={[
-					{ name: 'maps', title: 'Maps', content: <Maps /> },
-					{ name: 'layers', title: 'Layers', content: <Layers /> },
-					{ name: 'markers', title: 'Markers', content: <h2>404: Page not found.</h2> },
-					{ name: 'info', title: <Icon icon="info" />, content: <h2>404: Page not found.</h2> }
+					{ name: 'maps', title: 'Maps' },
+					{ name: 'layers', title: 'Layers' },
+					{ name: 'markers', title: 'Markers' },
+					{ name: 'info', title: <Icon icon="info" /> },
 				]}
 				onSelect={tab => navigate({ tab })}
 				initialTabName={query.tab}
 				key={tabsKey}
 				className={cls.tabPanel}
-			>
-				{tab => (
-					<>
-						<CardDivider />
-						{tab.content}
-					</>
-				)}
-			</TabPanel >
+			>{() => null}</TabPanel >
+			<Router param='tab' rootPath='maps' errorPath='error' >
+				<Route path='maps'><Maps /></Route>
+				<Route path='layers'><Layers /></Route>
+				<Route path='error'><h2>404: Page not found</h2></Route>
+			</Router>
 		</div >
 	)
 }
