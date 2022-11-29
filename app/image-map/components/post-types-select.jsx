@@ -1,7 +1,7 @@
 import { CheckboxControl, BaseControl } from '@wordpress/components'
 import { useEffect, useState } from '@wordpress/element'
 
-import { wpFetch } from '../utils/wp-fetch'
+import apiFetch from '@wordpress/api-fetch'
 
 import cls from './post-types-select.module.scss'
 
@@ -19,8 +19,8 @@ export default function PostTypesSelect({ selected, onSelect, baseClass, inputCl
 	const [all, setAll] = useState([])
 
 	useEffect(async () => {
-		const types = await wpFetch('flare/v1/post-types')
-		setAll(Object.values(types.body))
+		const types = await apiFetch({ path: 'flare/v1/post-types' })
+		setAll(Object.values(types))
 	}, [])
 
 	function onChange(checked, type) {

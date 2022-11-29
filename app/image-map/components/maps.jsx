@@ -10,7 +10,7 @@ import EditMap from './edit-map'
  * List of maps with details of selected map
  */
 export default function Maps() {
-	const { dispatch, maps } = useGlobalContext()
+	const { dispatchMap, maps } = useGlobalContext()
 	const [loading, setLoading] = useState(true)
 
 	useEffect(async () => {
@@ -21,8 +21,8 @@ export default function Maps() {
 				{ page: maps.page, parent: 0 }
 			)
 
-			dispatch({
-				type: 'setMapList',
+			dispatchMap({
+				type: 'updateAll',
 				payload: { list: body, totalPages }
 			})
 		}
@@ -30,7 +30,7 @@ export default function Maps() {
 		setLoading(false)
 	}, [])
 
-	const setSelected = mapId => { dispatch({ type: 'selectMap', payload: mapId }) }
+	const setSelected = mapId => { dispatchMap({ type: 'select', payload: mapId }) }
 
 	return (
 		<Layout

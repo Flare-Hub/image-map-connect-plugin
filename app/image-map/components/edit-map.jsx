@@ -16,7 +16,7 @@ import PostTypesSelect from './post-types-select'
  * @param props
  */
 export default function EditMap() {
-	const { maps, dispatch } = useGlobalContext()
+	const { maps, dispatchMap } = useGlobalContext()
 
 	function getSelected() {
 		if (maps.selected === 'new') return { name: '', description: '', meta: { post_types: [] } }
@@ -33,17 +33,17 @@ export default function EditMap() {
 	async function onSave() {
 		if (map.id) {
 			const res = await postItem('imagemaps', map.id, map)
-			dispatch({ type: 'updateMap', payload: res.body })
+			dispatchMap({ type: 'update', payload: res.body })
 		} else {
 			const res = await createItem('imagemaps', map)
-			dispatch({ type: 'addMap', payload: { map: res.body, select: true } })
+			dispatchMap({ type: 'add', payload: { item: res.body, select: true } })
 		}
 	}
 
 	async function onDelete() {
 		const res = await deleteItem('imagemaps', map.id, { force: true })
 		if (!res.body.deleted) throw new Error('To do: handle this!')
-		dispatch({ type: 'deleteMap', payload: map.id })
+		dispatchMap({ type: 'delete', payload: map.id })
 	}
 
 	if (map.name === undefined) return <div></div>

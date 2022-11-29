@@ -12,27 +12,21 @@ import cls from './app.module.scss'
 export default function App() {
 	// Get reactive url query parameters
 	const { query, navigate } = useRouter()
-	const { dispatch } = useGlobalContext()
+	const { dispatchMap, dispatchLayer, dispatchMarker } = useGlobalContext()
 
 	// Ensure that the tabs panel is refreshed when query is updated
 	const tabsKey = forceChildUpdate([query])
 
-	useEffect(async () => {
-		const selected = {}
+	useEffect(() => {
 		if (query.map) {
-			selected.maps = Number(query.map)
+			dispatchMap({ type: 'updateAll', payload: { selected: Number(query.map) } })
 		}
 		if (query.layer) {
-			selected.layers = Number(query.layer)
+			dispatchLayer({ type: 'updateAll', payload: { selected: Number(query.layer) } })
 		}
 		if (query.marker) {
-			selected.markers = Number(query.marker)
+			dispatchMarker({ type: 'updateAll', payload: { selected: Number(query.marker) } })
 		}
-
-		dispatch({
-			type: 'setSelected',
-			payload: selected
-		})
 	}, [])
 
 	return (

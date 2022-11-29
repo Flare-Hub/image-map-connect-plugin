@@ -1,21 +1,13 @@
-import { useContext, createContext, useReducer } from '@wordpress/element'
+import { useContext, createContext, useReducer, useState } from '@wordpress/element'
 import { navigate } from './router'
 
 /**
  * @typedef WpCollection
+ * @prop {string} object
  * @prop {Array.<object>} list
- * @prop {number} parent
  * @prop {number} page
  * @prop {number} totalPages
  * @prop {number | 'new'} selected
- */
-
-/**
- * @typedef State
- * @prop {WpCollection} maps
- * @prop {WpCollection} layers
- * @prop {WpCollection} markers
- * @prop {Array.<string>} errors
  */
 
 /** @typedef {Object.<string, any> | WpCollection | string} Payload */
@@ -27,101 +19,53 @@ import { navigate } from './router'
  */
 
 /**
- * @typedef Dispatcher
- * @prop {import('react').Dispatch.<Action>} dispatch
+ * @typedef GlobalContext
+ * @prop {WpCollection} maps
+ * @prop {import('react').Dispatch<Action>} dispatchMap
+ * @prop {WpCollection} layers
+ * @prop {import('react').Dispatch<Action>} dispatchLayer
+ * @prop {WpCollection} markers
+ * @prop {import('react').Dispatch<Action>} dispatchMarker
+ * @prop {Array|string>} messages
+ * @prop {(error: string) => Array<string>} addMessage
  */
 
-/** @type {import('react').Context<State & Dispatcher>} Global context */
+/** @type {import('react').Context<GlobalContext>} Global context */
 const globalContext = createContext(null)
 
-/**
- * @callback doAction
- * @param {State} state
- * @param {Payload} payload
- * @return {state}
- */
-
-/** @type {Object.<string, doAction>} */
+/** @type {Object.<string, (state: WpCollection, payload: Payload) => WpCollection>} */
 const actions = {
-	/** Set all selected items */
-	setSelected(state, selected) {
-		const newState = { ...state }
-		for (const item in selected) {
-			newState[item].selected = selected[item]
-		}
-
-		return newState
-	},
-
 	/** Update the list of maps */
-	setMapList(state, maps) {
-		return { ...state, maps: { ...state.maps, ...maps } }
+	updateAll(state, newList) {
+		return { ...state, ...newList }
 	},
 
 	/** Update the selected map and set the map query parameter accordingly  */
-	selectMap(state, mapId) {
-		navigate({ map: mapId })
-		return { ...state, maps: { ...state.maps, selected: mapId } }
+	select(state, id) {
+		navigate({ [state.object]: id })
+		return { ...state, selected: id }
 	},
 
 	/** Update a map in the list */
-	updateMap(state, newMap) {
+	update(state, newItem) {
 		// Get position of updated map in the map list
-		const mapPos = state.maps.list.findIndex(map => map.id === newMap.id)
+		const pos = state.list.findIndex(item => item.id === newItem.id)
 
 		// Create new list with updated map and return state with the new list
-		const newList = Object.assign([], state.maps.list, { [mapPos]: newMap })
-		return { ...state, maps: { ...state.maps, list: newList } }
+		const newList = Object.assign([], state.list, { [pos]: newItem })
+		return { ...state, list: newList }
 	},
 
 	/** Add a new map to the list and select it if required. */
-	addMap(state, payload) {
-		if (payload.select) state = actions.selectMap(state, payload.map.id)
-		return { ...state, maps: { ...state.maps, list: [...state.maps.list, payload.map] } }
+	add(state, payload) {
+		if (payload.select) state = actions.select(state, payload.item.id)
+		return { ...state, list: [...state.list, payload.item] }
 	},
 
 	/** Remove a collection from the list */
-	deleteMap(state, mapId) {
-		const newList = state.maps.list.filter(map => map.id !== mapId)
-		return { ...state, maps: { ...state.maps, list: newList } }
-	},
-
-	/** Update the list of maps */
-	setLayerList(state, layers) {
-		return { ...state, layers: { ...state.layers, ...layers } }
-	},
-
-	/** Update the selected map and set the map query parameter accordingly  */
-	selectLayer(state, layerId) {
-		navigate({ layer: layerId })
-		return { ...state, layers: { ...state.layers, selected: layerId } }
-	},
-
-	/** Update a map in the list */
-	updateLayer(state, newLayer) {
-		// Get position of updated map in the map list
-		const layerPos = state.layers.list.findIndex(layer => layer.id === newLayer.id)
-
-		// Create new list with updated map and return state with the new list
-		const newList = Object.assign([], state.layers.list, { [layerPos]: newLayer })
-		return { ...state, layers: { ...state.layers, list: newList } }
-	},
-
-	/** Add a new map to the list and select it if required. */
-	addLayer(state, payload) {
-		if (payload.select) state = actions.selectLayer(state, payload.layer.id)
-		return { ...state, layers: { ...state.layers, list: [...state.layers.list, payload.layer] } }
-	},
-
-	/** Remove a collection from the list */
-	deleteLayer(state, layerId) {
-		const newList = state.layers.list.filter(layer => layer.id !== layerId)
-		return { ...state, layers: { ...state.layers, list: newList } }
-	},
-
-	/** Add a new error message */
-	setError(state, errorMsg) {
-		return { ...state, errors: [...state.errors, errorMsg] }
+	delete(state, id) {
+		const newList = state.list.filter(item => item.id !== id)
+		return { ...state, list: newList }
 	},
 }
 
@@ -142,16 +86,19 @@ function reducer(state, action) {
  * Context provider for the global state
  */
 export function GlobalProvider({ children }) {
-	// Use a reducer for teh global state.
-	const [state, dispatch] = useReducer(reducer, {
-		maps: { list: [], page: 1, selected: 0 },
-		layers: { list: [], page: 1, selected: 0 },
-		markers: { list: [], page: 1, selected: 0 },
-		errors: []
-	})
+	// Use a reducers for the global collections.
+	const [maps, dispatchMap] = useReducer(reducer, { object: 'map', list: [], page: 1, selected: 0 })
+	const [layers, dispatchLayer] = useReducer(reducer, { object: 'layer', list: [], page: 1, selected: 0 })
+	const [markers, dispatchMarker] = useReducer(reducer, { object: 'marker', list: [], page: 1, selected: 0 })
+
+	// Handle message snackbars globally
+	const [messages, setMessages] = useState([])
+	const addMessage = (e) => setMessages(oldErr => oldErr.push(e))
 
 	return (
-		<globalContext.Provider value={{ ...state, dispatch }}>
+		<globalContext.Provider value={
+			{ maps, dispatchMap, layers, dispatchLayer, markers, dispatchMarker, messages, addMessage }
+		}>
 			{children}
 		</globalContext.Provider>
 	)

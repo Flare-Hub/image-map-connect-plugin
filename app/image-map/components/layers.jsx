@@ -10,11 +10,11 @@ import EditLayer from './edit-layer'
  * List of maps with details of selected map
  */
 export default function Layers() {
-	const { dispatch, maps, layers } = useGlobalContext()
+	const { dispatchLayer, maps, layers } = useGlobalContext()
 	const [loading, setLoading] = useState(true)
 
 	useEffect(async () => {
-		if (!layers.parent || layers.parent !== maps.selected) {
+		if (maps.selected) {
 			// Get image maps from rest api and store the results
 			const { body, totalPages } = maps.selected
 				? await getCollection(
@@ -23,16 +23,16 @@ export default function Layers() {
 				)
 				: { body: [] }
 
-			dispatch({
-				type: 'setLayerList',
-				payload: { list: body, totalPages, parent: maps.selected }
+			dispatchLayer({
+				type: 'updateAll',
+				payload: { list: body, totalPages }
 			})
 		}
 
 		setLoading(false)
-	}, [])
+	}, [maps.selected])
 
-	const setSelected = layerId => { dispatch({ type: 'selectLayer', payload: layerId }) }
+	const setSelected = layerId => { dispatchLayer({ type: 'select', payload: layerId }) }
 
 	return (
 		<Layout

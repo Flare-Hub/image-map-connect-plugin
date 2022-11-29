@@ -13,13 +13,16 @@ import cls from './edit-form.module.scss'
  * @param props
  */
 export default function EditLayer() {
-	const { layers, maps, dispatch } = useGlobalContext()
+	const { layers, maps, dispatchLayer } = useGlobalContext()
 
 	// Get the currently selected layer.
 	function getSelected() {
-		if (layers.selected === 'new') return { name: '', description: '', parent: maps.selected }
+		if (layers.selected === 'new') return {
+			name: '', description: '', parent: maps.selected, meta: {}
+		}
 		return layers.list.find(layer => layer.id === layers.selected)
 	}
+
 	const [layer, setLayer] = useState()
 	const [mediaMgr, setMediaMgr] = useState()
 	const [image, setImage] = useState({})
@@ -68,10 +71,10 @@ export default function EditLayer() {
 	async function onSave() {
 		if (layer.id) {
 			const res = await postItem('imagemaps', layer.id, layer)
-			dispatch({ type: 'updateLayer', payload: res.body })
+			dispatchLayer({ type: 'update', payload: res.body })
 		} else {
 			const res = await createItem('imagemaps', layer)
-			dispatch({ type: 'addLayer', payload: { layer: res.body, select: true } })
+			dispatchLayer({ type: 'add', payload: { item: res.body, select: true } })
 		}
 	}
 
@@ -79,7 +82,7 @@ export default function EditLayer() {
 	async function onDelete() {
 		const res = await deleteItem('imagemaps', layer.id, { force: true })
 		if (!res.body.deleted) throw new Error('To do: handle this!')
-		dispatch({ type: 'deleteLayer', payload: layer.id })
+		dispatchLayer({ type: 'delete', payload: layer.id })
 	}
 
 	if (!layer) return <div></div>
