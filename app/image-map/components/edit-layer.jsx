@@ -2,7 +2,7 @@ import { TextControl, Button, BaseControl } from '@wordpress/components'
 import { useEffect, useState } from '@wordpress/element'
 
 import { useGlobalContext } from "../contexts/global"
-import { postItem, deleteItem, createItem } from '../utils/wp-fetch'
+import useSelected from '../hooks/useSelected'
 import LifeCycleButtons from './lifecycle-buttons'
 
 import cls from './edit-form.module.scss'
@@ -13,32 +13,20 @@ import cls from './edit-form.module.scss'
  * @param props
  */
 export default function EditLayer() {
-	const { layers, maps, dispatchLayer } = useGlobalContext()
+	const { layers, dispatchLayer } = useGlobalContext()
 
-	// Get the currently selected layer.
-	function getSelected() {
-		if (layers.selected === 'new') return {
-			name: '', description: '', parent: maps.selected, meta: {}
-		}
-		return layers.list.find(layer => layer.id === layers.selected)
-	}
-
-	const [layer, setLayer] = useState()
+	const [layer, setLayer] = useSelected(layers, { name: '', description: '', meta: {} })
 	const [mediaMgr, setMediaMgr] = useState()
 	const [image, setImage] = useState({})
 
-	// Set layer and image as mount.
+	// Set image at mount.
 	useEffect(async () => {
-		// Update layer to the selected layer.
-		const newLayer = getSelected()
-		setLayer(newLayer)
-
 		// Get image for the stored image ID.
-		if (newLayer && newLayer.meta.image) {
-			const newImage = await window.wp.media.attachment(newLayer.meta.image).fetch()
-			setImage(newImage)
-		}
-	}, [layers])
+		const newImage = layer && layer.meta.image
+			? await window.wp.media.attachment(layer.meta.image).fetch()
+			: {}
+		setImage(newImage)
+	}, [layer])
 
 	// Load media manager
 	useEffect(() => {
@@ -67,25 +55,7 @@ export default function EditLayer() {
 		return () => mm.off('select', getImage)
 	}, [])
 
-	// Save the new or udpated layer to the backend and the global state.
-	async function onSave() {
-		if (layer.id) {
-			const res = await postItem('imagemaps', layer.id, layer)
-			dispatchLayer({ type: 'update', payload: res.body })
-		} else {
-			const res = await createItem('imagemaps', layer)
-			dispatchLayer({ type: 'add', payload: { item: res.body, select: true } })
-		}
-	}
-
-	// Remove the layer from the backend and the global state.
-	async function onDelete() {
-		const res = await deleteItem('imagemaps', layer.id, { force: true })
-		if (!res.body.deleted) throw new Error('To do: handle this!')
-		dispatchLayer({ type: 'delete', payload: layer.id })
-	}
-
-	if (!layer) return <div></div>
+	if (layer.name === undefined) return <div></div>
 
 	return (
 		<>
@@ -109,7 +79,7 @@ export default function EditLayer() {
 				</div>
 			</div>
 			<div className="col-xs-3">
-				<LifeCycleButtons onSave={onSave} onDelete={onDelete} />
+				<LifeCycleButtons collection="imagemaps" item={layer} dispatch={dispatchLayer} />
 			</div>
 		</>
 	)

@@ -1,9 +1,8 @@
-import { useEffect, useState } from '@wordpress/element'
 import { Button } from '@wordpress/components'
 
 import Layout from './layout'
 import { useGlobalContext } from '../contexts/global'
-import { getCollection } from '../utils/wp-fetch'
+import useLoader from '../hooks/useLoader'
 import EditMap from './edit-map'
 
 /**
@@ -11,26 +10,12 @@ import EditMap from './edit-map'
  */
 export default function Maps() {
 	const { dispatchMap, maps } = useGlobalContext()
-	const [loading, setLoading] = useState(true)
-
-	useEffect(async () => {
-		if (!maps.list.length) {
-			// Get image maps from rest api and store the results
-			const { body, totalPages } = await getCollection(
-				'imagemaps',
-				{ page: maps.page, parent: 0 }
-			)
-
-			dispatchMap({
-				type: 'updateAll',
-				payload: { list: body, totalPages }
-			})
-		}
-
-		setLoading(false)
-	}, [])
-
-	const setSelected = mapId => { dispatchMap({ type: 'select', payload: mapId }) }
+	const [loading, setSelected] = useLoader(
+		'imagemaps',
+		false,
+		dispatchMap,
+		{ page: maps.page, parent: 0 }
+	)
 
 	return (
 		<Layout

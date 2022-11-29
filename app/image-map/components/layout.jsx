@@ -15,6 +15,18 @@ import { Card, CardBody, CardDivider } from '@wordpress/components'
  * @param {Component} props.addButton Component for adding a new item to the list.
  */
 export default function Layout({ loading, list, titleAttr, selected, selectItem, addButton, children }) {
+	function getTitle(item) {
+		const attrs = titleAttr.split('.')
+		// let title = item
+		for (const attr of attrs) {
+			// title = title[attr]
+			item = item[attr]
+		}
+
+		// return title
+		return item
+	}
+
 	return (
 		<div className={`${cls.tab} grid-bleed`}>
 			<Card as="aside" className={`${cls.menu} col-3`}>
@@ -37,10 +49,11 @@ export default function Layout({ loading, list, titleAttr, selected, selectItem,
 									className={cls.menuItem}
 									onClick={() => selectItem(item.id)}
 									isShady={item.id === selected}
-								>{item[titleAttr]}</CardBody>
+								>{getTitle(item)}</CardBody>
 								<CardDivider />
 							</div>
-						))
+						)
+						)
 						: <p className={cls.empty}>No items found</p>
 				}
 			</Card>

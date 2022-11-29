@@ -1,14 +1,11 @@
 import { TextControl, TextareaControl } from '@wordpress/components'
-import { useEffect, useState } from '@wordpress/element'
 
 import { useGlobalContext } from "../contexts/global"
-import { postItem, deleteItem, createItem } from '../utils/wp-fetch'
 import LifeCycleButtons from './lifecycle-buttons'
 
 import cls from './edit-form.module.scss'
 import PostTypesSelect from './post-types-select'
-
-/** Default values for an empty map */
+import useSelected from '../hooks/useSelected'
 
 /**
  * Map details form.
@@ -18,33 +15,7 @@ import PostTypesSelect from './post-types-select'
 export default function EditMap() {
 	const { maps, dispatchMap } = useGlobalContext()
 
-	function getSelected() {
-		if (maps.selected === 'new') return { name: '', description: '', meta: { post_types: [] } }
-		const foundMap = maps.list.find(map => map.id === maps.selected)
-		return foundMap ? foundMap : {}
-	}
-
-	const [map, setMap] = useState({})
-
-	useEffect(() => {
-		setMap(getSelected())
-	}, [maps])
-
-	async function onSave() {
-		if (map.id) {
-			const res = await postItem('imagemaps', map.id, map)
-			dispatchMap({ type: 'update', payload: res.body })
-		} else {
-			const res = await createItem('imagemaps', map)
-			dispatchMap({ type: 'add', payload: { item: res.body, select: true } })
-		}
-	}
-
-	async function onDelete() {
-		const res = await deleteItem('imagemaps', map.id, { force: true })
-		if (!res.body.deleted) throw new Error('To do: handle this!')
-		dispatchMap({ type: 'delete', payload: map.id })
-	}
+	const [map, setMap] = useSelected(maps, { name: '', description: '', meta: { post_types: [] } })
 
 	if (map.name === undefined) return <div></div>
 
@@ -73,7 +44,7 @@ export default function EditMap() {
 				}
 			</div>
 			<div className="col-xs-3">
-				<LifeCycleButtons onSave={onSave} onDelete={onDelete} />
+				<LifeCycleButtons collection="imagemaps" item={map} dispatch={dispatchMap} />
 			</div>
 		</>
 	)

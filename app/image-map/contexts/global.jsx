@@ -18,14 +18,16 @@ import { navigate } from './router'
  * @prop {Payload} payload
  */
 
+/** @typedef {import('react').Dispatch<Action>} Dispatcher */
+
 /**
  * @typedef GlobalContext
  * @prop {WpCollection} maps
- * @prop {import('react').Dispatch<Action>} dispatchMap
+ * @prop {Dispatcher} dispatchMap
  * @prop {WpCollection} layers
- * @prop {import('react').Dispatch<Action>} dispatchLayer
+ * @prop {Dispatcher} dispatchLayer
  * @prop {WpCollection} markers
- * @prop {import('react').Dispatch<Action>} dispatchMarker
+ * @prop {Dispatcher} dispatchMarker
  * @prop {Array|string>} messages
  * @prop {(error: string) => Array<string>} addMessage
  */
