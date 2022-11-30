@@ -31,8 +31,7 @@ export default function EditMarker() {
 				<MapContainer
 					crs={CRS.Simple}
 					className={cls.map}
-					center={overlay.center}
-					bounds={overlay.bounds}
+					bounds={layer.meta.initial_bounds}
 					maxZoom={layer.meta.max_zoom}
 					minZoom={layer.meta.min_zoom}
 					maxBounds={overlay.bounds}

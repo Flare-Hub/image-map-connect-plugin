@@ -39,9 +39,9 @@ export default function App() {
 
 		// Fetch each collection if a parent is needed and available
 		loaded.push(updateList(maps, { parent: 0 }, false, dispatchMap))
-		if (query.map) {
+		if (query.map && query.map !== 'new') {
 			loaded.push(updateList(layers, { parent: query.map }, query.map, dispatchLayer))
-			if (query.layer) {
+			if (query.layer && query.layer !== 'new') {
 				loaded.push(updateList(markers, { imagemaps: query.layer }, query.layer, dispatchMarker))
 			}
 		}

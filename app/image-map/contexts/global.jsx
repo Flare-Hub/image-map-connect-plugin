@@ -48,7 +48,7 @@ const actions = {
 
 	/** Update the selected map and set the map query parameter accordingly  */
 	select(state, id) {
-		navigate({ [state.object]: id })
+		setTimeout(() => navigate({ [state.object]: id }))
 		return { ...state, selected: id }
 	},
 

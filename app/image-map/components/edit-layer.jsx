@@ -10,6 +10,7 @@ import LifeCycleButtons from './lifecycle-buttons'
 import cls from './edit-form.module.scss'
 import useImgOverlay from '../hooks/useImgOverlay'
 import useForceUpdate from '../hooks/useForceUpdate';
+import BoundsGetter from './BoundsGetter';
 
 /**
  * Map details form.
@@ -19,7 +20,7 @@ import useForceUpdate from '../hooks/useForceUpdate';
 export default function EditLayer() {
 	const { layers, dispatchLayer } = useGlobalContext()
 
-	const [layer, setLayer] = useSelected(layers, { name: '', description: '', meta: {} })
+	const [layer, setLayer] = useSelected(layers, { name: '', description: '', meta: { initial_bounds: [] } })
 	const [mediaMgr, setMediaMgr] = useState()
 	const overlay = useImgOverlay(layer.meta.image)
 
@@ -82,16 +83,20 @@ export default function EditLayer() {
 					className={`${cls.field} ${cls.center}`}
 				/>
 				{overlay &&
-					<BaseControl label="Map" className={`${cls.field} ${cls.start}`}>
+					<BaseControl label="Initial position" className={`${cls.field} ${cls.start}`}>
 						<MapContainer
 							key={mapKey}
 							crs={CRS.Simple}
 							className={cls.map}
-							bounds={overlay.bounds}
+							bounds={layer.meta.initial_bounds.length ? layer.meta.initial_bounds : overlay.bounds}
 							maxZoom={layer.meta.max_zoom}
 							minZoom={layer.meta.min_zoom}
 							maxBounds={overlay.bounds}
 						>
+							<BoundsGetter onChange={bounds => setLayer(oldLayer => ({
+								...oldLayer,
+								meta: { ...oldLayer.meta, initial_bounds: bounds }
+							}))} />
 							<ImageOverlay url={overlay.url} bounds={overlay.bounds} />
 						</MapContainer>
 					</BaseControl>

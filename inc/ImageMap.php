@@ -92,7 +92,7 @@ class ImageMap {
 	}
 
 	/**
-	 * Register Image Map's max zoom level field witb the rest API
+	 * Register Image Map's max zoom level field with the rest API.
 	 *
 	 * @since 0.1.0
 	 **/
@@ -107,7 +107,7 @@ class ImageMap {
 	}
 
 	/**
-	 * Register Image Map's max zoom level field witb the rest API
+	 * Register Image Map's max zoom level field with the rest API.
 	 *
 	 * @since 0.1.0
 	 **/
@@ -119,5 +119,30 @@ class ImageMap {
 			'show_in_rest'    => true,
 		);
 		register_meta( 'term', 'min_zoom', $meta_args );
+	}
+
+	/**
+	 * Register Image Map's initial bounds field with the rest API.
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_initial_bounds() {
+		$meta_args = array(
+			'object_subtype ' => 'imagemap',
+			'type'            => 'array',
+			'single'          => true,
+			'show_in_rest'    => array(
+				'schema' => array(
+					'type'  => 'array',
+					'items' => array(
+						'type'  => 'array',
+						'items' => array(
+							'type' => 'number',
+						),
+					),
+				),
+			),
+		);
+		register_meta( 'term', 'initial_bounds', $meta_args );
 	}
 }

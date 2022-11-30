@@ -71,6 +71,7 @@ class Plugin {
 		$this->image_map->register_image();
 		$this->image_map->register_max_zoom();
 		$this->image_map->register_min_zoom();
+		$this->image_map->register_initial_bounds();
 		$this->image_map->register_connected_post_types();
 		add_action( 'rest_prepare_imagemap', array( $this->image_map, 'add_image_link' ), 10, 2 );
 
