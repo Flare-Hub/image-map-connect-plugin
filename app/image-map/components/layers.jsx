@@ -10,12 +10,17 @@ import EditLayer from './edit-layer'
  */
 export default function Layers() {
 	const { dispatchLayer, maps, layers } = useGlobalContext()
-	const [loading, setSelected] = useLoader(
-		'imagemaps',
+
+	// Load layers into global state
+	const loading = useLoader(
+		layers,
+		{ page: layers.page, parent: maps.selected },
 		maps,
-		dispatchLayer,
-		{ page: layers.page, parent: maps.selected }
+		dispatchLayer
 	)
+
+	/** Set selected layer */
+	const setSelected = id => dispatchLayer({ type: 'select', payload: id })
 
 	return (
 		<Layout

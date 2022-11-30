@@ -10,12 +10,17 @@ import EditMap from './edit-map'
  */
 export default function Maps() {
 	const { dispatchMap, maps } = useGlobalContext()
-	const [loading, setSelected] = useLoader(
-		'imagemaps',
+
+	// Load maps into global state
+	const loading = useLoader(
+		maps,
+		{ page: maps.page, parent: 0 },
 		false,
-		dispatchMap,
-		{ page: maps.page, parent: 0 }
+		dispatchMap
 	)
+
+	/** Set selected map */
+	const setSelected = id => dispatchMap({ type: 'select', payload: id })
 
 	return (
 		<Layout

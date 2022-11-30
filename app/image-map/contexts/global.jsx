@@ -4,10 +4,12 @@ import { navigate } from './router'
 /**
  * @typedef WpCollection
  * @prop {string} object
+ * @prop {string} wp
  * @prop {Array.<object>} list
  * @prop {number} page
  * @prop {number} totalPages
  * @prop {number | 'new'} selected
+ * @prop {number | false} parent
  */
 
 /** @typedef {Object.<string, any> | WpCollection | string} Payload */
@@ -30,6 +32,8 @@ import { navigate } from './router'
  * @prop {Dispatcher} dispatchMarker
  * @prop {Array|string>} messages
  * @prop {(error: string) => Array<string>} addMessage
+ * @prop {boolean} appLoading
+ * @prop {(loading: boolean) => void} setAppLoading
  */
 
 /** @type {import('react').Context<GlobalContext>} Global context */
@@ -89,17 +93,19 @@ function reducer(state, action) {
  */
 export function GlobalProvider({ children }) {
 	// Use a reducers for the global collections.
-	const [maps, dispatchMap] = useReducer(reducer, { object: 'map', list: [], page: 1, selected: 0 })
-	const [layers, dispatchLayer] = useReducer(reducer, { object: 'layer', list: [], page: 1, selected: 0 })
-	const [markers, dispatchMarker] = useReducer(reducer, { object: 'marker', list: [], page: 1, selected: 0 })
+	const [maps, dispatchMap] = useReducer(reducer, { object: 'map', wp: 'imagemaps', list: [], page: 1, selected: 0 })
+	const [layers, dispatchLayer] = useReducer(reducer, { object: 'layer', wp: 'imagemaps', list: [], page: 1, selected: 0 })
+	const [markers, dispatchMarker] = useReducer(reducer, { object: 'marker', wp: 'markers', list: [], page: 1, selected: 0 })
 
 	// Handle message snackbars globally
 	const [messages, setMessages] = useState([])
 	const addMessage = (e) => setMessages(oldErr => oldErr.push(e))
 
+	const [appLoading, setAppLoading] = useState(true)
+
 	return (
 		<globalContext.Provider value={
-			{ maps, dispatchMap, layers, dispatchLayer, markers, dispatchMarker, messages, addMessage }
+			{ maps, dispatchMap, layers, dispatchLayer, markers, dispatchMarker, messages, addMessage, appLoading, setAppLoading }
 		}>
 			{children}
 		</globalContext.Provider>
