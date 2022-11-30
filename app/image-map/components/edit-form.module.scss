@@ -1,19 +1,46 @@
 .field {
+	gap: 0;
+
+	&.start {
+
+		>div>label,
+		:global(.components-base-control__label) {
+			align-self: flex-start;
+		}
+	}
+
+	&.center {
+
+		>div>label,
+		:global(.components-base-control__label) {
+			align-self: center;
+		}
+	}
+
 	>div {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: baseline;
-	}
 
-	label,
-	.label,
-	:global(.components-base-control__label) {
-		flex: 0 1 100px;
-	}
+		>label,
+		>.label,
+		>:global(.components-base-control__label) {
+			flex: 0 1 100px;
+			width: 100px;
+		}
 
-	input,
-	textarea,
-	.input {
-		flex: 1 1 100px;
+		>input,
+		>textarea,
+		>.input,
+		>.map,
+		>:global(.components-range-control__root) {
+			flex: 1 1;
+			width: 100%;
+		}
 	}
+}
+
+.map {
+	height: 400px;
+	margin-bottom: 8px;
 }

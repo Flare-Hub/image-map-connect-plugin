@@ -90,4 +90,34 @@ class ImageMap {
 		);
 		register_meta( 'term', 'post_types', $meta_args );
 	}
+
+	/**
+	 * Register Image Map's max zoom level field witb the rest API
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_max_zoom() {
+		$meta_args = array(
+			'object_subtype ' => 'imagemap',
+			'type'            => 'number',
+			'single'          => true,
+			'show_in_rest'    => true,
+		);
+		register_meta( 'term', 'max_zoom', $meta_args );
+	}
+
+	/**
+	 * Register Image Map's max zoom level field witb the rest API
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_min_zoom() {
+		$meta_args = array(
+			'object_subtype ' => 'imagemap',
+			'type'            => 'number',
+			'single'          => true,
+			'show_in_rest'    => true,
+		);
+		register_meta( 'term', 'min_zoom', $meta_args );
+	}
 }

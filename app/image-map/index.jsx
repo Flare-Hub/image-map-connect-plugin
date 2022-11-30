@@ -4,6 +4,8 @@ import { RouterProvider } from './contexts/router'
 import App from './app'
 import { GlobalProvider } from './contexts/global'
 
+import 'leaflet/dist/leaflet.css'
+
 const appDiv = document.getElementById('image-map')
 
 render(

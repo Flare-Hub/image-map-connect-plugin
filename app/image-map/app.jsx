@@ -6,7 +6,7 @@ import { useGlobalContext } from './contexts/global'
 import Maps from './components/maps'
 import Layers from './components/layers'
 import Markers from './components/markers'
-import forceChildUpdate from './utils/forceChildUpdate'
+import useForceUpdate from './hooks/useForceUpdate'
 import { getCollection } from './utils/wp-fetch'
 
 import cls from './app.module.scss'
@@ -17,7 +17,7 @@ export default function App() {
 	const { maps, dispatchMap, layers, dispatchLayer, markers, dispatchMarker, setAppLoading } = useGlobalContext()
 
 	// Ensure that the tabs panel is refreshed when query is updated
-	const tabsKey = forceChildUpdate([query])
+	const tabsKey = useForceUpdate([query])
 
 	// Load collections from Wordpress on mounting the app.
 	useEffect(async () => {

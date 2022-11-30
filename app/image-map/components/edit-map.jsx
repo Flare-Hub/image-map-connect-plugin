@@ -25,19 +25,19 @@ export default function EditMap() {
 				<TextControl
 					label="Name"
 					value={map.name}
-					onChange={val => setMap({ ...map, name: val })}
+					onChange={val => setMap(oldMap => ({ ...oldMap, name: val }))}
 					className={cls.field}
 				/>
 				<TextareaControl
 					label="Description"
 					value={map.description}
 					className={cls.field}
-					onChange={val => setMap({ ...map, description: val })}
+					onChange={val => setMap(oldMap => ({ ...oldMap, description: val }))}
 				/>
 				{map.meta &&
 					<PostTypesSelect
 						selected={map.meta.post_types}
-						onSelect={types => setMap(map => ({ ...map, meta: { ...map.meta, post_types: types } }))}
+						onSelect={types => setMap(oldMap => ({ ...oldMap, meta: { ...oldMap.meta, post_types: types } }))}
 						baseClass={cls.field}
 						inputClass={cls.input}
 					/>
