@@ -25,7 +25,7 @@
 		>label,
 		>.label,
 		>:global(.components-base-control__label) {
-			flex: 0 1 100px;
+			flex: 0 0 100px;
 			width: 100px;
 		}
 
@@ -38,6 +38,18 @@
 			width: 100%;
 		}
 	}
+
+	&.iconGroup>div {
+		flex-wrap: nowrap;
+
+		:global(.components-toolbar) {
+			flex-shrink: 1;
+		}
+	}
+}
+
+.row {
+	margin-bottom: 4px;
 }
 
 .map {
@@ -45,4 +57,19 @@
 	margin-bottom: 8px;
 	border: 1px solid #757575;
 	border-radius: 2px;
+}
+
+.right {
+	text-align: right;
+}
+
+.alignColour {
+	margin-bottom: 28px;
+}
+
+.marker {
+	display: inline-block;
+	font-size: 30px;
+	width: 30px;
+	height: 30px;
 }

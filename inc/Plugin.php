@@ -17,9 +17,14 @@ class Plugin {
 	/** @var string version */
 	const VERSION = '0.1.0';
 
-	/** @var \Flare\ImageMap\ImageMap $image_map The image map Taxonomy management object. */
+	/** @var ImageMap The image map Taxonomy management object. */
 	protected $image_map;
 
+	/** @var Marker The marker Custom Post Type management object. */
+	protected $marker;
+
+	/** @var MarkerIcon The marker icon Taxonomy management object. */
+	protected $marker_icon;
 	/**
 	 * Register plugin to primary and lifecycle hooks.
 	 *
@@ -33,20 +38,28 @@ class Plugin {
 	}
 
 	/**
-	 * Instantiate any classes that are always needed and hook them into WordPress.
+	 * Instantiate any classes that are always needed.
 	 *
 	 * @since 0.1.0
 	 **/
 	public function plugins_loaded() {
+		$this->image_map   = new ImageMap();
+		$this->marker      = new Marker();
+		$this->marker_icon = new MarkerIcon();
+
+		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+	}
 
-		// Hook Image Map functions.
-		$this->image_map = new ImageMap();
-		add_action( 'init', array( $this->image_map, 'register_image_map' ) );
-
-		// Hook Marker functions.
-		$marker = new Marker();
-		add_action( 'init', array( $marker, 'register_marker_cpt' ) );
+	/**
+	 * Run actions that require the init hook
+	 *
+	 * @since 0.1.0
+	 **/
+	public function init() {
+		$this->image_map->register_image_map();
+		$this->marker->register_marker_cpt();
+		$this->marker_icon->register_marker_icon();
 	}
 
 	/**
@@ -74,6 +87,11 @@ class Plugin {
 		$this->image_map->register_initial_bounds();
 		$this->image_map->register_connected_post_types();
 		add_action( 'rest_prepare_imagemap', array( $this->image_map, 'add_image_link' ), 10, 2 );
+
+		// Hook marker icon functions.
+		$this->marker_icon->register_colour();
+		$this->marker_icon->register_icon();
+		$this->marker_icon->register_map();
 
 		// Hook Post Type Route functions.
 		$types = new PostTypesRoute();

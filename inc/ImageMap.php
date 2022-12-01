@@ -52,10 +52,10 @@ class ImageMap {
 	 **/
 	public function register_image() {
 		$meta_args = array(
-			'object_subtype ' => 'imagemap',
-			'type'            => 'number',
-			'single'          => true,
-			'show_in_rest'    => true,
+			'object_subtype' => 'imagemap',
+			'type'           => 'number',
+			'single'         => true,
+			'show_in_rest'   => true,
 		);
 		register_meta( 'term', 'image', $meta_args );
 	}
@@ -83,10 +83,10 @@ class ImageMap {
 	 **/
 	public function register_connected_post_types() {
 		$meta_args = array(
-			'object_subtype ' => 'imagemap',
-			'type'            => 'string',
-			'single'          => false,
-			'show_in_rest'    => true,
+			'object_subtype' => 'imagemap',
+			'type'           => 'string',
+			'single'         => false,
+			'show_in_rest'   => true,
 		);
 		register_meta( 'term', 'post_types', $meta_args );
 	}
@@ -98,10 +98,10 @@ class ImageMap {
 	 **/
 	public function register_max_zoom() {
 		$meta_args = array(
-			'object_subtype ' => 'imagemap',
-			'type'            => 'number',
-			'single'          => true,
-			'show_in_rest'    => true,
+			'object_subtype' => 'imagemap',
+			'type'           => 'number',
+			'single'         => true,
+			'show_in_rest'   => true,
 		);
 		register_meta( 'term', 'max_zoom', $meta_args );
 	}
@@ -113,10 +113,10 @@ class ImageMap {
 	 **/
 	public function register_min_zoom() {
 		$meta_args = array(
-			'object_subtype ' => 'imagemap',
-			'type'            => 'number',
-			'single'          => true,
-			'show_in_rest'    => true,
+			'object_subtype' => 'imagemap',
+			'type'           => 'number',
+			'single'         => true,
+			'show_in_rest'   => true,
 		);
 		register_meta( 'term', 'min_zoom', $meta_args );
 	}
@@ -128,10 +128,10 @@ class ImageMap {
 	 **/
 	public function register_initial_bounds() {
 		$meta_args = array(
-			'object_subtype ' => 'imagemap',
-			'type'            => 'array',
-			'single'          => true,
-			'show_in_rest'    => array(
+			'object_subtype' => 'imagemap',
+			'type'           => 'array',
+			'single'         => true,
+			'show_in_rest'   => array(
 				'schema' => array(
 					'type'  => 'array',
 					'items' => array(

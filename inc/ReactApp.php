@@ -9,18 +9,18 @@ namespace Flare\ImageMap;
  */
 class ReactApp {
 
-	/** @var string $id Id for the metabox and app div. */
+	/** @var string Id for the metabox and app div. */
 	public $id;
 
-	/** @var string $script_name description */
+	/** @var string description */
 	protected $script_name;
 
-	/** @var array{string} $script_deps Registered javascript tags that the script
+	/** @var array{string} Registered javascript tags that the script
 	 * for this metabox depends on.
 	 */
 	protected $script_deps;
 
-	/** @var AssetPath $asset_path Handler to provide build location. */
+	/** @var AssetPath Handler to provide build location. */
 	protected $asset_path;
 
 	/**
