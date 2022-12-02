@@ -76,6 +76,23 @@ class MarkerIcon {
 	}
 
 	/**
+	 * Remove Parent field from the rest API.
+	 *
+	 * @param \WP_REST_Response $response The response object.
+	 * @param \WP_Term          $term The original term object.
+	 * @param \WP_REST_Request  $request Request used to generate the response.
+	 * @return \WP_REST_Response The response object.
+	 *
+	 * @since 0.1.0
+	 */
+	public function unregister_parent( \WP_REST_Response $response, \WP_Term $term, \WP_REST_Request $request ) {
+		$data = $response->get_data();
+		unset( $data['parent'] );
+		$response->set_data( $data );
+		return $response;
+	}
+
+	/**
 	 * Register Marker Map field with the rest API.
 	 *
 	 * @since 0.1.0
@@ -119,4 +136,17 @@ class MarkerIcon {
 		);
 	}
 
+	/**
+	 * Description
+	 *
+	 * @param array            $prepared_args Array of arguments for get_terms().
+	 * @param \WP_REST_Request $request The REST API request.
+	 * @return array Array of arguments for get_terms().
+	 * @since 0.1.0
+	 **/
+	public function query_map( array $prepared_args, \WP_REST_Request $request ) {
+		$map                     = $request->get_param( 'map' );
+		$prepared_args['parent'] = intval( $map );
+		return $prepared_args;
+	}
 }

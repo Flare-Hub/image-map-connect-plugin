@@ -92,6 +92,8 @@ class Plugin {
 		$this->marker_icon->register_colour();
 		$this->marker_icon->register_icon();
 		$this->marker_icon->register_map();
+		add_filter( 'rest_prepare_marker-icon', array( $this->marker_icon, 'unregister_parent' ), 10, 3 );
+		add_filter( 'rest_marker-icon_query', array( $this->marker_icon, 'query_map' ), 10, 2 );
 
 		// Hook Post Type Route functions.
 		$types = new PostTypesRoute();
