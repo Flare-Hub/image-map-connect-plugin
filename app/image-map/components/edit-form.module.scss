@@ -24,7 +24,8 @@
 
 		>label,
 		>.label,
-		>:global(.components-base-control__label) {
+		>:global(.components-base-control__label),
+		>:global(.components-custom-select-control) {
 			flex: 0 0 100px;
 			width: 100px;
 		}
@@ -72,4 +73,20 @@
 	font-size: 30px;
 	width: 30px;
 	height: 30px;
+}
+
+.iconName {
+	margin-left: 1em;
+}
+
+.select {
+	> :global(.components-custom-select-control__menu) {
+		min-width: auto;
+		right: 0;
+		left: 100px;
+	}
+
+	> :global(.components-flex) {
+		flex: 1 1 0;
+	}
 }

@@ -15,11 +15,12 @@ import cls from './lifecycle-buttons.module.scss'
 export default function LifeCycleButtons({ item, collection, dispatch }) {
 	// Save the new or updated item to the backend and the global state.
 	async function onSave() {
+		const query = { context: 'edit' }
 		if (item.id) {
-			const res = await postItem(collection, item.id, item)
+			const res = await postItem(collection, item.id, item, query)
 			dispatch({ type: 'update', payload: res.body })
 		} else {
-			const res = await createItem(collection, item)
+			const res = await createItem(collection, item, query)
 			dispatch({ type: 'add', payload: { item: res.body, select: true } })
 		}
 	}

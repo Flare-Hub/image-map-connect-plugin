@@ -17,13 +17,10 @@ import { Card, CardBody, CardDivider } from '@wordpress/components'
 export default function Layout({ loading, list, titleAttr, selected, selectItem, addButton, children }) {
 	function getTitle(item) {
 		const attrs = titleAttr.split('.')
-		// let title = item
 		for (const attr of attrs) {
-			// title = title[attr]
 			item = item[attr]
 		}
 
-		// return title
 		return item
 	}
 

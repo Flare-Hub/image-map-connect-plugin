@@ -8,11 +8,12 @@
 }
 
 :global(#image-map) {
-	height: calc(100vh - 32px);
+	min-height: calc(100vh - 32px);
+	display: flex;
 }
 
 .app {
-	height: 100%;
+	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
 }

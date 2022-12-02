@@ -81,10 +81,11 @@ export function getItem(collection, id, query) {
  * @param {string} collection The type of wordpress object to get.
  * @param {string} id The ID of the object.
  * @param {object} body The content of the message. Will be stringified.
+ * @param {Object.<string, string>} query Query parameters to append to the endpoint.
  */
-export function createItem(collection, body) {
+export function createItem(collection, body, query) {
 	const path = `/wp/v2/${collection}/`
-	return wpFetch(path, 'POST', body)
+	return wpFetch(path, 'POST', body, query)
 }
 
 /**
@@ -93,10 +94,11 @@ export function createItem(collection, body) {
  * @param {string} collection The type of wordpress object to get.
  * @param {string} id The ID of the object.
  * @param {object} body The content of the message. Will be stringified.
+ * @param {Object.<string, string>} query Query parameters to append to the endpoint.
  */
-export function postItem(collection, id, body) {
+export function postItem(collection, id, body, query) {
 	const path = `/wp/v2/${collection}/${id}`
-	return wpFetch(path, 'POST', body)
+	return wpFetch(path, 'POST', body, query)
 }
 
 /**

@@ -1,4 +1,5 @@
 import { useEffect, useState } from '@wordpress/element'
+import { getItem } from '../utils/wp-fetch'
 
 /**
  * Get controlled state for an item selected from a collection.
@@ -14,12 +15,14 @@ export default function useSelected(collection, placeholder) {
 
 	// Set state to the selected item, the placeholder for a new item,
 	// or a blank object if no item is found.
-	useEffect(() => {
+	useEffect(async () => {
 		const foundItem = (collection.selected === 'new')
-			? placeholder
-			: collection.list.find(i => i.id === collection.selected)
+			? { body: placeholder }
+			: (collection.selected)
+				? await getItem(collection.wp, collection.selected, { context: 'edit' })
+				: { body: empty }
 
-		setItem(foundItem || empty)
+		setItem(foundItem.body || empty)
 	}, [collection])
 
 	return [item, setItem]

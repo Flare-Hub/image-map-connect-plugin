@@ -20,7 +20,12 @@ import BoundsGetter from './BoundsGetter';
 export default function EditLayer() {
 	const { layers, dispatchLayer } = useGlobalContext()
 
-	const [layer, setLayer] = useSelected(layers, { name: '', description: '', meta: { initial_bounds: [] } })
+	const [layer, setLayer] = useSelected(layers, {
+		name: '',
+		description: '',
+		parent: layers.parent,
+		meta: { initial_bounds: [] }
+	})
 	const [mediaMgr, setMediaMgr] = useState()
 	const overlay = useImgOverlay(layer.meta.image)
 

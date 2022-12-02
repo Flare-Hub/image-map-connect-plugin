@@ -24,10 +24,11 @@ export default function App() {
 		/** Fetch collection and store it in global state. */
 		async function updateList(collection, queryParams, parent, dispatch) {
 			const res = await getCollection(collection.wp, queryParams)
+			const selected = query[collection.object]
 			dispatch({
 				type: 'updateAll', payload: {
 					list: res.body,
-					selected: Number(query[collection.object]),
+					selected: selected === 'new' ? selected : Number(selected),
 					parent: Number(parent)
 				}
 			})
@@ -38,11 +39,11 @@ export default function App() {
 		const loaded = []
 
 		// Fetch each collection if a parent is needed and available
-		loaded.push(updateList(maps, { parent: 0 }, false, dispatchMap))
+		loaded.push(updateList(maps, { parent: 0, _fields: 'name,id' }, false, dispatchMap))
 		if (query.map && query.map !== 'new') {
-			loaded.push(updateList(layers, { parent: query.map }, query.map, dispatchLayer))
+			loaded.push(updateList(layers, { parent: query.map, _fields: 'name,id' }, query.map, dispatchLayer))
 			if (query.layer && query.layer !== 'new') {
-				loaded.push(updateList(markers, { imagemaps: query.layer }, query.layer, dispatchMarker))
+				loaded.push(updateList(markers, { imagemaps: query.layer, _fields: 'title,id' }, query.layer, dispatchMarker))
 			}
 		}
 
