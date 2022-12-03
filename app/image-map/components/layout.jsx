@@ -40,7 +40,7 @@ export default function Layout({ loading, list, titleAttr, selected, selectItem,
 					</>
 					: list.length
 						? list.map(item => (
-							<div key={item.id}>
+							<div key={item.id ?? 0}>
 								<CardBody
 									size='extraSmall'
 									className={cls.menuItem}

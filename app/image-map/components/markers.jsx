@@ -1,43 +1,46 @@
 import { Button } from '@wordpress/components'
 
 import Layout from './layout'
-import { useGlobalContext } from '../contexts/global'
-import useLoader from '../hooks/useLoader'
+import useCollection from '../hooks/useCollection'
 import EditMarker from './edit-marker'
+import { useRouter } from '../contexts/router'
+
+/** @type {import('../hooks/useCollection').WpIdentifiers} */
+export const wpMarkers = {
+	model: 'marker',
+	endpoint: 'markers',
+	parent: 'layer',
+}
 
 /**
  * List of maps with details of selected map
  */
 export default function Markers() {
-	const { dispatchMarker, markers, layers } = useGlobalContext()
+	const { query, navigate } = useRouter()
 
 	// Load markers into global state
-	const loading = useLoader(
-		markers,
-		{ page: markers.page, imagemaps: layers.selected },
-		layers,
-		dispatchMarker
+	const [markers, dispatchMarkers, loading] = useCollection(
+		wpMarkers,
+		{ parent: query[wpMarkers.parent], _fields: 'title,id' },
+		{ list: [], page: 1 }
 	)
-
-	/** Set selected marker */
-	const setSelected = id => dispatchMarker({ type: 'select', payload: id })
 
 	return (
 		<Layout
 			list={markers.list}
 			titleAttr="title.rendered"
-			selected={markers.selected}
-			selectItem={setSelected}
+			selected={Number(query.marker)}
+			selectItem={marker => navigate({ marker })}
 			loading={loading}
 			addButton={
 				<Button
 					variant='primary'
 					className='medium'
-					onClick={() => setSelected('new')}
+					onClick={() => navigate({ marker: 'new' })}
 				>Add Marker</Button>
 			}
 		>
-			<EditMarker />
+			<EditMarker markers={wpMarkers} dispatch={dispatchMarkers} />
 		</Layout>
 	)
 }

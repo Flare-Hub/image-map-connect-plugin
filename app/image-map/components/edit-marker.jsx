@@ -3,29 +3,35 @@ import { SelectControl, TextControl } from '@wordpress/components'
 import { MapContainer, ImageOverlay } from 'react-leaflet'
 import { CRS } from 'leaflet';
 
-import { useGlobalContext } from "../contexts/global"
 import useSelected from '../hooks/useSelected'
+import useImgOverlay from '../hooks/useImgOverlay';
+import useCollection from '../hooks/useCollection';
+import { useRouter } from '../contexts/router';
+import { wpLayers } from './layers';
 import LifeCycleButtons from './lifecycle-buttons'
+import MarkerIconSelect from './marker-icon-select';
 
 import cls from './edit-form.module.scss'
-import useImgOverlay from '../hooks/useImgOverlay';
-import MarkerIconSelect from './marker-icon-select';
 
 /**
  * Map details form.
  *
- * @param props
+ * @param {Object} props
+ * @param {import('../hooks/useCollection').WpIdentifiers} props.markers
+ * @param {import('../hooks/useCollection').Dispatcher} props.dispatch
  */
-export default function EditMarker() {
-	const { markers, dispatchMarker, layers } = useGlobalContext()
+export default function EditMarker({ markers, dispatch }) {
+	const { query } = useRouter()
+	const [layers] = useCollection(wpLayers, { parent: query.map }, { list: [] })
+
+	const [layer] = useSelected(wpLayers)
 
 	const [marker, setMarker] = useSelected(markers, {
 		status: 'publish',
 		title: { raw: '' },
-		imagemaps: [layers.selected],
+		imagemaps: [query[markers.parent]],
 		'marker-icons': []
 	})
-	const [layer] = useSelected(layers)
 
 	const overlay = useImgOverlay(layer.meta.image)
 
@@ -71,7 +77,7 @@ export default function EditMarker() {
 				/>
 			</div>
 			<div className="col-xs-3">
-				<LifeCycleButtons collection={markers.wp} item={marker} dispatch={dispatchMarker} />
+				<LifeCycleButtons identifiers={markers} item={marker} dispatch={dispatch} />
 			</div>
 		</>
 	)

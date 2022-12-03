@@ -2,7 +2,7 @@ import { CustomSelectControl, Icon } from '@wordpress/components'
 import { useEffect, useState } from '@wordpress/element'
 
 import { getCollection } from '../utils/wp-fetch'
-import { useGlobalContext } from '../contexts/global'
+import { useRouter } from '../contexts/router'
 
 import cls from './edit-form.module.scss'
 
@@ -15,12 +15,12 @@ import cls from './edit-form.module.scss'
  * @param {(icon: number) => any} props.onSelect Callback that is called when a post type is selected.
  */
 export default function MarkerIconSelect({ label, value, onSelect }) {
-	const { maps } = useGlobalContext()
+	const { query } = useRouter()
 	const [icons, setIcons] = useState([])
 	const [loading, setLoading] = useState(true)
 
 	useEffect(async () => {
-		const res = await getCollection('marker-icons', { map: maps.selected })
+		const res = await getCollection('marker-icons', { map: query.map })
 		const newIcons = res.body.map(icon => ({
 			key: icon.id,
 			name: <span>
@@ -30,7 +30,7 @@ export default function MarkerIconSelect({ label, value, onSelect }) {
 		}))
 		setIcons(Object.values(newIcons))
 		setLoading(false)
-	}, [maps.selected])
+	}, [query.map])
 
 	return (
 		<div className={cls.field}>

@@ -24,7 +24,11 @@ const routeContext = createContext(null)
 function createUrl(query) {
 	const search = new URLSearchParams(globalHistory.location.search)
 	for (const param in query) {
-		search.set(param, query[param])
+		if (query[param] === undefined) {
+			search.delete(param)
+		} else {
+			search.set(param, query[param])
+		}
 	}
 	return '?' + search.toString()
 }
@@ -32,11 +36,11 @@ function createUrl(query) {
 /**
  * Navigate to new query parameters using client side routing.
  *
- * @param {object} query The query parameters to change.
- * @param {object} state Any state to pass to the next page.
+ * @param {Object} query The query parameters to change.
+ * @param {Object} state Any state to pass to the next page.
  * @param {boolean} replace Replace url in history instead of pushing a new entry.
  */
-export function navigate(query, state, replace) {
+export function navigate(query, state, replace = false) {
 	const route = createUrl(query)
 	replace ? globalHistory.replace(route, state) : globalHistory.push(route, state)
 }

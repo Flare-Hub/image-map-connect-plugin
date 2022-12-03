@@ -1,43 +1,45 @@
 import { Button } from '@wordpress/components'
 
 import Layout from './layout'
-import { useGlobalContext } from '../contexts/global'
-import useLoader from '../hooks/useLoader'
+import useCollection from '../hooks/useCollection'
 import EditMap from './edit-map'
+import { useRouter } from '../contexts/router'
+
+/** @type {import('../hooks/useCollection').WpIdentifiers} */
+export const wpMaps = {
+	model: 'map',
+	endpoint: 'imagemaps',
+	parent: false,
+}
 
 /**
  * List of maps with details of selected map
  */
 export default function Maps() {
-	const { dispatchMap, maps } = useGlobalContext()
-
 	// Load maps into global state
-	const loading = useLoader(
-		maps,
-		{ page: maps.page, parent: 0 },
-		false,
-		dispatchMap
+	const { query, navigate } = useRouter()
+	const [maps, dispatchMaps, loading] = useCollection(
+		wpMaps,
+		{ parent: 0, _fields: 'name,id' },
+		{ list: [], page: 1 }
 	)
-
-	/** Set selected map */
-	const setSelected = id => dispatchMap({ type: 'select', payload: id })
 
 	return (
 		<Layout
 			list={maps.list}
 			titleAttr="name"
-			selected={maps.selected}
-			selectItem={setSelected}
+			selected={Number(query.map)}
+			selectItem={map => navigate({ map })}
 			loading={loading}
 			addButton={
 				<Button
 					variant='primary'
 					className='medium'
-					onClick={() => setSelected('new')}
+					onClick={() => navigate({ map: 'new' })}
 				>Add Map</Button>
 			}
 		>
-			<EditMap />
+			<EditMap maps={wpMaps} dispatch={dispatchMaps} />
 		</Layout>
 	)
 }

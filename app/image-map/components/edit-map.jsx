@@ -12,7 +12,6 @@ import {
 } from '@wordpress/components'
 import { useEffect, useReducer, useState } from '@wordpress/element'
 
-import { useGlobalContext } from "../contexts/global"
 import useSelected from '../hooks/useSelected'
 import { deleteItem, getCollection } from '../utils/wp-fetch'
 import LifeCycleButtons from './lifecycle-buttons'
@@ -24,10 +23,11 @@ import cls from './edit-form.module.scss'
 /**
  * Map details form.
  *
- * @param props
+ * @param {object} props
+ * @param {import('../hooks/useCollection').WpIdentifiers} props.maps
+ * @param {import('../hooks/useCollection').Dispatcher} props.dispatch
  */
-export default function EditMap() {
-	const { maps, dispatchMap } = useGlobalContext()
+export default function EditMap({ maps, dispatch }) {
 
 	// Get selected map
 	const [map, setMap] = useSelected(maps, { name: '', description: '', meta: { post_types: [] } })
@@ -123,7 +123,7 @@ export default function EditMap() {
 				</BaseControl>
 			</div>
 			<div className="col-xs-3">
-				<LifeCycleButtons collection="imagemaps" item={map} dispatch={dispatchMap} />
+				<LifeCycleButtons identifiers={maps} item={map} dispatch={dispatch} />
 			</div>
 		</>
 	)

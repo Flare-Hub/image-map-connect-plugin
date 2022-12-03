@@ -3,29 +3,34 @@ import { useEffect, useState } from '@wordpress/element'
 import { MapContainer, ImageOverlay } from 'react-leaflet'
 import { CRS } from 'leaflet';
 
-import { useGlobalContext } from "../contexts/global"
 import useSelected from '../hooks/useSelected'
-import LifeCycleButtons from './lifecycle-buttons'
-
-import cls from './edit-form.module.scss'
 import useImgOverlay from '../hooks/useImgOverlay'
 import useForceUpdate from '../hooks/useForceUpdate';
+import { useRouter } from '../contexts/router';
+import LifeCycleButtons from './lifecycle-buttons'
 import BoundsGetter from './BoundsGetter';
+
+import cls from './edit-form.module.scss'
 
 /**
  * Map details form.
  *
- * @param props
+ * @param {Object} props
+ * @param {import('../hooks/useCollection').WpIdentifiers} props.layers
+ * @param {import('../hooks/useCollection').Dispatcher} props.dispatch
  */
-export default function EditLayer() {
-	const { layers, dispatchLayer } = useGlobalContext()
+export default function EditLayer({ layers, dispatch }) {
+	const { query } = useRouter()
 
+	// Fetch selected layer from Wordpress.
 	const [layer, setLayer] = useSelected(layers, {
 		name: '',
 		description: '',
-		parent: layers.parent,
+		parent: query[layers.parent],
 		meta: { initial_bounds: [] }
 	})
+
+	// Initialise media manager
 	const [mediaMgr, setMediaMgr] = useState()
 	const overlay = useImgOverlay(layer.meta.image)
 
@@ -108,7 +113,7 @@ export default function EditLayer() {
 				}
 			</div>
 			<div className="col-xs-3">
-				<LifeCycleButtons collection={layers.wp} item={layer} dispatch={dispatchLayer} />
+				<LifeCycleButtons identifiers={layers} item={layer} dispatch={dispatch} />
 			</div>
 		</>
 	)

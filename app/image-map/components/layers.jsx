@@ -1,43 +1,46 @@
 import { Button } from '@wordpress/components'
 
+import useCollection from '../hooks/useCollection'
+import { useRouter } from '../contexts/router'
 import Layout from './layout'
-import { useGlobalContext } from '../contexts/global'
-import useLoader from '../hooks/useLoader'
 import EditLayer from './edit-layer'
+
+/** @type {import('../hooks/useCollection').WpIdentifiers} */
+export const wpLayers = {
+	model: 'layer',
+	endpoint: 'imagemaps',
+	parent: 'map',
+}
 
 /**
  * List of maps with details of selected map
  */
 export default function Layers() {
-	const { dispatchLayer, maps, layers } = useGlobalContext()
+	const { query, navigate } = useRouter()
 
 	// Load layers into global state
-	const loading = useLoader(
-		layers,
-		{ page: layers.page, parent: maps.selected },
-		maps,
-		dispatchLayer
+	const [layers, dispatchLayers, loading] = useCollection(
+		wpLayers,
+		{ parent: Number(query[wpLayers.parent]), _fields: 'name,id' },
+		{ list: [], page: 1 }
 	)
-
-	/** Set selected layer */
-	const setSelected = id => dispatchLayer({ type: 'select', payload: id })
 
 	return (
 		<Layout
 			list={layers.list}
 			titleAttr="name"
-			selected={layers.selected}
-			selectItem={setSelected}
+			selected={Number(query.layer)}
+			selectItem={layer => navigate({ layer })}
 			loading={loading}
 			addButton={
 				<Button
 					variant='primary'
 					className='medium'
-					onClick={() => setSelected('new')}
+					onClick={() => navigate('new')}
 				>Add Layer</Button>
 			}
 		>
-			<EditLayer />
+			<EditLayer layers={wpLayers} dispatch={dispatchLayers} />
 		</Layout>
 	)
 }

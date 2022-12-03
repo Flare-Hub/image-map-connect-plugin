@@ -1,29 +1,43 @@
 import { useEffect, useState } from '@wordpress/element'
+import { useRouter } from '../contexts/router'
 import { getItem } from '../utils/wp-fetch'
+
+const empty = { meta: {} }
 
 /**
  * Get controlled state for an item selected from a collection.
  *
-* @param {import('../contexts/global').WpCollection} collection Collection to select item from.
+* @param {import('./useCollection').WpIdentifiers} collection Collection itentifiers.
  * @param {Object} placeholder Empty object as placeholder for a new item.
  * @returns {[Object, React.Dispatch<React.SetStateAction<{}>>]} Item state
  */
 export default function useSelected(collection, placeholder) {
-	const empty = { meta: {} }
+	const { query } = useRouter()
+	const selected = query[collection.model]
+
 	// Manage state for selected item
 	const [item, setItem] = useState(empty)
 
-	// Set state to the selected item, the placeholder for a new item,
-	// or a blank object if no item is found.
+	// Set state to the selected item or the placeholder for a new item,
 	useEffect(async () => {
-		const foundItem = (collection.selected === 'new')
-			? { body: placeholder }
-			: (collection.selected)
-				? await getItem(collection.wp, collection.selected, { context: 'edit' })
-				: { body: empty }
+		switch (selected) {
+			case item.id:
+				break
 
-		setItem(foundItem.body || empty)
-	}, [collection])
+			case undefined:
+				item.id && setItem(empty)
+				break
+
+			case 'new':
+				setItem(placeholder)
+				break
+
+			default:
+				const newItem = await getItem(collection.endpoint, selected, { context: 'edit' })
+				setItem(newItem.body)
+				break
+		}
+	}, [query])
 
 	return [item, setItem]
 }
