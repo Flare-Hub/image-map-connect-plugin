@@ -1,15 +1,13 @@
 import { useState, useEffect } from '@wordpress/element'
 import { SelectControl, TextControl } from '@wordpress/components'
-import { MapContainer, ImageOverlay } from 'react-leaflet'
-import { CRS } from 'leaflet';
 
 import useSelected from '../hooks/useSelected'
-import useImgOverlay from '../hooks/useImgOverlay';
 import useCollection from '../hooks/useCollection';
 import { useRouter } from '../contexts/router';
 import { wpLayers } from './layers';
 import LifeCycleButtons from './lifecycle-buttons'
 import MarkerIconSelect from './marker-icon-select';
+import ImageMap from './image-map';
 
 import cls from './edit-form.module.scss'
 
@@ -33,24 +31,11 @@ export default function EditMarker({ markers, dispatch }) {
 		'marker-icons': []
 	})
 
-	const overlay = useImgOverlay(layer.meta.image)
-
 	if (marker.title === undefined) return <div></div>
 
 	return (
 		<>
-			{overlay &&
-				<MapContainer
-					crs={CRS.Simple}
-					className={cls.map}
-					bounds={layer.meta.initial_bounds}
-					maxZoom={layer.meta.max_zoom}
-					minZoom={layer.meta.min_zoom}
-					maxBounds={overlay.bounds}
-				>
-					<ImageOverlay url={overlay.url} bounds={overlay.bounds} />
-				</MapContainer>
-			}
+			<ImageMap layer={layer} className={cls.map} />
 			<div className='col-xs-9'>
 				<TextControl
 					label="Name"

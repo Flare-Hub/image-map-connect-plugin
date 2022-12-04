@@ -4,11 +4,11 @@ import { MapContainer, ImageOverlay } from 'react-leaflet'
 import { CRS } from 'leaflet';
 
 import useSelected from '../hooks/useSelected'
-import useImgOverlay from '../hooks/useImgOverlay'
 import useForceUpdate from '../hooks/useForceUpdate';
 import { useRouter } from '../contexts/router';
 import LifeCycleButtons from './lifecycle-buttons'
 import BoundsGetter from './BoundsGetter';
+import ImageMap from './image-map';
 
 import cls from './edit-form.module.scss'
 
@@ -32,9 +32,8 @@ export default function EditLayer({ layers, dispatch }) {
 
 	// Initialise media manager
 	const [mediaMgr, setMediaMgr] = useState()
-	const overlay = useImgOverlay(layer.meta.image)
 
-	const mapKey = useForceUpdate([layer.meta, overlay])
+	const mapKey = useForceUpdate([layer.meta.image])
 
 	// Load media manager
 	useEffect(() => {
@@ -92,25 +91,14 @@ export default function EditLayer({ layers, dispatch }) {
 					max="2"
 					className={`${cls.field} ${cls.center}`}
 				/>
-				{overlay &&
-					<BaseControl label="Initial position" className={`${cls.field} ${cls.start}`}>
-						<MapContainer
-							key={mapKey}
-							crs={CRS.Simple}
-							className={cls.map}
-							bounds={layer.meta.initial_bounds.length ? layer.meta.initial_bounds : overlay.bounds}
-							maxZoom={layer.meta.max_zoom}
-							minZoom={layer.meta.min_zoom}
-							maxBounds={overlay.bounds}
-						>
-							<BoundsGetter onChange={bounds => setLayer(oldLayer => ({
-								...oldLayer,
-								meta: { ...oldLayer.meta, initial_bounds: bounds }
-							}))} />
-							<ImageOverlay url={overlay.url} bounds={overlay.bounds} />
-						</MapContainer>
-					</BaseControl>
-				}
+				<BaseControl label="Initial position" className={`${cls.field} ${cls.start}`}>
+					<ImageMap key={mapKey} layer={layer} className={cls.map}>
+						<BoundsGetter onChange={bounds => setLayer(oldLayer => ({
+							...oldLayer,
+							meta: { ...oldLayer.meta, initial_bounds: bounds }
+						}))} />
+					</ImageMap>
+				</BaseControl>
 			</div>
 			<div className="col-xs-3">
 				<LifeCycleButtons identifiers={layers} item={layer} dispatch={dispatch} />
