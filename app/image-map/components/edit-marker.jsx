@@ -1,8 +1,7 @@
 import { useState, useEffect } from '@wordpress/element'
-import { SelectControl, TextControl } from '@wordpress/components'
+import { BaseControl, TextControl } from '@wordpress/components'
 
 import useSelected from '../hooks/useSelected'
-import useCollection from '../hooks/useCollection';
 import { useRouter } from '../contexts/router';
 import { wpLayers } from './layers';
 import LifeCycleButtons from './lifecycle-buttons'
@@ -20,16 +19,19 @@ import cls from './edit-form.module.scss'
  */
 export default function EditMarker({ markers, dispatch }) {
 	const { query } = useRouter()
-	const [layers] = useCollection(wpLayers, { parent: query.map }, { list: [] })
 
-	const [layer] = useSelected(wpLayers)
+	const [layer] = useSelected(wpLayers, { _fields: 'id,name,meta' })
 
-	const [marker, setMarker] = useSelected(markers, {
-		status: 'publish',
-		title: { raw: '' },
-		imagemaps: [query[markers.parent]],
-		'marker-icons': []
-	})
+	const [marker, setMarker] = useSelected(
+		markers,
+		{ context: 'edit' },
+		{
+			status: 'publish',
+			title: { raw: '' },
+			imagemaps: [query[markers.parent]],
+			'marker-icons': []
+		}
+	)
 
 	if (marker.title === undefined) return <div></div>
 
@@ -37,18 +39,11 @@ export default function EditMarker({ markers, dispatch }) {
 		<>
 			<ImageMap layer={layer} className={cls.map} />
 			<div className='col-xs-9'>
+				<BaseControl label="Layer" className={cls.field}>{layer.name}</BaseControl>
 				<TextControl
 					label="Name"
 					value={marker.title.raw}
 					onChange={val => setMarker(oldMarker => ({ ...oldMarker, title: { raw: val } }))}
-					className={cls.field}
-				/>
-				<SelectControl
-					label="Layer"
-					options={layers.list.map(layer => ({ label: layer.name, value: layer.id }))}
-					value={marker.imagemaps[0]}
-					onChange={val => setMarker(oldMarker => ({ ...oldMarker, imagemaps: [val] }))}
-					labelPosition="side"
 					className={cls.field}
 				/>
 				<MarkerIconSelect

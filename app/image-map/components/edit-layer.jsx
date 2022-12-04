@@ -23,12 +23,16 @@ export default function EditLayer({ layers, dispatch }) {
 	const { query } = useRouter()
 
 	// Fetch selected layer from Wordpress.
-	const [layer, setLayer] = useSelected(layers, {
-		name: '',
-		description: '',
-		parent: query[layers.parent],
-		meta: { initial_bounds: [] }
-	})
+	const [layer, setLayer] = useSelected(
+		layers,
+		{ context: 'edit' },
+		{
+			name: '',
+			description: '',
+			parent: query[layers.parent],
+			meta: { initial_bounds: [] }
+		}
+	)
 
 	// Initialise media manager
 	const [mediaMgr, setMediaMgr] = useState()

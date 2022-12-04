@@ -30,7 +30,11 @@ import cls from './edit-form.module.scss'
 export default function EditMap({ maps, dispatch }) {
 
 	// Get selected map
-	const [map, setMap] = useSelected(maps, { name: '', description: '', meta: { post_types: [] } })
+	const [map, setMap] = useSelected(
+		maps,
+		{ context: 'edit' },
+		{ name: '', description: '', meta: { post_types: [] } }
+	)
 
 	// Use a reducer to manage the CRUD operations of the marker icon collection.
 	const [markerIcons, dispatchMarkerIcons] = useReducer((state, action) => {

@@ -7,13 +7,14 @@ const empty = { meta: {} }
 /**
  * Get controlled state for an item selected from a collection.
  *
-* @param {import('./useCollection').WpIdentifiers} collection Collection itentifiers.
- * @param {Object} placeholder Empty object as placeholder for a new item.
- * @returns {[Object, React.Dispatch<React.SetStateAction<{}>>]} Item state
+ * @param {import('./useCollection').WpIdentifiers} collection Collection itentifiers.
+ * @param {object} query Query parameters for fetching the item.
+ * @param {object} placeholder Empty object as placeholder for a new item.
+ * @returns {[object, React.Dispatch<React.SetStateAction<{}>>]} Item state
  */
-export default function useSelected(collection, placeholder) {
-	const { query } = useRouter()
-	const selected = query[collection.model]
+export default function useSelected(collection, query, placeholder) {
+	const { query: queryparams } = useRouter()
+	const selected = queryparams[collection.model]
 
 	// Manage state for selected item
 	const [item, setItem] = useState(empty)
@@ -33,11 +34,11 @@ export default function useSelected(collection, placeholder) {
 				break
 
 			default:
-				const newItem = await getItem(collection.endpoint, selected, { context: 'edit' })
+				const newItem = await getItem(collection.endpoint, selected, query)
 				setItem(newItem.body)
 				break
 		}
-	}, [query])
+	}, [queryparams])
 
 	return [item, setItem]
 }
