@@ -8,6 +8,9 @@ namespace Flare\ImageMap;
  * @since 0.1.0
  */
 class ImageMap {
+	/** @var string $name The taxonomy name for markers. */
+	public static $name = 'imagemap';
+
 	/**
 	 * Register Image Map taxonomy.
 	 *
@@ -42,7 +45,7 @@ class ImageMap {
 			'show_in_rest'       => true,
 			'rest_base'          => 'imagemaps',
 		);
-		register_taxonomy( 'imagemap', array(), $args );
+		register_taxonomy( self::$name, array(), $args );
 	}
 
 	/**
@@ -52,7 +55,7 @@ class ImageMap {
 	 **/
 	public function register_image() {
 		$meta_args = array(
-			'object_subtype' => 'imagemap',
+			'object_subtype' => self::$name,
 			'type'           => 'number',
 			'single'         => true,
 			'show_in_rest'   => true,
@@ -83,7 +86,7 @@ class ImageMap {
 	 **/
 	public function register_connected_post_types() {
 		$meta_args = array(
-			'object_subtype' => 'imagemap',
+			'object_subtype' => self::$name,
 			'type'           => 'string',
 			'single'         => false,
 			'show_in_rest'   => true,
@@ -98,7 +101,7 @@ class ImageMap {
 	 **/
 	public function register_max_zoom() {
 		$meta_args = array(
-			'object_subtype' => 'imagemap',
+			'object_subtype' => self::$name,
 			'type'           => 'number',
 			'single'         => true,
 			'show_in_rest'   => true,
@@ -113,7 +116,7 @@ class ImageMap {
 	 **/
 	public function register_min_zoom() {
 		$meta_args = array(
-			'object_subtype' => 'imagemap',
+			'object_subtype' => self::$name,
 			'type'           => 'number',
 			'single'         => true,
 			'show_in_rest'   => true,
@@ -128,7 +131,7 @@ class ImageMap {
 	 **/
 	public function register_initial_bounds() {
 		$meta_args = array(
-			'object_subtype' => 'imagemap',
+			'object_subtype' => self::$name,
 			'type'           => 'array',
 			'single'         => true,
 			'show_in_rest'   => array(

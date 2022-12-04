@@ -58,8 +58,8 @@ class Plugin {
 	 **/
 	public function init() {
 		$this->image_map->register_image_map();
-		$this->marker->register_marker_cpt();
 		$this->marker_icon->register_marker_icon();
+		$this->marker->register_marker_cpt();
 	}
 
 	/**

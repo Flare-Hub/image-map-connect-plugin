@@ -8,6 +8,9 @@ namespace Flare\ImageMap;
  * @since 0.1.0
  */
 class Marker {
+	/** @var string $post_type The custom post type name for markers. */
+	public static $post_type = 'marker';
+
 	/**
 	 * Register Markers post type
 	 *
@@ -48,7 +51,7 @@ class Marker {
 			'description'         => __( 'Markers on an image map.', 'flare-im' ),
 			'labels'              => $labels,
 			'supports'            => array( 'title', 'excerpt', 'thumbnail', 'author' ),
-			'taxonomies'          => array( 'imagemap' ),
+			'taxonomies'          => array( ImageMap::$name, MarkerIcon::$name ),
 			'public'              => false,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
@@ -64,6 +67,35 @@ class Marker {
 			'publicly_queryable'  => false,
 			'capability_type'     => 'post',
 		);
-		register_post_type( 'marker', $args );
+		register_post_type( self::$post_type, $args );
+	}
+
+	/**
+	 * Register Marker's coordinates fields with the rest API.
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_coordinates() {
+		$meta_args = array(
+			'object_subtype' => self::$post_type,
+			'type'           => 'object',
+			'single'         => false,
+			'show_in_rest'   => array(
+				'schema' => array(
+					'type'       => 'object',
+					'properties' => array(
+						'lat' => array(
+							'type'     => 'string',
+							'required' => true,
+						),
+						'lng' => array(
+							'type'     => 'string',
+							'required' => true,
+						),
+					),
+				),
+			),
+		);
+		register_meta( 'post', 'coordinates', $meta_args );
 	}
 }

@@ -8,6 +8,9 @@ namespace Flare\ImageMap;
  * @since 0.1.0
  */
 class MarkerIcon {
+	/** @var string $name The taxonomy name for marker icons. */
+	public static $name = 'marker-icon';
+
 	/**
 	 * Register Marker Icon taxonomy.
 	 *
@@ -42,7 +45,7 @@ class MarkerIcon {
 			'show_in_rest'       => true,
 			'rest_base'          => 'marker-icons',
 		);
-		register_taxonomy( 'marker-icon', array( 'marker' ), $args );
+		register_taxonomy( self::$name, array(), $args );
 	}
 
 	/**
@@ -52,7 +55,7 @@ class MarkerIcon {
 	 **/
 	public function register_icon() {
 		$meta_args = array(
-			'object_subtype' => 'marker-icon',
+			'object_subtype' => self::$name,
 			'type'           => 'string',
 			'single'         => true,
 			'show_in_rest'   => true,
@@ -67,7 +70,7 @@ class MarkerIcon {
 	 **/
 	public function register_colour() {
 		$meta_args = array(
-			'object_subtype' => 'marker-icon',
+			'object_subtype' => self::$name,
 			'type'           => 'string',
 			'single'         => true,
 			'show_in_rest'   => true,
@@ -99,7 +102,7 @@ class MarkerIcon {
 	 **/
 	public function register_map() {
 		register_rest_field(
-			'marker-icon',
+			self::$name,
 			'map',
 			array(
 				'get_callback'    => array( $this, 'get_map' ),
