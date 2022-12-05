@@ -88,6 +88,9 @@ class Plugin {
 		$this->image_map->register_connected_post_types();
 		add_action( 'rest_prepare_imagemap', array( $this->image_map, 'add_image_link' ), 10, 2 );
 
+		// Hook marker functions.
+		$this->marker->register_coordinates();
+
 		// Hook marker icon functions.
 		$this->marker_icon->register_colour();
 		$this->marker_icon->register_icon();

@@ -50,7 +50,7 @@ class Marker {
 			'label'               => __( 'Marker', 'flare-im' ),
 			'description'         => __( 'Markers on an image map.', 'flare-im' ),
 			'labels'              => $labels,
-			'supports'            => array( 'title', 'excerpt', 'thumbnail', 'author' ),
+			'supports'            => array( 'title', 'excerpt', 'thumbnail', 'author', 'custom-fields' ),
 			'taxonomies'          => array( ImageMap::$name, MarkerIcon::$name ),
 			'public'              => false,
 			'show_ui'             => true,
@@ -79,20 +79,21 @@ class Marker {
 		$meta_args = array(
 			'object_subtype' => self::$post_type,
 			'type'           => 'object',
-			'single'         => false,
+			'single'         => true,
 			'show_in_rest'   => array(
 				'schema' => array(
 					'type'       => 'object',
 					'properties' => array(
 						'lat' => array(
-							'type'     => 'string',
+							'type'     => 'number',
 							'required' => true,
 						),
 						'lng' => array(
-							'type'     => 'string',
+							'type'     => 'number',
 							'required' => true,
 						),
 					),
+					'required'   => true,
 				),
 			),
 		);

@@ -1,9 +1,14 @@
 import { Button } from '@wordpress/components'
+import { useState } from '@wordpress/element'
 
-import Layout from './layout'
-import useCollection from '../hooks/useCollection'
-import EditMarker from './edit-marker'
 import { useRouter } from '../contexts/router'
+import useCollection from '../hooks/useCollection'
+import useSelected from '../hooks/useSelected'
+import transformModel from '../utils/transform-model'
+import { wpLayers } from './layers';
+import Layout from './layout'
+import EditMarker from './edit-marker'
+import ImageMap from './image-map';
 
 /** @type {import('../hooks/useCollection').WpIdentifiers} */
 export const wpMarkers = {
@@ -18,12 +23,16 @@ export const wpMarkers = {
 export default function Markers() {
 	const { query, navigate } = useRouter()
 
+	const [map, setMap] = useState()
+
 	// Load markers into global state
 	const [markers, dispatchMarkers, loading] = useCollection(
 		wpMarkers,
 		{ parent: query[wpMarkers.parent], _fields: 'title,id' },
 		{ list: [], page: 1 }
 	)
+
+	const [layer] = useSelected(wpLayers, { _fields: 'id,meta' })
 
 	return (
 		<Layout
@@ -40,7 +49,11 @@ export default function Markers() {
 				>Add Marker</Button>
 			}
 		>
-			<EditMarker markers={wpMarkers} dispatch={dispatchMarkers} />
+			<ImageMap layer={layer} whenCreated={setMap} />
+			<EditMarker
+				markers={wpMarkers}
+				dispatch={action => dispatchMarkers(transformModel(action))}
+				map={map} />
 		</Layout>
 	)
 }

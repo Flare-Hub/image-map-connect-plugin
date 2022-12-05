@@ -6,7 +6,6 @@ import { useRouter } from '../contexts/router';
 import { wpLayers } from './layers';
 import LifeCycleButtons from './lifecycle-buttons'
 import MarkerIconSelect from './marker-icon-select';
-import ImageMap from './image-map';
 
 import cls from './edit-form.module.scss'
 
@@ -16,8 +15,9 @@ import cls from './edit-form.module.scss'
  * @param {Object} props
  * @param {import('../hooks/useCollection').WpIdentifiers} props.markers
  * @param {import('../hooks/useCollection').Dispatcher} props.dispatch
+ * @param {import('leaflet').Map} props.map
  */
-export default function EditMarker({ markers, dispatch }) {
+export default function EditMarker({ markers, dispatch, map }) {
 	const { query } = useRouter()
 
 	const [layer] = useSelected(wpLayers, { _fields: 'id,name,meta' })
@@ -29,15 +29,30 @@ export default function EditMarker({ markers, dispatch }) {
 			status: 'publish',
 			title: { raw: '' },
 			imagemaps: [query[markers.parent]],
-			'marker-icons': []
+			'marker-icons': [],
+			meta: {}
 		}
 	)
+
+	useEffect(() => {
+		if (!map || marker.meta.coordinates) return
+		const events = {
+			click(e) {
+				setMarker(oldMarker => ({
+					...oldMarker,
+					meta: { ...oldMarker.meta, coordinates: e.latlng }
+				}))
+			}
+		}
+
+		map.on(events)
+		return () => map.off(events)
+	}, [map, marker.id])
 
 	if (marker.title === undefined) return <div></div>
 
 	return (
 		<>
-			<ImageMap layer={layer} className={cls.map} />
 			<div className='col-xs-9'>
 				<BaseControl label="Layer" className={cls.field}>{layer.name}</BaseControl>
 				<TextControl
