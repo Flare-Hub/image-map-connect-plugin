@@ -22,7 +22,7 @@ export default function LifeCycleButtons({ item, identifiers, dispatch }) {
 			dispatch({ type: 'update', payload: res.body })
 		} else {
 			const res = await createItem(identifiers.endpoint, item, query)
-			dispatch({ type: 'add', payload: { item: res.body, select: true } })
+			dispatch({ type: 'add', payload: res.body })
 			navigate({ [identifiers.model]: res.body.id })
 		}
 	}
