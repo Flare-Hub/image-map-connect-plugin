@@ -1,9 +1,8 @@
-import { useState, useEffect } from '@wordpress/element'
 import { BaseControl, TextControl } from '@wordpress/components'
 
 import useSelected from '../hooks/useSelected'
-import { useRouter } from '../contexts/router';
 import { wpLayers } from './layers';
+import { useMarker } from '../contexts/marker';
 import LifeCycleButtons from './lifecycle-buttons'
 import MarkerIconSelect from './marker-icon-select';
 
@@ -15,39 +14,11 @@ import cls from './edit-form.module.scss'
  * @param {Object} props
  * @param {import('../hooks/useCollection').WpIdentifiers} props.markers
  * @param {import('../hooks/useCollection').Dispatcher} props.dispatch
- * @param {import('leaflet').Map} props.map
  */
-export default function EditMarker({ markers, dispatch, map }) {
-	const { query } = useRouter()
-
+export default function EditMarker({ markers, dispatch }) {
 	const [layer] = useSelected(wpLayers, { _fields: 'id,name,meta' })
 
-	const [marker, setMarker] = useSelected(
-		markers,
-		{ context: 'edit' },
-		{
-			status: 'publish',
-			title: { raw: '' },
-			imagemaps: [query[markers.parent]],
-			'marker-icons': [],
-			meta: {}
-		}
-	)
-
-	useEffect(() => {
-		if (!map || marker.meta.coordinates) return
-		const events = {
-			click(e) {
-				setMarker(oldMarker => ({
-					...oldMarker,
-					meta: { ...oldMarker.meta, coordinates: e.latlng }
-				}))
-			}
-		}
-
-		map.on(events)
-		return () => map.off(events)
-	}, [map, marker.id])
+	const [marker, setMarker] = useMarker()
 
 	if (marker.title === undefined) return <div></div>
 

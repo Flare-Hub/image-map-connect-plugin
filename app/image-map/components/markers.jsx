@@ -1,14 +1,17 @@
 import { Button } from '@wordpress/components'
-import { useState } from '@wordpress/element'
+import { useEffect, useState } from '@wordpress/element'
 
 import { useRouter } from '../contexts/router'
+import { MarkerProvider } from '../contexts/marker'
 import useCollection from '../hooks/useCollection'
 import useSelected from '../hooks/useSelected'
+import { getCollection } from '../utils/wp-fetch'
 import transformModel from '../utils/transform-model'
 import { wpLayers } from './layers';
 import Layout from './layout'
 import EditMarker from './edit-marker'
 import ImageMap from './image-map';
+import SelectedMarker from './selected-marker'
 
 /** @type {import('../hooks/useCollection').WpIdentifiers} */
 export const wpMarkers = {
@@ -23,8 +26,6 @@ export const wpMarkers = {
 export default function Markers() {
 	const { query, navigate } = useRouter()
 
-	const [map, setMap] = useState()
-
 	// Load markers into global state
 	const [markers, dispatchMarkers, loading] = useCollection(
 		wpMarkers,
@@ -33,6 +34,14 @@ export default function Markers() {
 	)
 
 	const [layer] = useSelected(wpLayers, { _fields: 'id,meta' })
+
+	const [markerIcons, setMarkerIcons] = useState([])
+
+	useEffect(async () => {
+		if (!query.map) return
+		const res = await getCollection('marker-icons', { map: query.map, meta: {} })
+		setMarkerIcons(res.body)
+	}, [query.map])
 
 	return (
 		<Layout
@@ -49,11 +58,15 @@ export default function Markers() {
 				>Add Marker</Button>
 			}
 		>
-			<ImageMap layer={layer} whenCreated={setMap} />
-			<EditMarker
-				markers={wpMarkers}
-				dispatch={action => dispatchMarkers(transformModel(action))}
-				map={map} />
+			<MarkerProvider>
+				<ImageMap layer={layer}>
+					<SelectedMarker icons={markerIcons} />
+				</ImageMap>
+				<EditMarker
+					markers={wpMarkers}
+					dispatch={action => dispatchMarkers(transformModel(action))}
+				/>
+			</MarkerProvider>
 		</Layout>
 	)
 }
