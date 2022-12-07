@@ -9,9 +9,9 @@ import { useMarker } from "../contexts/marker"
  * Set marker coordinates for a new marker
  *
  * @param {object} props
- * @param {object<string, any>} props.icons
+ * @param {Array<Object<string, any>>} props.icons
  */
-export default function SelectedMarker({ icons }) {
+export default function SelectedMarkerPin({ icons }) {
 	const map = useMap()
 	const [marker, setMarker] = useMarker()
 

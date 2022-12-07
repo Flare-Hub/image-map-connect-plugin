@@ -11,7 +11,8 @@ import { wpLayers } from './layers';
 import Layout from './layout'
 import EditMarker from './edit-marker'
 import ImageMap from './image-map';
-import SelectedMarker from './selected-marker'
+import SelectedMarkerPin from './selected-marker-pin'
+import MarkerPinList from './marker-pin-list'
 
 /** @type {import('../hooks/useCollection').WpIdentifiers} */
 export const wpMarkers = {
@@ -29,7 +30,7 @@ export default function Markers() {
 	// Load markers into global state
 	const [markers, dispatchMarkers, loading] = useCollection(
 		wpMarkers,
-		{ parent: query[wpMarkers.parent], _fields: 'title,id' },
+		{ parent: query[wpMarkers.parent], _fields: 'title,id,meta,marker-icons' },
 		{ list: [], page: 1 }
 	)
 
@@ -60,7 +61,8 @@ export default function Markers() {
 		>
 			<MarkerProvider>
 				<ImageMap layer={layer}>
-					<SelectedMarker icons={markerIcons} />
+					<SelectedMarkerPin icons={markerIcons} />
+					<MarkerPinList markers={markers.list} icons={markerIcons} />
 				</ImageMap>
 				<EditMarker
 					markers={wpMarkers}
