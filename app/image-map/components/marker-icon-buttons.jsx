@@ -1,6 +1,5 @@
 import { ToolbarButton, ToolbarGroup } from '@wordpress/components'
-
-const names = ['post-status', 'sticky', 'star-filled', 'star-empty', 'flag', 'location', 'marker']
+import { icons } from '../utils/marker-icons'
 
 /**
  * A list of marker icons to choose from.
@@ -13,12 +12,12 @@ const names = ['post-status', 'sticky', 'star-filled', 'star-empty', 'flag', 'lo
 export default function MarkerIconButtons({ onClick, selected, colour }) {
 	return (
 		<ToolbarGroup style={{ margin: '0 1px' }}>
-			{names.map(name => (
+			{icons.map(icon => (
 				<ToolbarButton
-					key={name}
-					icon={name}
-					onClick={() => onClick(name)}
-					isActive={selected === name}
+					key={icon.icon}
+					icon={icon.icon}
+					onClick={() => onClick(icon)}
+					isActive={selected === icon.icon}
 					style={{ color: colour }}
 				/>
 			))}

@@ -14,6 +14,7 @@ import { useEffect, useReducer, useState } from '@wordpress/element'
 
 import useSelected from '../hooks/useSelected'
 import { deleteItem, getCollection } from '../utils/wp-fetch'
+import { getStyles } from '../utils/marker-icons'
 import LifeCycleButtons from './lifecycle-buttons'
 import PostTypesSelect from './post-types-select'
 import EditMarkerIcon from './edit-marker-icon'
@@ -114,7 +115,7 @@ export default function EditMap({ maps, dispatch }) {
 								<CardDivider />
 								<CardBody>
 									<Flex>
-										<Icon icon={icon.meta.icon} style={{ color: icon.meta.colour }} className={cls.marker} />
+										<Icon icon={icon.meta.icon} style={getStyles(icon.meta, false)} className={cls.marker} />
 										<FlexItem isBlock >{icon.name}</FlexItem>
 										<Button variant='tertiary' icon="edit" onClick={() => setEditIcon(icon)} />
 										<Button variant='tertiary' icon="no" isDestructive onClick={() => deleteIcon(icon.id)} />

@@ -95,6 +95,9 @@ class Plugin {
 		$this->marker_icon->register_colour();
 		$this->marker_icon->register_icon();
 		$this->marker_icon->register_map();
+		$this->marker_icon->register_size();
+		$this->marker_icon->register_anchor();
+		$this->marker_icon->register_popup_anchor();
 		add_filter( 'rest_prepare_marker-icon', array( $this->marker_icon, 'unregister_parent' ), 10, 3 );
 		add_filter( 'rest_marker-icon_query', array( $this->marker_icon, 'query_map' ), 10, 2 );
 

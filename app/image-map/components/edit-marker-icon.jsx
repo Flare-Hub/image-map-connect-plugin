@@ -34,8 +34,8 @@ export default function EditMarkerIcon({ icon, dispatch, close }) {
 	}
 
 	/** Update a meta field of the marker icon */
-	function setIconMeta(attr, name) {
-		setUpdIcon(oldIcon => ({ ...oldIcon, meta: { ...oldIcon.meta, [attr]: name } }))
+	function setIconMeta(meta) {
+		setUpdIcon(oldIcon => ({ ...oldIcon, meta: { ...oldIcon.meta, ...meta } }))
 	}
 
 	if (!updIcon) return <></>
@@ -50,14 +50,14 @@ export default function EditMarkerIcon({ icon, dispatch, close }) {
 			/>
 			<BaseControl label="Icon" className={`${cls.field} ${cls.iconGroup}`}>
 				<MarkerIconButtons
-					onClick={setIconMeta.bind(null, 'icon')}
+					onClick={setIconMeta}
 					selected={updIcon.meta.icon}
 					colour={updIcon.meta.colour}
 				/>
 			</BaseControl>
 			<Flex align="flex-end">
 				<BaseControl label="Colour" className={cls.field}>
-					<ColorPicker color={updIcon.meta.colour} onChange={setIconMeta.bind(null, 'colour')} />
+					<ColorPicker color={updIcon.meta.colour} onChange={colour => setIconMeta({ colour })} />
 				</BaseControl>
 				<Button text='Save' variant="primary" onClick={save} className={cls.alignColour} />
 			</Flex>

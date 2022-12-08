@@ -79,6 +79,87 @@ class MarkerIcon {
 	}
 
 	/**
+	 * Register Marker Icon's image field with the rest API.
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_size() {
+		$meta_args = array(
+			'object_subtype' => self::$name,
+			'type'           => 'object',
+			'single'         => true,
+			'show_in_rest'   => array(
+				'schema' => array(
+					'type'       => 'object',
+					'properties' => array(
+						'x' => array(
+							'type' => 'integer',
+						),
+						'y' => array(
+							'type' => 'integer',
+						),
+					),
+				),
+			),
+		);
+		register_meta( 'term', 'size', $meta_args );
+	}
+
+	/**
+	 * Register Marker Icon's anchor field with the rest API.
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_anchor() {
+		$meta_args = array(
+			'object_subtype' => self::$name,
+			'type'           => 'object',
+			'single'         => true,
+			'show_in_rest'   => array(
+				'schema' => array(
+					'type'       => 'object',
+					'properties' => array(
+						'x' => array(
+							'type' => 'number',
+						),
+						'y' => array(
+							'type' => 'number',
+						),
+					),
+				),
+			),
+		);
+		register_meta( 'term', 'iconAnchor', $meta_args );
+	}
+
+	/**
+	 * Register Marker Icon's popup anchor field with the rest API.
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_popup_anchor() {
+		$meta_args = array(
+			'object_subtype' => self::$name,
+			'type'           => 'object',
+			'single'         => true,
+			'show_in_rest'   => array(
+				'schema' => array(
+					'type'       => 'object',
+					'properties' => array(
+						'x' => array(
+							'type' => 'number',
+						),
+						'y' => array(
+							'type' => 'number',
+						),
+					),
+				),
+			),
+		);
+		register_meta( 'term', 'popupAnchor', $meta_args );
+	}
+
+	/**
 	 * Remove Parent field from the rest API.
 	 *
 	 * @param \WP_REST_Response $response The response object.
