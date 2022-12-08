@@ -11,8 +11,11 @@ import { wpLayers } from './layers';
 import Layout from './layout'
 import EditMarker from './edit-marker'
 import ImageMap from './image-map';
+import ListedMarkerPin from './listed-marker-pin'
 import SelectedMarkerPin from './selected-marker-pin'
-import MarkerPinList from './marker-pin-list'
+import NewMarkerPin from './new-marker-pin'
+
+/** @typedef {import('leaflet').Map} Map */
 
 /** @type {import('../hooks/useCollection').WpIdentifiers} */
 export const wpMarkers = {
@@ -46,12 +49,21 @@ export default function Markers() {
 		setMarkerIcons(res.body)
 	}, [query.map])
 
+	/** @type {[Map | undefined, (map: Map) => void]} */
+	const [map, setMap] = useState()
+
+	function selectMarker(marker) {
+		navigate({ marker })
+		const selected = markers.list.find(m => m.id === marker)
+		map.panTo(selected.meta.coordinates, { animate: true, easeLinearity: 0.1, duration: 0.5 })
+	}
+
 	return (
 		<Layout
 			list={markers.list}
 			titleAttr="title.rendered"
 			selected={Number(query.marker)}
-			selectItem={marker => navigate({ marker })}
+			selectItem={selectMarker}
 			loading={loading}
 			addButton={
 				<Button
@@ -61,10 +73,16 @@ export default function Markers() {
 				>Add Marker</Button>
 			}
 		>
-			<MarkerProvider>
-				<ImageMap layer={layer}>
-					<SelectedMarkerPin icons={markerIcons} />
-					<MarkerPinList markers={markers.list} icons={markerIcons} />
+			<MarkerProvider icons={markerIcons}>
+				<ImageMap layer={layer} whenCreated={setMap}>
+					{markers.list.map(mk => {
+						if (mk.id == query.marker) {
+							return <SelectedMarkerPin key={mk.id} icons={markerIcons} selected={mk} />
+						} else {
+							return <ListedMarkerPin key={mk.id} marker={mk} icons={markerIcons} />
+						}
+					})}
+					{(query.marker === 'new') && <NewMarkerPin icons={markerIcons} />}
 				</ImageMap>
 				<EditMarker
 					markers={wpMarkers}
