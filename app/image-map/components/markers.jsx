@@ -22,20 +22,22 @@ export const wpMarkers = {
 }
 
 /**
- * List of maps with details of selected map
+ * List of maps with details of selected map.
  */
 export default function Markers() {
 	const { query, navigate } = useRouter()
 
-	// Load markers into global state
+	// Fetch markers from Wordpress.
 	const [markers, dispatchMarkers, loading] = useCollection(
 		wpMarkers,
-		{ parent: query[wpMarkers.parent], _fields: 'title,id,meta,marker-icons' },
+		{ imagemaps: query[wpMarkers.parent], _fields: 'title,id,meta,marker-icons' },
 		{ list: [], page: 1 }
 	)
 
+	// Fetch selected layer from Wordpress.
 	const [layer] = useSelected(wpLayers, { _fields: 'id,meta' })
 
+	// Fetch marker icons from Wordpress.
 	const [markerIcons, setMarkerIcons] = useState([])
 
 	useEffect(async () => {
