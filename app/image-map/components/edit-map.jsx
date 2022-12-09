@@ -77,59 +77,61 @@ export default function EditMap({ maps, dispatch }) {
 	if (map.name === undefined) return <div></div>
 
 	return (
-		<>
-			<div className='col-xs-9'>
-				<TextControl
-					label="Name"
-					value={map.name}
-					onChange={val => setMap(oldMap => ({ ...oldMap, name: val }))}
-					className={cls.field}
-				/>
-				<TextareaControl
-					label="Description"
-					value={map.description}
-					className={cls.field}
-					onChange={val => setMap(oldMap => ({ ...oldMap, description: val }))}
-				/>
-				{map.meta &&
-					<PostTypesSelect
-						selected={map.meta.post_types}
-						onSelect={types => setMap(oldMap => ({ ...oldMap, meta: { ...oldMap.meta, post_types: types } }))}
-						baseClass={cls.field}
-						inputClass={cls.input}
+		<Card className="full-height">
+			<CardBody>
+				<div className="col-xs-9">
+					<TextControl
+						label="Name"
+						value={map.name}
+						onChange={val => setMap(oldMap => ({ ...oldMap, name: val }))}
+						className={cls.field}
 					/>
-				}
-				<BaseControl label="Icon categories" className={cls.field}>
-					<Card size='xSmall' className={cls.input}>
-						<CardBody className={cls.right}>
-							<Button
-								icon='plus-alt'
-								iconPosition='right'
-								text='Add category'
-								variant='tertiary'
-								onClick={() => setEditIcon({ name: '', map: map.id, meta: {} })}
-							/>
-						</CardBody>
-						{markerIcons && markerIcons.map(icon => (
-							<div key={icon.id}>
-								<CardDivider />
-								<CardBody>
-									<Flex>
-										<Icon icon={icon.meta.icon} style={getStyles(icon.meta, false)} className={cls.marker} />
-										<FlexItem isBlock >{icon.name}</FlexItem>
-										<Button variant='tertiary' icon="edit" onClick={() => setEditIcon(icon)} />
-										<Button variant='tertiary' icon="no" isDestructive onClick={() => deleteIcon(icon.id)} />
-									</Flex>
-								</CardBody>
-							</div>
-						))}
-					</Card>
-					{editIcon && <EditMarkerIcon icon={editIcon} dispatch={dispatchMarkerIcons} close={() => setEditIcon()} />}
-				</BaseControl>
-			</div>
-			<div className="col-xs-3">
-				<LifeCycleButtons identifiers={maps} item={map} dispatch={dispatch} />
-			</div>
-		</>
+					<TextareaControl
+						label="Description"
+						value={map.description}
+						className={cls.field}
+						onChange={val => setMap(oldMap => ({ ...oldMap, description: val }))}
+					/>
+					{map.meta &&
+						<PostTypesSelect
+							selected={map.meta.post_types}
+							onSelect={types => setMap(oldMap => ({ ...oldMap, meta: { ...oldMap.meta, post_types: types } }))}
+							baseClass={cls.field}
+							inputClass={cls.input}
+						/>
+					}
+					<BaseControl label="Icon categories" className={cls.field}>
+						<Card size='xSmall' className={cls.input}>
+							<CardBody className={cls.right}>
+								<Button
+									icon='plus-alt'
+									iconPosition='right'
+									text='Add category'
+									variant='tertiary'
+									onClick={() => setEditIcon({ name: '', map: map.id, meta: {} })}
+								/>
+							</CardBody>
+							{markerIcons && markerIcons.map(icon => (
+								<div key={icon.id}>
+									<CardDivider />
+									<CardBody>
+										<Flex>
+											<Icon icon={icon.meta.icon} style={getStyles(icon.meta, false)} className={cls.marker} />
+											<FlexItem isBlock >{icon.name}</FlexItem>
+											<Button variant='tertiary' icon="edit" onClick={() => setEditIcon(icon)} />
+											<Button variant='tertiary' icon="no" isDestructive onClick={() => deleteIcon(icon.id)} />
+										</Flex>
+									</CardBody>
+								</div>
+							))}
+						</Card>
+						{editIcon && <EditMarkerIcon icon={editIcon} dispatch={dispatchMarkerIcons} close={() => setEditIcon()} />}
+					</BaseControl>
+				</div>
+				<div className="col-xs-3">
+					<LifeCycleButtons identifiers={maps} item={map} dispatch={dispatch} />
+				</div>
+			</CardBody>
+		</Card>
 	)
 }

@@ -54,7 +54,9 @@ export default function Layout({ loading, list, titleAttr, selected, selectItem,
 						: <p className={cls.empty}>No items found</p>
 				}
 			</Card>
-			<Card className={`${cls.details} col-9`}><CardBody>{children}</CardBody></Card>
+			<div className="full-height col-9">
+				{children}
+			</div>
 		</div >
 	)
 }

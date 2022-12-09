@@ -1,7 +1,5 @@
-import { TextControl, Button, BaseControl, RangeControl } from '@wordpress/components'
+import { TextControl, Button, BaseControl, RangeControl, Card, CardBody } from '@wordpress/components'
 import { useEffect, useState } from '@wordpress/element'
-import { MapContainer, ImageOverlay } from 'react-leaflet'
-import { CRS } from 'leaflet';
 
 import useSelected from '../hooks/useSelected'
 import useForceUpdate from '../hooks/useForceUpdate';
@@ -68,45 +66,47 @@ export default function EditLayer({ layers, dispatch }) {
 	if (layer.name === undefined) return <div></div>
 
 	return (
-		<>
-			<div className='col-xs-9'>
-				<TextControl
-					label="Name"
-					value={layer.name}
-					onChange={val => setLayer(oldLayer => ({ ...oldLayer, name: val }))}
-					className={cls.field}
-				/>
-				<BaseControl label='Image' className={cls.field}>
-					<Button variant='secondary' onClick={() => mediaMgr.open()}>Select image</Button>
-				</BaseControl>
-				<RangeControl
-					label="Maximum zoom"
-					value={layer.meta.max_zoom}
-					onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, max_zoom: val } }))}
-					min="-10"
-					max="2"
-					className={`${cls.field} ${cls.center}`}
-				/>
-				<RangeControl
-					label="Minimum zoom"
-					value={layer.meta.min_zoom}
-					onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, min_zoom: val } }))}
-					min="-10"
-					max="2"
-					className={`${cls.field} ${cls.center}`}
-				/>
-				<BaseControl label="Initial position" className={`${cls.field} ${cls.start}`}>
-					<ImageMap key={mapKey} layer={layer} className={cls.map}>
-						<BoundsGetter onChange={bounds => setLayer(oldLayer => ({
-							...oldLayer,
-							meta: { ...oldLayer.meta, initial_bounds: bounds }
-						}))} />
-					</ImageMap>
-				</BaseControl>
-			</div>
-			<div className="col-xs-3">
-				<LifeCycleButtons identifiers={layers} item={layer} dispatch={dispatch} />
-			</div>
-		</>
+		<Card className="full-height">
+			<CardBody>
+				<div className="col-xs-9">
+					<TextControl
+						label="Name"
+						value={layer.name}
+						onChange={val => setLayer(oldLayer => ({ ...oldLayer, name: val }))}
+						className={cls.field}
+					/>
+					<BaseControl label='Image' className={cls.field}>
+						<Button variant='secondary' onClick={() => mediaMgr.open()}>Select image</Button>
+					</BaseControl>
+					<RangeControl
+						label="Maximum zoom"
+						value={layer.meta.max_zoom}
+						onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, max_zoom: val } }))}
+						min="-10"
+						max="2"
+						className={`${cls.field} ${cls.center}`}
+					/>
+					<RangeControl
+						label="Minimum zoom"
+						value={layer.meta.min_zoom}
+						onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, min_zoom: val } }))}
+						min="-10"
+						max="2"
+						className={`${cls.field} ${cls.center}`}
+					/>
+					<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
+						<ImageMap key={mapKey} layer={layer} className={cls.map}>
+							<BoundsGetter onChange={bounds => setLayer(oldLayer => ({
+								...oldLayer,
+								meta: { ...oldLayer.meta, initial_bounds: bounds }
+							}))} />
+						</ImageMap>
+					</BaseControl>
+				</div>
+				<div className="col-xs-3">
+					<LifeCycleButtons identifiers={layers} item={layer} dispatch={dispatch} />
+				</div>
+			</CardBody>
+		</Card>
 	)
 }

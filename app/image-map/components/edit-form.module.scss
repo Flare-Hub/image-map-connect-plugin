@@ -1,11 +1,16 @@
 .field {
 	gap: 0;
 
-	&.start {
+	&.map {
 
 		>div>label,
 		:global(.components-base-control__label) {
 			align-self: flex-start;
+		}
+
+		>div>:global(.leaflet-container) {
+			border: 1px solid #757575;
+			border-radius: 2px;
 		}
 	}
 

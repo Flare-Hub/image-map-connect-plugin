@@ -1,4 +1,4 @@
-import { Button } from '@wordpress/components'
+import { Button, Flex, FlexItem, Card } from '@wordpress/components'
 import { useEffect, useState } from '@wordpress/element'
 
 import { useRouter } from '../contexts/router'
@@ -74,20 +74,28 @@ export default function Markers() {
 			}
 		>
 			<MarkerProvider icons={markerIcons}>
-				<ImageMap layer={layer} whenCreated={setMap}>
-					{markers.list.map(mk => {
-						if (mk.id == query.marker) {
-							return <SelectedMarkerPin key={mk.id} icons={markerIcons} selected={mk} />
-						} else {
-							return <ListedMarkerPin key={mk.id} marker={mk} icons={markerIcons} />
-						}
-					})}
-					{(query.marker === 'new') && <NewMarkerPin icons={markerIcons} />}
-				</ImageMap>
-				<EditMarker
-					markers={wpMarkers}
-					dispatch={action => dispatchMarkers(transformModel(action))}
-				/>
+				<Flex direction="column" gap="1px" className="full-height">
+					<FlexItem>
+						<Card>
+							<ImageMap layer={layer} whenCreated={setMap}>
+								{markers.list.map(mk => {
+									if (mk.id == query.marker) {
+										return <SelectedMarkerPin key={mk.id} icons={markerIcons} selected={mk} />
+									} else {
+										return <ListedMarkerPin key={mk.id} marker={mk} icons={markerIcons} />
+									}
+								})}
+								{(query.marker === 'new') && <NewMarkerPin icons={markerIcons} />}
+							</ImageMap>
+						</Card>
+					</FlexItem>
+					<FlexItem isBlock>
+						<EditMarker
+							markers={wpMarkers}
+							dispatch={action => dispatchMarkers(transformModel(action))}
+						/>
+					</FlexItem>
+				</Flex>
 			</MarkerProvider>
 		</Layout>
 	)
