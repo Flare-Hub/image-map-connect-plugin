@@ -22,6 +22,14 @@
 		}
 	}
 
+	&.iconGroup>div {
+		flex-wrap: nowrap;
+
+		:global(.components-toolbar) {
+			flex-shrink: 1;
+		}
+	}
+
 	>div {
 		display: flex;
 		flex-wrap: wrap;
@@ -29,8 +37,7 @@
 
 		>label,
 		>.label,
-		>:global(.components-base-control__label),
-		>:global(.components-custom-select-control) {
+		>:global(.components-base-control__label) {
 			flex: 0 0 100px;
 			width: 100px;
 		}
@@ -39,52 +46,40 @@
 		>textarea,
 		>.input,
 		>.map,
-		>:global(.components-range-control__root) {
+		>:global(.components-range-control__root),
+		>:global(.components-custom-select-control) {
 			flex: 1 1;
 			width: 100%;
 		}
-	}
 
-	&.iconGroup>div {
-		flex-wrap: nowrap;
 
-		:global(.components-toolbar) {
-			flex-shrink: 1;
+		.select {
+			>label {
+				display: none;
+			}
 		}
-	}
-}
 
-.row {
-	margin-bottom: 4px;
-}
+		.row {
+			margin-bottom: 4px;
+		}
 
-.right {
-	text-align: right;
-}
+		.right {
+			text-align: right;
+		}
 
-.alignColour {
-	margin-bottom: 28px;
-}
+		.alignColour {
+			margin-bottom: 28px;
+		}
 
-.marker {
-	display: inline-block;
-	font-size: 30px;
-	width: 30px;
-	height: 30px;
-}
+		.marker {
+			display: inline-block;
+			font-size: 30px;
+			width: 30px;
+			height: 30px;
+		}
 
-.iconName {
-	margin-left: 1em;
-}
-
-.select {
-	> :global(.components-custom-select-control__menu) {
-		min-width: auto;
-		right: 0;
-		left: 100px;
-	}
-
-	> :global(.components-flex) {
-		flex: 1 1 0;
+		.iconName {
+			margin-left: 1em;
+		}
 	}
 }

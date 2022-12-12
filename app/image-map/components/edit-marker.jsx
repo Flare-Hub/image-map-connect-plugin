@@ -1,4 +1,4 @@
-import { BaseControl, TextControl, Card, CardBody } from '@wordpress/components'
+import { BaseControl, TextControl, Card, CardBody, CardDivider } from '@wordpress/components'
 
 import useSelected from '../hooks/useSelected'
 import { useMarker } from '../contexts/marker';
@@ -7,6 +7,7 @@ import LifeCycleButtons from './lifecycle-buttons'
 import MarkerIconSelect from './marker-icon-select';
 
 import cls from './edit-form.module.scss'
+import ButtonSelector from './button-selector';
 
 /**
  * Map details form.
@@ -42,6 +43,18 @@ export default function EditMarker({ markers, dispatch }) {
 							}))
 						}}
 					/>
+					<ButtonSelector
+						label="Type"
+						items={[
+							{ value: 'standalone', label: 'Standalone' },
+							{ value: 'linked', label: 'Linked' }
+						]}
+						selected={marker.meta.type}
+						onClick={type => setMarker(oldMarker => ({
+							...oldMarker, meta: { ...oldMarker.meta, type }
+						}))}
+					/>
+					<CardDivider />
 				</div>
 				<div className="col-xs-3">
 					<LifeCycleButtons identifiers={markers} item={marker} dispatch={dispatch} />

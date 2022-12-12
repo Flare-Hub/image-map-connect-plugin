@@ -90,6 +90,7 @@ class Plugin {
 
 		// Hook marker functions.
 		$this->marker->register_coordinates();
+		$this->marker->register_type();
 
 		// Hook marker icon functions.
 		$this->marker_icon->register_colour();

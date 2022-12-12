@@ -1,4 +1,4 @@
-import { CustomSelectControl, Icon } from '@wordpress/components'
+import { CustomSelectControl, Icon, BaseControl } from '@wordpress/components'
 import { useEffect, useState } from '@wordpress/element'
 
 import { getCollection } from '../utils/wp-fetch'
@@ -33,15 +33,14 @@ export default function MarkerIconSelect({ label, value, onSelect }) {
 	}, [query.map])
 
 	return (
-		<div className={cls.field}>
+		<BaseControl label="Icon" className={cls.field}>
 			<CustomSelectControl
-				label={label}
 				value={icons.find(icon => icon.key === value)}
 				onChange={item => onSelect(item.selectedItem.key)}
 				options={loading ? { name: 'Loading...' } : icons}
-				className={cls.select}
 				__nextUnconstrainedWidth
+				className={cls.select}
 			/>
-		</div>
+		</BaseControl>
 	)
 }

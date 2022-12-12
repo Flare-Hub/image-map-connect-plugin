@@ -99,4 +99,24 @@ class Marker {
 		);
 		register_meta( 'post', 'coordinates', $meta_args );
 	}
+
+	/**
+	 * Register Marker's type field with the rest API.
+	 *
+	 * @since 0.1.0
+	 */
+	public function register_type() {
+		$meta_args = array(
+			'object_subtype' => self::$post_type,
+			'type'           => 'string',
+			'single'         => true,
+			'show_in_rest'   => array(
+				'schema' => array(
+					'type' => 'string',
+					'enum' => array( 'standalone', 'linked' ),
+				),
+			),
+		);
+		register_meta( 'post', 'type', $meta_args );
+	}
 }
