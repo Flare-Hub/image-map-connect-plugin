@@ -10,10 +10,10 @@ import transformModel from '../utils/transform-model'
 import { wpLayers } from './layers';
 import Layout from './layout'
 import EditMarker from './edit-marker'
-import ImageMap from './image-map';
-import ListedMarkerPin from './listed-marker-pin'
-import SelectedMarkerPin from './selected-marker-pin'
-import NewMarkerPin from './new-marker-pin'
+// import ImageMap from './image-map';
+// import ListedMarkerPin from './listed-marker-pin'
+// import SelectedMarkerPin from './selected-marker-pin'
+// import NewMarkerPin from './new-marker-pin'
 
 /** @typedef {import('leaflet').Map} Map */
 
@@ -77,7 +77,7 @@ export default function Markers() {
 				<Flex direction="column" gap="1px" className="full-height">
 					<FlexItem>
 						<Card>
-							<ImageMap layer={layer} whenCreated={setMap}>
+							{/* <ImageMap layer={layer} whenCreated={setMap}>
 								{markers.list.map(mk => {
 									if (mk.id == query.marker) {
 										return <SelectedMarkerPin key={mk.id} icons={markerIcons} selected={mk} />
@@ -86,7 +86,7 @@ export default function Markers() {
 									}
 								})}
 								{(query.marker === 'new') && <NewMarkerPin icons={markerIcons} />}
-							</ImageMap>
+							</ImageMap> */}
 						</Card>
 					</FlexItem>
 					<FlexItem isBlock>

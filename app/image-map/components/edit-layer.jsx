@@ -5,7 +5,6 @@ import useSelected from '../hooks/useSelected'
 import useForceUpdate from '../hooks/useForceUpdate';
 import { useRouter } from '../contexts/router';
 import LifeCycleButtons from './lifecycle-buttons'
-import BoundsGetter from './BoundsGetter';
 import ImageMap from './image-map';
 
 import cls from './edit-form.module.scss'
@@ -23,7 +22,7 @@ export default function EditLayer({ layers, dispatch }) {
 	// Fetch selected layer from Wordpress.
 	const [layer, setLayer] = useSelected(
 		layers,
-		{ context: 'edit' },
+		{ context: 'edit', _embed: 1 },
 		{
 			name: '',
 			description: '',
@@ -52,7 +51,16 @@ export default function EditLayer({ layers, dispatch }) {
 			const newImage = mm.state().get('selection').first()
 			setLayer(oldLayer => ({
 				...oldLayer,
-				meta: { ...oldLayer.meta, image: newImage.attributes.id }
+				meta: { ...oldLayer.meta, image: newImage.attributes.id },
+				_embedded: {
+					'flare:image': [{
+						source_url: newImage.attributes.url,
+						media_details: {
+							width: newImage.attributes.width,
+							height: newImage.attributes.height,
+						},
+					}],
+				}
 			}))
 		}
 
@@ -95,12 +103,13 @@ export default function EditLayer({ layers, dispatch }) {
 						className={`${cls.field} ${cls.center}`}
 					/>
 					<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
-						<ImageMap key={mapKey} layer={layer} className={cls.map}>
+						{/* <ImageMap key={mapKey} layer={layer} className={cls.map}>
 							<BoundsGetter onChange={bounds => setLayer(oldLayer => ({
 								...oldLayer,
 								meta: { ...oldLayer.meta, initial_bounds: bounds }
 							}))} />
-						</ImageMap>
+						</ImageMap> */}
+						<ImageMap layer={layer} className={cls.map} />
 					</BaseControl>
 				</div>
 				<div className="col-xs-3">
