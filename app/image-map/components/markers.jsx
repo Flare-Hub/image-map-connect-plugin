@@ -15,8 +15,6 @@ import EditMarker from './edit-marker'
 // import SelectedMarkerPin from './selected-marker-pin'
 // import NewMarkerPin from './new-marker-pin'
 
-/** @typedef {import('leaflet').Map} Map */
-
 /** @type {import('../hooks/useCollection').WpIdentifiers} */
 export const wpMarkers = {
 	model: 'marker',
@@ -49,7 +47,6 @@ export default function Markers() {
 		setMarkerIcons(res.body)
 	}, [query.map])
 
-	/** @type {[Map | undefined, (map: Map) => void]} */
 	const [map, setMap] = useState()
 
 	function selectMarker(marker) {

@@ -5,9 +5,10 @@ import useSelected from '../hooks/useSelected'
 import useForceUpdate from '../hooks/useForceUpdate';
 import { useRouter } from '../contexts/router';
 import LifeCycleButtons from './lifecycle-buttons'
-import ImageMap from './image-map';
+import OlMap from './ol/map';
 
 import cls from './edit-form.module.scss'
+import ImageLayer from './ol/image-layer';
 
 /**
  * Map details form.
@@ -109,7 +110,14 @@ export default function EditLayer({ layers, dispatch }) {
 								meta: { ...oldLayer.meta, initial_bounds: bounds }
 							}))} />
 						</ImageMap> */}
-						<ImageMap layer={layer} className={cls.map} />
+						<OlMap
+							image={layer._embedded['flare:image'][0].media_details}
+							minZoom={layer.meta.min_zoom}
+							maxZoom={layer.meta.max_zoom}
+							// position={{ center: [400, 600], zoom: 2 }}
+							className={cls.map} >
+							<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
+						</OlMap>
 					</BaseControl>
 				</div>
 				<div className="col-xs-3">
