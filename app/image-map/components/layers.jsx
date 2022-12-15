@@ -36,7 +36,7 @@ export default function Layers() {
 				<Button
 					variant='primary'
 					className='medium'
-					onClick={() => navigate('new')}
+					onClick={() => navigate({ layer: 'new' })}
 				>Add Layer</Button>
 			}
 		>

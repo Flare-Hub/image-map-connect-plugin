@@ -2,7 +2,6 @@ import { TextControl, Button, BaseControl, RangeControl, Card, CardBody } from '
 import { useEffect, useState } from '@wordpress/element'
 
 import useSelected from '../hooks/useSelected'
-import useForceUpdate from '../hooks/useForceUpdate';
 import { useRouter } from '../contexts/router';
 import LifeCycleButtons from './lifecycle-buttons'
 import OlMap from './ol/map';
@@ -29,14 +28,12 @@ export default function EditLayer({ layers, dispatch }) {
 			name: '',
 			description: '',
 			parent: query[layers.parent],
-			meta: { initial_bounds: [] }
+			meta: { initial_bounds: [] },
 		}
 	)
 
 	// Initialise media manager
 	const [mediaMgr, setMediaMgr] = useState()
-
-	const mapKey = useForceUpdate([layer.meta.image])
 
 	// Load media manager
 	useEffect(() => {
@@ -53,7 +50,7 @@ export default function EditLayer({ layers, dispatch }) {
 			const newImage = mm.state().get('selection').first()
 			setLayer(oldLayer => ({
 				...oldLayer,
-				meta: { ...oldLayer.meta, image: newImage.attributes.id, initial_position: undefined },
+				meta: { ...oldLayer.meta, image: newImage.attributes.id, initial_position: {} },
 				_embedded: {
 					'flare:image': [{
 						source_url: newImage.attributes.url,
@@ -105,18 +102,15 @@ export default function EditLayer({ layers, dispatch }) {
 						className={`${cls.field} ${cls.center}`}
 					/>
 					<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
-						<OlMap
-							image={layer._embedded['flare:image'][0].media_details}
-							minZoom={layer.meta.min_zoom}
-							maxZoom={layer.meta.max_zoom}
-							position={layer.meta.initial_position}
-							className={cls.map}
-						>
-							<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
-							<PositionGetter onMoveEnd={pos => setLayer(oldLayer => ({
-								...oldLayer,
-								meta: { ...oldLayer.meta, initial_position: pos }
-							}))} />
+						<OlMap layer={layer} className={cls.map} >
+							{layer._embedded && (<>
+								<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
+								<PositionGetter onMoveEnd={pos => setLayer(oldLayer => ({
+									...oldLayer,
+									meta: { ...oldLayer.meta, initial_position: pos }
+								}))} />
+							</>
+							)}
 						</OlMap>
 					</BaseControl>
 				</div>
