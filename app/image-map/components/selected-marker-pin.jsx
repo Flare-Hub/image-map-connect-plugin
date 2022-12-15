@@ -31,10 +31,11 @@ export default function SelectedMarkerPin({ icons, selected }) {
 		icons.find(i => i.id === iconId)
 	), [marker['marker-icons']])
 
-	const position = [selected.meta.coordinates.lng, selected.meta.coordinates.lat]
-
 	return (
-		<Marker position={position} anchor={mi.meta.iconAnchor}>
+		<Marker
+			position={[selected.meta.lng, selected.meta.lat]}
+			anchor={mi.meta.iconAnchor}
+		>
 			<Icon icon={mi.meta.icon} style={getStyles(mi.meta)} className={cls.pin} />
 		</Marker >
 	)

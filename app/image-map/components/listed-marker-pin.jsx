@@ -21,10 +21,11 @@ export default function ListedMarkerPin({ marker, icons }) {
 		return icons.find(i => i.id === iconId)
 	}, [marker['marker-icons']])
 
-	const position = [marker.meta.coordinates.lng, marker.meta.coordinates.lat]
-
 	return (
-		<Marker position={position} anchor={mi.meta.iconAnchor}>
+		<Marker
+			position={[marker.meta.lng, marker.meta.lat]}
+			anchor={mi.meta.iconAnchor}
+		>
 			<Link query={{ marker: marker.id }} className={cls.link} >
 				<Icon icon={mi.meta.icon} style={getStyles(mi.meta)} />
 			</Link>

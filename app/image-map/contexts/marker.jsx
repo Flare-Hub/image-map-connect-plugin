@@ -34,7 +34,6 @@ export function MarkerProvider({ icons, children }) {
 
 	useEffect(() => {
 		if (icons && icons.length && marker['marker-icons'] && !marker['marker-icons'][0]) {
-			console.log('marker-icon set!');
 			setMarker(oldMarker => ({ ...oldMarker, 'marker-icons': [icons[0].id] }))
 		}
 	}, [marker.id, marker.status, icons])

@@ -14,7 +14,9 @@ import OlMap from './ol/map'
 import ListedMarkerPin from './listed-marker-pin'
 import ImageLayer from './ol/image-layer'
 import SelectedMarkerPin from './selected-marker-pin'
-// import NewMarkerPin from './new-marker-pin'
+import NewMarkerPin from './new-marker-pin'
+
+/** @typedef {import('ol').Map} Map */
 
 /** @type {import('../hooks/useCollection').WpIdentifiers} */
 export const wpMarkers = {
@@ -48,10 +50,16 @@ export default function Markers() {
 		setMarkerIcons(res.body)
 	}, [query.map])
 
+	/** @type {[Map, React.Dispatch<React.SetStateAction<Map>>]} */
+	const [map, setMap] = useState()
+
 	function selectMarker(marker) {
 		navigate({ marker })
 		const selected = markers.list.find(m => m.id === marker)
-		map.panTo(selected.meta.coordinates, { animate: true, easeLinearity: 0.1, duration: 0.5 })
+		map.getView().animate({
+			center: [selected.meta.lng, selected.meta.lat],
+			duration: 500,
+		})
 	}
 
 	return (
@@ -73,7 +81,7 @@ export default function Markers() {
 				<Flex direction="column" gap="1px" className="full-height">
 					<FlexItem>
 						<Card>
-							<OlMap layer={layer} >
+							<OlMap layer={layer} onReady={setMap}>
 								{layer.id && (<>
 									<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
 									{markerIcons.length && markers.list.map(mk => {
@@ -83,11 +91,9 @@ export default function Markers() {
 											return <ListedMarkerPin key={mk.id} marker={mk} icons={markerIcons} />
 										}
 									})}
+									{(query.marker === 'new') && <NewMarkerPin icons={markerIcons} />}
 								</>)}
 							</OlMap>
-							{/* <ImageMap layer={layer} whenCreated={setMap}>
-								{(query.marker === 'new') && <NewMarkerPin icons={markerIcons} />}
-							</ImageMap> */}
 						</Card>
 					</FlexItem>
 					<FlexItem isBlock>

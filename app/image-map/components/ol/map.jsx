@@ -12,10 +12,11 @@ import cls from './map.module.scss'
  * Map with image overlay.
  *
  * @param {object} props
- * @param {object<string, any>} props.layer The Wordpress layer
- * @param {object} props.className Class for the map container.
+ * @param {Object<string, any>} props.layer The Wordpress layer
+ * @param {(map: Map) => void} props.onReady This callback is called when the map is loaded.
+ * @param {string} props.className Class for the map container.
  */
-export default function OlMap({ layer, className, children }) {
+export default function OlMap({ layer, onReady, className, children }) {
 	if (!layer._embedded) return <div className={cls.map}></div>
 
 	// Div to add the map to.
@@ -58,7 +59,10 @@ export default function OlMap({ layer, className, children }) {
 	}, [])
 
 	// Add the map to the dom after mounting the component.
-	useEffect(() => map.setTarget(mapTarget.current), [])
+	useEffect(() => {
+		map.setTarget(mapTarget.current)
+		onReady && onReady(map)
+	}, [])
 
 	// Reset the view when a new image is selected.
 	useEffect(() => {

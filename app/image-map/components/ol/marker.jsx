@@ -1,4 +1,4 @@
-import { renderToString, useMemo, useEffect, useRef } from '@wordpress/element'
+import { useMemo, useEffect, useRef } from '@wordpress/element'
 import { Overlay } from 'ol'
 
 import { useMap } from './context'
@@ -17,6 +17,10 @@ export default function Marker({ position, anchor, events, className, children }
 	const { map } = useMap()
 
 	const markerDiv = useRef()
+
+	const pos = useMemo(() => (
+		position
+	), [position[0], position[1]])
 
 	const overlay = useMemo(() => new Overlay({
 		position,
@@ -42,8 +46,8 @@ export default function Marker({ position, anchor, events, className, children }
 	}, [events])
 
 	useEffect(() => {
-		overlay.setPosition(position)
-	}, [position])
+		overlay.setPosition(pos)
+	}, [pos])
 
 	// useEffect(() => {
 	// 	overlay.setElement()
