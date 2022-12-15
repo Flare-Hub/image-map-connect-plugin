@@ -132,20 +132,28 @@ class ImageMap {
 	public function register_initial_bounds() {
 		$meta_args = array(
 			'object_subtype' => self::$name,
-			'type'           => 'array',
+			'type'           => 'object',
 			'single'         => true,
 			'show_in_rest'   => array(
 				'schema' => array(
-					'type'  => 'array',
-					'items' => array(
-						'type'  => 'array',
-						'items' => array(
+					'type'       => 'object',
+					'properties' => array(
+						'zoom'   => array(
 							'type' => 'number',
+						),
+						'center' => array(
+							'type'  => 'array',
+							'items' => array(
+								'type'  => 'array',
+								'items' => array(
+									'type' => 'number',
+								),
+							),
 						),
 					),
 				),
 			),
 		);
-		register_meta( 'term', 'initial_bounds', $meta_args );
+		register_meta( 'term', 'initial_position', $meta_args );
 	}
 }

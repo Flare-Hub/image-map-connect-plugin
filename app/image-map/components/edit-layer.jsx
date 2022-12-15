@@ -9,6 +9,7 @@ import OlMap from './ol/map';
 
 import cls from './edit-form.module.scss'
 import ImageLayer from './ol/image-layer';
+import PositionGetter from './ol/position-getter';
 
 /**
  * Map details form.
@@ -52,7 +53,7 @@ export default function EditLayer({ layers, dispatch }) {
 			const newImage = mm.state().get('selection').first()
 			setLayer(oldLayer => ({
 				...oldLayer,
-				meta: { ...oldLayer.meta, image: newImage.attributes.id },
+				meta: { ...oldLayer.meta, image: newImage.attributes.id, initial_position: undefined },
 				_embedded: {
 					'flare:image': [{
 						source_url: newImage.attributes.url,
@@ -91,32 +92,31 @@ export default function EditLayer({ layers, dispatch }) {
 						label="Maximum zoom"
 						value={layer.meta.max_zoom}
 						onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, max_zoom: val } }))}
-						min="-10"
-						max="2"
+						min="0"
+						max="10"
 						className={`${cls.field} ${cls.center}`}
 					/>
 					<RangeControl
 						label="Minimum zoom"
 						value={layer.meta.min_zoom}
 						onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, min_zoom: val } }))}
-						min="-10"
-						max="2"
+						min="0"
+						max="10"
 						className={`${cls.field} ${cls.center}`}
 					/>
 					<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
-						{/* <ImageMap key={mapKey} layer={layer} className={cls.map}>
-							<BoundsGetter onChange={bounds => setLayer(oldLayer => ({
-								...oldLayer,
-								meta: { ...oldLayer.meta, initial_bounds: bounds }
-							}))} />
-						</ImageMap> */}
 						<OlMap
 							image={layer._embedded['flare:image'][0].media_details}
 							minZoom={layer.meta.min_zoom}
 							maxZoom={layer.meta.max_zoom}
-							// position={{ center: [400, 600], zoom: 2 }}
-							className={cls.map} >
+							position={layer.meta.initial_position}
+							className={cls.map}
+						>
 							<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
+							<PositionGetter onMoveEnd={pos => setLayer(oldLayer => ({
+								...oldLayer,
+								meta: { ...oldLayer.meta, initial_position: pos }
+							}))} />
 						</OlMap>
 					</BaseControl>
 				</div>
