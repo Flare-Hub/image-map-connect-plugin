@@ -86,21 +86,9 @@ class MarkerIcon {
 	public function register_size() {
 		$meta_args = array(
 			'object_subtype' => self::$name,
-			'type'           => 'object',
+			'type'           => 'integer',
 			'single'         => true,
-			'show_in_rest'   => array(
-				'schema' => array(
-					'type'       => 'object',
-					'properties' => array(
-						'x' => array(
-							'type' => 'integer',
-						),
-						'y' => array(
-							'type' => 'integer',
-						),
-					),
-				),
-			),
+			'show_in_rest'   => true,
 		);
 		register_meta( 'term', 'size', $meta_args );
 	}
@@ -120,10 +108,10 @@ class MarkerIcon {
 					'type'       => 'object',
 					'properties' => array(
 						'x' => array(
-							'type' => 'number',
+							'type' => 'string',
 						),
 						'y' => array(
-							'type' => 'number',
+							'type' => 'string',
 						),
 					),
 				),
@@ -147,10 +135,10 @@ class MarkerIcon {
 					'type'       => 'object',
 					'properties' => array(
 						'x' => array(
-							'type' => 'number',
+							'type' => 'string',
 						),
 						'y' => array(
-							'type' => 'number',
+							'type' => 'string',
 						),
 					),
 				),

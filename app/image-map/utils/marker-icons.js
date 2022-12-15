@@ -4,58 +4,51 @@
  * @param {boolean} setPosition Whether to position the icon to show the accurate location.
  * @returns {React.CSSProperties}
  */
-export function getStyles(icon, setPosition = true) {
+export function getStyles(icon) {
 	/** @type {React.CSSProperties} */
-	const styles = {
+	return {
 		color: icon.colour,
-		height: icon.size.y,
-		width: icon.size.x,
-		fontSize: icon.size.x,
+		height: icon.size,
+		width: icon.size,
+		fontSize: icon.size,
 	}
-
-	if (setPosition) {
-		styles.marginLeft = -(icon.size.x * icon.iconAnchor.x)
-		styles.marginTop = -(icon.size.y * icon.iconAnchor.y)
-	}
-
-	return styles
 }
 
 /** Available icons for markers. */
 export const icons = [
 	{
 		icon: 'post-status',
-		size: { x: 24, y: 24 },
-		iconAnchor: { x: 0.5, y: 1 },
+		size: 24,
+		iconAnchor: { x: '50%', y: '100%' },
 	},
 	{
 		icon: 'sticky',
-		size: { x: 24, y: 24 },
-		iconAnchor: { x: 0.5, y: 1 },
+		size: 24,
+		iconAnchor: { x: '50%', y: '100%' },
 	},
 	{
 		icon: 'star-filled',
-		size: { x: 24, y: 24 },
-		iconAnchor: { x: 0.5, y: 0.6 },
+		size: 24,
+		iconAnchor: { x: '50%', y: '60%' },
 	},
 	{
 		icon: 'star-empty',
-		size: { x: 24, y: 24 },
-		iconAnchor: { x: 0.5, y: 0.6 },
+		size: 24,
+		iconAnchor: { x: '50%', y: '60%' },
 	},
 	{
 		icon: 'flag',
-		size: { x: 24, y: 24 },
-		iconAnchor: { x: 0.2, y: 0.9 },
+		size: 24,
+		iconAnchor: { x: '20%', y: '90%' },
 	},
 	{
 		icon: 'location',
-		size: { x: 24, y: 24 },
-		iconAnchor: { x: 0.5, y: 0.9 },
+		size: 24,
+		iconAnchor: { x: '50%', y: '90%' },
 	},
 	{
 		icon: 'marker',
-		size: { x: 24, y: 24 },
-		iconAnchor: { x: 0.5, y: 0.5 },
+		size: 24,
+		iconAnchor: { x: '50%', y: '50%' },
 	},
 ]

@@ -8,7 +8,7 @@ import { useRouter } from "../contexts/router"
  * @param {object} props.state Any state to pass to the next page.
  * @returns Link component
  */
-export function Link({ query, state, children, ...attr }) {
+export default function Link({ query, state, children, ...attr }) {
 	const { createUrl, history } = useRouter()
 	// Determine the url to link to
 	const route = createUrl(query)

@@ -10,9 +10,10 @@ import transformModel from '../utils/transform-model'
 import { wpLayers } from './layers';
 import Layout from './layout'
 import EditMarker from './edit-marker'
-// import ImageMap from './image-map';
-// import ListedMarkerPin from './listed-marker-pin'
-// import SelectedMarkerPin from './selected-marker-pin'
+import OlMap from './ol/map'
+import ListedMarkerPin from './listed-marker-pin'
+import ImageLayer from './ol/image-layer'
+import SelectedMarkerPin from './selected-marker-pin'
 // import NewMarkerPin from './new-marker-pin'
 
 /** @type {import('../hooks/useCollection').WpIdentifiers} */
@@ -36,7 +37,7 @@ export default function Markers() {
 	)
 
 	// Fetch selected layer from Wordpress.
-	const [layer] = useSelected(wpLayers, { _fields: 'id,meta' })
+	const [layer] = useSelected(wpLayers, { _fields: 'id,meta', _embed: 1 })
 
 	// Fetch marker icons from Wordpress.
 	const [markerIcons, setMarkerIcons] = useState([])
@@ -46,8 +47,6 @@ export default function Markers() {
 		const res = await getCollection('marker-icons', { map: query.map, meta: {} })
 		setMarkerIcons(res.body)
 	}, [query.map])
-
-	const [map, setMap] = useState()
 
 	function selectMarker(marker) {
 		navigate({ marker })
@@ -74,14 +73,19 @@ export default function Markers() {
 				<Flex direction="column" gap="1px" className="full-height">
 					<FlexItem>
 						<Card>
+							<OlMap layer={layer} >
+								{layer.id && (<>
+									<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
+									{markerIcons.length && markers.list.map(mk => {
+										if (mk.id == query.marker) {
+											return <SelectedMarkerPin key={query.marker} icons={markerIcons} selected={mk} />
+										} else {
+											return <ListedMarkerPin key={mk.id} marker={mk} icons={markerIcons} />
+										}
+									})}
+								</>)}
+							</OlMap>
 							{/* <ImageMap layer={layer} whenCreated={setMap}>
-								{markers.list.map(mk => {
-									if (mk.id == query.marker) {
-										return <SelectedMarkerPin key={mk.id} icons={markerIcons} selected={mk} />
-									} else {
-										return <ListedMarkerPin key={mk.id} marker={mk} icons={markerIcons} />
-									}
-								})}
 								{(query.marker === 'new') && <NewMarkerPin icons={markerIcons} />}
 							</ImageMap> */}
 						</Card>

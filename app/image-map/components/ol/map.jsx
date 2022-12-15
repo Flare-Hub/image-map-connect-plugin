@@ -63,7 +63,10 @@ export default function OlMap({ layer, className, children }) {
 	// Reset the view when a new image is selected.
 	useEffect(() => {
 		map.setView(getView())
-	}, [layer._embedded['flare:image'][0].media_details])
+	}, [
+		layer._embedded['flare:image'][0].media_details.width,
+		layer._embedded['flare:image'][0].media_details.height,
+	])
 
 	// Update the view when the min or max zoom levels are changed
 	useEffect(() => {

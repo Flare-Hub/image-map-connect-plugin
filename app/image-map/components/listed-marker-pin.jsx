@@ -1,10 +1,11 @@
-import { renderToString, useMemo } from '@wordpress/element'
+import { useMemo } from '@wordpress/element'
 import { Icon } from '@wordpress/components'
-import { Marker } from "react-leaflet"
-import { divIcon } from 'leaflet'
 
 import { getStyles } from '../utils/marker-icons'
-import { navigate } from '../contexts/router'
+import Marker from './ol/marker'
+import Link from './link'
+
+import cls from './listed-marker-pin.module.scss'
 
 /**
  * The marker pin to display for unselected markers.
@@ -15,28 +16,18 @@ import { navigate } from '../contexts/router'
  */
 export default function ListedMarkerPin({ marker, icons }) {
 
-	const { icon, events } = useMemo(() => {
+	const mi = useMemo(() => {
 		const iconId = marker['marker-icons'][0]
-		const mi = icons.find(i => i.id === iconId)
-		return {
-			icon: divIcon({
-				html: renderToString(<Icon icon={mi.meta.icon} style={getStyles(mi.meta)} />),
-				className: '',
-				iconAnchor: [0, 0]
-			}),
+		return icons.find(i => i.id === iconId)
+	}, [marker['marker-icons']])
 
-			events: {
-				click() {
-					navigate({ marker: marker.id })
-				}
-			}
-		}
-	}, [marker['marker-icons'], marker.id])
+	const position = [marker.meta.coordinates.lng, marker.meta.coordinates.lat]
 
-
-	return <Marker
-		position={marker.meta.coordinates}
-		icon={icon}
-		eventHandlers={events}
-	/>
+	return (
+		<Marker position={position} anchor={mi.meta.iconAnchor}>
+			<Link query={{ marker: marker.id }} className={cls.link} >
+				<Icon icon={mi.meta.icon} style={getStyles(mi.meta)} />
+			</Link>
+		</Marker>
+	)
 }
