@@ -9,35 +9,40 @@ import { useMap } from './context'
  * Marker on an Openlayers map.
  *
  * @param {object} props
- * @param {import('ol/coordinate').Coordinate} props.position Icon coordinates on the map.
+ * @param {{lng: number, lat: number}} props.position Icon coordinates on the map.
  * @param {{x: string, y: string}} props.anchor Relative position on the anchor that should be placed in the coordinates.
  * @param {OverlayEventHandlers} props.events Event handlers triggered by the marker overlay.
+ * @param {string} props.className Class attached to the marker div.
  */
 export default function Marker({ position, anchor, events, className, children }) {
+	// Set up state
 	const { map } = useMap()
-
 	const markerDiv = useRef()
 
-	const pos = useMemo(() => (
-		position
-	), [position[0], position[1]])
-
+	// Create overlay when component is created.
 	const overlay = useMemo(() => new Overlay({
-		position,
+		position: [position.lng, position.lat],
 		stopEvent: false,
 	}), [])
 
+	// Add overlay to map after component is mounted.
 	useEffect(() => {
 		overlay.setElement(markerDiv.current)
 		map.addOverlay(overlay)
-		return () => { map.removeOverlay(overlay) }
+
+		// Remove overlay when component is unmounted.
+		return () => {
+			map.removeOverlay(overlay)
+		}
 	}, [])
 
+	// Register all event handlers with overlay if set.
 	useEffect(() => {
 		for (const e in events) {
 			overlay.on(e, events[e])
 		}
 
+		// Unregister handlers before resetting updated ones.
 		return () => {
 			for (const e in events) {
 				overlay.un(e, events[e])
@@ -45,9 +50,10 @@ export default function Marker({ position, anchor, events, className, children }
 		}
 	}, [events])
 
+	// Update overlay position when marker position changes.
 	useEffect(() => {
-		overlay.setPosition(pos)
-	}, [pos])
+		overlay.setPosition([position.lng, position.lat])
+	}, [position.lng, position.lat])
 
 	// useEffect(() => {
 	// 	overlay.setElement()

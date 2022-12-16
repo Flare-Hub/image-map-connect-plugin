@@ -15,7 +15,7 @@ import cls from './listed-marker-pin.module.scss'
  * @param {Array<Object<string, any>>} props.icons
  */
 export default function ListedMarkerPin({ marker, icons }) {
-
+	// Marker icon for the current marker
 	const mi = useMemo(() => {
 		const iconId = marker['marker-icons'][0]
 		return icons.find(i => i.id === iconId)
@@ -23,7 +23,7 @@ export default function ListedMarkerPin({ marker, icons }) {
 
 	return (
 		<Marker
-			position={[marker.meta.lng, marker.meta.lat]}
+			position={marker.meta}
 			anchor={mi.meta.iconAnchor}
 		>
 			<Link query={{ marker: marker.id }} className={cls.link} >

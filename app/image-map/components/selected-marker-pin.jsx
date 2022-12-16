@@ -1,17 +1,13 @@
-import { useMemo } from '@wordpress/element'
+import { useMemo, useState, useEffect, useCallback } from '@wordpress/element'
 import { Icon } from '@wordpress/components'
 
 import { getStyles } from '../utils/marker-icons'
 import { useMarker } from "../contexts/marker"
 import Marker from './ol/marker'
+import { useMap } from './ol/context'
+import { DragPan } from 'ol/interaction'
 
 import cls from './selected-marker-pin.module.scss'
-
-/**
- * @typedef PersistentMarkerProperties
- * @property {import('leaflet').DivIcon} icon
- * @property {{dragend: import('leaflet').DragEndEventHandlerFn}} events
- */
 
 /**
  * Set marker coordinates for a new marker
@@ -21,37 +17,87 @@ import cls from './selected-marker-pin.module.scss'
  * @param {Object<string, any>} props.selected
  */
 export default function SelectedMarkerPin({ icons, selected }) {
+	// Set up state
 	const [marker, setMarker] = useMarker()
+	const { map } = useMap()
+
+	/** @typedef {{lng: number, lat: number}} Position */
+	/**
+	 * Coordinates of the marker
+	 * @type {[Position, (pos: Position) => void]}
+	 * */
+	const [position, setPosition] = useState(selected.meta)
+
+	// True after a move is complete.
+	const [moved, setMoved] = useState(false)
 
 	// Make sure everything is loaded.
 	const iconId = selected['marker-icons'][0]
 	if (!iconId || !selected) return null
 
-	const mi = useMemo(() => (
-		icons.find(i => i.id === iconId)
-	), [marker['marker-icons']])
+	// Marker icon for the current marker
+	const mi = useMemo(() => {
+		return icons.find(i => i.id === iconId)
+	}, [marker['marker-icons']])
+
+	// Update the marker pin position as it is being dragged.
+	const handlePointerMove = useCallback(
+		/** @param {import('ol').MapBrowserEvent} e */
+		e => setPosition({ lng: e.coordinate[0], lat: e.coordinate[1] }),
+		[]
+	)
+
+	// Reset handlers when drag is complete.
+	const handleMouseUp = useCallback(() => {
+		// Unregister handlers
+		map.un('pointermove', handlePointerMove)
+		window.removeEventListener('mouseup', handleMouseUp)
+
+		// Reenable map panning.
+		map.getInteractions().forEach(i => {
+			if (i instanceof DragPan) i.setActive(true)
+		})
+
+		// Let the component know that dragging is complete.
+		setMoved(true)
+	}, [])
+
+	// Register handlers when holding the mouse down on the selected marker.
+	function handleMouseDown() {
+		// Disable map panning.
+		map.getInteractions().forEach(i => {
+			if (i instanceof DragPan) i.setActive(false)
+		})
+
+		// Let component know that move is in progress
+		setMoved(false)
+
+		// Register drag handlers
+		map.on('pointermove', handlePointerMove)
+		window.addEventListener('mouseup', handleMouseUp)
+	}
+
+	// Save the pin position to the marker when dragging is complete
+	useEffect(() => {
+		if (moved) {
+			setMarker(oldMarker => ({
+				...oldMarker,
+				meta: { ...oldMarker.meta, ...position }
+			}))
+		}
+	}, [moved])
 
 	return (
 		<Marker
-			position={[selected.meta.lng, selected.meta.lat]}
+			position={position}
 			anchor={mi.meta.iconAnchor}
 		>
-			<Icon icon={mi.meta.icon} style={getStyles(mi.meta)} className={cls.pin} />
+			<Icon
+				icon={mi.meta.icon}
+				style={getStyles(mi.meta)}
+				className={cls.pin}
+				onMouseDown={handleMouseDown}
+			/>
 		</Marker >
 	)
-
-	/**
-	 * Persist selected marker to prevent it from updating each key entry when updating the marker.
-	 * @type {PersistentMarkerProperties}
-	 */
-	/** Create a Leaflet icon using the marker icon settings. */
-	/** Event listener on dragend to update the marker position to the new location. */
-	// events: {s
-	// 	dragend(e) {
-	// 		setMarker(oldMarker => ({
-	// 			...oldMarker,
-	// 			meta: { ...oldMarker.meta, coordinates: e.target.getLatLng() }
-	// 		}))
-	// 	}
-	// }
 }
