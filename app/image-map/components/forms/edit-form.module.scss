@@ -7,11 +7,12 @@
 		:global(.components-base-control__label) {
 			align-self: flex-start;
 		}
+	}
 
-		.map {
-			border: 1px solid #757575;
-			border-radius: 2px;
-		}
+	.border,
+	:global(.ProseMirror) {
+		border: 1px solid #757575;
+		border-radius: 2px;
 	}
 
 	&.center {
@@ -45,7 +46,6 @@
 		>input,
 		>textarea,
 		>.input,
-		>.map,
 		>:global(.components-range-control__root),
 		>:global(.components-custom-select-control) {
 			flex: 1 1;

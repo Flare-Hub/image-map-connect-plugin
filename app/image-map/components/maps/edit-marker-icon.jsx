@@ -2,7 +2,7 @@ import { TextControl, Modal, Button, BaseControl, ColorPicker, Flex } from '@wor
 import { useState, useEffect } from '@wordpress/element'
 import { createItem, postItem } from '../../utils/wp-fetch'
 import { icons } from '../../utils/marker-icons'
-import IconButtons from '../forms/icon-buttons'
+import IconToolbarButtons from '../forms/icon-toolbar-buttons'
 
 import cls from '../forms/edit-form.module.scss'
 
@@ -49,7 +49,7 @@ export default function EditMarkerIcon({ icon, dispatch, close }) {
 				onChange={name => setUpdIcon(oldIcon => ({ ...oldIcon, name }))}
 				className={cls.field}
 			/>
-			<IconButtons
+			<IconToolbarButtons
 				label="Icon"
 				icons={icons}
 				onClick={setIconMeta}

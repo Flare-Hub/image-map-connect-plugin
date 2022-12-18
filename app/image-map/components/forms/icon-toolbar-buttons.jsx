@@ -12,9 +12,9 @@ import cls from './edit-form.module.scss'
  * @param {string} props.selected The name of the selected marker icon.
  * @param {string} props.colour The colour of the selected marker icon.
  */
-export default function IconButtons({ label, icons, onClick, selected, colour }) {
+export default function IconToolbarButtons({ label, icons, onClick, selected, colour }) {
 	return (
-		<BaseControl label="Icon" className={`${cls.field} ${cls.iconGroup}`}>
+		<BaseControl label={label} className={`${cls.field} ${cls.iconGroup}`}>
 			<ToolbarGroup style={{ margin: '0 1px' }}>
 				{icons.map(icon => (
 					<ToolbarButton

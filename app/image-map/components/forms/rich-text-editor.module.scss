@@ -1,0 +1,47 @@
+.toolbar {
+	margin-top: 8px;
+	width: 100%;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.filler {
+	flex-grow: 1;
+}
+
+.editor {
+	:global(.ProseMirror) {
+		padding: 1em;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+
+		&:not(:focus) {
+			border-top: 0;
+		}
+
+		&:focus {
+			border-color: var(--wp-admin-theme-color);
+			box-shadow: 0 0 0 1px var(--wp-admin-theme-color);
+			outline: 2px solid transparent;
+		}
+
+		>:first-child {
+			margin-top: 0;
+		}
+
+		>:last-child {
+			margin-bottom: 0;
+		}
+
+		ul {
+			list-style: initial;
+			padding-left: 2em;
+		}
+
+		blockquote {
+			margin-left: 0.5em;
+			padding-left: 0.5em;
+			border-left: 2px solid;
+		}
+	}
+}

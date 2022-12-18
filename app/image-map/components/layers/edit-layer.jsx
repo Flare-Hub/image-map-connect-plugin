@@ -102,7 +102,7 @@ export default function EditLayer({ layers, dispatch }) {
 						className={`${cls.field} ${cls.center}`}
 					/>
 					<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
-						<OlMap layer={layer} className={cls.map} >
+						<OlMap layer={layer} className={`${cls.border} ${cls.input}`} >
 							{layer._embedded && (<>
 								<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
 								<PositionGetter onMoveEnd={pos => setLayer(oldLayer => ({
