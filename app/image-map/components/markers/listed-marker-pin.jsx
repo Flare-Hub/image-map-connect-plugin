@@ -1,9 +1,9 @@
 import { useMemo } from '@wordpress/element'
 import { Icon } from '@wordpress/components'
 
-import { getStyles } from '../utils/marker-icons'
-import Marker from './ol/marker'
-import Link from './link'
+import { getStyles } from '../../utils/marker-icons'
+import Marker from '../ol/marker'
+import Link from '../link'
 
 import cls from './listed-marker-pin.module.scss'
 

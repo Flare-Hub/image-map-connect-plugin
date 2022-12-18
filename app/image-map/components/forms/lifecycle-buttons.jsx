@@ -1,7 +1,7 @@
 import { Button } from '@wordpress/components'
-import { navigate } from '../contexts/router'
+import { navigate } from '../../contexts/router'
 
-import { postItem, deleteItem, createItem } from '../utils/wp-fetch'
+import { postItem, deleteItem, createItem } from '../../utils/wp-fetch'
 
 import cls from './lifecycle-buttons.module.scss'
 
@@ -10,7 +10,7 @@ import cls from './lifecycle-buttons.module.scss'
  *
  * @param {object} props
  * @param {Object} props.item Item to save or delete.
- * @param {import('../hooks/useCollection').WpIdentifiers} props.identifiers Name of Wordpress collection to update.
+ * @param {import('../../hooks/useCollection').WpIdentifiers} props.identifiers Name of Wordpress collection to update.
  * @param {import('../contexts/global').Dispatcher} props.dispatch Function to handle the state update.
  */
 export default function LifeCycleButtons({ item, identifiers, dispatch }) {

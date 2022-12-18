@@ -1,20 +1,20 @@
 import { BaseControl, TextControl, Card, CardBody, CardDivider } from '@wordpress/components'
 
-import useSelected from '../hooks/useSelected'
-import { useMarker } from '../contexts/marker';
-import { wpLayers } from './layers';
-import LifeCycleButtons from './lifecycle-buttons'
-import MarkerIconSelect from './marker-icon-select';
+import useSelected from '../../hooks/useSelected'
+import { useMarker } from '../../contexts/marker';
+import { wpLayers } from '../layers';
+import LifeCycleButtons from '../forms/lifecycle-buttons'
+import MarkerIconSelect from '../forms/marker-icon-select';
 
-import cls from './edit-form.module.scss'
-import ButtonSelector from './button-selector';
+import cls from '../forms/edit-form.module.scss'
+import ButtonSelector from '../forms/button-selector';
 
 /**
  * Map details form.
  *
  * @param {Object} props
- * @param {import('../hooks/useCollection').WpIdentifiers} props.markers
- * @param {import('../hooks/useCollection').Dispatcher} props.dispatch
+ * @param {import('../../hooks/useCollection').WpIdentifiers} props.markers
+ * @param {import('../../hooks/useCollection').Dispatcher} props.dispatch
  */
 export default function EditMarker({ markers, dispatch }) {
 	const [layer] = useSelected(wpLayers, { _fields: 'id,name,meta' })

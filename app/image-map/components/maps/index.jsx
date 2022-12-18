@@ -1,11 +1,11 @@
 import { Button } from '@wordpress/components'
 
-import Layout from './layout'
-import useCollection from '../hooks/useCollection'
+import Layout from '../layout'
+import useCollection from '../../hooks/useCollection'
 import EditMap from './edit-map'
-import { useRouter } from '../contexts/router'
+import { useRouter } from '../../contexts/router'
 
-/** @type {import('../hooks/useCollection').WpIdentifiers} */
+/** @type {import('../../hooks/useCollection').WpIdentifiers} */
 export const wpMaps = {
 	model: 'map',
 	endpoint: 'imagemaps',

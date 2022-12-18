@@ -1,24 +1,24 @@
 import { Button, Flex, FlexItem, Card } from '@wordpress/components'
 import { useEffect, useState } from '@wordpress/element'
 
-import { useRouter } from '../contexts/router'
-import { MarkerProvider } from '../contexts/marker'
-import useCollection from '../hooks/useCollection'
-import useSelected from '../hooks/useSelected'
-import { getCollection } from '../utils/wp-fetch'
-import transformModel from '../utils/transform-model'
-import { wpLayers } from './layers';
-import Layout from './layout'
+import { useRouter } from '../../contexts/router'
+import { MarkerProvider } from '../../contexts/marker'
+import useCollection from '../../hooks/useCollection'
+import useSelected from '../../hooks/useSelected'
+import { getCollection } from '../../utils/wp-fetch'
+import transformModel from '../../utils/transform-model'
+import { wpLayers } from '../layers';
+import Layout from '../layout'
 import EditMarker from './edit-marker'
-import OlMap from './ol/map'
+import OlMap from '../ol/map'
 import ListedMarkerPin from './listed-marker-pin'
-import ImageLayer from './ol/image-layer'
+import ImageLayer from '../ol/image-layer'
 import SelectedMarkerPin from './selected-marker-pin'
 import NewMarkerPin from './new-marker-pin'
 
 /** @typedef {import('ol').Map} Map */
 
-/** @type {import('../hooks/useCollection').WpIdentifiers} */
+/** @type {import('../../hooks/useCollection').WpIdentifiers} */
 export const wpMarkers = {
 	model: 'marker',
 	endpoint: 'markers',

@@ -1,9 +1,10 @@
 import { TextControl, Modal, Button, BaseControl, ColorPicker, Flex } from '@wordpress/components'
 import { useState, useEffect } from '@wordpress/element'
-import { createItem, postItem } from '../utils/wp-fetch'
-import MarkerIconButtons from './marker-icon-buttons'
+import { createItem, postItem } from '../../utils/wp-fetch'
+import { icons } from '../../utils/marker-icons'
+import IconButtons from '../forms/icon-buttons'
 
-import cls from './edit-form.module.scss'
+import cls from '../forms/edit-form.module.scss'
 
 /**
  * A row to edit or display the marker icon.
@@ -48,13 +49,13 @@ export default function EditMarkerIcon({ icon, dispatch, close }) {
 				onChange={name => setUpdIcon(oldIcon => ({ ...oldIcon, name }))}
 				className={cls.field}
 			/>
-			<BaseControl label="Icon" className={`${cls.field} ${cls.iconGroup}`}>
-				<MarkerIconButtons
-					onClick={setIconMeta}
-					selected={updIcon.meta.icon}
-					colour={updIcon.meta.colour}
-				/>
-			</BaseControl>
+			<IconButtons
+				label="Icon"
+				icons={icons}
+				onClick={setIconMeta}
+				selected={updIcon.meta.icon}
+				colour={updIcon.meta.colour}
+			/>
 			<Flex align="flex-end">
 				<BaseControl label="Colour" className={cls.field}>
 					<ColorPicker color={updIcon.meta.colour} onChange={colour => setIconMeta({ colour })} />

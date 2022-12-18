@@ -1,11 +1,11 @@
 import { Button } from '@wordpress/components'
 
-import useCollection from '../hooks/useCollection'
-import { useRouter } from '../contexts/router'
-import Layout from './layout'
+import useCollection from '../../hooks/useCollection'
+import { useRouter } from '../../contexts/router'
+import Layout from '../layout'
 import EditLayer from './edit-layer'
 
-/** @type {import('../hooks/useCollection').WpIdentifiers} */
+/** @type {import('../../hooks/useCollection').WpIdentifiers} */
 export const wpLayers = {
 	model: 'layer',
 	endpoint: 'imagemaps',

@@ -1,7 +1,7 @@
 import { useEffect } from '@wordpress/element'
-import { useMap } from "./ol/context"
+import { useMap } from "../ol/context"
 
-import { useMarker } from "../contexts/marker"
+import { useMarker } from "../../contexts/marker"
 import SelectedMarkerPin from './selected-marker-pin'
 
 /**

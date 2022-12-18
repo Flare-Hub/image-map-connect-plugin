@@ -12,21 +12,21 @@ import {
 } from '@wordpress/components'
 import { useEffect, useReducer, useState } from '@wordpress/element'
 
-import useSelected from '../hooks/useSelected'
-import { deleteItem, getCollection } from '../utils/wp-fetch'
-import { getStyles } from '../utils/marker-icons'
-import LifeCycleButtons from './lifecycle-buttons'
-import PostTypesSelect from './post-types-select'
+import useSelected from '../../hooks/useSelected'
+import { deleteItem, getCollection } from '../../utils/wp-fetch'
+import { getStyles } from '../../utils/marker-icons'
+import LifeCycleButtons from '../forms/lifecycle-buttons'
+import PostTypesSelect from '../forms/post-types-select'
 import EditMarkerIcon from './edit-marker-icon'
 
-import cls from './edit-form.module.scss'
+import cls from '../forms/edit-form.module.scss'
 
 /**
  * Map details form.
  *
  * @param {object} props
- * @param {import('../hooks/useCollection').WpIdentifiers} props.maps
- * @param {import('../hooks/useCollection').Dispatcher} props.dispatch
+ * @param {import('../../hooks/useCollection').WpIdentifiers} props.maps
+ * @param {import('../../hooks/useCollection').Dispatcher} props.dispatch
  */
 export default function EditMap({ maps, dispatch }) {
 

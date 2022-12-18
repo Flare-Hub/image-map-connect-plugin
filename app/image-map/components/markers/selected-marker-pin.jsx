@@ -1,10 +1,10 @@
 import { useMemo, useState, useEffect, useCallback } from '@wordpress/element'
 import { Icon } from '@wordpress/components'
 
-import { getStyles } from '../utils/marker-icons'
-import { useMarker } from "../contexts/marker"
-import Marker from './ol/marker'
-import { useMap } from './ol/context'
+import { getStyles } from '../../utils/marker-icons'
+import { useMarker } from "../../contexts/marker"
+import Marker from '../ol/marker'
+import { useMap } from '../ol/context'
 import { DragPan } from 'ol/interaction'
 
 import cls from './selected-marker-pin.module.scss'

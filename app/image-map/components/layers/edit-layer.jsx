@@ -1,21 +1,21 @@
 import { TextControl, Button, BaseControl, RangeControl, Card, CardBody } from '@wordpress/components'
 import { useEffect, useState } from '@wordpress/element'
 
-import useSelected from '../hooks/useSelected'
-import { useRouter } from '../contexts/router';
-import LifeCycleButtons from './lifecycle-buttons'
-import OlMap from './ol/map';
+import useSelected from '../../hooks/useSelected'
+import { useRouter } from '../../contexts/router';
+import LifeCycleButtons from '../forms/lifecycle-buttons'
+import OlMap from '../ol/map';
+import ImageLayer from '../ol/image-layer';
+import PositionGetter from '../ol/position-getter';
 
-import cls from './edit-form.module.scss'
-import ImageLayer from './ol/image-layer';
-import PositionGetter from './ol/position-getter';
+import cls from '../forms/edit-form.module.scss'
 
 /**
  * Map details form.
  *
  * @param {Object} props
- * @param {import('../hooks/useCollection').WpIdentifiers} props.layers
- * @param {import('../hooks/useCollection').Dispatcher} props.dispatch
+ * @param {import('../../hooks/useCollection').WpIdentifiers} props.layers
+ * @param {import('../../hooks/useCollection').Dispatcher} props.dispatch
  */
 export default function EditLayer({ layers, dispatch }) {
 	const { query } = useRouter()
