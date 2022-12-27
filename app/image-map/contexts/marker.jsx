@@ -26,6 +26,7 @@ export function MarkerProvider({ icons, children }) {
 		{
 			status: 'publish',
 			title: { raw: '' },
+			excerpt: { raw: '' },
 			imagemaps: [query[wpMarkers.parent]],
 			'marker-icons': [],
 			meta: {}

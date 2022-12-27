@@ -1,14 +1,40 @@
-
+import { createContext, useContext } from '@wordpress/element'
 import { BaseControl, Toolbar, ToolbarGroup, ToolbarButton } from "@wordpress/components";
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from "@tiptap/extension-underline"
 
 import cls from '../forms/edit-form.module.scss'
 import rteCls from './rich-text-editor.module.scss'
 
+/** @type {React.Context<Editor>} */
+const EditorContext = createContext()
+
 /**
- * Rich text editor
+ * Button that formats TipTap content using the provided styling.
+ *
+ * @param {object} props
+ * @param {string} props.icon
+ * @param {string} props.style
+ * @param {object} props.config
+ * @param {string} props.toggler
+ * @returns
+ */
+function StyleButton({ icon, style, config, toggler }) {
+	const editor = useContext(EditorContext)
+
+	return (
+		<ToolbarButton
+			icon={icon}
+			isActive={editor && editor.isActive(style, config)}
+			onClick={() => editor.chain().focus()[toggler](config).run()}
+			disabled={editor && !editor.can().chain().focus()[toggler](config).run()}
+		/>
+	)
+}
+
+/**
+ * TipTap editor
  *
  * @param {object} props
  * @param {string} props.label Form label visible to the end user.
@@ -16,6 +42,7 @@ import rteCls from './rich-text-editor.module.scss'
  * @param {(content: string) => void} props.onChange Provide changed content on blur.
  */
 export default function RichTextEditor({ label, content, onChange }) {
+	// Initialize TipTap editor
 	const editor = useEditor({
 		extensions: [StarterKit, Underline],
 		content: content,
@@ -23,69 +50,36 @@ export default function RichTextEditor({ label, content, onChange }) {
 	})
 
 	return (
-		<BaseControl label={label} className={cls.field}>
-			<div className={cls.input}>
-				<Toolbar label={label} className={rteCls.toolbar}>
-					<ToolbarGroup>
-						<ToolbarButton
-							icon={'heading'}
-							isActive={editor && editor.isActive('heading', { level: 2 })}
-							onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-							disabled={editor && !editor.can().chain().focus().toggleHeading({ level: 2 }).run()}
-						/>
-						<ToolbarButton
-							icon={'format-quote'}
-							isActive={editor && editor.isActive('blockquote')}
-							onClick={() => editor.chain().focus().toggleBlockquote().run()}
-							disabled={editor && !editor.can().chain().focus().toggleBlockquote().run()}
-						/>
-					</ToolbarGroup>
-					<ToolbarGroup>
-						<ToolbarButton
-							icon={'editor-bold'}
-							isActive={editor && editor.isActive('bold')}
-							onClick={() => editor.chain().focus().toggleBold().run()}
-							disabled={editor && !editor.can().chain().focus().toggleBold().run()}
-						/>
-						<ToolbarButton
-							icon={'editor-italic'}
-							isActive={editor && editor.isActive('italic')}
-							onClick={() => editor.chain().focus().toggleItalic().run()}
-							disabled={editor && !editor.can().chain().focus().toggleItalic().run()}
-						/>
-						<ToolbarButton
-							icon={'editor-underline'}
-							isActive={editor && editor.isActive('underline')}
-							onClick={() => editor.chain().focus().toggleUnderline().run()}
-							disabled={editor && !editor.can().chain().focus().toggleUnderline().run()}
-						/>
-					</ToolbarGroup>
-					<ToolbarGroup>
-						<ToolbarButton
-							icon={'editor-ul'}
-							isActive={editor && editor.isActive('bulletList')}
-							onClick={() => editor.chain().focus().toggleBulletList().run()}
-							disabled={editor && !editor.can().chain().focus().toggleBulletList().run()}
-						/>
-						<ToolbarButton
-							icon={'editor-ol'}
-							isActive={editor && editor.isActive('orderedList')}
-							onClick={() => editor.chain().focus().toggleOrderedList().run()}
-							disabled={editor && !editor.can().chain().focus().toggleOrderedList().run()}
-						/>
-					</ToolbarGroup>
-					<ToolbarGroup>
-						<ToolbarButton
-							icon={'editor-removeformatting'}
-							onClick={() => editor.chain().focus().unsetAllMarks().run()}
-						/>
-					</ToolbarGroup>
-					<ToolbarGroup>
-						<div className={rteCls.filler}></div>
-					</ToolbarGroup>
-				</Toolbar>
-				<EditorContent editor={editor} className={rteCls.editor} />
-			</div>
-		</BaseControl >
+		<EditorContext.Provider value={editor} >
+			<BaseControl label={label} className={cls.field}>
+				<div className={`${cls.input} ${cls.border} ${editor && editor.isFocused && rteCls.focused}`}>
+					<Toolbar label={label} className={rteCls.toolbar}>
+						<ToolbarGroup>
+							<StyleButton icon="heading" style="heading" config={{ level: 3 }} toggler="toggleHeading" />
+							<StyleButton icon="format-quote" style="blockquote" toggler="toggleBlockquote" />
+						</ToolbarGroup>
+						<ToolbarGroup>
+							<StyleButton icon="editor-bold" style="bold" toggler="toggleBold" />
+							<StyleButton icon="editor-italic" style="italic" toggler="toggleItalic" />
+							<StyleButton icon="editor-underline" style="underline" toggler="toggleUnderline" />
+						</ToolbarGroup>
+						<ToolbarGroup>
+							<StyleButton icon="editor-ul" style="bulletList" toggler="toggleBulletList" />
+							<StyleButton icon="editor-ol" style="orderedList" toggler="toggleOrderedList" />
+						</ToolbarGroup>
+						<ToolbarGroup>
+							<ToolbarButton
+								icon={'editor-removeformatting'}
+								onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}
+							/>
+						</ToolbarGroup>
+						<ToolbarGroup>
+							<div className={rteCls.filler}></div>
+						</ToolbarGroup>
+					</Toolbar>
+					<EditorContent editor={editor} className={rteCls.editor} />
+				</div>
+			</BaseControl >
+		</EditorContext.Provider>
 	)
 }

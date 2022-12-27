@@ -9,10 +9,11 @@
 		}
 	}
 
-	.border,
-	:global(.ProseMirror) {
+	.border {
 		border: 1px solid #757575;
 		border-radius: 2px;
+		margin-left: 1px;
+		margin-right: 1px;
 	}
 
 	&.center {
@@ -45,6 +46,7 @@
 
 		>input,
 		>textarea,
+		>hr,
 		>.input,
 		>:global(.components-range-control__root),
 		>:global(.components-custom-select-control) {
@@ -82,4 +84,23 @@
 			margin-left: 1em;
 		}
 	}
+
+	.featuredButtons {
+		margin: 0 8px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.featured {
+		align-self: flex-end;
+	}
+}
+
+.spacer {
+	margin-bottom: 30px;
+}
+
+.divider {
+	margin-bottom: 8px;
 }

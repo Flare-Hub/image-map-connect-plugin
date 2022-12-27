@@ -5,9 +5,11 @@ import { useMarker } from '../../contexts/marker';
 import { wpLayers } from '../layers';
 import LifeCycleButtons from '../forms/lifecycle-buttons'
 import MarkerIconSelect from '../forms/marker-icon-select';
+import ButtonSelector from '../forms/button-selector';
+import RichTextEditor from '../forms/rich-text-editor';
 
 import cls from '../forms/edit-form.module.scss'
-import ButtonSelector from '../forms/button-selector';
+import ImageSelector from '../forms/image-selector';
 
 /**
  * Map details form.
@@ -26,7 +28,7 @@ export default function EditMarker({ markers, dispatch }) {
 	return (
 		<Card>
 			<CardBody>
-				<div className='col-xs-9'>
+				<div className="col-xs-9">
 					<BaseControl label="Layer" className={cls.field}>{layer.name}</BaseControl>
 					<TextControl
 						label="Name"
@@ -43,6 +45,7 @@ export default function EditMarker({ markers, dispatch }) {
 							}))
 						}}
 					/>
+					<div className={cls.spacer} />
 					<ButtonSelector
 						label="Type"
 						items={[
@@ -54,7 +57,32 @@ export default function EditMarker({ markers, dispatch }) {
 							...oldMarker, meta: { ...oldMarker.meta, type }
 						}))}
 					/>
-					<CardDivider />
+					<CardDivider className={cls.divider} />
+					{marker.meta.type === 'standalone' && (
+						<>
+							<TextControl
+								label="Title"
+								value={marker.meta.popup_title}
+								onChange={val => setMarker(oldMarker => ({
+									...oldMarker,
+									meta: { ...oldMarker.meta, popup_title: val }
+								}))}
+								className={cls.field}
+							/>
+							<RichTextEditor
+								label="Content"
+								content={marker.excerpt.raw}
+								onChange={content => setMarker(oldMarker => ({
+									...oldMarker, excerpt: { raw: content }
+								}))}
+							/>
+							<ImageSelector
+								label='Featured Image'
+								imageId={marker.featured_media}
+								onSelect={img => setMarker(oldMarker => ({ ...oldMarker, featured_media: img }))}
+							/>
+						</>
+					)}
 				</div>
 				<div className="col-xs-3">
 					<LifeCycleButtons identifiers={markers} item={marker} dispatch={dispatch} />
