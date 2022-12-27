@@ -1,7 +1,7 @@
 import { TextControl, Button, BaseControl, RangeControl, Card, CardBody } from '@wordpress/components'
-import { useEffect, useState } from '@wordpress/element'
 
 import useSelected from '../../hooks/useSelected'
+import useMediaMgr from '../../hooks/useMediaMgr';
 import { useRouter } from '../../contexts/router';
 import LifeCycleButtons from '../forms/lifecycle-buttons'
 import OlMap from '../ol/map';
@@ -32,43 +32,25 @@ export default function EditLayer({ layers, dispatch }) {
 		}
 	)
 
-	// Initialise media manager
-	const [mediaMgr, setMediaMgr] = useState()
-
-	// Load media manager
-	useEffect(() => {
-		// Create media manager
-		const mm = window.wp.media({
-			title: 'Select image',
-			button: { text: 'Select image' },
-			multiple: false,
-		})
-		setMediaMgr(mm)
-
-		// Update image and set the new image ID in the layer
-		function getImage() {
-			const newImage = mm.state().get('selection').first()
-			setLayer(oldLayer => ({
-				...oldLayer,
-				meta: { ...oldLayer.meta, image: newImage.attributes.id, initial_position: {} },
-				_embedded: {
-					'flare:image': [{
-						source_url: newImage.attributes.url,
-						media_details: {
-							width: newImage.attributes.width,
-							height: newImage.attributes.height,
-						},
-					}],
-				}
-			}))
+	// Initiate Wordpress media manager to select layer image
+	const mediaMgr = useMediaMgr(false, selImages => setLayer(oldLayer => {
+		// Get selected image
+		const selImg = selImages.first()
+		// Mimic rest API structure for image details.
+		return {
+			...oldLayer,
+			meta: { ...oldLayer.meta, image: selImg.attributes.id, initial_position: {} },
+			_embedded: {
+				'flare:image': [{
+					source_url: selImg.attributes.url,
+					media_details: {
+						width: selImg.attributes.width,
+						height: selImg.attributes.height,
+					},
+				}],
+			}
 		}
-
-		// Action to take when selecting an image.
-		mm.on('select', getImage)
-
-		// Unregister media manager action.
-		return () => mm.off('select', getImage)
-	}, [])
+	}))
 
 	if (layer.name === undefined) return <div></div>
 
