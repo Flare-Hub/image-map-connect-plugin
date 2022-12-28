@@ -23,7 +23,7 @@ export default function ListedMarkerPin({ marker, icons }) {
 
 	return (
 		<Marker
-			position={marker.meta}
+			position={marker.flare_loc}
 			anchor={mi.meta.iconAnchor}
 		>
 			<Link query={{ marker: marker.id }} className={cls.link} >

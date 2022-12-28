@@ -60,7 +60,7 @@ export default function EditMarker({ markers, dispatch }) {
 					<CardDivider className={cls.divider} />
 					{marker.meta.type === 'standalone' && (
 						<>
-							<TextControl
+							{/* <TextControl
 								label="Title"
 								value={marker.meta.popup_title}
 								onChange={val => setMarker(oldMarker => ({
@@ -68,7 +68,7 @@ export default function EditMarker({ markers, dispatch }) {
 									meta: { ...oldMarker.meta, popup_title: val }
 								}))}
 								className={cls.field}
-							/>
+							/> */}
 							<RichTextEditor
 								label="Content"
 								content={marker.excerpt.raw}

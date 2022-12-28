@@ -26,7 +26,7 @@ export default function SelectedMarkerPin({ icons, selected }) {
 	 * Coordinates of the marker
 	 * @type {[Position, (pos: Position) => void]}
 	 * */
-	const [position, setPosition] = useState(selected.meta)
+	const [position, setPosition] = useState(selected.flare_loc)
 
 	// True after a move is complete.
 	const [moved, setMoved] = useState(false)
@@ -80,10 +80,7 @@ export default function SelectedMarkerPin({ icons, selected }) {
 	// Save the pin position to the marker when dragging is complete
 	useEffect(() => {
 		if (moved) {
-			setMarker(oldMarker => ({
-				...oldMarker,
-				meta: { ...oldMarker.meta, ...position }
-			}))
+			setMarker(oldMarker => ({ ...oldMarker, flare_loc: position }))
 		}
 	}, [moved])
 

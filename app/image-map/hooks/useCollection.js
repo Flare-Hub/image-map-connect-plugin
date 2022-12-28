@@ -101,7 +101,7 @@ export default function useCollection(identifiers, query, initialState) {
 
 		// Collection is loaded.
 		setLoading(false)
-	}, [appQuery[identifiers.model]])
+	}, [query])
 
 	return [collection, dispatch, loading]
 }

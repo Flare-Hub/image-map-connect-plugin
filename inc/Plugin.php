@@ -89,10 +89,11 @@ class Plugin {
 		add_action( 'rest_prepare_imagemap', array( $this->image_map, 'add_image_link' ), 10, 2 );
 
 		// Hook marker functions.
-		$this->marker->register_popup_title();
-		$this->marker->register_lng();
-		$this->marker->register_lat();
 		$this->marker->register_type();
+
+		// Hook location fields.
+		$loc_fields = new LocationMeta();
+		$loc_fields->add_to_post_types();
 
 		// Hook marker icon functions.
 		$this->marker_icon->register_colour();

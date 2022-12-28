@@ -29,7 +29,8 @@ export function MarkerProvider({ icons, children }) {
 			excerpt: { raw: '' },
 			imagemaps: [query[wpMarkers.parent]],
 			'marker-icons': [],
-			meta: {}
+			flare_loc: {},
+			meta: {},
 		}
 	)
 

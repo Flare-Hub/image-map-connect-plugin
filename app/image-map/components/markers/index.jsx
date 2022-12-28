@@ -34,7 +34,7 @@ export default function Markers() {
 	// Fetch markers from Wordpress.
 	const [markers, dispatchMarkers, loading] = useCollection(
 		wpMarkers,
-		{ imagemaps: query[wpMarkers.parent], _fields: 'title,id,meta,marker-icons' },
+		{ imagemaps: query[wpMarkers.parent], _fields: 'title,id,meta,marker-icons,flare_loc' },
 		{ list: [], page: 1 }
 	)
 
@@ -57,7 +57,7 @@ export default function Markers() {
 		navigate({ marker })
 		const selected = markers.list.find(m => m.id === marker)
 		map.getView().animate({
-			center: [selected.meta.lng, selected.meta.lat],
+			center: [selected.flare_loc.lng, selected.flare_loc.lat],
 			duration: 500,
 		})
 	}

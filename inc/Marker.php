@@ -75,51 +75,6 @@ class Marker {
 	 *
 	 * @since 0.1.0
 	 */
-	public function register_popup_title() {
-		$meta_args = array(
-			'object_subtype' => self::$post_type,
-			'type'           => 'string',
-			'single'         => true,
-			'show_in_rest'   => true,
-		);
-		register_meta( 'post', 'popup_title', $meta_args );
-	}
-
-	/**
-	 * Register Marker's type field with the rest API.
-	 *
-	 * @since 0.1.0
-	 */
-	public function register_lat() {
-		$meta_args = array(
-			'object_subtype' => self::$post_type,
-			'type'           => 'number',
-			'single'         => true,
-			'show_in_rest'   => true,
-		);
-		register_meta( 'post', 'lat', $meta_args );
-	}
-
-	/**
-	 * Register Marker's type field with the rest API.
-	 *
-	 * @since 0.1.0
-	 */
-	public function register_lng() {
-		$meta_args = array(
-			'object_subtype' => self::$post_type,
-			'type'           => 'number',
-			'single'         => true,
-			'show_in_rest'   => true,
-		);
-		register_meta( 'post', 'lng', $meta_args );
-	}
-
-	/**
-	 * Register Marker's type field with the rest API.
-	 *
-	 * @since 0.1.0
-	 */
 	public function register_type() {
 		$meta_args = array(
 			'object_subtype' => self::$post_type,

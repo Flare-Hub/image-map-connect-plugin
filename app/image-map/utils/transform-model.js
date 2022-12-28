@@ -6,6 +6,7 @@ export default function transformModel(action) {
 			title: { rendered: action.payload.title.raw },
 			meta: action.payload.meta,
 			'marker-icons': action.payload['marker-icons'],
+			flare_loc: action.payload.flare_loc,
 		}
 	}
 
