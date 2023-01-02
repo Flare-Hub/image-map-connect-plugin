@@ -9,7 +9,18 @@ namespace Flare\ImageMap;
  */
 class Marker {
 	/** @var string $post_type The custom post type name for markers. */
-	public static $post_type = 'marker';
+	public const POST_TYPE = 'marker';
+
+	/** @var array $post_types Post types that can contain location meta. */
+	protected $post_types;
+
+	/**
+	 * @param array $post_types Post types that can contain location meta.
+	 * @since 0.1.0
+	 **/
+	public function __construct( array $post_types ) {
+		$this->post_types = $post_types;
+	}
 
 	/**
 	 * Register Markers post type
@@ -67,26 +78,19 @@ class Marker {
 			'publicly_queryable'  => false,
 			'capability_type'     => 'post',
 		);
-		register_post_type( self::$post_type, $args );
+		register_post_type( self::POST_TYPE, $args );
 	}
 
 	/**
-	 * Register Marker's type field with the rest API.
+	 * Include post types with location meta in the REST list route for markers.
 	 *
+	 * @param array $args The query args used to get the list.
+	 * @return array The updated query args.
 	 * @since 0.1.0
-	 */
-	public function register_type() {
-		$meta_args = array(
-			'object_subtype' => self::$post_type,
-			'type'           => 'string',
-			'single'         => true,
-			'show_in_rest'   => array(
-				'schema' => array(
-					'type' => 'string',
-					'enum' => array( 'standalone', 'linked' ),
-				),
-			),
-		);
-		register_meta( 'post', 'type', $meta_args );
+	 **/
+	public function filter_rest_query( array $args ) {
+		$types             = is_array( $args['post_type'] ) ? $args['post_type'] : array( $args['post_type'] );
+		$args['post_type'] = array_merge( $types, $this->post_types );
+		return $args;
 	}
 }

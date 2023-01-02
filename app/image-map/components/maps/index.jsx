@@ -1,4 +1,5 @@
 import { Button } from '@wordpress/components'
+import { useMemo } from '@wordpress/element'
 
 import Layout from '../layout'
 import useCollection from '../../hooks/useCollection'
@@ -12,6 +13,8 @@ export const wpMaps = {
 	parent: false,
 }
 
+const collectionQuery = { parent: 0, _fields: 'name,id' }
+
 /**
  * List of maps with details of selected map
  */
@@ -20,7 +23,7 @@ export default function Maps() {
 	const { query, navigate } = useRouter()
 	const [maps, dispatchMaps, loading] = useCollection(
 		wpMaps,
-		{ parent: 0, _fields: 'name,id' },
+		collectionQuery,
 		{ list: [], page: 1 }
 	)
 

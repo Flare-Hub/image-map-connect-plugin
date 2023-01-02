@@ -105,7 +105,7 @@ class LocationMeta {
 	 **/
 	public function add_to_post_types() {
 		$post_types   = $this->get_location_post_types();
-		$post_types[] = Marker::$post_type;
+		$post_types[] = Marker::POST_TYPE;
 
 		foreach ( $post_types as $type ) {
 			$this->register_flare_field( $type );

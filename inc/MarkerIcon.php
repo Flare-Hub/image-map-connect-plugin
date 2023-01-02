@@ -14,9 +14,10 @@ class MarkerIcon {
 	/**
 	 * Register Marker Icon taxonomy.
 	 *
+	 * @param array $post_types The post types that should support image maps.
 	 * @since 0.1.0
 	 **/
-	public function register_marker_icon() {
+	public function register_marker_icon( array $post_types ) {
 		$labels = array(
 			'name'              => _x( 'Marker Icons', 'taxonomy general name', 'flare-im' ),
 			'singular_name'     => _x( 'Marker Icon', 'taxonomy singular name', 'flare-im' ),
@@ -45,7 +46,7 @@ class MarkerIcon {
 			'show_in_rest'       => true,
 			'rest_base'          => 'marker-icons',
 		);
-		register_taxonomy( self::$name, array(), $args );
+		register_taxonomy( self::$name, $post_types, $args );
 	}
 
 	/**
@@ -185,7 +186,7 @@ class MarkerIcon {
 	 * Description.
 	 *
 	 * @param array $object The term that is being requested.
-	 * @return integer The parent ID.
+	 * @return int The parent ID.
 	 * @since 0.1.0
 	 **/
 	public function get_map( $object ) {
@@ -195,7 +196,7 @@ class MarkerIcon {
 	/**
 	 * Description
 	 *
-	 * @param integer  $value Map value as set in the message body.
+	 * @param int      $value Map value as set in the message body.
 	 * @param \WP_Term $term The term that is being updated.
 	 * @param string   $field_name The name of the field being updated.
 	 * @since 0.1.0

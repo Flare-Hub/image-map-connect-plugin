@@ -14,9 +14,10 @@ class ImageMap {
 	/**
 	 * Register Image Map taxonomy.
 	 *
+	 * @param array $post_types The post types that should support image maps.
 	 * @since 0.1.0
 	 **/
-	public function register_image_map() {
+	public function register_image_map( array $post_types ) {
 		$labels = array(
 			'name'              => _x( 'Image Maps', 'taxonomy general name', 'flare-im' ),
 			'singular_name'     => _x( 'Image Map', 'taxonomy singular name', 'flare-im' ),
@@ -45,7 +46,7 @@ class ImageMap {
 			'show_in_rest'       => true,
 			'rest_base'          => 'imagemaps',
 		);
-		register_taxonomy( self::$name, array(), $args );
+		register_taxonomy( self::$name, $post_types, $args );
 	}
 
 	/**

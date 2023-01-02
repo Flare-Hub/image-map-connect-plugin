@@ -25,6 +25,10 @@ class Plugin {
 
 	/** @var MarkerIcon The marker icon Taxonomy management object. */
 	protected $marker_icon;
+
+	/** @var LocationMeta The marker icon Taxonomy management object. */
+	protected $loc_meta;
+
 	/**
 	 * Register plugin to primary and lifecycle hooks.
 	 *
@@ -43,9 +47,10 @@ class Plugin {
 	 * @since 0.1.0
 	 **/
 	public function plugins_loaded() {
+		$this->loc_meta    = new LocationMeta();
 		$this->image_map   = new ImageMap();
-		$this->marker      = new Marker();
 		$this->marker_icon = new MarkerIcon();
+		$this->marker      = new Marker( $this->loc_meta->get_location_post_types() );
 
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
@@ -57,8 +62,9 @@ class Plugin {
 	 * @since 0.1.0
 	 **/
 	public function init() {
-		$this->image_map->register_image_map();
-		$this->marker_icon->register_marker_icon();
+		$post_types = $this->loc_meta->get_location_post_types();
+		$this->image_map->register_image_map( $post_types );
+		$this->marker_icon->register_marker_icon( $post_types );
 		$this->marker->register_marker_cpt();
 	}
 
@@ -89,11 +95,10 @@ class Plugin {
 		add_action( 'rest_prepare_imagemap', array( $this->image_map, 'add_image_link' ), 10, 2 );
 
 		// Hook marker functions.
-		$this->marker->register_type();
+		add_action( sprintf( 'rest_%s_query', Marker::POST_TYPE ), array( $this->marker, 'filter_rest_query' ), 10, 1 );
 
 		// Hook location fields.
-		$loc_fields = new LocationMeta();
-		$loc_fields->add_to_post_types();
+		$this->loc_meta->add_to_post_types();
 
 		// Hook marker icon functions.
 		$this->marker_icon->register_colour();

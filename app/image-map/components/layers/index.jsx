@@ -1,4 +1,5 @@
 import { Button } from '@wordpress/components'
+import { useMemo } from '@wordpress/element'
 
 import useCollection from '../../hooks/useCollection'
 import { useRouter } from '../../contexts/router'
@@ -21,7 +22,9 @@ export default function Layers() {
 	// Load layers into global state
 	const [layers, dispatchLayers, loading] = useCollection(
 		wpLayers,
-		{ parent: Number(query[wpLayers.parent]), _fields: 'name,id' },
+		useMemo(() => (
+			{ parent: Number(query[wpLayers.parent]), _fields: 'name,id' }
+		), [query[wpLayers.parent]]),
 		{ list: [], page: 1 }
 	)
 

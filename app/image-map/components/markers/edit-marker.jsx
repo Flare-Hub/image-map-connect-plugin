@@ -1,15 +1,18 @@
 import { BaseControl, TextControl, Card, CardBody, CardDivider } from '@wordpress/components'
+import { useMemo } from '@wordpress/element'
 
 import useSelected from '../../hooks/useSelected'
+import useCollection from '../../hooks/useCollection';
 import { useMarker } from '../../contexts/marker';
 import { wpLayers } from '../layers';
 import LifeCycleButtons from '../forms/lifecycle-buttons'
 import MarkerIconSelect from '../forms/marker-icon-select';
-import ButtonSelector from '../forms/button-selector';
 import RichTextEditor from '../forms/rich-text-editor';
+import ImageSelector from '../forms/image-selector';
 
 import cls from '../forms/edit-form.module.scss'
-import ImageSelector from '../forms/image-selector';
+
+const typesQuery = {}
 
 /**
  * Map details form.
@@ -19,9 +22,11 @@ import ImageSelector from '../forms/image-selector';
  * @param {import('../../hooks/useCollection').Dispatcher} props.dispatch
  */
 export default function EditMarker({ markers, dispatch }) {
-	const [layer] = useSelected(wpLayers, { _fields: 'id,name,meta' })
+	const [layer] = useSelected(wpLayers, { _fields: 'id,name' })
 
 	const [marker, setMarker] = useMarker()
+
+	const [postTypes] = useCollection({ endpoint: 'types' }, typesQuery, {})
 
 	if (marker.title === undefined) return <div></div>
 
@@ -30,12 +35,11 @@ export default function EditMarker({ markers, dispatch }) {
 			<CardBody>
 				<div className="col-xs-9">
 					<BaseControl label="Layer" className={cls.field}>{layer.name}</BaseControl>
-					<TextControl
-						label="Name"
-						value={marker.title.raw}
-						onChange={val => setMarker(oldMarker => ({ ...oldMarker, title: { raw: val } }))}
-						className={cls.field}
-					/>
+					{postTypes.list && marker && (
+						<BaseControl label="Type" className={cls.field}>
+							{marker.type === 'marker' ? 'Standalone marker' : postTypes.list[marker.type].name}
+						</BaseControl>
+					)}
 					<MarkerIconSelect
 						label="Icon"
 						value={marker['marker-icons'][0]}
@@ -45,30 +49,14 @@ export default function EditMarker({ markers, dispatch }) {
 							}))
 						}}
 					/>
-					<div className={cls.spacer} />
-					<ButtonSelector
-						label="Type"
-						items={[
-							{ value: 'standalone', label: 'Standalone' },
-							{ value: 'linked', label: 'Linked' }
-						]}
-						selected={marker.meta.type}
-						onClick={type => setMarker(oldMarker => ({
-							...oldMarker, meta: { ...oldMarker.meta, type }
-						}))}
+					<TextControl
+						label="Name"
+						value={marker.title.raw}
+						onChange={val => setMarker(oldMarker => ({ ...oldMarker, title: { raw: val } }))}
+						className={cls.field}
 					/>
-					<CardDivider className={cls.divider} />
-					{marker.meta.type === 'standalone' && (
+					{marker.type === 'marker' && (
 						<>
-							{/* <TextControl
-								label="Title"
-								value={marker.meta.popup_title}
-								onChange={val => setMarker(oldMarker => ({
-									...oldMarker,
-									meta: { ...oldMarker.meta, popup_title: val }
-								}))}
-								className={cls.field}
-							/> */}
 							<RichTextEditor
 								label="Content"
 								content={marker.excerpt.raw}

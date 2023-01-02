@@ -9,8 +9,9 @@ import cls from './edit-form.module.scss'
  * @param {Array<{value: string, label: string}>} props.items Possible button values.
  * @param {string} props.selected The selected value.
  * @param {(string) => any} props.onClick Callback to execute on clicking a button. Provides the value of the selected button.
+ * @param {string} props.buttonClass Class to add to each button
  */
-export default function ButtonSelector({ label, items, selected, onClick }) {
+export default function ButtonSelector({ label, items, selected, onClick, buttonClass }) {
 	const getVariant = val => val === selected ? 'primary' : 'secondary'
 
 	return (
@@ -20,7 +21,7 @@ export default function ButtonSelector({ label, items, selected, onClick }) {
 					<Button
 						key={item.value}
 						variant={getVariant(item.value)}
-						className="medium"
+						className={buttonClass}
 						onClick={() => onClick(item.value)}
 					>{item.label}</Button>
 				))}

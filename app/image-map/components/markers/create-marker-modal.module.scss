@@ -1,0 +1,18 @@
+@media (min-width: 600px) {
+	.overlay>:global(.components-modal__frame) {
+		margin-top: 15vh;
+	}
+}
+
+.modal>:global(.components-modal__content) {
+	width: 50vw;
+	max-width: 500px;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+.right {
+	text-align: right;
+}

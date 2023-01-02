@@ -49,7 +49,8 @@
 		>hr,
 		>.input,
 		>:global(.components-range-control__root),
-		>:global(.components-custom-select-control) {
+		>:global(.components-custom-select-control),
+		>:global(.components-combobox-control__suggestions-container) {
 			flex: 1 1;
 			width: 100%;
 		}
@@ -63,10 +64,6 @@
 
 		.row {
 			margin-bottom: 4px;
-		}
-
-		.right {
-			text-align: right;
 		}
 
 		.alignColour {
@@ -94,6 +91,14 @@
 
 	.featured {
 		align-self: flex-end;
+	}
+
+	&:global(.components-radio-control) {
+		padding-top: 4px;
+
+		>:global(.components-base-control__field)>div {
+			margin-bottom: 8px;
+		}
 	}
 }
 

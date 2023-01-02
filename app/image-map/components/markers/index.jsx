@@ -1,5 +1,5 @@
 import { Button, Flex, FlexItem, Card } from '@wordpress/components'
-import { useEffect, useState } from '@wordpress/element'
+import { useEffect, useState, useMemo } from '@wordpress/element'
 
 import { useRouter } from '../../contexts/router'
 import { MarkerProvider } from '../../contexts/marker'
@@ -15,6 +15,7 @@ import ListedMarkerPin from './listed-marker-pin'
 import ImageLayer from '../ol/image-layer'
 import SelectedMarkerPin from './selected-marker-pin'
 import NewMarkerPin from './new-marker-pin'
+import CreateMarkerModal from './create-marker-modal'
 
 /** @typedef {import('ol').Map} Map */
 
@@ -34,7 +35,9 @@ export default function Markers() {
 	// Fetch markers from Wordpress.
 	const [markers, dispatchMarkers, loading] = useCollection(
 		wpMarkers,
-		{ imagemaps: query[wpMarkers.parent], _fields: 'title,id,meta,marker-icons,flare_loc' },
+		useMemo(() => (
+			{ imagemaps: query[wpMarkers.parent], _fields: 'title,id,marker-icons,flare_loc' }
+		), [query[wpMarkers.parent]]),
 		{ list: [], page: 1 }
 	)
 
@@ -62,6 +65,9 @@ export default function Markers() {
 		})
 	}
 
+	// Control add new marker modal state
+	const [showModal, setShowModal] = useState(false)
+
 	return (
 		<Layout
 			list={markers.list}
@@ -73,7 +79,7 @@ export default function Markers() {
 				<Button
 					variant='primary'
 					className='medium'
-					onClick={() => navigate({ marker: 'new' })}
+					onClick={() => setShowModal(true)}
 				>Add Marker</Button>
 			}
 		>
@@ -103,6 +109,7 @@ export default function Markers() {
 						/>
 					</FlexItem>
 				</Flex>
+				{showModal && <CreateMarkerModal onRequestClose={() => setShowModal(false)} />}
 			</MarkerProvider>
 		</Layout>
 	)

@@ -30,7 +30,7 @@ export function MarkerProvider({ icons, children }) {
 			imagemaps: [query[wpMarkers.parent]],
 			'marker-icons': [],
 			flare_loc: {},
-			meta: {},
+			type: 'marker',
 		}
 	)
 
