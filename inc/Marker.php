@@ -82,15 +82,32 @@ class Marker {
 	}
 
 	/**
-	 * Include post types with location meta in the REST list route for markers.
+	 * Include post types with location meta in the REST list route for markers,
+	 * and exclude given post types.
 	 *
-	 * @param array $args The query args used to get the list.
+	 * @param array            $args The query args used to get the list.
+	 * @param \WP_REST_Request $request The REST request.
 	 * @return array The updated query args.
 	 * @since 0.1.0
 	 **/
-	public function filter_rest_query( array $args ) {
-		$types             = is_array( $args['post_type'] ) ? $args['post_type'] : array( $args['post_type'] );
-		$args['post_type'] = array_merge( $types, $this->post_types );
+	public function filter_rest_query( array $args, \WP_REST_Request $request ) {
+		// Merge array of post types with location meta with the args post type array.
+		$arg_types = is_array( $request ) ? $args['post_type'] : array( $args['post_type'] );
+		$types     = array_merge( $arg_types, $this->post_types );
+
+		// If post type to exclude is provided, remove it from the array.
+		$exclude = $request->get_param( 'type_exclude' );
+		if ( $exclude ) {
+			foreach ( explode( ',', $exclude ) as $type ) {
+				$key = array_search( $type, $types, true );
+				if ( false !== $key ) {
+					unset( $types[ $key ] );
+				}
+			}
+		}
+
+		// Update the post type array in args before returning it.
+		$args['post_type'] = $types;
 		return $args;
 	}
 }

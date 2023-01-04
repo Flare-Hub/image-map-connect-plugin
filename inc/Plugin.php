@@ -95,7 +95,7 @@ class Plugin {
 		add_action( 'rest_prepare_imagemap', array( $this->image_map, 'add_image_link' ), 10, 2 );
 
 		// Hook marker functions.
-		add_action( sprintf( 'rest_%s_query', Marker::POST_TYPE ), array( $this->marker, 'filter_rest_query' ), 10, 1 );
+		add_action( sprintf( 'rest_%s_query', Marker::POST_TYPE ), array( $this->marker, 'filter_rest_query' ), 10, 2 );
 
 		// Hook location fields.
 		$this->loc_meta->add_to_post_types();

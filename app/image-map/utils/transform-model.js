@@ -4,7 +4,7 @@ export default function transformModel(action) {
 		action.payload = {
 			id: action.payload.id,
 			title: { rendered: action.payload.title.raw },
-			meta: action.payload.meta,
+			type: action.payload.type,
 			'marker-icons': action.payload['marker-icons'],
 			flare_loc: action.payload.flare_loc,
 		}

@@ -1,10 +1,6 @@
-import { BaseControl, TextControl, Card, CardBody, CardDivider } from '@wordpress/components'
-import { useMemo } from '@wordpress/element'
+import { BaseControl, TextControl, Card, CardBody } from '@wordpress/components'
 
-import useSelected from '../../hooks/useSelected'
-import useCollection from '../../hooks/useCollection';
 import { useMarker } from '../../contexts/marker';
-import { wpLayers } from '../layers';
 import LifeCycleButtons from '../forms/lifecycle-buttons'
 import MarkerIconSelect from '../forms/marker-icon-select';
 import RichTextEditor from '../forms/rich-text-editor';
@@ -12,33 +8,30 @@ import ImageSelector from '../forms/image-selector';
 
 import cls from '../forms/edit-form.module.scss'
 
-const typesQuery = {}
-
 /**
  * Map details form.
  *
  * @param {Object} props
- * @param {import('../../hooks/useCollection').WpIdentifiers} props.markers
  * @param {import('../../hooks/useCollection').Dispatcher} props.dispatch
+ * @param {Object<string, any>} props.layer
  */
-export default function EditMarker({ markers, dispatch }) {
-	const [layer] = useSelected(wpLayers, { _fields: 'id,name' })
+export default function EditMarker({ dispatch, layer }) {
+	const { marker, setMarker, loaded, postTypes } = useMarker()
 
-	const [marker, setMarker] = useMarker()
-
-	const [postTypes] = useCollection({ endpoint: 'types' }, typesQuery, {})
-
-	if (marker.title === undefined) return <div></div>
+	if (!loaded) return <div></div>
 
 	return (
 		<Card>
 			<CardBody>
 				<div className="col-xs-9">
 					<BaseControl label="Layer" className={cls.field}>{layer.name}</BaseControl>
-					{postTypes.list && marker && (
+					{postTypes && marker && (
 						<BaseControl label="Type" className={cls.field}>
-							{marker.type === 'marker' ? 'Standalone marker' : postTypes.list[marker.type].name}
+							{marker.type === 'marker' ? 'Standalone marker' : postTypes[marker.type].name}
 						</BaseControl>
+					)}
+					{marker.type !== 'marker' && (
+						<BaseControl label="Post" className={cls.field}>{marker.title.raw}</BaseControl>
 					)}
 					<MarkerIconSelect
 						label="Icon"
@@ -49,14 +42,14 @@ export default function EditMarker({ markers, dispatch }) {
 							}))
 						}}
 					/>
-					<TextControl
-						label="Name"
-						value={marker.title.raw}
-						onChange={val => setMarker(oldMarker => ({ ...oldMarker, title: { raw: val } }))}
-						className={cls.field}
-					/>
 					{marker.type === 'marker' && (
 						<>
+							<TextControl
+								label="Title"
+								value={marker.title.raw}
+								onChange={val => setMarker(oldMarker => ({ ...oldMarker, title: { raw: val } }))}
+								className={cls.field}
+							/>
 							<RichTextEditor
 								label="Content"
 								content={marker.excerpt.raw}
@@ -73,7 +66,10 @@ export default function EditMarker({ markers, dispatch }) {
 					)}
 				</div>
 				<div className="col-xs-3">
-					<LifeCycleButtons identifiers={markers} item={marker} dispatch={dispatch} />
+					<LifeCycleButtons
+						identifiers={{ model: marker.type, endpoint: (postTypes[marker.type] ?? {}).rest_base }}
+						item={marker} dispatch={dispatch}
+					/>
 				</div>
 			</CardBody>
 		</Card>

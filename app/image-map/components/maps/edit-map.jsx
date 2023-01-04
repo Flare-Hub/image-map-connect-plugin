@@ -20,6 +20,7 @@ import PostTypesSelect from '../forms/post-types-select'
 import EditMarkerIcon from './edit-marker-icon'
 
 import cls from '../forms/edit-form.module.scss'
+import { useRouter } from '../../contexts/router'
 
 /**
  * Map details form.
@@ -29,10 +30,12 @@ import cls from '../forms/edit-form.module.scss'
  * @param {import('../../hooks/useCollection').Dispatcher} props.dispatch
  */
 export default function EditMap({ maps, dispatch }) {
+	const { query } = useRouter()
 
 	// Get selected map
-	const [map, setMap] = useSelected(
-		maps,
+	const [map, setMap, loaded] = useSelected(
+		maps.endpoint,
+		query[maps.model],
 		{ context: 'edit' },
 		{ name: '', description: '', meta: { post_types: [] } }
 	)
@@ -74,7 +77,7 @@ export default function EditMap({ maps, dispatch }) {
 		dispatchMarkerIcons({ type: 'set', payload: res.body })
 	}, [map.id])
 
-	if (map.name === undefined) return <div></div>
+	if (!loaded) return <div></div>
 
 	return (
 		<Card className="full-height">

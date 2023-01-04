@@ -21,8 +21,9 @@ export default function EditLayer({ layers, dispatch }) {
 	const { query } = useRouter()
 
 	// Fetch selected layer from Wordpress.
-	const [layer, setLayer] = useSelected(
-		layers,
+	const [layer, setLayer, loaded] = useSelected(
+		layers.endpoint,
+		query[layers.model],
 		{ context: 'edit', _embed: 1 },
 		{
 			name: '',
@@ -52,7 +53,7 @@ export default function EditLayer({ layers, dispatch }) {
 		}
 	}))
 
-	if (layer.name === undefined) return <div></div>
+	if (!loaded) return <div></div>
 
 	return (
 		<Card className="full-height">

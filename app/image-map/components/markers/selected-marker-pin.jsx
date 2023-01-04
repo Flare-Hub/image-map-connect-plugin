@@ -18,7 +18,7 @@ import cls from './selected-marker-pin.module.scss'
  */
 export default function SelectedMarkerPin({ icons, selected }) {
 	// Set up state
-	const [marker, setMarker] = useMarker()
+	const { marker, setMarker } = useMarker()
 	const { map } = useMap()
 
 	/** @typedef {{lng: number, lat: number}} Position */
@@ -31,12 +31,11 @@ export default function SelectedMarkerPin({ icons, selected }) {
 	// True after a move is complete.
 	const [moved, setMoved] = useState(false)
 
-	// Make sure everything is loaded.
+	// Set marker icon for the current marker
 	const iconId = selected['marker-icons'][0]
-	if (!iconId || !selected) return null
 
-	// Marker icon for the current marker
 	const mi = useMemo(() => {
+		if (!iconId) return
 		return icons.find(i => i.id === iconId)
 	}, [marker['marker-icons']])
 
@@ -62,8 +61,13 @@ export default function SelectedMarkerPin({ icons, selected }) {
 		setMoved(true)
 	}, [])
 
-	// Register handlers when holding the mouse down on the selected marker.
-	function handleMouseDown() {
+	/**
+	 * Register handlers when holding the mouse down on the selected marker.
+	 *
+	 * @param {MouseEvent} e
+	 */
+	function handleMouseDown(e) {
+		e.stopPropagation()
 		// Disable map panning.
 		map.getInteractions().forEach(i => {
 			if (i instanceof DragPan) i.setActive(false)
@@ -83,6 +87,9 @@ export default function SelectedMarkerPin({ icons, selected }) {
 			setMarker(oldMarker => ({ ...oldMarker, flare_loc: position }))
 		}
 	}, [moved])
+
+	// Make sure everything is loaded.
+	if (!mi) return null
 
 	return (
 		<Marker

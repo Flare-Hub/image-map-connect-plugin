@@ -36,13 +36,28 @@ export default function Markers() {
 	const [markers, dispatchMarkers, loading] = useCollection(
 		wpMarkers,
 		useMemo(() => (
-			{ imagemaps: query[wpMarkers.parent], _fields: 'title,id,marker-icons,flare_loc' }
+			{ imagemaps: query[wpMarkers.parent], _fields: 'title,id,type,marker-icons,flare_loc' }
 		), [query[wpMarkers.parent]]),
 		{ list: [], page: 1 }
 	)
 
+	// Identify the selected marker.
+	const selected = useMemo(
+		() => {
+			if (loading) return {}
+			if (query[wpMarkers.model] === 'new') return { flare_loc: {} }
+			return markers.list.find(mk => mk.id == query[wpMarkers.model]) ?? {}
+		},
+		[loading, markers, query[wpMarkers.model]]
+	)
+
 	// Fetch selected layer from Wordpress.
-	const [layer] = useSelected(wpLayers, { _fields: 'id,meta', _embed: 1 })
+	const [layer] = useSelected(
+		wpLayers.endpoint,
+		query[wpLayers.model],
+		{ _fields: 'id,name,meta', _embed: 1 },
+		{}
+	)
 
 	// Fetch marker icons from Wordpress.
 	const [markerIcons, setMarkerIcons] = useState([])
@@ -56,11 +71,11 @@ export default function Markers() {
 	/** @type {[Map, React.Dispatch<React.SetStateAction<Map>>]} */
 	const [map, setMap] = useState()
 
-	function selectMarker(marker) {
-		navigate({ marker })
-		const selected = markers.list.find(m => m.id === marker)
+	function selectMarker(id) {
+		navigate({ marker: id })
+		const marker = markers.list.find(m => m.id === id)
 		map.getView().animate({
-			center: [selected.flare_loc.lng, selected.flare_loc.lat],
+			center: [marker.flare_loc.lng, marker.flare_loc.lat],
 			duration: 500,
 		})
 	}
@@ -83,7 +98,11 @@ export default function Markers() {
 				>Add Marker</Button>
 			}
 		>
-			<MarkerProvider icons={markerIcons}>
+			<MarkerProvider
+				icons={markerIcons}
+				selected={selected}
+				layer={query[wpLayers.model]}
+			>
 				<Flex direction="column" gap="1px" className="full-height">
 					<FlexItem>
 						<Card>
@@ -92,24 +111,32 @@ export default function Markers() {
 									<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
 									{markerIcons.length && markers.list.map(mk => {
 										if (mk.id == query.marker) {
-											return <SelectedMarkerPin key={query.marker} icons={markerIcons} selected={mk} />
+											if (selected.flare_loc.lng && selected.flare_loc.lat) {
+												return <SelectedMarkerPin key={query.marker} icons={markerIcons} selected={mk} />
+											}
 										} else {
 											return <ListedMarkerPin key={mk.id} marker={mk} icons={markerIcons} />
 										}
 									})}
-									{(query.marker === 'new') && <NewMarkerPin icons={markerIcons} />}
+									{selected.flare_loc && !(selected.flare_loc.lng && selected.flare_loc.lat) && (
+										<NewMarkerPin icons={markerIcons} />
+									)}
 								</>)}
 							</OlMap>
 						</Card>
 					</FlexItem>
 					<FlexItem isBlock>
 						<EditMarker
-							markers={wpMarkers}
 							dispatch={action => dispatchMarkers(transformModel(action))}
+							layer={layer}
 						/>
 					</FlexItem>
 				</Flex>
-				{showModal && <CreateMarkerModal onRequestClose={() => setShowModal(false)} />}
+				{showModal && <CreateMarkerModal
+					onRequestClose={() => setShowModal(false)}
+					layer={layer.id}
+					dispatch={dispatchMarkers}
+				/>}
 			</MarkerProvider>
 		</Layout>
 	)
