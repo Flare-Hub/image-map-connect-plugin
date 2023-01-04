@@ -36,7 +36,11 @@ export default function Markers() {
 	const [markers, dispatchMarkers, loading] = useCollection(
 		wpMarkers,
 		useMemo(() => (
-			{ imagemaps: query[wpMarkers.parent], _fields: 'title,id,type,marker-icons,flare_loc' }
+			{
+				imagemaps: query[wpMarkers.parent],
+				_fields: 'title,id,type,marker-icons,flare_loc',
+				map: query.map,
+			}
 		), [query[wpMarkers.parent]]),
 		{ list: [], page: 1 }
 	)
@@ -135,6 +139,7 @@ export default function Markers() {
 				{showModal && <CreateMarkerModal
 					onRequestClose={() => setShowModal(false)}
 					layer={layer.id}
+					map={query.map}
 					dispatch={dispatchMarkers}
 				/>}
 			</MarkerProvider>

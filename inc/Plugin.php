@@ -50,7 +50,7 @@ class Plugin {
 		$this->loc_meta    = new LocationMeta();
 		$this->image_map   = new ImageMap();
 		$this->marker_icon = new MarkerIcon();
-		$this->marker      = new Marker( $this->loc_meta->get_location_post_types() );
+		$this->marker      = new Marker();
 
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );

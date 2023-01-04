@@ -11,17 +11,6 @@ class Marker {
 	/** @var string $post_type The custom post type name for markers. */
 	public const POST_TYPE = 'marker';
 
-	/** @var array $post_types Post types that can contain location meta. */
-	protected $post_types;
-
-	/**
-	 * @param array $post_types Post types that can contain location meta.
-	 * @since 0.1.0
-	 **/
-	public function __construct( array $post_types ) {
-		$this->post_types = $post_types;
-	}
-
 	/**
 	 * Register Markers post type
 	 *
@@ -91,9 +80,13 @@ class Marker {
 	 * @since 0.1.0
 	 **/
 	public function filter_rest_query( array $args, \WP_REST_Request $request ) {
-		// Merge array of post types with location meta with the args post type array.
-		$arg_types = is_array( $request ) ? $args['post_type'] : array( $args['post_type'] );
-		$types     = array_merge( $arg_types, $this->post_types );
+		// Get post types for map if map is provided in the query parameters.
+		$map_id     = $request->get_param( 'map' );
+		$post_types = $map_id ? get_term_meta( $map_id, 'post_types', false ) : array();
+
+		// Merge the map post types with the existing query post types.
+		$arg_types = is_array( $args['post_type'] ) ? $args['post_type'] : array( $args['post_type'] );
+		$types     = array_merge( $arg_types, $post_types );
 
 		// If post type to exclude is provided, remove it from the array.
 		$exclude = $request->get_param( 'type_exclude' );

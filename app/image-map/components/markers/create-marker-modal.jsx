@@ -13,10 +13,11 @@ import { wpMarkers } from '.'
  *
  * @param {object} props
  * @param {() => void} props.onRequestClose Called when save button is pressed.
- * @param {number} props.layer Id of the selected layer.
+ * @param {number} props.layer ID of the selected layer.
+ * @param {number} props.map ID of the selected <map name="" className=""></map>
  * @param {import('../../hooks/useCollection').Dispatcher} props.dispatch
  */
-export default function CreateMarkerModal({ onRequestClose, layer, dispatch }) {
+export default function CreateMarkerModal({ onRequestClose, layer, map, dispatch }) {
 	const [type, setType] = useState('standalone')
 	const [post, setPost] = useState()
 
@@ -28,6 +29,7 @@ export default function CreateMarkerModal({ onRequestClose, layer, dispatch }) {
 	const [posts] = useCollection(wpMarkers, useMemo(() => ({
 		imagemaps_exclude: layer,
 		type_exclude: wpMarkers.model,
+		map: map,
 		_fields: 'id,title,type,slug',
 		per_page: 100,
 		search: debouncedSearch
