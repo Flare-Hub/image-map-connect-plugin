@@ -12,9 +12,6 @@ class ReactApp {
 	/** @var string Id for the metabox and app div. */
 	public $id;
 
-	/** @var string description */
-	protected $script_name;
-
 	/** @var array{string} Registered javascript tags that the script
 	 * for this metabox depends on.
 	 */
@@ -32,7 +29,6 @@ class ReactApp {
 	 **/
 	public function __construct( string $id, string $script, array $deps = array() ) {
 		$this->id          = $id;
-		$this->script_name = $script;
 		$this->script_deps = $deps;
 
 		$this->asset_path = new AssetPath( $script );
