@@ -22,7 +22,7 @@ class AdminMenu {
 	 **/
 	public function init() {
 		// Script gets enqueued from here on admin_enqueue_scripts.
-		$this->app = new ReactApp( 'image-map', 'image-map' );
+		$this->app = new ReactApp( 'image-map', 'image-map/index' );
 
 		add_menu_page(
 			__( 'Image Maps', 'flare-im' ),

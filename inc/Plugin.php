@@ -53,7 +53,6 @@ class Plugin {
 		$this->marker      = new Marker();
 
 		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 	}
 
 	/**
@@ -66,6 +65,7 @@ class Plugin {
 		$this->image_map->register_image_map( $post_types );
 		$this->marker_icon->register_marker_icon( $post_types );
 		$this->marker->register_marker_cpt();
+		BlockMgr::register_blocks();
 	}
 
 	/**
@@ -113,17 +113,5 @@ class Plugin {
 		// Hook Post Type Route functions.
 		$types = new PostTypesRoute();
 		$types->register_route();
-	}
-
-	/**
-	 * Enqueue the common app.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function enqueue_styles() {
-		$dir  = new AssetPath( 'styles' );
-		$deps = $dir->get_dependencies();
-
-		wp_enqueue_style( 'plugin-styles', $dir->get_url( 'css' ), array(), $deps['version'] );
 	}
 }

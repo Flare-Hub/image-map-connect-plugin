@@ -5,8 +5,8 @@
   "scripts": {
     "start": "npm-run-all --parallel dockerup watch sync",
     "sync": "node browser-sync.js",
-    "build": "wp-scripts build",
-    "watch": "wp-scripts start",
+    "build": "wp-scripts build --webpack-src-dir=app",
+    "watch": "wp-scripts start --webpack-src-dir=app",
     "dockerup": "docker compose --env-file docker.env --file ./docker/docker-compose.yml up",
     "dockerdown": "docker compose --env-file docker.env --file ./docker/docker-compose.yml down",
     "wp": "docker compose --env-file docker.env --file ./docker/docker-compose.yml exec wordpress wp"

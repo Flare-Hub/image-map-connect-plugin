@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "flare/image-map",
+  "title": "Map with single marker",
+  "category": "widgets",
+  "icon": "location-alt",
+  "description": "An image map displaying the selected map with it's markers.",
+  "keywords": [
+    "image",
+    "map",
+    "markers",
+    "list"
+  ],
+  "textdomain": "flare",
+  "editorScript": "file:./editor/index.js",
+  "viewScript": "file:./view/index.js"
+}
