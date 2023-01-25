@@ -29,6 +29,9 @@ class Plugin {
 	/** @var LocationMeta The marker icon Taxonomy management object. */
 	protected $loc_meta;
 
+	/** @var BlockMgr $block_mgr The block manager object. */
+	protected $block_mgr;
+
 	/**
 	 * Register plugin to primary and lifecycle hooks.
 	 *
@@ -51,6 +54,7 @@ class Plugin {
 		$this->image_map   = new ImageMap();
 		$this->marker_icon = new MarkerIcon();
 		$this->marker      = new Marker();
+		$this->block_mgr   = new BlockMgr();
 
 		add_action( 'init', array( $this, 'init' ) );
 	}
@@ -65,7 +69,9 @@ class Plugin {
 		$this->image_map->register_image_map( $post_types );
 		$this->marker_icon->register_marker_icon( $post_types );
 		$this->marker->register_marker_cpt();
-		BlockMgr::register_blocks();
+		// $this->block_mgr->register_image_map_block();
+		$this->block_mgr->register_blocks();
+		// add_action( 'wp_enqueue_scripts', array( $this->block_mgr, 'register_scripts' ) );
 	}
 
 	/**
@@ -75,9 +81,10 @@ class Plugin {
 	 **/
 	public function admin_menu() {
 		// Hook admin menu functions.
-		$map_menu = new AdminMenu();
+		$map_menu = new AdminMenu( 'image-map' );
 		$map_menu->init();
-		add_action( 'admin_enqueue_scripts', array( $map_menu->app, 'register_script' ) );
+		add_action( 'admin_enqueue_scripts', array( $map_menu->assets, 'register_script' ) );
+		// add_action( 'admin_enqueue_scripts', array( $this->block_mgr, 'admin_register_scripts' ) );
 	}
 
 	/**
