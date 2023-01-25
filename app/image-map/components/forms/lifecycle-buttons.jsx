@@ -1,7 +1,7 @@
 import { Button } from '@wordpress/components'
 import { navigate } from '../../contexts/router'
 
-import { postItem, deleteItem, createItem } from '../../utils/wp-fetch'
+import { postItem, deleteItem, createItem } from '../../../common/utils/wp-fetch'
 
 import cls from './lifecycle-buttons.module.scss'
 

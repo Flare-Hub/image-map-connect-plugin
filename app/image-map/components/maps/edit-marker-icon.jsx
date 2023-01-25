@@ -1,6 +1,6 @@
 import { TextControl, Modal, Button, BaseControl, ColorPicker, Flex } from '@wordpress/components'
 import { useState, useEffect } from '@wordpress/element'
-import { createItem, postItem } from '../../utils/wp-fetch'
+import { createItem, postItem } from '../../../common/utils/wp-fetch'
 import { icons } from '../../utils/marker-icons'
 import IconToolbarButtons from '../forms/icon-toolbar-buttons'
 

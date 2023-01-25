@@ -5,7 +5,7 @@ import { useRouter } from '../../contexts/router'
 import { MarkerProvider } from '../../contexts/marker'
 import useCollection from '../../hooks/useCollection'
 import useSelected from '../../hooks/useSelected'
-import { getCollection } from '../../utils/wp-fetch'
+import { getCollection } from '../../../common/utils/wp-fetch'
 import transformModel from '../../utils/transform-model'
 import { wpLayers } from '../layers';
 import Layout from '../layout'

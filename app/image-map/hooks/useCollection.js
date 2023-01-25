@@ -1,7 +1,7 @@
 import { useEffect, useState, useReducer } from '@wordpress/element'
 
 import { useRouter } from '../contexts/router'
-import { getCollection } from '../utils/wp-fetch'
+import { getCollection } from '../../common/utils/wp-fetch'
 
 /**
  * @typedef WpIdentifiers

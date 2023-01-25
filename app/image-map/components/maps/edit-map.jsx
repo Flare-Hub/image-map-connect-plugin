@@ -13,7 +13,7 @@ import {
 import { useEffect, useReducer, useState } from '@wordpress/element'
 
 import useSelected from '../../hooks/useSelected'
-import { deleteItem, getCollection } from '../../utils/wp-fetch'
+import { deleteItem, getCollection } from '../../../common/utils/wp-fetch'
 import { getStyles } from '../../utils/marker-icons'
 import LifeCycleButtons from '../forms/lifecycle-buttons'
 import PostTypesSelect from '../forms/post-types-select'

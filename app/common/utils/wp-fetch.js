@@ -23,10 +23,7 @@ import apiFetch from '@wordpress/api-fetch'
  */
 export async function wpFetch(path, method = 'GET', body, query = {}) {
 	// Create the full query path
-	const params = new URLSearchParams()
-	for (const param in query) {
-		params.set(param, query[param])
-	}
+	const params = new URLSearchParams(query)
 
 	// Send request
 	const response = await apiFetch({

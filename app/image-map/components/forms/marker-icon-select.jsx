@@ -1,7 +1,7 @@
 import { CustomSelectControl, Icon, BaseControl } from '@wordpress/components'
 import { useEffect, useState } from '@wordpress/element'
 
-import { getCollection } from '../../utils/wp-fetch'
+import { getCollection } from '../../../common/utils/wp-fetch'
 import { useRouter } from '../../contexts/router'
 
 import cls from './edit-form.module.scss'
