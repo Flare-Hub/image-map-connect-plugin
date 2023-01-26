@@ -42,6 +42,6 @@ class PostTypesRoute {
 	 * @since 0.1.0
 	 **/
 	public function check_permissions() {
-		return current_user_can( AdminMenu::$capability );
+		return current_user_can( AdminMenu::CAPABILITY );
 	}
 }

@@ -5,22 +5,8 @@ namespace Flare\ImageMap;
  * Manage plugin blocks for the block editor.
  */
 class BlockMgr {
-	/** @var array<string> $script_scopes Scopes where block scripts can be loaded, and their keys in the registration args */
-	const SCRIPT_SCOPES = array(
-		'editor' => 'editor_script_handles',
-		'view'   => 'view_script_handles',
-		'all'    => 'script_handles',
-	);
-
 	/** @var string $plugin_dir Directory of this plugin. */
 	protected $plugin_dir;
-
-	/** @var array $scripts List of assets to register. */
-	protected $scripts = array(
-		'editor' => array(),
-		'view'   => array(),
-		'all'    => array(),
-	);
 
 	/**
 	 * Constructor.
@@ -42,35 +28,6 @@ class BlockMgr {
 			array( 'view_script_handles' => array( 'view' => 'view/index' ) ),
 			array( $this, 'load_map_query_script' )
 		);
-	}
-
-	/**
-	 * Testing.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function register_image_map_block() {
-			// automatically load dependencies and version.
-		$asset_file = include plugin_dir_path( __DIR__ ) . 'assets/build/map-query-block/index.asset.php';
-
-		$url = plugins_url( 'assets/build/map-query-block/view/index.js', __DIR__ );
-
-		wp_register_script(
-			'map-query-block-view',
-			$url,
-			$asset_file['dependencies'],
-			$asset_file['version']
-		);
-
-		$block = register_block_type(
-			plugin_dir_path( __DIR__ ) . 'assets/build/map-query-block',
-			array(
-				'view_script_handles' => 'map-query-block-view',
-				'render_callback'     => array( $this, 'load_map_query_script' ),
-			)
-		);
-
-		return;
 	}
 
 	/**
@@ -106,31 +63,6 @@ class BlockMgr {
 		$path = $this->plugin_dir . WpScriptsAsset::ASSETDIR . $name;
 
 		register_block_type( $path, $args );
-	}
-
-	/**
-	 * Register block scripts on the frontend.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function register_scripts() {
-		$scripts = array_merge( $this->scripts['view'], $this->scripts['all'] );
-		foreach ( $scripts as $handle => $path ) {
-			$asset = new WpScriptsAsset( $path, $handle );
-			$asset->register_script();
-		}
-	}
-
-	/**
-	 * Register block scripts on the backend.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function admin_register_scripts() {
-		foreach ( $this->scripts['editor'] as $handle => $path ) {
-			$asset = new WpScriptsAsset( $path, $handle );
-			$asset->register_script();
-		}
 	}
 
 	/**

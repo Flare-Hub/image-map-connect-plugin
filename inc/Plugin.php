@@ -69,9 +69,7 @@ class Plugin {
 		$this->image_map->register_image_map( $post_types );
 		$this->marker_icon->register_marker_icon( $post_types );
 		$this->marker->register_marker_cpt();
-		// $this->block_mgr->register_image_map_block();
 		$this->block_mgr->register_blocks();
-		// add_action( 'wp_enqueue_scripts', array( $this->block_mgr, 'register_scripts' ) );
 	}
 
 	/**
@@ -84,7 +82,6 @@ class Plugin {
 		$map_menu = new AdminMenu( 'image-map' );
 		$map_menu->init();
 		add_action( 'admin_enqueue_scripts', array( $map_menu->assets, 'register_script' ) );
-		// add_action( 'admin_enqueue_scripts', array( $this->block_mgr, 'admin_register_scripts' ) );
 	}
 
 	/**

@@ -88,15 +88,13 @@ class WpScriptsAsset {
 
 		$url = $this->get_url( 'js' );
 
-		$success = wp_register_script(
+		return wp_register_script(
 			$this->handle,
 			$url,
 			array_merge( $this->deps, $meta['dependencies'] ),
 			$meta['version'],
 			true
 		);
-
-		return $success;
 	}
 
 	/**
