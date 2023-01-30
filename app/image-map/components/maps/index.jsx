@@ -1,5 +1,4 @@
 import { Button } from '@wordpress/components'
-import { useMemo } from '@wordpress/element'
 
 import Layout from '../layout'
 import useCollection from '../../hooks/useCollection'
