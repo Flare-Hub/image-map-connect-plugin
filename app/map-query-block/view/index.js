@@ -4,4 +4,9 @@
 // 	console.log(posts);
 // });
 
-console.log(imageMapQuery);
+const mapQueries = document.querySelectorAll('.wp-block-flare-image-map')
+
+mapQueries.forEach(blockEl => {
+	const ids = blockEl.dataset.postIds.split(',')
+	console.log(ids)
+})
