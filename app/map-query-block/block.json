@@ -16,6 +16,14 @@
   "attributes": {
     "mapId": {
       "type": "number"
+    },
+    "height": {
+      "type": "string",
+      "default": "400px"
+    },
+    "width": {
+      "type": "string",
+      "default": "100%"
     }
   },
   "editorScript": "file:./editor/index.js",

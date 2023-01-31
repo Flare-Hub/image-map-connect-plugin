@@ -1,5 +1,5 @@
-import { BlockControls, useBlockProps } from "@wordpress/block-editor"
-import { ToolbarButton } from "@wordpress/components"
+import { BlockControls, InspectorControls, useBlockProps } from "@wordpress/block-editor"
+import { PanelBody, ToolbarButton, __experimentalUnitControl as UnitControl } from "@wordpress/components"
 import { useState } from "@wordpress/element"
 import { __ } from "@wordpress/i18n"
 
@@ -14,7 +14,10 @@ import MapSelector from "./map-selector"
  * @param {number} props.attributes.mapId ID of the selected map.
  * @param {(attrs: Partial<{}>) => void} props.setAttributes
  */
-export default function Edit({ attributes: { mapId }, setAttributes }) {
+export default function Edit({
+	attributes: { mapId, height, width },
+	setAttributes
+}) {
 	const [prevMapId, setPrevMapId] = useState(null)
 
 	/** Store backup of mapId (to enable cancel) and clear value. */
@@ -37,6 +40,20 @@ export default function Edit({ attributes: { mapId }, setAttributes }) {
 				/>
 			</BlockControls>
 		)}
+		<InspectorControls>
+			<PanelBody title={__('Size', blockMeta.textdomain)} initialOpen={false}>
+				<UnitControl
+					label={__('Width', blockMeta.textdomain)}
+					value={width}
+					onChange={val => setAttributes({ width: val })}
+				/>
+				<UnitControl
+					label={__('Height', blockMeta.textdomain)}
+					value={height}
+					onChange={val => setAttributes({ height: val })}
+				/>
+			</PanelBody>
+		</InspectorControls>
 		<MapSelector
 			mapId={mapId}
 			setMapId={setMapId}
