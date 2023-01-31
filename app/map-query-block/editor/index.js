@@ -1,8 +1,8 @@
 import { registerBlockType } from '@wordpress/blocks'
-import { useBlockProps } from '@wordpress/block-editor'
+import Edit from './edit'
+
+import './editor.scss'
 
 registerBlockType('flare/image-map', {
-	edit: () => {
-		return <div {...useBlockProps()}>Image Map block.</div>
-	},
+	edit: Edit
 })
