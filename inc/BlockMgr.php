@@ -72,30 +72,52 @@ class BlockMgr {
 	/**
 	 * Load view script for the map query block.
 	 *
+	 * @param array     $attributes The attributes as stored in the block html.
+	 * @param string    $content The inner html of the block coming from the post html.
+	 * @param \WP_Block $block The block instance.
 	 * @since 0.1.0
 	 **/
-	public function render_map_query() {
-		global $wp_the_query;
+	public function render_map_query( $attributes, $content, \WP_Block $block ) {
+		/** HTML attributes to add to the map div. */
+		$block_attr = array();
 
-		// Duplicate the current query with paging disabled.
-		$query_args = array_merge(
-			$wp_the_query->query_vars,
-			array(
-				'nopaging'       => true,
-				'posts_per_page' => -1,
-				'fields'         => 'ids',
-			)
-		);
-		$query      = new \WP_Query( $query_args );
+		// Check if the block is inside a query loop block.
+		if ( isset( $block->context['query'] ) ) {
+			// If the query loop is inherited from the template, get the global query parameters.
+			if ( $block->context['query']['inherit'] ) {
+				/** @global \WP_Query $wp_the_query */
+				global $wp_the_query;
+				$query_args = $wp_the_query->query;
+			} else {
+				// Get the query parameters from the query loop block, for the provided page if necessary.
+				$page_key = isset( $block->context['queryId'] ) ? 'query-' . $block->context['queryId'] . '-page' : 'query-page';
+				// @codingStandardsIgnoreStart
+				$page     = (( 'query' === $attributes['queryType'] ) || empty( $_GET[ $page_key ] ))
+					? 1	: (int) $_GET[ $page_key ];
+				// @codingStandardsIgnoreEnd
 
-		// Stringify the list of post IDs.
-		$ids = implode( ',', $query->get_posts() );
+				$query_args = build_query_vars_from_query_block( $block, $page );
+			}
+
+			// Only the post ids are required here. The map will fetch the required details from the REST API.
+			$query_args['fields'] = 'ids';
+
+			// Disable paging if the full query is required.
+			if ( 'query' === $attributes['queryType'] ) {
+				$query_args['nopaging']       = true;
+				$query_args['posts_per_page'] = -1;
+			}
+
+			// Run the query and add it's post ids to the map div attributes.
+			$query = new \WP_Query( $query_args );
+
+			$block_attr['data-post-ids'] = implode( ',', $query->get_posts() );
+		}
+
+		// Merge the map div attributes with the block attributes.
+		$div_attr = get_block_wrapper_attributes( $block_attr );
 
 		// Return div to place map in with post IDs of markers to include.
-		ob_start();
-		?><div data-post-ids="<?php echo esc_attr( $ids ); ?>" class="wp-block-flare-image-map" />
-		<?php
-
-		return ob_get_clean();
+		return "<div $div_attr></div>";
 	}
 }

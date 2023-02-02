@@ -1,10 +1,18 @@
 import { BlockControls, InspectorControls, useBlockProps } from "@wordpress/block-editor"
-import { PanelBody, ToolbarButton, __experimentalUnitControl as UnitControl } from "@wordpress/components"
+import {
+	BaseControl,
+	Button,
+	ButtonGroup,
+	PanelBody,
+	ToggleControl,
+	ToolbarButton,
+	__experimentalUnitControl as UnitControl
+} from "@wordpress/components"
 import { useState } from "@wordpress/element"
 import { __ } from "@wordpress/i18n"
 
-import blockMeta from "../block.json"
 import MapSelector from "./map-selector"
+import blockMeta from "../block.json"
 
 /**
  * Edit map query block.
@@ -15,8 +23,9 @@ import MapSelector from "./map-selector"
  * @param {(attrs: Partial<{}>) => void} props.setAttributes
  */
 export default function Edit({
-	attributes: { mapId, height, width },
-	setAttributes
+	attributes: { mapId, height, width, queryType, showStandAlone },
+	setAttributes,
+	context,
 }) {
 	const [prevMapId, setPrevMapId] = useState(null)
 
@@ -41,6 +50,43 @@ export default function Edit({
 			</BlockControls>
 		)}
 		<InspectorControls>
+			<PanelBody title={__('Marker query')}>
+				{context.query && (
+					<>
+						<BaseControl
+							label={__('Show markers for', blockMeta.textdomain)}
+							help={__('Help text goes here', blockMeta.textdomain)}
+						>
+							<ButtonGroup>
+								<Button
+									variant={queryType === 'page' ? 'primary' : 'secondary'}
+									onClick={() => setAttributes({ queryType: 'page' })}
+								>
+									{__('Current page')}
+								</Button>
+								<Button
+									variant={queryType === 'query' ? 'primary' : 'secondary'}
+									onClick={() => setAttributes({ queryType: 'query' })}
+								>
+									{__('Whole query loop')}
+								</Button>
+							</ButtonGroup>
+						</BaseControl>
+						<ToggleControl
+							label={__('Also display standalone markers', blockMeta.textdomain)}
+							checked={showStandAlone}
+							onChange={() => setAttributes({ showStandAlone: !showStandAlone })}
+							help={__('Help text goes here', blockMeta.textdomain)}
+						/>
+					</>
+				)}
+				{!context.query && (
+					<p>
+						This block will show all posts on the selected map.
+						To filter the posts, place this block inside a query block.
+					</p>
+				)}
+			</PanelBody>
 			<PanelBody title={__('Size', blockMeta.textdomain)} initialOpen={false}>
 				<UnitControl
 					label={__('Width', blockMeta.textdomain)}

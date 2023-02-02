@@ -24,8 +24,20 @@
     "width": {
       "type": "string",
       "default": "100%"
+    },
+    "queryType": {
+      "type": "string",
+      "default": "query"
+    },
+    "showStandAlone": {
+      "type": "boolean",
+      "default": true
     }
   },
+  "usesContext": [
+    "queryId",
+    "query"
+  ],
   "editorScript": "file:./editor/index.js",
   "viewScript": "file:./view/index.js",
   "editorStyle": "file:./editor/index.css"
