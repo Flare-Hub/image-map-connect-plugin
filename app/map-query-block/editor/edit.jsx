@@ -1,10 +1,6 @@
 import { BlockControls, InspectorControls, useBlockProps } from "@wordpress/block-editor"
 import {
-	BaseControl,
-	Button,
-	ButtonGroup,
 	PanelBody,
-	ToggleControl,
 	ToolbarButton,
 	__experimentalUnitControl as UnitControl
 } from "@wordpress/components"
@@ -13,6 +9,8 @@ import { __ } from "@wordpress/i18n"
 
 import MapSelector from "./map-selector"
 import blockMeta from "../block.json"
+import MarkerQueryPanel from "./marker-query"
+import Map from "./map"
 
 /**
  * Edit map query block.
@@ -25,7 +23,12 @@ import blockMeta from "../block.json"
 export default function Edit({
 	attributes: { mapId, height, width, queryType, showStandAlone },
 	setAttributes,
-	context,
+	context: {
+		query,
+		templateSlug,
+		previewPostType,
+		queryContext: [{ page }] = [{}]
+	},
 }) {
 	const [prevMapId, setPrevMapId] = useState(null)
 
@@ -36,8 +39,8 @@ export default function Edit({
 	}
 
 	/** Set mapId attribute */
-	function setMapId(newMapId) {
-		setAttributes({ mapId: newMapId })
+	function setAttr(attr, val) {
+		setAttributes({ [attr]: val })
 	}
 
 	return <div {...useBlockProps()}>
@@ -50,43 +53,13 @@ export default function Edit({
 			</BlockControls>
 		)}
 		<InspectorControls>
-			<PanelBody title={__('Marker query')}>
-				{context.query && (
-					<>
-						<BaseControl
-							label={__('Show markers for', blockMeta.textdomain)}
-							help={__('Help text goes here', blockMeta.textdomain)}
-						>
-							<ButtonGroup>
-								<Button
-									variant={queryType === 'page' ? 'primary' : 'secondary'}
-									onClick={() => setAttributes({ queryType: 'page' })}
-								>
-									{__('Current page')}
-								</Button>
-								<Button
-									variant={queryType === 'query' ? 'primary' : 'secondary'}
-									onClick={() => setAttributes({ queryType: 'query' })}
-								>
-									{__('Whole query loop')}
-								</Button>
-							</ButtonGroup>
-						</BaseControl>
-						<ToggleControl
-							label={__('Also display standalone markers', blockMeta.textdomain)}
-							checked={showStandAlone}
-							onChange={() => setAttributes({ showStandAlone: !showStandAlone })}
-							help={__('Help text goes here', blockMeta.textdomain)}
-						/>
-					</>
-				)}
-				{!context.query && (
-					<p>
-						This block will show all posts on the selected map.
-						To filter the posts, place this block inside a query block.
-					</p>
-				)}
-			</PanelBody>
+			<MarkerQueryPanel
+				hasQuery={!!query}
+				queryType={queryType}
+				setQueryType={setAttr.bind(null, 'queryType')}
+				showStandAlone={showStandAlone}
+				setShowStandAlone={setAttr.bind(null, 'showStandAlone')}
+			/>
 			<PanelBody title={__('Size', blockMeta.textdomain)} initialOpen={false}>
 				<UnitControl
 					label={__('Width', blockMeta.textdomain)}
@@ -102,9 +75,16 @@ export default function Edit({
 		</InspectorControls>
 		<MapSelector
 			mapId={mapId}
-			setMapId={setMapId}
+			setMapId={setAttr.bind(null, 'mapId')}
 			prevMapId={prevMapId}
 			setPrevMapId={setPrevMapId}
+		/>
+		<Map
+			queryType={queryType}
+			queryParams={query}
+			templateSlug={templateSlug}
+			previewPostType={previewPostType}
+			page={page}
 		/>
 	</div>
 }

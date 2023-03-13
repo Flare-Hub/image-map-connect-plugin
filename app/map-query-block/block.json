@@ -36,7 +36,10 @@
   },
   "usesContext": [
     "queryId",
-    "query"
+    "query",
+    "queryContext",
+    "templateSlug",
+    "previewPostType"
   ],
   "editorScript": "file:./editor/index.js",
   "viewScript": "file:./view/index.js",
