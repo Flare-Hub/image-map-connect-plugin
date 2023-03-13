@@ -6,7 +6,6 @@ import { useRouter } from '../../contexts/router';
 import LifeCycleButtons from '../forms/lifecycle-buttons'
 import OlMap from '../ol/map';
 import ImageLayer from '../ol/image-layer';
-import PositionGetter from '../ol/position-getter';
 
 import cls from '../forms/edit-form.module.scss'
 
@@ -32,6 +31,20 @@ export default function EditLayer({ layers, dispatch }) {
 			meta: { initial_bounds: [] },
 		}
 	)
+
+	/** Update layer's initial position when panning or zooming on map. */
+	function moveHandler(e) {
+		setLayer(oldLayer => ({
+			...oldLayer,
+			meta: {
+				...oldLayer.meta,
+				initial_position: {
+					center: e.frameState.viewState.center,
+					zoom: e.frameState.viewState.zoom
+				}
+			}
+		}))
+	}
 
 	// Initiate Wordpress media manager to select layer image
 	const mediaMgr = useMediaMgr(false, selImages => setLayer(oldLayer => {
@@ -85,15 +98,12 @@ export default function EditLayer({ layers, dispatch }) {
 						className={`${cls.field} ${cls.center}`}
 					/>
 					<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
-						<OlMap layer={layer} className={`${cls.border} ${cls.input}`} >
-							{layer._embedded && (<>
-								<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
-								<PositionGetter onMoveEnd={pos => setLayer(oldLayer => ({
-									...oldLayer,
-									meta: { ...oldLayer.meta, initial_position: pos }
-								}))} />
-							</>
-							)}
+						<OlMap
+							layer={layer}
+							className={`${cls.border} ${cls.input}`}
+							eventHandlers={{ moveend: moveHandler }}
+						>
+							{layer._embedded && <ImageLayer url={layer._embedded['flare:image'][0].source_url} />}
 						</OlMap>
 					</BaseControl>
 				</div>

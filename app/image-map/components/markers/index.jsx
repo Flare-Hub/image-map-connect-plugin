@@ -110,7 +110,7 @@ export default function Markers() {
 				<Flex direction="column" gap="1px" className="full-height">
 					<FlexItem>
 						<Card>
-							<OlMap layer={layer} onReady={setMap}>
+							<OlMap layer={layer} oneTimeHandlers={{ postrender: e => setMap(e.map) }}>
 								{layer.id && (<>
 									<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
 									{markerIcons.length && markers.list.map(mk => {

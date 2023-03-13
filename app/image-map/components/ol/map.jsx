@@ -13,10 +13,11 @@ import cls from './map.module.scss'
  *
  * @param {object} props
  * @param {Object<string, any>} props.layer The Wordpress layer
- * @param {(map: Map) => void} props.onReady This callback is called when the map is loaded.
+ * @param {Object<string, (any) => void>} props.eventHandlers Event handlers for OL map events.
+ * @param {Object<string, (any) => void>} props.oneTimeHandlers One time event handlers for OL map events.
  * @param {string} props.className Class for the map container.
  */
-export default function OlMap({ layer, onReady, className, children }) {
+export default function OlMap({ layer, eventHandlers = {}, oneTimeHandlers = {}, className, children }) {
 	if (!layer._embedded) return <div className={cls.map}></div>
 
 	// Div to add the map to.
@@ -51,17 +52,33 @@ export default function OlMap({ layer, onReady, className, children }) {
 	}
 
 	/** OpenLayers Map with initial view. */
-	const map = useMemo(() => {
-		// Create the map on first render.
-		return new Map({
-			view: getView()
-		})
-	}, [])
+	const map = useMemo(
+		() => new Map({ view: getView() }),
+		[]
+	)
 
-	// Add the map to the dom after mounting the component.
+	// After mounting the component.
 	useEffect(() => {
+		// Register one time event handlers.
+		Object.entries(oneTimeHandlers).forEach(([evt, handler]) => {
+			map.once(evt, handler)
+		})
+
+		// Register event handlers.
+		Object.entries(eventHandlers).forEach(([evt, handler]) => {
+			map.on(evt, handler)
+		})
+
+		// Add the map to the dom.
 		map.setTarget(mapTarget.current)
-		onReady && onReady(map)
+
+		// Remove event handlers on unmount
+		return () => {
+			Object.entries(eventHandlers).forEach(([evt, handler]) => {
+				map.un(evt, handler)
+			})
+
+		}
 	}, [])
 
 	// Reset the view when a new image is selected.
