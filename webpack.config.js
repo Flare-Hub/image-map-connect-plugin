@@ -13,4 +13,11 @@ module.exports = {
 	output: {
 		path: resolve(__dirname, 'assets/build'),
 	},
+	resolve: {
+		...defaultConfig.resolve,
+		alias: {
+			...defaultConfig.resolve.alias,
+			common: resolve(__dirname, 'app', 'common')
+		}
+	}
 }

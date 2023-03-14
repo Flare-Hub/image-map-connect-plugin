@@ -3,8 +3,8 @@ import { Icon } from '@wordpress/components'
 
 import { getStyles } from '../../utils/marker-icons'
 import { useMarker } from "../../contexts/marker"
-import Marker from '../ol/marker'
-import { useMap } from '../ol/context'
+import Marker from 'common/components/ol/marker'
+import { useMap } from 'common/components/ol/context'
 import { DragPan } from 'ol/interaction'
 
 import cls from './selected-marker-pin.module.scss'
