@@ -1,20 +1,25 @@
-import { useMemo } from "@wordpress/element"
+import { useMemo, useState } from "@wordpress/element"
 import { useSelect } from "@wordpress/data"
+import OlMap from "common/components/ol/map"
+import LayerSelector from "./layer-selector"
+import ImageLayer from "common/components/ol/image-layer"
 
 /**
  * Show preview of the map with markers.
  *
  * @param {object} props
+ * @param {number} props.mapId Id of the map to display.
  * @param {object} [props.queryParams] Parameters provided by the Query Loop block.
  * @param {string} [props.templateSlug] Slug of the current FSE template.
  * @param {string} [props.previewPostType] Post type to show in the inherited query loop.
  * @param {string} props.queryType Whether to use pagination.
  * @param {number} [props.page] Current page in the query loop.
  */
-export default function Map({ queryParams, templateSlug, previewPostType, queryType, page }) {
+export default function Map({ mapId, queryParams, templateSlug, previewPostType, queryType, page }) {
 	const {
 		inherit, postType, perPage, offset, order, orderBy, search, author, exclude = [], sticky, taxQuery
 	} = queryParams ?? {}
+
 	// Get query post type.
 	const tplPostType = templateSlug && templateSlug.replace('archive-', '')
 	const entityPostType = previewPostType ?? inherit ? tplPostType : postType
@@ -88,7 +93,16 @@ export default function Map({ queryParams, templateSlug, previewPostType, queryT
 		[postQuery]
 	)
 
+	const [layer, setLayer] = useState({})
+
 	return (
-		<>{JSON.stringify(postIds)}</>
+		<>
+			<LayerSelector map={mapId} selected={layer} onSelect={setLayer} />
+			<OlMap layer={layer} >
+				{layer.id && (
+					<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
+				)}
+			</OlMap>
+		</>
 	)
 }

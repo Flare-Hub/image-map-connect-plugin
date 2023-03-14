@@ -73,18 +73,22 @@ export default function Edit({
 				/>
 			</PanelBody>
 		</InspectorControls>
-		<MapSelector
-			mapId={mapId}
-			setMapId={setAttr.bind(null, 'mapId')}
-			prevMapId={prevMapId}
-			setPrevMapId={setPrevMapId}
-		/>
-		<Map
-			queryType={queryType}
-			queryParams={query}
-			templateSlug={templateSlug}
-			previewPostType={previewPostType}
-			page={page}
-		/>
+		{mapId ? (
+			<Map
+				mapId={mapId}
+				queryType={queryType}
+				queryParams={query}
+				templateSlug={templateSlug}
+				previewPostType={previewPostType}
+				page={page}
+			/>
+		) : (
+			<MapSelector
+				mapId={mapId}
+				setMapId={setAttr.bind(null, 'mapId')}
+				prevMapId={prevMapId}
+				setPrevMapId={setPrevMapId}
+			/>
+		)}
 	</div>
 }
