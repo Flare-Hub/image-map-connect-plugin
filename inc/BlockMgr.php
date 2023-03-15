@@ -5,6 +5,8 @@ namespace Flare\ImageMap;
  * Manage plugin blocks for the block editor.
  */
 class BlockMgr {
+		// const ASSETDIR = 'assets/build/';
+
 	/** @var string $plugin_dir Directory of this plugin. */
 	protected $plugin_dir;
 
@@ -14,7 +16,7 @@ class BlockMgr {
 	 * @since 0.1.0
 	 **/
 	public function __construct() {
-		$this->plugin_dir = plugin_dir_path( __DIR__ );
+		$this->plugin_dir = plugin_dir_path( __DIR__ ); // . self::ASSETDIR;
 	}
 
 	/**
@@ -23,6 +25,10 @@ class BlockMgr {
 	 * @since 0.1.0
 	 **/
 	public function register_blocks() {
+		// register_block_type(
+		// 	$this->plugin_dir . 'map-query-block',
+		// 	array( 'render_callback' => array( $this, 'render_map_query' ) )
+		// );
 		$this->register_block(
 			'map-query-block',
 			array( 'view_script_handles' => array( 'view' => 'view/index' ) ),
