@@ -16,8 +16,9 @@ import cls from './map.module.scss'
  * @param {Object<string, (any) => void>} props.eventHandlers Event handlers for OL map events.
  * @param {Object<string, (any) => void>} props.oneTimeHandlers One time event handlers for OL map events.
  * @param {string} props.className Class for the map container.
+ * @param {import('react').CSSProperties} props.style Inline styling.
  */
-export default function OlMap({ layer, eventHandlers = {}, oneTimeHandlers = {}, className, children }) {
+export default function OlMap({ layer, eventHandlers = {}, oneTimeHandlers = {}, className, style, children }) {
 	if (!layer._embedded) return <div className={cls.map}></div>
 
 	// Div to add the map to.
@@ -98,7 +99,7 @@ export default function OlMap({ layer, eventHandlers = {}, oneTimeHandlers = {},
 
 	return (
 		<MapProvider value={{ map, imageExtent, projection }}>
-			<div className={`${className} ${cls.map}`} ref={mapTarget}>
+			<div className={cls.map + (className ? ' ' + className : '')} style={style} ref={mapTarget}>
 				{children}
 			</div>
 		</MapProvider>

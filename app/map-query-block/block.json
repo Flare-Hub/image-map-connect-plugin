@@ -21,10 +21,6 @@
       "type": "string",
       "default": "400px"
     },
-    "width": {
-      "type": "string",
-      "default": "100%"
-    },
     "queryType": {
       "type": "string",
       "default": "query"

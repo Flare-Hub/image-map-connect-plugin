@@ -21,7 +21,7 @@ import Map from "./map"
  * @param {(attrs: Partial<{}>) => void} props.setAttributes
  */
 export default function Edit({
-	attributes: { mapId, height, width, queryType, showStandAlone },
+	attributes: { mapId, height, queryType, showStandAlone },
 	setAttributes,
 	context: {
 		query,
@@ -62,11 +62,6 @@ export default function Edit({
 			/>
 			<PanelBody title={__('Size', blockMeta.textdomain)} initialOpen={false}>
 				<UnitControl
-					label={__('Width', blockMeta.textdomain)}
-					value={width}
-					onChange={val => setAttributes({ width: val })}
-				/>
-				<UnitControl
 					label={__('Height', blockMeta.textdomain)}
 					value={height}
 					onChange={val => setAttributes({ height: val })}
@@ -81,6 +76,7 @@ export default function Edit({
 				templateSlug={templateSlug}
 				previewPostType={previewPostType}
 				page={page}
+				height={height}
 			/>
 		) : (
 			<MapSelector

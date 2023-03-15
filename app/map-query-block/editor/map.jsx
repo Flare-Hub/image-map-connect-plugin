@@ -14,8 +14,9 @@ import ImageLayer from "common/components/ol/image-layer"
  * @param {string} [props.previewPostType] Post type to show in the inherited query loop.
  * @param {string} props.queryType Whether to use pagination.
  * @param {number} [props.page] Current page in the query loop.
+ * @param {string} [props.height] Height of the map container.
  */
-export default function Map({ mapId, queryParams, templateSlug, previewPostType, queryType, page }) {
+export default function Map({ mapId, queryParams, templateSlug, previewPostType, queryType, page, height }) {
 	const {
 		inherit, postType, perPage, offset, order, orderBy, search, author, exclude = [], sticky, taxQuery
 	} = queryParams ?? {}
@@ -98,7 +99,7 @@ export default function Map({ mapId, queryParams, templateSlug, previewPostType,
 	return (
 		<>
 			<LayerSelector map={mapId} selected={layer} onSelect={setLayer} />
-			<OlMap layer={layer} >
+			<OlMap layer={layer} style={{ height }}>
 				{layer.id && (
 					<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
 				)}
