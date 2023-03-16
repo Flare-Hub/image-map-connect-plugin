@@ -12,7 +12,7 @@ import Layout from '../layout'
 import EditMarker from './edit-marker'
 import OlMap from 'common/components/ol/map'
 import ListedMarkerPin from './listed-marker-pin'
-import ImageLayer from 'common/components/ol/image-layer'
+import ImageLayer from 'common/components/ol/image-base-layer'
 import SelectedMarkerPin from './selected-marker-pin'
 import NewMarkerPin from './new-marker-pin'
 import CreateMarkerModal from './create-marker-modal'
@@ -110,9 +110,9 @@ export default function Markers() {
 				<Flex direction="column" gap="1px" className="full-height">
 					<FlexItem>
 						<Card>
-							<OlMap layer={layer} oneTimeHandlers={{ postrender: e => setMap(e.map) }}>
+							<OlMap oneTimeHandlers={{ postrender: e => setMap(e.map) }}>
 								{layer.id && (<>
-									<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
+									<ImageLayer layer={layer} />
 									{markerIcons.length && markers.list.map(mk => {
 										if (mk.id == query.marker) {
 											if (selected.flare_loc.lng && selected.flare_loc.lat) {

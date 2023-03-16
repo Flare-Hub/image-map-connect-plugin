@@ -2,7 +2,7 @@ import { useMemo, useState } from "@wordpress/element"
 import { useSelect } from "@wordpress/data"
 import OlMap from "common/components/ol/map"
 import LayerSelector from "./layer-selector"
-import ImageLayer from "common/components/ol/image-layer"
+import ImageLayer from "common/components/ol/image-base-layer"
 
 /**
  * Show preview of the map with markers.
@@ -99,9 +99,9 @@ export default function Map({ mapId, queryParams, templateSlug, previewPostType,
 	return (
 		<>
 			<LayerSelector map={mapId} selected={layer} onSelect={setLayer} />
-			<OlMap layer={layer} style={{ height }}>
+			<OlMap style={{ height }}>
 				{layer.id && (
-					<ImageLayer url={layer._embedded['flare:image'][0].source_url} />
+					<ImageLayer layer={layer} />
 				)}
 			</OlMap>
 		</>

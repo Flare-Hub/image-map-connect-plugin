@@ -5,7 +5,7 @@ import useMediaMgr from '../../hooks/useMediaMgr';
 import { useRouter } from '../../contexts/router';
 import LifeCycleButtons from '../forms/lifecycle-buttons'
 import OlMap from 'common/components/ol/map';
-import ImageLayer from 'common/components/ol/image-layer';
+import ImageLayer from 'common/components/ol/image-base-layer';
 
 import cls from '../forms/edit-form.module.scss'
 
@@ -99,11 +99,10 @@ export default function EditLayer({ layers, dispatch }) {
 					/>
 					<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
 						<OlMap
-							layer={layer}
 							className={`${cls.border} ${cls.input}`}
 							eventHandlers={{ moveend: moveHandler }}
 						>
-							{layer._embedded && <ImageLayer url={layer._embedded['flare:image'][0].source_url} />}
+							{layer.id && <ImageLayer layer={layer} />}
 						</OlMap>
 					</BaseControl>
 				</div>
