@@ -1,5 +1,5 @@
 import { useEffect, useState } from '@wordpress/element'
-import { getItem } from '../../common/utils/wp-fetch'
+import { getItem } from 'common/utils/wp-fetch'
 
 /**
  * Get controlled state for an item selected from a collection.

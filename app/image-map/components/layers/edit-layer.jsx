@@ -5,7 +5,7 @@ import useMediaMgr from '../../hooks/useMediaMgr';
 import { useRouter } from '../../contexts/router';
 import LifeCycleButtons from '../forms/lifecycle-buttons'
 import OlMap from 'common/components/ol/map';
-import ImageLayer from 'common/components/ol/image-base-layer';
+import ImageLayer from 'common/components/ol/image-layer';
 
 import cls from '../forms/edit-form.module.scss'
 

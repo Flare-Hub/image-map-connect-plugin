@@ -1,8 +1,10 @@
-import { useMemo, useState } from "@wordpress/element"
+import { useMemo } from "@wordpress/element"
 import { useSelect } from "@wordpress/data"
+import { __ } from "@wordpress/i18n"
+
 import OlMap from "common/components/ol/map"
-import LayerSelector from "./layer-selector"
-import ImageLayer from "common/components/ol/image-base-layer"
+import BaseLayerGroup from "common/components/ol/base-layer-group"
+import blockMeta from "../block.json"
 
 /**
  * Show preview of the map with markers.
@@ -94,16 +96,12 @@ export default function Map({ mapId, queryParams, templateSlug, previewPostType,
 		[postQuery]
 	)
 
-	const [layer, setLayer] = useState({})
-
 	return (
-		<>
-			<LayerSelector map={mapId} selected={layer} onSelect={setLayer} />
-			<OlMap style={{ height }}>
-				{layer.id && (
-					<ImageLayer layer={layer} />
-				)}
-			</OlMap>
-		</>
+		<OlMap style={{ height }}>
+			<BaseLayerGroup
+				mapId={mapId}
+				title={__('Initial layer', blockMeta.textdomain)}
+			/>
+		</OlMap>
 	)
 }
