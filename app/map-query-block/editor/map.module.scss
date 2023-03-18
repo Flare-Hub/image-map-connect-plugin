@@ -1,0 +1,19 @@
+.withSwitcher:global(.ol-control.ol-bar .ol-control.ol-collapsed.ol-layerswitcher) {
+	overflow: visible;
+
+	:global(.panel-container) {
+		position: absolute;
+		top: 100%;
+		right: 100%;
+		padding: 0.5em;
+	}
+
+	:global(.panel) {
+		position: relative;
+		display: block;
+	}
+
+	:global(.layerswitcher-opacity) {
+		display: none;
+	}
+}

@@ -21,6 +21,7 @@
   "author": "Igor Honhoff",
   "license": "MIT",
   "devDependencies": {
+    "@types/ol-ext": "npm:@siedlerchr/types-ol-ext@^3.0.9",
     "@wordpress/scripts": "^25.2.0",
     "browser-sync": "^2.27.11",
     "dotenv": "^16.0.3",
@@ -41,7 +42,7 @@
     "@wordpress/icons": "^9.16.0",
     "history": "^5.3.0",
     "ol": "^7.2.2",
-    "ol-layerswitcher": "^4.1.1",
+    "ol-ext": "^4.0.6",
     "reflex-grid": "^2.0.7"
   }
 }

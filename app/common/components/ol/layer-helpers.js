@@ -55,7 +55,7 @@ export function createImgLayer(layer, projection, visible = true) {
 	return new ImgLayer({
 		source: createSource(layer, projection),
 		title: layer.name,
-		type: 'base',
+		baseLayer: true,
 		visible
 	})
 }

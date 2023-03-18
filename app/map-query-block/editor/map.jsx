@@ -4,7 +4,11 @@ import { __ } from "@wordpress/i18n"
 
 import OlMap from "common/components/ol/map"
 import BaseLayerGroup from "common/components/ol/base-layer-group"
+// import Control from "common/components/ol/control"
+import ControlBar from "common/components/ol/control-bar"
+
 import blockMeta from "../block.json"
+import cls from "./map.module.scss"
 
 /**
  * Show preview of the map with markers.
@@ -98,10 +102,15 @@ export default function Map({ mapId, queryParams, templateSlug, previewPostType,
 
 	return (
 		<OlMap style={{ height }}>
-			<BaseLayerGroup
-				mapId={mapId}
-				title={__('Initial layer', blockMeta.textdomain)}
-			/>
+			<ControlBar position="top-right" className={cls.withSwitcher}>
+				<BaseLayerGroup
+					mapId={mapId}
+					title={__('Initial layer', blockMeta.textdomain)}
+				/>
+				{/* <Control>
+					<button onClick={() => console.log('Test')}>S</button>
+				</Control> */}
+			</ControlBar>
 		</OlMap>
 	)
 }

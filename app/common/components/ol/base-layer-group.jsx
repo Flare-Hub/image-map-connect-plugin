@@ -1,13 +1,13 @@
 import { useEffect } from '@wordpress/element'
 import LayerGroup from 'ol/layer/Group'
-import LayerSwitcher from 'ol-layerswitcher'
+import LayerSwitcher from 'ol-ext/control/LayerSwitcher'
 import { Collection } from 'ol'
 
 import { useMap } from './context'
 import { createImgLayer, createProjection, createView } from './layer-helpers'
 import { getCollection } from 'common/utils/wp-fetch'
 
-import 'ol-layerswitcher/dist/ol-layerswitcher.css'
+import 'ol-ext/dist/ol-ext.css'
 
 /**
  * Add OpenLayers layer group with base layers, and layer switcher, to map.
@@ -18,10 +18,17 @@ import 'ol-layerswitcher/dist/ol-layerswitcher.css'
  * @param {number} [props.selLayerId] Id of the Layer that is selected when initializing this component.
  */
 export default function BaseLayerGroup({ mapId, title, selLayerId }) {
-	const { map } = useMap()
+	const { map, controlBar } = useMap()
 
 	// Get the list of layers for the provided map and pre-select the 1st layer.
 	useEffect(async () => {
+		const switcher = new LayerSwitcher({
+			reordering: false,
+			noScroll: true,
+		})
+
+		controlBar.addControl(switcher)
+
 		const { body: layers } = await getCollection(
 			'imagemaps',
 			{ parent: mapId, per_page: 100, _embed: true }
@@ -29,9 +36,6 @@ export default function BaseLayerGroup({ mapId, title, selLayerId }) {
 
 		if (!selLayerId) selLayerId = layers[0].id
 
-		/**
-		 * @type {Array<import('ol/layer/Image').default>}
-		 **/
 		const imgLayers = new Collection()
 		let view
 
@@ -47,13 +51,12 @@ export default function BaseLayerGroup({ mapId, title, selLayerId }) {
 			}
 		}
 
-		const group = new LayerGroup({ title })
+		const group = new LayerGroup({ title, openInLayerSwitcher: true })
 		group.setLayers(imgLayers)
 		map.setLayerGroup(group)
 		if (view) map.setView(view)
 
-		map.addControl(new LayerSwitcher())
-
+		switcher.drawPanel()
 	}, [mapId])
 
 	return null
