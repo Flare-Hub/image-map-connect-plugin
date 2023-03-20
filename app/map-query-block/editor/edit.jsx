@@ -21,7 +21,7 @@ import Map from "./map"
  * @param {(attrs: Partial<{}>) => void} props.setAttributes
  */
 export default function Edit({
-	attributes: { mapId, height, queryType, showStandAlone },
+	attributes: { mapId, height, queryType, showStandAlone, initialView },
 	setAttributes,
 	context: {
 		query,
@@ -77,6 +77,8 @@ export default function Edit({
 				previewPostType={previewPostType}
 				page={page}
 				height={height}
+				initialView={initialView}
+				setView={setAttr.bind(null, 'initialView')}
 			/>
 		) : (
 			<MapSelector

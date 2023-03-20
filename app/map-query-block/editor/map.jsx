@@ -4,11 +4,11 @@ import { __ } from "@wordpress/i18n"
 
 import OlMap from "common/components/ol/map"
 import BaseLayerGroup from "common/components/ol/base-layer-group"
-// import Control from "common/components/ol/control"
 import ControlBar from "common/components/ol/control-bar"
 
 import blockMeta from "../block.json"
 import cls from "./map.module.scss"
+import SaveView from "./save-view"
 
 /**
  * Show preview of the map with markers.
@@ -21,8 +21,20 @@ import cls from "./map.module.scss"
  * @param {string} props.queryType Whether to use pagination.
  * @param {number} [props.page] Current page in the query loop.
  * @param {string} [props.height] Height of the map container.
+ * @param {import('./save-view').MapView} [props.initialView] Initial settings for the map view.
+ * @param {(mapView: MapView) => void} props.setView Update the initialView attribute.
  */
-export default function Map({ mapId, queryParams, templateSlug, previewPostType, queryType, page, height }) {
+export default function Map({
+	mapId,
+	queryParams,
+	templateSlug,
+	previewPostType,
+	queryType,
+	page,
+	height,
+	initialView,
+	setView
+}) {
 	const {
 		inherit, postType, perPage, offset, order, orderBy, search, author, exclude = [], sticky, taxQuery
 	} = queryParams ?? {}
@@ -101,15 +113,14 @@ export default function Map({ mapId, queryParams, templateSlug, previewPostType,
 	)
 
 	return (
-		<OlMap style={{ height }}>
+		<OlMap center={initialView.center} zoom={initialView.zoom} style={{ height }}>
 			<ControlBar position="top-right" className={cls.withSwitcher}>
 				<BaseLayerGroup
 					mapId={mapId}
 					title={__('Initial layer', blockMeta.textdomain)}
+					selLayerId={initialView.layer}
 				/>
-				{/* <Control>
-					<button onClick={() => console.log('Test')}>S</button>
-				</Control> */}
+				<SaveView setView={setView} />
 			</ControlBar>
 		</OlMap>
 	)

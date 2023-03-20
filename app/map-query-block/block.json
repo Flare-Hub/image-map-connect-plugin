@@ -28,6 +28,10 @@
     "showStandAlone": {
       "type": "boolean",
       "default": true
+    },
+    "initialView": {
+      "type": "object",
+      "default": {}
     }
   },
   "usesContext": [

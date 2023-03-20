@@ -32,20 +32,6 @@ export default function EditLayer({ layers, dispatch }) {
 		}
 	)
 
-	/** Update layer's initial position when panning or zooming on map. */
-	function moveHandler(e) {
-		setLayer(oldLayer => ({
-			...oldLayer,
-			meta: {
-				...oldLayer.meta,
-				initial_position: {
-					center: e.frameState.viewState.center,
-					zoom: e.frameState.viewState.zoom
-				}
-			}
-		}))
-	}
-
 	// Initiate Wordpress media manager to select layer image
 	const mediaMgr = useMediaMgr(false, selImages => setLayer(oldLayer => {
 		// Get selected image
@@ -100,7 +86,6 @@ export default function EditLayer({ layers, dispatch }) {
 					<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
 						<OlMap
 							className={`${cls.border} ${cls.input}`}
-							eventHandlers={{ moveend: moveHandler }}
 						>
 							{layer.id && <ImageLayer layer={layer} />}
 						</OlMap>

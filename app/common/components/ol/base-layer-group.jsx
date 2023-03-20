@@ -1,11 +1,9 @@
-import { useEffect } from '@wordpress/element'
-import LayerGroup from 'ol/layer/Group'
+import { useEffect, useState } from '@wordpress/element'
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher'
-import { Collection } from 'ol'
 
-import { useMap } from './context'
-import { createImgLayer, createProjection, createView } from './layer-helpers'
 import { getCollection } from 'common/utils/wp-fetch'
+import { useMap } from './context'
+import ImageLayer from './image-layer'
 
 import 'ol-ext/dist/ol-ext.css'
 
@@ -14,50 +12,30 @@ import 'ol-ext/dist/ol-ext.css'
  *
  * @param {object} props
  * @param {Object<string, any>} props.mapId WordPress map ID to fetch the layer list from.
- * @param {string} props.title Title of the base layer group in the layer switcher.
  * @param {number} [props.selLayerId] Id of the Layer that is selected when initializing this component.
+ * @param {(selLayerId: number) => void} props.setSelLayerId Setter for the selected layer.
  */
-export default function BaseLayerGroup({ mapId, title, selLayerId }) {
-	const { map, controlBar } = useMap()
+export default function BaseLayerGroup({ mapId, selLayerId, setSelLayerId }) {
+	const { controlBar } = useMap()
+	const [layers, setLayers] = useState([])
 
 	// Get the list of layers for the provided map and pre-select the 1st layer.
-	useEffect(async () => {
-		const switcher = new LayerSwitcher({
+	useEffect(() => {
+		controlBar.addControl(new LayerSwitcher({
 			reordering: false,
 			noScroll: true,
-		})
+		}))
 
-		controlBar.addControl(switcher)
-
-		const { body: layers } = await getCollection(
+		getCollection(
 			'imagemaps',
 			{ parent: mapId, per_page: 100, _embed: true }
-		)
+		).then((res) => {
+			setLayers(res.body)
+		})
 
-		if (!selLayerId) selLayerId = layers[0].id
-
-		const imgLayers = new Collection()
-		let view
-
-		for (const layer of layers) {
-			const projection = createProjection(layer)
-			const imgLayer = createImgLayer(layer, projection, false)
-
-			imgLayers.push(imgLayer)
-
-			if (layer.id === selLayerId) {
-				imgLayer.setVisible(true)
-				view = createView(layer, projection)
-			}
-		}
-
-		const group = new LayerGroup({ title, openInLayerSwitcher: true })
-		group.setLayers(imgLayers)
-		map.setLayerGroup(group)
-		if (view) map.setView(view)
-
-		switcher.drawPanel()
 	}, [mapId])
 
-	return null
+	return layers.map(layer => (
+		<ImageLayer layer={layer} visible={layer.id === (selLayerId ?? layers[0].id)} key={layer.id} />
+	))
 }
