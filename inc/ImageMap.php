@@ -124,37 +124,4 @@ class ImageMap {
 		);
 		register_meta( 'term', 'min_zoom', $meta_args );
 	}
-
-	/**
-	 * Register Image Map's initial bounds field with the rest API.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function register_initial_bounds() {
-		$meta_args = array(
-			'object_subtype' => self::$name,
-			'type'           => 'object',
-			'single'         => true,
-			'show_in_rest'   => array(
-				'schema' => array(
-					'type'       => 'object',
-					'properties' => array(
-						'zoom'   => array(
-							'type' => 'number',
-						),
-						'center' => array(
-							'type'  => 'array',
-							'items' => array(
-								'type'  => 'array',
-								'items' => array(
-									'type' => 'number',
-								),
-							),
-						),
-					),
-				),
-			),
-		);
-		register_meta( 'term', 'initial_position', $meta_args );
-	}
 }

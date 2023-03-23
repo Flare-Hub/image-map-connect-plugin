@@ -39,7 +39,7 @@ export default function EditLayer({ layers, dispatch }) {
 		// Mimic rest API structure for image details.
 		return {
 			...oldLayer,
-			meta: { ...oldLayer.meta, image: selImg.attributes.id, initial_position: {} },
+			meta: { ...oldLayer.meta, image: selImg.attributes.id },
 			_embedded: {
 				'flare:image': [{
 					source_url: selImg.attributes.url,
