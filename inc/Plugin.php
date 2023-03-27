@@ -105,7 +105,8 @@ class Plugin {
 
 		// Hook marker icon functions.
 		$this->marker_icon->register_colour();
-		$this->marker_icon->register_icon();
+		$this->marker_icon->register_type();
+		$this->marker_icon->register_loc();
 		$this->marker_icon->register_map();
 		$this->marker_icon->register_size();
 		$this->marker_icon->register_anchor();

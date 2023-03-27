@@ -6,7 +6,6 @@ import {
 	CardDivider,
 	Button,
 	BaseControl,
-	Icon,
 	Flex,
 	FlexItem
 } from '@wordpress/components'
@@ -14,7 +13,6 @@ import { useEffect, useReducer, useState } from '@wordpress/element'
 
 import useSelected from '../../hooks/useSelected'
 import { deleteItem, getCollection } from '../../../common/utils/wp-fetch'
-import { getStyles } from '../../utils/marker-icons'
 import LifeCycleButtons from '../forms/lifecycle-buttons'
 import PostTypesSelect from '../forms/post-types-select'
 import EditMarkerIcon from './edit-marker-icon'
@@ -119,7 +117,7 @@ export default function EditMap({ maps, dispatch }) {
 									<CardDivider />
 									<CardBody>
 										<Flex>
-											<Icon icon={icon.meta.icon} style={getStyles(icon.meta, false)} className={cls.marker} />
+											<i className={icon.meta.loc} style={{ color: icon.meta.colour, fontSize: '1.2em' }} />
 											<FlexItem isBlock >{icon.name}</FlexItem>
 											<Button variant='tertiary' icon="edit" onClick={() => setEditIcon(icon)} />
 											<Button variant='tertiary' icon="no" isDestructive onClick={() => deleteIcon(icon.id)} />
@@ -128,7 +126,12 @@ export default function EditMap({ maps, dispatch }) {
 								</div>
 							))}
 						</Card>
-						{editIcon && <EditMarkerIcon icon={editIcon} dispatch={dispatchMarkerIcons} close={() => setEditIcon()} />}
+						{editIcon && <EditMarkerIcon
+							icon={editIcon}
+							setIcon={setEditIcon}
+							dispatch={dispatchMarkerIcons}
+							close={() => setEditIcon()}
+						/>}
 					</BaseControl>
 				</div>
 				<div className="col-xs-3">

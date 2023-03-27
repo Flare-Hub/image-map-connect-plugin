@@ -50,22 +50,7 @@ class MarkerIcon {
 	}
 
 	/**
-	 * Register Marker Icon's image field with the rest API.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function register_icon() {
-		$meta_args = array(
-			'object_subtype' => self::$name,
-			'type'           => 'string',
-			'single'         => true,
-			'show_in_rest'   => true,
-		);
-		register_meta( 'term', 'icon', $meta_args );
-	}
-
-	/**
-	 * Register Marker Icon's image field with the rest API.
+	 * Register Marker Icon's colour field with the rest API.
 	 *
 	 * @since 0.1.0
 	 **/
@@ -80,7 +65,37 @@ class MarkerIcon {
 	}
 
 	/**
-	 * Register Marker Icon's image field with the rest API.
+	 * Register Marker Icon's location field with the rest API.
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_loc() {
+		$meta_args = array(
+			'object_subtype' => self::$name,
+			'type'           => 'string',
+			'single'         => true,
+			'show_in_rest'   => true,
+		);
+		register_meta( 'term', 'loc', $meta_args );
+	}
+
+	/**
+	 * Register Marker Icon's type field with the rest API.
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_type() {
+		$meta_args = array(
+			'object_subtype' => self::$name,
+			'type'           => 'string',
+			'single'         => true,
+			'show_in_rest'   => true,
+		);
+		register_meta( 'term', 'type', $meta_args );
+	}
+
+	/**
+	 * Register Marker Icon's size field with the rest API.
 	 *
 	 * @since 0.1.0
 	 **/
@@ -109,10 +124,10 @@ class MarkerIcon {
 					'type'       => 'object',
 					'properties' => array(
 						'x' => array(
-							'type' => 'string',
+							'type' => 'number',
 						),
 						'y' => array(
-							'type' => 'string',
+							'type' => 'number',
 						),
 					),
 				),
@@ -136,10 +151,10 @@ class MarkerIcon {
 					'type'       => 'object',
 					'properties' => array(
 						'x' => array(
-							'type' => 'string',
+							'type' => 'number',
 						),
 						'y' => array(
-							'type' => 'string',
+							'type' => 'number',
 						),
 					),
 				),

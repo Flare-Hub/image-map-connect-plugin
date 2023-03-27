@@ -1,8 +1,7 @@
 import { useMemo } from '@wordpress/element'
-import { Icon } from '@wordpress/components'
 
-import { getStyles } from '../../utils/marker-icons'
 import Marker from 'common/components/ol/marker'
+import { getStyles } from '../../utils/marker-icons'
 import Link from '../link'
 
 import cls from './listed-marker-pin.module.scss'
@@ -18,16 +17,19 @@ export default function ListedMarkerPin({ marker, icons }) {
 	// Marker icon for the current marker
 	const mi = useMemo(() => {
 		const iconId = marker['marker-icons'][0]
-		return icons.find(i => i.id === iconId)
+		const icon = icons.find(i => i.id === iconId)
+		return icon ? icon.meta : null
 	}, [marker['marker-icons']])
+
+	if (!mi) return null
 
 	return (
 		<Marker
 			position={marker.flare_loc}
-			anchor={mi.meta.iconAnchor}
+			anchor={[(-mi.iconAnchor.x * mi.size), (-mi.iconAnchor.y * mi.size)]}
 		>
-			<Link query={{ marker: marker.id }} className={cls.link} >
-				<Icon icon={mi.meta.icon} style={getStyles(mi.meta)} />
+			<Link query={{ marker: marker.id }} className={cls.link} style={{ height: mi.size }} >
+				<i className={mi.loc} style={getStyles(mi)} />
 			</Link>
 		</Marker>
 	)

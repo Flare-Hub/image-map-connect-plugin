@@ -1,19 +1,17 @@
 import { useMemo, useState, useEffect, useCallback } from '@wordpress/element'
-import { Icon } from '@wordpress/components'
-
-import { getStyles } from '../../utils/marker-icons'
 import { useMarker } from "../../contexts/marker"
 import Marker from 'common/components/ol/marker'
 import { useMap } from 'common/components/ol/context'
 import { DragPan } from 'ol/interaction'
 
 import cls from './selected-marker-pin.module.scss'
+import { getStyles } from '../../utils/marker-icons'
 
 /**
  * Set marker coordinates for a new marker
  *
  * @param {object} props
- * @param {Array<Object<string, any>>} props.icons
+ * @param {Array<import('../../utils/marker-icons').Icon>} props.icons
  * @param {Object<string, any>} props.selected
  */
 export default function SelectedMarkerPin({ icons, selected }) {
@@ -36,7 +34,8 @@ export default function SelectedMarkerPin({ icons, selected }) {
 
 	const mi = useMemo(() => {
 		if (!iconId) return
-		return icons.find(i => i.id === iconId)
+		const icon = icons.find(i => i.id === iconId)
+		return icon ? icon.meta : null
 	}, [marker['marker-icons']])
 
 	// Update the marker pin position as it is being dragged.
@@ -94,14 +93,11 @@ export default function SelectedMarkerPin({ icons, selected }) {
 	return (
 		<Marker
 			position={position}
-			anchor={mi.meta.iconAnchor}
+			anchor={[(-mi.iconAnchor.x * mi.size), (-mi.iconAnchor.y * mi.size)]}
 		>
-			<Icon
-				icon={mi.meta.icon}
-				style={getStyles(mi.meta)}
-				className={cls.pin}
-				onMouseDown={handleMouseDown}
-			/>
+			<div className={cls.pin} style={{ height: mi.size }} onMouseDown={handleMouseDown} >
+				<i className={mi.loc} style={getStyles(mi)} />
+			</div>
 		</Marker >
 	)
 }

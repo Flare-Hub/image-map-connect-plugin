@@ -23,6 +23,7 @@ export default function Marker({ position, anchor, events, className, children }
 	const overlay = useMemo(() => new Overlay({
 		position: [position.lng, position.lat],
 		stopEvent: false,
+		offset: anchor
 	}), [])
 
 	// Add overlay to map after component is mounted.
@@ -55,15 +56,10 @@ export default function Marker({ position, anchor, events, className, children }
 		overlay.setPosition([position.lng, position.lat])
 	}, [position.lng, position.lat])
 
-	// useEffect(() => {
-	// 	overlay.setElement()
-	// }, [children])
-
 	return (
 		<div>
 			<div
 				ref={markerDiv}
-				style={{ marginLeft: '-' + anchor.x, marginTop: '-' + anchor.y }}
 				className={className}
 			>
 				{children}
