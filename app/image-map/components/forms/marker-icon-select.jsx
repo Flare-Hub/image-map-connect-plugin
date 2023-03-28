@@ -24,7 +24,7 @@ export default function MarkerIconSelect({ label, value, onSelect }) {
 		const newIcons = res.body.map(icon => ({
 			key: icon.id,
 			name: <span>
-				<Icon icon={icon.meta.icon} style={{ color: icon.meta.colour }} />
+				<i className={icon.meta.loc} style={{ color: icon.meta.colour }} />
 				<span className={cls.iconName}>{icon.name}</span>
 			</span>
 		}))
