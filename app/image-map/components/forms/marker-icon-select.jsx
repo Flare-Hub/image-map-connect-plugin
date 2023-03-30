@@ -33,7 +33,7 @@ export default function MarkerIconSelect({ label, value, onSelect }) {
 	}, [query.map])
 
 	return (
-		<BaseControl label="Icon" className={cls.field}>
+		<BaseControl label={label} className={cls.field}>
 			<CustomSelectControl
 				value={icons.find(icon => icon.key === value)}
 				onChange={item => onSelect(item.selectedItem.key)}

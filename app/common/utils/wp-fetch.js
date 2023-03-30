@@ -61,6 +61,38 @@ export async function getCollection(collection, query) {
 }
 
 /**
+ * Request all pages of a collection from the Wordpress rest API.
+ *
+ * @param {string} collection The type of wordpress objects to get.
+ * @param {Object.<string, string>} query Query parameters to append to the endpoint.
+ * @returns {Promise<Array<object>>} The response from Wordpress.
+ */
+export async function getFullCollection(collection, query = {}) {
+	/** @type {Array<Promise<WpResponse & CollectionResponse>>} */
+	const requests = []
+
+	query.page = 1
+	if (!query.per_page) query.per_page = 100
+	const firstReq = getCollection(collection, query)
+	requests.push(firstReq)
+
+	const totalPages = (await firstReq).totalPages
+
+	while (query.page !== totalPages) {
+		query.page++
+		requests.push(getCollection(collection, query))
+	}
+
+	try {
+		const responses = await Promise.all(requests)
+		return responses.reduce((acc, res) => [...acc, ...res.body], [])
+	} catch (error) {
+		console.error(error)
+		return []
+	}
+}
+
+/**
  * Request a collection from the Wordpress rest API.
  *
  * @param {string} collection The type of wordpress object to get.

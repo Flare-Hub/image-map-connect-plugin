@@ -12,11 +12,11 @@ import blockMeta from "../block.json"
  *
  * @param {object} props
  * @param {string} props.mapId ID of the selected map.
- * @param {(mapId: string|null) => void} props.setMapId Setter for mapId.
- * @param {string} props.prevMapId Map Id of the previously selected map when replacing.
- * @param {(mapId: string|null) => void} props.setPrevMapId Setter for prevMapId.
+ * @param {(mapId: string|null) => void} props.setAttr Setter for mapId.
+ * @param {Object<string, any>|null} props.prevAttr Map Id of the previously selected map when replacing.
+ * @param {(mapId: string|null) => void} props.setPrevAttr Setter for prevMapId.
  */
-export default function MapSelector({ mapId, setMapId, prevMapId, setPrevMapId }) {
+export default function MapSelector({ mapId, setAttr, prevAttr, setPrevAttr }) {
 	// Use counter to ensure imagemaps are fetched from backend whenever counter is updated.
 	const [updCount, setUpdCount] = useState(0)
 
@@ -30,8 +30,8 @@ export default function MapSelector({ mapId, setMapId, prevMapId, setPrevMapId }
 
 	/** Update mapId and clear previous mapId (disables cancel) */
 	function handleSelectMap(newMapId) {
-		setMapId(newMapId)
-		setPrevMapId(null)
+		setAttr({ mapId: newMapId })
+		setPrevAttr(null)
 	}
 
 	/** Open Add Map page in new tab. */
@@ -46,8 +46,8 @@ export default function MapSelector({ mapId, setMapId, prevMapId, setPrevMapId }
 
 	/** Set mapId back to what it was before replacing. */
 	function handleCancelReplace() {
-		setMapId(prevMapId)
-		setPrevMapId(null)
+		setAttr(prevAttr)
+		setPrevAttr(null)
 	}
 
 	return (
@@ -79,7 +79,7 @@ export default function MapSelector({ mapId, setMapId, prevMapId, setPrevMapId }
 						/>
 					</div>
 				</BaseControl>
-				{prevMapId && (
+				{prevAttr && (
 					<BaseControl className="flare-cancel-replace">
 						<Button
 							variant="primary"

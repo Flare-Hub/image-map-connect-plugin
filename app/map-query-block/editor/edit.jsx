@@ -30,12 +30,12 @@ export default function Edit({
 		queryContext: [{ page }] = [{}]
 	},
 }) {
-	const [prevMapId, setPrevMapId] = useState(null)
+	const [prevAttr, setPrevAttr] = useState(null)
 
 	/** Store backup of mapId (to enable cancel) and clear value. */
 	function handleReplace() {
-		setAttributes({ mapId: null })
-		setPrevMapId(mapId)
+		setAttributes({ mapId: null, initialView: {} })
+		setPrevAttr({ mapId, initialView })
 	}
 
 	/** Set mapId attribute */
@@ -75,6 +75,7 @@ export default function Edit({
 				queryParams={query}
 				templateSlug={templateSlug}
 				previewPostType={previewPostType}
+				showStandAlone={showStandAlone}
 				page={page}
 				height={height}
 				initialView={initialView}
@@ -83,9 +84,9 @@ export default function Edit({
 		) : (
 			<MapSelector
 				mapId={mapId}
-				setMapId={setAttr.bind(null, 'mapId')}
-				prevMapId={prevMapId}
-				setPrevMapId={setPrevMapId}
+				setAttr={setAttributes}
+				prevAttr={prevAttr}
+				setPrevAttr={setPrevAttr}
 			/>
 		)}
 	</div>

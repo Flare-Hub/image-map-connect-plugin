@@ -62,7 +62,7 @@ export default function OlMap({ eventHandlers = {}, oneTimeHandlers = {}, center
 	useEffect(() => {
 		// Add the map to the dom.
 		map.setTarget(mapTarget.current)
-	})
+	}, [])
 
 	return (
 		<MapProvider value={{ map }}>

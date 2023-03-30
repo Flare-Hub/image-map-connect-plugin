@@ -39,7 +39,7 @@ export default function Markers() {
 			{
 				imagemaps: query[wpMarkers.parent],
 				_fields: 'title,id,type,marker-icons,flare_loc',
-				map: query.map,
+				post_types: 'all'
 			}
 		), [query[wpMarkers.parent]]),
 		{ list: [], page: 1 }

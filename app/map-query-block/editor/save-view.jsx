@@ -26,7 +26,7 @@ export default function SaveView({ setView }) {
 		setView({
 			center: view.getCenter(),
 			zoom: view.getZoom(),
-			layer: map.getAllLayers().find(l => l.getVisible()).get('wpId')
+			layer: map.getAllLayers().find(l => l.getVisible() && l.get('baseLayer')).get('wpId')
 		})
 	}
 

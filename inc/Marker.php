@@ -80,27 +80,81 @@ class Marker {
 	 * @since 0.1.0
 	 **/
 	public function filter_rest_query( array $args, \WP_REST_Request $request ) {
-		// Get post types for map if map is provided in the query parameters.
-		$map_id     = $request->get_param( 'map' );
-		$post_types = $map_id ? get_term_meta( $map_id, 'post_types', false ) : array();
+		$imagemaps = $request->get_param( 'imagemaps' );
 
-		// Merge the map post types with the existing query post types.
-		$arg_types = is_array( $args['post_type'] ) ? $args['post_type'] : array( $args['post_type'] );
-		$types     = array_merge( $arg_types, $post_types );
-
-		// If post type to exclude is provided, remove it from the array.
-		$exclude = $request->get_param( 'type_exclude' );
-		if ( $exclude ) {
-			foreach ( explode( ',', $exclude ) as $type ) {
-				$key = array_search( $type, $types, true );
-				if ( false !== $key ) {
-					unset( $types[ $key ] );
-				}
-			}
+		// If no imagemap is provided, update query to include posts with any imagemap set.
+		if ( ! $imagemaps ) {
+			$tax_query         = array_key_exists( 'tax_query', $args ) ? $args['tax_query'] : array();
+			$args['tax_query'] = $this->get_marker_tax_query( $tax_query ); //phpcs:ignore
 		}
 
-		// Update the post type array in args before returning it.
-		$args['post_type'] = $types;
+		// Get all post types to include in the query.
+		$map_id            = $this->get_parent_map( $imagemaps ? $imagemaps[0] : false );
+		$post_types        = $request->get_param( 'post_types' );
+		$args['post_type'] = $this->get_req_post_types( $post_types, $args['post_type'], $map_id );
+
 		return $args;
+	}
+
+	/**
+	 * Add search to tax query to include any post with an imagemap.
+	 *
+	 * @param array $tax_query The query arg by the same name.
+	 * @return array The updated tax query.
+	 * @since 0.1.0
+	 **/
+	public function get_marker_tax_query( array $tax_query ) {
+		$tax_query[] = array(
+			'taxonomy' => 'imagemap',
+			'operator' => 'EXISTS',
+		);
+
+		return $tax_query;
+	}
+
+	/**
+	 * Get parent map for a given layer.
+	 *
+	 * @param int $layer Child layer.
+	 * @return int|false Map ID.
+	 * @since 0.1.0
+	 **/
+	public function get_parent_map( int $layer ) {
+		if ( $layer ) {
+						$map_hierarchy = get_ancestors( $layer, ImageMap::$name );
+			return $map_hierarchy ? end( $map_hierarchy ) : $layer;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get post types to query for a given marker rest request.
+	 *
+	 * @param string|null               $req_types Post types parameter in the request.
+	 * @param string|array<int, string> $post_type The post type query arg.
+	 * @param int|false                 $map_id ID for the queried map.
+	 * @return string|array<int, string> Post types to add to the query args.
+	 * @since 0.1.0
+	 **/
+	public function get_req_post_types( $req_types, $post_type, $map_id ) {
+		switch ( $req_types ) {
+			case 'linked':
+				// Get post types linked to map.
+				if ( $map_id ) {
+					return get_term_meta( $map_id, 'post_types', false );
+				}
+				// If no map provided, return post type as is.
+
+			case 'standalone':
+				// Return post type as is.
+				return $post_type;
+
+			default:
+				// Get standalone and map post types.
+				$arg_types = is_array( $post_type ) ? $post_type : array( $post_type );
+				$map_types = $map_id ? get_term_meta( $map_id, 'post_types', false ) : array();
+				return array_merge( $map_types, $arg_types ?? array() );
+		}
 	}
 }
