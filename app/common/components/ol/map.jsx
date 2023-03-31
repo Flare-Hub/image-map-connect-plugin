@@ -3,7 +3,6 @@ import { Map } from 'ol'
 
 import { MapProvider } from './context'
 
-import 'ol/ol.css'
 import cls from './map.module.scss'
 import { getCenter } from 'ol/extent'
 

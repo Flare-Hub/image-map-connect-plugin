@@ -42,6 +42,7 @@
     "previewPostType"
   ],
   "editorScript": "file:./editor/index.js",
+  "editorStyle": "file:./editor/index.css",
   "viewScript": "file:./view/index.js",
-  "editorStyle": "file:./editor/index.css"
+  "style": "file:./view/index.css"
 }
