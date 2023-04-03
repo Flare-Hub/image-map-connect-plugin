@@ -73,6 +73,9 @@ class BlockMgr {
 			// Run the query to add it's post ids.
 			$query = new \WP_Query( $query_args );
 
+			$block_attr['data-post-ids'] = implode( ',', $query->get_posts() );
+		}
+
 			// Set data attributes for the map div.
 			$block_attr['style']                 = 'height: ' . $attributes['height'] . ';';
 			$block_attr['data-map-id']           = $attributes['mapId'];
@@ -81,8 +84,6 @@ class BlockMgr {
 			$block_attr['data-initial-zoom']     = $attributes['initialView']['zoom'];
 			$block_attr['data-initial-center-x'] = $attributes['initialView']['center'][0];
 			$block_attr['data-initial-center-y'] = $attributes['initialView']['center'][1];
-			$block_attr['data-post-ids']         = implode( ',', $query->get_posts() );
-		}
 
 		// Merge the map div attributes with the block attributes.
 		$div_attr = get_block_wrapper_attributes( $block_attr );
