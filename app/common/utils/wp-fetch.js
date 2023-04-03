@@ -70,17 +70,18 @@ export async function getCollection(collection, query) {
 export async function getFullCollection(collection, query = {}) {
 	/** @type {Array<Promise<WpResponse & CollectionResponse>>} */
 	const requests = []
+	const q = { ...query }
 
-	query.page = 1
-	if (!query.per_page) query.per_page = 100
-	const firstReq = getCollection(collection, query)
+	q.page = 1
+	if (!query.per_page) q.per_page = 100
+	const firstReq = getCollection(collection, q)
 	requests.push(firstReq)
 
 	const totalPages = (await firstReq).totalPages
 
-	while (query.page !== totalPages) {
-		query.page++
-		requests.push(getCollection(collection, query))
+	while (q.page < totalPages) {
+		q.page++
+		requests.push(getCollection(collection, q))
 	}
 
 	try {
