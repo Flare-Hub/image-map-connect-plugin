@@ -10,7 +10,7 @@ addEventListener("DOMContentLoaded", () => {
 
 	mapQueries.forEach(async (blockEl) => {
 		const map = new Map(blockEl)
-		map.addFeatureLayer()
+		map.addMarkerSupport()
 		map.initBaseLayers(blockEl.dataset.mapId)
 		map.addLayerSwitcher()
 	})
