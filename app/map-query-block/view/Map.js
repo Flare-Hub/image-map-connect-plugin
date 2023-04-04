@@ -5,31 +5,29 @@ import VectorSource from "ol/source/Vector"
 import { Fill, Style, Text } from "ol/style"
 import Popup from "ol-ext/overlay/Popup"
 import { Point } from "ol/geom"
+import Mustache from "mustache"
 
 import remixMap from "common/remix-unicode.json"
-import { getFullCollection } from "common/utils/wp-fetch"
-import Layer from "./Layer"
+import { getFullCollection, getItem, wpFetch } from "common/utils/wp-fetch"
+import Layer from "./layer"
 import { Select } from "ol/interaction"
 
-const popupTemplate = /* html */`
-	<h4 class="flare-marker-title">Title</h4>
-	<div class="flare-marker">
-		<div class="flare-col flare-marker-img">Image goes here.</div>
-		<div class="flare-col flare-marker-content">Content goes here.</div>
-	</div>
-	`
-
 export default class Map {
-	/** @type {import('./Layer').BlockAttr} Dataset from the map element. */ blockAttr
+	/** @type {import('./layer').BlockAttr} Dataset from the map element. */ blockAttr
+	/** @type {HTMLTemplateElement} Template for the popup content. */ template
 	/** @type {OlMap} Open Layers map to add the layer to. */ map
 	/** @type {VectorLayer} Layer to display the features */ ftLayer
 	/** @type {Array<Object<string, any>>} WordPress imagemaps. */ wpLayers
 	/** @type {Popup} Marker popup. */ popup
 	/** @type {Select} Marker selection handler */ selector
+	/** @type {{slug: string, rest_base: string }} Post types that can be linked to markers */  postTypes
 
+	/** @param {HTMLDivElement} el Map container. */
 	constructor(el) {
 		this.blockAttr = el.dataset
 		this.map = new OlMap({ target: el })
+
+		this.template = el.querySelector('template')
 
 		this.ftLayer = new VectorLayer({
 			source: new VectorSource(),
@@ -44,9 +42,16 @@ export default class Map {
 		})
 
 		this.popup = new Popup({
-			popupClass: 'default',
+			popupClass: 'default flare-marker-popup',
 			closeBox: true,
 			onclose: () => this.selector.getFeatures().clear()
+		})
+
+		wpFetch('/wp/v2/types').then(types => {
+			this.postTypes = Object.values(types.body).reduce((postTypes, type) => {
+				postTypes[type.slug] = type.rest_base
+				return postTypes
+			}, {})
 		})
 	}
 
@@ -108,13 +113,40 @@ export default class Map {
 		}
 	}
 
+
+
 	/**
 	 * Open popup for selected feature.
 	 * @param {{element: Feature<Point>}} e
 	 */
-	onSelectFeature = (e) => {
-		const point = e.element.getGeometry()
-		this.popup.show(point.getCoordinates(), popupTemplate)
+	onSelectFeature = async (e) => {
+		// Show loading indicator.
+		const point = e.element.getGeometry().getCoordinates()
+		this.popup.show(point, 'Loading...')
+
+		// Get marker from WordPress based on the marker's post type.
+		const collection = this.postTypes[e.element.get('postType')]
+		const marker = await getItem(collection, e.element.get('markerId'), {
+			_fields: 'date,modified,slug,type,link,title,excerpt,author,meta,marker-icons,_embedded',
+			_embed: 'author,wp:featuredmedia',
+		})
+
+		// Prepare the Mustache view object containing the marker content.
+		const view = {
+			...marker.body,
+			author: marker.body._embedded.author[0],
+			standalone: marker.body.type === 'marker',
+		}
+
+		if (marker.body._embedded['wp:featuredmedia']) {
+			view.featured_media = marker.body._embedded['wp:featuredmedia'][0]
+		}
+
+		// Create popup content from Mustache template.
+		const content = Mustache.render(this.template.innerHTML, view)
+
+		// Update popup with marker content.
+		this.popup.show(point, content)
 	}
 
 	/** Close popup for deselected feature. */

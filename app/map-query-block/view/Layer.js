@@ -92,7 +92,7 @@ export default class Layer {
 		// Get linked markers based on post IDs in the current query.
 		const linkedMarkers = getFullCollection('markers', {
 			imagemaps: this.wpLayer.id,
-			_fields: 'id,marker-icons,flare_loc',
+			_fields: 'id,type,marker-icons,flare_loc',
 			post_types: 'linked',
 			include: this.postIds,
 		})
@@ -100,7 +100,7 @@ export default class Layer {
 		// Get standalone markers.
 		const saMarkers = this.blockAttr.showStandalone ? getFullCollection('markers', {
 			imagemaps: this.wpLayer.id,
-			_fields: 'id,marker-icons,flare_loc',
+			_fields: 'id,type,marker-icons,flare_loc',
 			post_types: 'standalone',
 		}) : []
 
@@ -126,7 +126,9 @@ export default class Layer {
 			if (icon) {
 				fts.push(new Feature({
 					geometry: new Point([marker.flare_loc.lng, marker.flare_loc.lat]),
-					icon: { ...icon.meta }
+					icon: { ...icon.meta },
+					markerId: marker.id,
+					postType: marker.type,
 				}))
 			}
 			return fts

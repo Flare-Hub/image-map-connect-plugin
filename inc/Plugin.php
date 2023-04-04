@@ -70,6 +70,7 @@ class Plugin {
 		$this->marker_icon->register_marker_icon( $post_types );
 		$this->marker->register_marker_cpt();
 		$this->block_mgr->register_blocks();
+		add_filter( 'flare_marker_popup_template', array( $this->block_mgr, 'get_popup_template' ), 1 );
 	}
 
 	/**

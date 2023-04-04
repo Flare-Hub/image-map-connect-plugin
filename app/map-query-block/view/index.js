@@ -3,7 +3,7 @@ import "./view.scss"
 import 'ol/ol.css'
 import 'ol-ext/dist/ol-ext.css'
 import "remixicon/fonts/remixicon.css"
-import Map from "./Map"
+import Map from "./map"
 
 addEventListener("DOMContentLoaded", () => {
 	const mapQueries = document.querySelectorAll('.wp-block-flare-image-map')
