@@ -18,9 +18,14 @@ export default function ImageSelector({ label, imageId, onSelect }) {
 
 	/** Store selected image in state and pass it on to the parent component. */
 	async function handleSelect(selImages) {
-		const newImg = await selImages ? selImages.first().fetch() : null
-		setMediaImg(newImg)
-		onSelect && onSelect(newImg ? newImg.id : null)
+		if (selImages) {
+			const newImg = await selImages.first().fetch()
+			setMediaImg(newImg)
+			onSelect && onSelect(newImg ? newImg.id : null)
+		} else {
+			setMediaImg(null)
+			onSelect(null)
+		}
 	}
 
 	// Initiate Wordpress media manager to select a featured image.
