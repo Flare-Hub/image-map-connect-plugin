@@ -28,7 +28,7 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, dispatch
 	// Get all posts not yet on the selected layer.
 	const [posts] = useCollection(wpMarkers, useMemo(() => ({
 		imagemaps_exclude: layer,
-		type_exclude: wpMarkers.model,
+		post_types: 'unlinked',
 		map: map,
 		_fields: 'id,title,type,slug',
 		per_page: 100,

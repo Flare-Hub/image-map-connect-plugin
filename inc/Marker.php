@@ -83,14 +83,15 @@ class Marker {
 		$imagemaps = $request->get_param( 'imagemaps' );
 
 		// If no imagemap is provided, update query to include posts with any imagemap set.
-		if ( ! $imagemaps ) {
+		$post_types = $request->get_param( 'post_types' );
+		if ( ! $imagemaps && 'unlinked' !== $post_types ) {
 			$tax_query         = array_key_exists( 'tax_query', $args ) ? $args['tax_query'] : array();
 			$args['tax_query'] = $this->get_marker_tax_query( $tax_query ); //phpcs:ignore
 		}
 
 		// Get all post types to include in the query.
-		$map_id            = $this->get_parent_map( $imagemaps ? $imagemaps[0] : false );
-		$post_types        = $request->get_param( 'post_types' );
+		$map_id            = $request->get_param( 'map' )
+			?? $this->get_parent_map( $imagemaps ? $imagemaps[0] : false );
 		$args['post_type'] = $this->get_req_post_types( $post_types, $args['post_type'], $map_id );
 
 		return $args;
@@ -120,12 +121,12 @@ class Marker {
 	 * @since 0.1.0
 	 **/
 	public function get_parent_map( int $layer ) {
-		if ( $layer ) {
-						$map_hierarchy = get_ancestors( $layer, ImageMap::$name );
-			return $map_hierarchy ? end( $map_hierarchy ) : $layer;
+		if ( ! $layer ) {
+			return false;
 		}
 
-		return false;
+		$map_hierarchy = get_ancestors( $layer, ImageMap::$name );
+		return $map_hierarchy ? end( $map_hierarchy ) : $layer;
 	}
 
 	/**
@@ -140,6 +141,7 @@ class Marker {
 	public function get_req_post_types( $req_types, $post_type, $map_id ) {
 		switch ( $req_types ) {
 			case 'linked':
+			case 'unlinked':
 				// Get post types linked to map.
 				if ( $map_id ) {
 					return get_term_meta( $map_id, 'post_types', false );
