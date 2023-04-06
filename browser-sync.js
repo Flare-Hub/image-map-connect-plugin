@@ -26,11 +26,11 @@ wait({ resources: [server] })
 			"assets/build/*.css",
 		],
 		// Don't open a browser if browsers is set to none
-		open: process.env.BROWSERS !== 'none',
+		open: process.env.BROWSER !== 'none',
 		// Otherwise open the provided browsers (system default if empty)
-		browsers: process.env.BROWSERS
-			? process.env.BROWSERS.split(',').forEach(
-				browser => browser.trim()
-			)
-			: '',
+		browser: {
+			app: process.env.BROWSER
+				? process.env.BROWSER.split(' ') : '',
+		},
+		startPath: '/wp-admin/'
 	}))
