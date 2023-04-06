@@ -32,15 +32,21 @@ class BlockMgr {
 	}
 
 	/**
-	 * Load view script for the map query block.
+	 * Provide the html container for the map query block.
 	 *
 	 * @param array     $attributes The attributes as stored in the block html.
 	 * @param string    $content The inner html of the block coming from the post html.
 	 * @param \WP_Block $block The block instance.
+	 * @return string|void The
 	 * @since 0.1.0
 	 **/
 	public function render_map_query( $attributes, $content, \WP_Block $block ) {
-		/** HTML attributes to add to the map div. */
+		// Do nothing if no ID is set for the map.
+		if ( ! isset( $attributes['mapId'] ) ) {
+			return;
+		}
+
+		// HTML attributes to add to the map div.
 		$block_attr = array();
 
 		// Check if the block is inside a query loop block.
