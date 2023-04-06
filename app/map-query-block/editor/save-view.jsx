@@ -1,7 +1,9 @@
 import { Icon } from "@wordpress/components"
 import { lock } from "@wordpress/icons"
+import { useEffect } from "@wordpress/element"
 import { useMap } from "common/components/ol/context"
 import Control from "common/components/ol/control"
+
 import cls from './save-view.module.scss'
 
 /**
@@ -15,20 +17,32 @@ import cls from './save-view.module.scss'
  * Save initial setting for the map view.
  *
  * @param {object} props
+ * @param {MapView} view Initial settings for the map view.
  * @param {(mapView: MapView) => void} props.setView Update the initialView attribute.
  */
-export default function SaveView({ setView }) {
+export default function SaveView({ view, setView }) {
 	const { map } = useMap()
 
 	/** Save map position and layer to block attributes */
 	function save() {
-		const view = map.getView()
+		console.log('Saved');
+		const mapView = map.getView()
 		setView({
-			center: view.getCenter(),
-			zoom: view.getZoom(),
-			layer: map.getAllLayers().find(l => l.getVisible() && l.get('baseLayer')).get('wpId')
+			center: mapView.getCenter(),
+			zoom: mapView.getZoom(),
+			layer: map.getLayers().getArray().find(l => l.getVisible() && l.get('baseLayer')).get('wpId')
 		})
 	}
+
+	function setInitialView() {
+		if (!view.layer && map.getLayers().getLength()) save()
+	}
+
+	useEffect(() => {
+		map.on('loadend', setInitialView)
+
+		return () => map.un('loadend', setInitialView)
+	}, [map])
 
 	return (
 		<Control>

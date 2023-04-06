@@ -52,7 +52,7 @@ export default function Map({
 					selLayerId={selLayer}
 					setSelLayerId={setSelLayer}
 				/>
-				<SaveView setView={setView} />
+				<SaveView view={initialView} setView={setView} />
 			</ControlBar>
 			<MarkerPins mapId={mapId} markers={markers} />
 		</OlMap>

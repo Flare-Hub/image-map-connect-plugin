@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from '@wordpress/element'
+import { useMemo, useLayoutEffect } from '@wordpress/element'
 import { View } from 'ol'
 import Static from 'ol/source/ImageStatic'
 import Projection from 'ol/proj/Projection'
@@ -51,13 +51,13 @@ export default function ImageLayer({ layer, visible = true, children }) {
 	}), [])
 
 	// Add the layer to the map after mounting.
-	useEffect(() => context.map.addLayer(imgLayer), [])
+	useLayoutEffect(() => context.map.addLayer(imgLayer), [])
 
 	// Update the image source when the url changes.
-	useEffect(() => imgLayer.setSource(source), [source])
+	useLayoutEffect(() => imgLayer.setSource(source), [source])
 
 	// Provide a new view using the current props.
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (visible) context.map.setView(new View({
 			minZoom: layer.meta.min_zoom,
 			maxZoom: layer.meta.max_zoom,
@@ -68,7 +68,7 @@ export default function ImageLayer({ layer, visible = true, children }) {
 	}, [visible, projection])
 
 	// Update min and max zoom based on layer.
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (visible) {
 			const view = context.map.getView()
 			view.setMinZoom(layer.meta.min_zoom)
