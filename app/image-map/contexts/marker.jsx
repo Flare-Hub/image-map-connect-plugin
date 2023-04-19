@@ -8,7 +8,7 @@ import { useRouter } from './router'
  * @typedef MarkerContext
  * @property {Object<string, any>} marker
  * @property {React.Dispatch<React.SetStateAction<Object<string, any>>>} setMarker
- * @property {boolean} loaded
+ * @property {string} loadStatus
  * @property {Array<Object<string, any>>} postTypes
  */
 
@@ -30,7 +30,7 @@ export function MarkerProvider({ selected, layer, icons, children }) {
 	const [postTypes] = useCollection({ endpoint: 'types' }, typesQuery, { list: {} })
 
 	// Fetch selected marker from Wordpress.
-	const [marker, setMarker, loaded] = useSelected(
+	const [marker, setMarker, loadStatus] = useSelected(
 		(postTypes.list[selected.type] ?? {}).rest_base,
 		query[wpMarkers.model],
 		{ context: 'edit' },
@@ -60,7 +60,7 @@ export function MarkerProvider({ selected, layer, icons, children }) {
 	}, [marker.id, marker.status, icons])
 
 	return (
-		<markerContext.Provider value={{ marker, setMarker, loaded, postTypes: postTypes.list }} >
+		<markerContext.Provider value={{ marker, setMarker, loadStatus, postTypes: postTypes.list }} >
 			{children}
 		</markerContext.Provider>
 	)

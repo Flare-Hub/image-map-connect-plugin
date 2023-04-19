@@ -7,7 +7,8 @@ import {
 	Button,
 	BaseControl,
 	Flex,
-	FlexItem
+	FlexItem,
+	Spinner
 } from '@wordpress/components'
 import { useEffect, useReducer, useState } from '@wordpress/element'
 
@@ -31,11 +32,12 @@ export default function EditMap({ maps, dispatch }) {
 	const { query } = useRouter()
 
 	// Get selected map
-	const [map, setMap, loaded] = useSelected(
+	const [map, setMap, status] = useSelected(
 		maps.endpoint,
 		query[maps.model],
 		{ context: 'edit' },
-		{ name: '', description: '', meta: { post_types: [] } }
+		{ name: '', description: '', meta: { post_types: [] } },
+		[maps.endpoint, query[maps.model]]
 	)
 
 	// Use a reducer to manage the CRUD operations of the marker icon collection.
@@ -70,16 +72,19 @@ export default function EditMap({ maps, dispatch }) {
 
 	// Get all the marker icons for the selected map when a map is selected.
 	useEffect(() => {
-		if (!map.id) return
-		getCollection('marker-icons', { map: map.id, meta: {} }).then(({ body }) => {
-			dispatchMarkerIcons({ type: 'set', payload: body })
-		})
+		dispatchMarkerIcons({ type: 'set', payload: [] })
+
+		if (map.id) {
+			getCollection('marker-icons', { map: map.id, meta: {} }).then(({ body }) => {
+				dispatchMarkerIcons({ type: 'set', payload: body })
+			})
+		}
+
 	}, [map.id])
 
-	if (!loaded) return <div></div>
-
-	return (
-		<Card className="full-height">
+	return <Card className="full-height">
+		{status === 'loading' && <Spinner style={{ width: '100px', height: '100px' }} />}
+		{(status === 'new' || status === 'loaded') && (
 			<CardBody>
 				<div className="col-xs-9">
 					<TextControl
@@ -139,6 +144,6 @@ export default function EditMap({ maps, dispatch }) {
 					<LifeCycleButtons identifiers={maps} item={map} dispatch={dispatch} />
 				</div>
 			</CardBody>
-		</Card>
-	)
+		)}
+	</Card>
 }

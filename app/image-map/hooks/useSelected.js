@@ -8,40 +8,40 @@ import { getItem } from 'common/utils/wp-fetch'
  * @param {number} id ID of the item to fetch from the collection.
  * @param {object} query Query parameters for fetching the item.
  * @param {object} placeholder Empty object as placeholder for a new item.
+ * @param {Array} deps Reset item when these values change.
  * @returns {[object, React.Dispatch<React.SetStateAction<{}>>, boolean]} Item state
  */
-export default function useSelected(path, id, query, placeholder) {
+export default function useSelected(path, id, query, placeholder, deps) {
 	// Manage state for selected item
 	const [item, setItem] = useState(placeholder)
-	const [loaded, setLoaded] = useState(false)
+	const [status, setStatus] = useState('loading')
 
 	// Set state to the selected item or the placeholder for a new item,
 	useEffect(() => {
 		switch (id) {
 			case undefined:
-				setLoaded(false)
-				item.id && setItem(placeholder)
+				setStatus('none')
 				break
 
 			case item.id:
-				setLoaded(true)
+				setStatus('loaded')
 				break
 
 			case 'new':
 				setItem(placeholder)
-				setLoaded(true)
+				setStatus('new')
 				break
 
 			default:
 				if (!path) break
-				setLoaded(false)
+				setStatus('loading')
 				getItem(path, id, query).then(({ body }) => {
 					setItem(body)
-					setLoaded(true)
+					setStatus('loaded')
 				})
 				break
 		}
-	}, [id, path])
+	}, deps)
 
-	return [item, setItem, loaded]
+	return [item, setItem, status]
 }

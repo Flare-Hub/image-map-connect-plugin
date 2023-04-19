@@ -12,14 +12,14 @@ import SelectedMarkerPin from './selected-marker-pin'
  */
 export default function NewMarkerPin({ icons }) {
 	const { map } = useMap()
-	const { marker, setMarker, loaded } = useMarker()
+	const { marker, setMarker, loadStatus } = useMarker()
 
 	if (!icons || !marker) return null
 
 	// Place a new marker when clicking on the map.
 	// Do not move the marker by clicking once placed.
 	useEffect(() => {
-		if (!loaded || marker.flare_loc.lng || marker.flare_loc.lat) return
+		if (loadStatus !== 'new' || marker.flare_loc.lng || marker.flare_loc.lat) return
 
 		/** Set the coordinates of the click event as the location of the marker. */
 		function handleClick(e) {
@@ -32,7 +32,7 @@ export default function NewMarkerPin({ icons }) {
 		// Add event listener to map and clean up afterwards.
 		map.on('click', handleClick)
 		return () => map.un('click', handleClick)
-	}, [loaded, marker.id, marker.flare_loc.lng, marker.flare_loc.lat])
+	}, [loadStatus, marker.id, marker.flare_loc.lng, marker.flare_loc.lat])
 
 	if (!(marker.flare_loc.lng && marker.flare_loc.lat)) return null
 
