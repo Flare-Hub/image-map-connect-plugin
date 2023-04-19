@@ -69,10 +69,11 @@ export default function EditMap({ maps, dispatch }) {
 	}
 
 	// Get all the marker icons for the selected map when a map is selected.
-	useEffect(async () => {
+	useEffect(() => {
 		if (!map.id) return
-		const res = await getCollection('marker-icons', { map: map.id, meta: {} })
-		dispatchMarkerIcons({ type: 'set', payload: res.body })
+		getCollection('marker-icons', { map: map.id, meta: {} }).then(({ body }) => {
+			dispatchMarkerIcons({ type: 'set', payload: body })
+		})
 	}, [map.id])
 
 	if (!loaded) return <div></div>

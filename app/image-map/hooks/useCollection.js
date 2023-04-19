@@ -84,23 +84,25 @@ export default function useCollection(identifiers, query, initialState) {
 	const [loading, setLoading] = useState(true)
 	const [collection, dispatch] = useReducer(reducer, initialState)
 
-	useEffect(async () => {
+	useEffect(() => {
 		// Get collection from rest api, checking that parent is available if needed.
-		const { body, totalPages } = (!identifiers.parent || appQuery[identifiers.parent])
-			? await getCollection(
-				identifiers.endpoint,
-				query
-			)
-			: { body: [] }
+		(async () => {
+			const { body, totalPages } = (!identifiers.parent || appQuery[identifiers.parent])
+				? await getCollection(
+					identifiers.endpoint,
+					query
+				)
+				: { body: [] }
 
-		// Store the collection in global state.
-		dispatch({
-			type: 'setList',
-			payload: { list: body, page: query.page, totalPages }
-		})
+			// Store the collection in global state.
+			dispatch({
+				type: 'setList',
+				payload: { list: body, page: query.page, totalPages }
+			})
 
-		// Collection is loaded.
-		setLoading(false)
+			// Collection is loaded.
+			setLoading(false)
+		})()
 	}, [query])
 
 	return [collection, dispatch, loading]

@@ -16,7 +16,7 @@ export default function useSelected(path, id, query, placeholder) {
 	const [loaded, setLoaded] = useState(false)
 
 	// Set state to the selected item or the placeholder for a new item,
-	useEffect(async () => {
+	useEffect(() => {
 		switch (id) {
 			case undefined:
 				setLoaded(false)
@@ -35,9 +35,10 @@ export default function useSelected(path, id, query, placeholder) {
 			default:
 				if (!path) break
 				setLoaded(false)
-				const newItem = await getItem(path, id, query)
-				setItem(newItem.body)
-				setLoaded(true)
+				getItem(path, id, query).then(({ body }) => {
+					setItem(body)
+					setLoaded(true)
+				})
 				break
 		}
 	}, [id, path])

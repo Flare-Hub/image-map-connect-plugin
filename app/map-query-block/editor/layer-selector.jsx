@@ -24,11 +24,11 @@ export default function LayerSelector({ map, selected, onSelect }) {
 	}
 
 	// Get the list of layers for the provided map and pre-select the 1st layer.
-	useEffect(async () => {
-		const res = await getCollection('imagemaps', { parent: map, per_page: 100 })
-
-		setLayers(res.body)
-		if (res.body[0]) selectLayer(res.body[0].id)
+	useEffect(() => {
+		getCollection('imagemaps', { parent: map, per_page: 100 }).then(({ body }) => {
+			setLayers(body)
+			if (body[0]) selectLayer(body[0].id)
+		})
 	}, [map])
 
 	return (

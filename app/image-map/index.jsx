@@ -1,4 +1,4 @@
-import { render } from '@wordpress/element'
+import { render, createRoot } from '@wordpress/element'
 
 import { RouterProvider } from './contexts/router'
 import App from './app'
@@ -7,10 +7,14 @@ import './styles.scss'
 import 'ol/ol.css'
 
 const appDiv = document.getElementById('image-map')
-
-render(
+const el = (
 	<RouterProvider>
 		<App />
-	</RouterProvider>,
-	appDiv
+	</RouterProvider>
 )
+
+if (createRoot) {
+	createRoot(appDiv).render(el);
+} else {
+	render(el, appDiv)
+}

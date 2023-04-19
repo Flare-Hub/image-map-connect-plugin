@@ -18,9 +18,10 @@ import cls from './post-types-select.module.scss'
 export default function PostTypesSelect({ selected, onSelect, baseClass, inputClass }) {
 	const [all, setAll] = useState([])
 
-	useEffect(async () => {
-		const types = await apiFetch({ path: 'flare/v1/post-types' })
-		setAll(Object.values(types))
+	useEffect(() => {
+		apiFetch({ path: 'flare/v1/post-types' }).then(types => {
+			setAll(Object.values(types))
+		})
 	}, [])
 
 	function onChange(checked, type) {

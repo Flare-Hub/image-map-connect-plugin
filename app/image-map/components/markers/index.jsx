@@ -66,10 +66,11 @@ export default function Markers() {
 	// Fetch marker icons from Wordpress.
 	const [markerIcons, setMarkerIcons] = useState([])
 
-	useEffect(async () => {
+	useEffect(() => {
 		if (!query.map) return
-		const res = await getCollection('marker-icons', { map: query.map, meta: {} })
-		setMarkerIcons(res.body)
+		getCollection('marker-icons', { map: query.map, meta: {} }).then(({ body }) => {
+			setMarkerIcons(body)
+		})
 	}, [query.map])
 
 	/** @type {[Map, React.Dispatch<React.SetStateAction<Map>>]} */

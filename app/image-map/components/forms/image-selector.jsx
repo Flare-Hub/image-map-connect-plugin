@@ -32,10 +32,13 @@ export default function ImageSelector({ label, imageId, onSelect }) {
 	const mediaMgr = useMediaMgr(false, handleSelect)
 
 	// Update the image state when the image id changes.
-	useEffect(async () => {
+	useEffect(() => {
 		if (!imageId) return
-		const newImg = await wp.media.attachment(imageId).fetch()
-		setMediaImg(newImg)
+		wp.media.attachment(imageId).fetch({
+			success: newImg => {
+				setMediaImg(newImg)
+			}
+		})
 	}, [imageId])
 
 	return (

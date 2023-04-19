@@ -19,17 +19,18 @@ export default function MarkerIconSelect({ label, value, onSelect }) {
 	const [icons, setIcons] = useState([])
 	const [loading, setLoading] = useState(true)
 
-	useEffect(async () => {
-		const res = await getCollection('marker-icons', { map: query.map })
-		const newIcons = res.body.map(icon => ({
-			key: icon.id,
-			name: <span>
-				<i className={icon.meta.loc} style={{ color: icon.meta.colour }} />
-				<span className={cls.iconName}>{icon.name}</span>
-			</span>
-		}))
-		setIcons(Object.values(newIcons))
-		setLoading(false)
+	useEffect(() => {
+		getCollection('marker-icons', { map: query.map }).then(({ body }) => {
+			const newIcons = body.map(icon => ({
+				key: icon.id,
+				name: <span>
+					<i className={icon.meta.loc} style={{ color: icon.meta.colour }} />
+					<span className={cls.iconName}>{icon.name}</span>
+				</span>
+			}))
+			setIcons(Object.values(newIcons))
+			setLoading(false)
+		})
 	}, [query.map])
 
 	return (

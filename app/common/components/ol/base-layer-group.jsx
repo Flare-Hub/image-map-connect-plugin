@@ -1,7 +1,6 @@
-import { useEffect, useState } from '@wordpress/element'
+import { useEffect } from '@wordpress/element'
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher'
 
-import { getCollection } from 'common/utils/wp-fetch'
 import { useMap } from './context'
 import ImageLayer from './image-layer'
 

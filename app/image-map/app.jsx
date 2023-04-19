@@ -4,16 +4,12 @@ import { useRouter, Router, Route } from './contexts/router'
 import Maps from './components/maps'
 import Layers from './components/layers'
 import Markers from './components/markers'
-import useForceUpdate from './hooks/useForceUpdate'
 
 import cls from './app.module.scss'
 
 export default function App() {
 	// Get reactive url query parameters
 	const { query, navigate } = useRouter()
-
-	// Ensure that the tabs panel is refreshed when query is updated
-	const tabsKey = useForceUpdate([query])
 
 	// Load collections from Wordpress on mounting the app.
 	return (
@@ -31,7 +27,6 @@ export default function App() {
 				]}
 				onSelect={tab => navigate({ tab })}
 				initialTabName={query.tab}
-				key={tabsKey}
 				className={cls.tabPanel}
 			>{() => null}</TabPanel >
 			<Router param='tab' rootPath='maps' errorPath='error' >

@@ -143,7 +143,7 @@ class BlockMgr {
 			{{{ excerpt.rendered }}}
 		</div>
 		{{^standalone}}
-			<a href="{{ link }}">Read more...</a>
+			<a href="{{ link }}"><?php /* phpcs:ignore */ _e( 'Read more' ); ?>...</a>
 		{{/standalone}}
 		<?php
 

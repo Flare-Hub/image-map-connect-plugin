@@ -1,4 +1,4 @@
-import { useMemo, useLayoutEffect } from '@wordpress/element'
+import { useMemo, useLayoutEffect, useEffect } from '@wordpress/element'
 import { View } from 'ol'
 import Static from 'ol/source/ImageStatic'
 import Projection from 'ol/proj/Projection'
@@ -57,7 +57,7 @@ export default function ImageLayer({ layer, visible = true, children }) {
 	useLayoutEffect(() => imgLayer.setSource(source), [source])
 
 	// Provide a new view using the current props.
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (visible) context.map.setView(new View({
 			minZoom: layer.meta.min_zoom,
 			maxZoom: layer.meta.max_zoom,
@@ -68,7 +68,7 @@ export default function ImageLayer({ layer, visible = true, children }) {
 	}, [visible, projection])
 
 	// Update min and max zoom based on layer.
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (visible) {
 			const view = context.map.getView()
 			view.setMinZoom(layer.meta.min_zoom)
