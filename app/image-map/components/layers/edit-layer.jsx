@@ -1,4 +1,4 @@
-import { TextControl, Button, BaseControl, RangeControl, Card, CardBody } from '@wordpress/components'
+import { TextControl, Button, BaseControl, RangeControl, Card, CardBody, Spinner } from '@wordpress/components'
 
 import useSelected from '../../hooks/useSelected'
 import useMediaMgr from '../../hooks/useMediaMgr';
@@ -20,7 +20,7 @@ export default function EditLayer({ layers, dispatch }) {
 	const { query } = useRouter()
 
 	// Fetch selected layer from Wordpress.
-	const [layer, setLayer, loaded] = useSelected(
+	const [layer, setLayer, status] = useSelected(
 		layers.endpoint,
 		query[layers.model],
 		{ context: 'edit', _embed: 1 },
@@ -29,7 +29,8 @@ export default function EditLayer({ layers, dispatch }) {
 			description: '',
 			parent: query[layers.parent],
 			meta: { initial_bounds: [] },
-		}
+		},
+		[layers.endpoint, query[layers.model]]
 	)
 
 	// Initiate Wordpress media manager to select layer image
@@ -52,49 +53,50 @@ export default function EditLayer({ layers, dispatch }) {
 		}
 	}))
 
-	if (!loaded) return <div></div>
-
 	return (
 		<Card className="full-height">
-			<CardBody>
-				<div className="col-xs-9">
-					<TextControl
-						label="Name"
-						value={layer.name}
-						onChange={val => setLayer(oldLayer => ({ ...oldLayer, name: val }))}
-						className={cls.field}
-					/>
-					<BaseControl label='Image' className={cls.field}>
-						<Button variant='secondary' onClick={() => mediaMgr.open()}>Select image</Button>
-					</BaseControl>
-					<RangeControl
-						label="Maximum zoom"
-						value={layer.meta.max_zoom}
-						onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, max_zoom: val } }))}
-						min="0"
-						max="10"
-						className={`${cls.field} ${cls.center}`}
-					/>
-					<RangeControl
-						label="Minimum zoom"
-						value={layer.meta.min_zoom}
-						onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, min_zoom: val } }))}
-						min="0"
-						max="10"
-						className={`${cls.field} ${cls.center}`}
-					/>
-					<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
-						<OlMap
-							className={`${cls.border} ${cls.input}`}
-						>
-							{layer.id && <ImageLayer layer={layer} />}
-						</OlMap>
-					</BaseControl>
-				</div>
-				<div className="col-xs-3">
-					<LifeCycleButtons identifiers={layers} item={layer} dispatch={dispatch} />
-				</div>
-			</CardBody>
+			{status === 'loading' && <Spinner style={{ width: '100px', height: '100px' }} />}
+			{(status === 'new' || status === 'loaded') && (
+				<CardBody>
+					<div className="col-xs-9">
+						<TextControl
+							label="Name"
+							value={layer.name}
+							onChange={val => setLayer(oldLayer => ({ ...oldLayer, name: val }))}
+							className={cls.field}
+						/>
+						<BaseControl label='Image' className={cls.field}>
+							<Button variant='secondary' onClick={() => mediaMgr.open()}>Select image</Button>
+						</BaseControl>
+						<RangeControl
+							label="Maximum zoom"
+							value={layer.meta.max_zoom}
+							onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, max_zoom: val } }))}
+							min="0"
+							max="10"
+							className={`${cls.field} ${cls.center}`}
+						/>
+						<RangeControl
+							label="Minimum zoom"
+							value={layer.meta.min_zoom}
+							onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, min_zoom: val } }))}
+							min="0"
+							max="10"
+							className={`${cls.field} ${cls.center}`}
+						/>
+						<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
+							<OlMap
+								className={`${cls.border} ${cls.input}`}
+							>
+								{layer.id && <ImageLayer layer={layer} />}
+							</OlMap>
+						</BaseControl>
+					</div>
+					<div className="col-xs-3">
+						<LifeCycleButtons identifiers={layers} item={layer} dispatch={dispatch} />
+					</div>
+				</CardBody>
+			)}
 		</Card>
 	)
 }
