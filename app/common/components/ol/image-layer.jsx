@@ -13,37 +13,21 @@ import { useMap, MapProvider } from './context'
  * @param {Object<string, any>} props.layer The Wordpress layer.
  * @param {boolean} props.visible Whether to show the layer.
  */
-export default function ImageLayer({ layer, visible = true, children }) {
+export default function ImageLayer({ layer = {}, visible = true, children }) {
+	const hasImg = layer._embedded && layer._embedded['flare:image']
 	// Get OpenLayer objects
 	const context = useMap()
 
-	// boundaries of the layer
+	/* Get boundaries of the layer */
 	const extent = [
 		0,
 		0,
-		layer._embedded['flare:image'][0].media_details.width,
-		layer._embedded['flare:image'][0].media_details.height
+		hasImg ? layer._embedded['flare:image'][0].media_details.width : 0,
+		hasImg ? layer._embedded['flare:image'][0].media_details.height : 0,
 	]
-
-	// Coordinate system to use in the map.
-	const projection = useMemo(
-		() => new Projection({
-			code: 'layer-image',
-			units: 'pixels',
-			extent,
-		}),
-		[layer._embedded['flare:image'][0].source_url]
-	)
-	// Static source based on the image url.
-	const source = useMemo(() => new Static({
-		url: layer._embedded['flare:image'][0].source_url,
-		projection,
-		imageExtent: extent,
-	}), [projection])
 
 	// OpenLayers image layer for source.
 	const imgLayer = useMemo(() => new ImgLayer({
-		source,
 		title: layer.name,
 		baseLayer: true,
 		visible,
@@ -53,14 +37,43 @@ export default function ImageLayer({ layer, visible = true, children }) {
 	// Add the layer to the map after mounting.
 	useLayoutEffect(() => context.map.addLayer(imgLayer), [])
 
-	// Update the image source when the url changes.
-	useLayoutEffect(() => imgLayer.setSource(source), [source])
+	useLayoutEffect(() => {
+		imgLayer.setProperties({
+			title: layer.name,
+			wpId: layer.id,
+		})
+	}, [layer.id, layer.name])
+
+	// Coordinate system to use in the map.
+	const projection = useMemo(
+		() => hasImg
+			? new Projection({
+				code: 'layer-image',
+				units: 'pixels',
+				extent,
+			})
+			: null,
+		[(hasImg ? layer._embedded['flare:image'][0].source_url : null)]
+	)
+
+	// Set static source based on the image url.
+	useLayoutEffect(() => {
+		if (projection) {
+			imgLayer.setSource(new Static({
+				url: layer._embedded['flare:image'][0].source_url,
+				projection,
+				imageExtent: extent,
+			}))
+		} else {
+			imgLayer.setSource()
+		}
+	}, [projection])
 
 	// Provide a new view using the current props.
 	useEffect(() => {
-		if (visible) context.map.setView(new View({
-			minZoom: layer.meta.min_zoom,
-			maxZoom: layer.meta.max_zoom,
+		if (hasImg && visible) context.map.setView(new View({
+			// minZoom: layer.meta.min_zoom,
+			// maxZoom: layer.meta.max_zoom,
 			projection,
 			extent,
 			constrainOnlyCenter: true,

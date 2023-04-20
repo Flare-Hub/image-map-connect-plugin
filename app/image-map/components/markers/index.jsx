@@ -60,7 +60,8 @@ export default function Markers() {
 		wpLayers.endpoint,
 		query[wpLayers.model],
 		{ _fields: 'id,name,meta', _embed: 1 },
-		{}
+		{ meta: {} },
+		[query[wpLayers.model]]
 	)
 
 	// Fetch marker icons from Wordpress.
@@ -112,21 +113,19 @@ export default function Markers() {
 					<FlexItem>
 						<Card>
 							<OlMap oneTimeHandlers={{ postrender: e => setMap(e.map) }}>
-								{layer.id && (<>
-									<ImageLayer layer={layer} />
-									{markerIcons.length && markers.list.map(mk => {
-										if (mk.id == query.marker) {
-											if (selected.flare_loc.lng && selected.flare_loc.lat) {
-												return <SelectedMarkerPin key={query.marker} icons={markerIcons} selected={mk} />
-											}
-										} else {
-											return <ListedMarkerPin key={mk.id} marker={mk} icons={markerIcons} />
+								<ImageLayer layer={layer} />
+								{markerIcons.length && markers.list.map(mk => {
+									if (mk.id == query.marker) {
+										if (selected.flare_loc.lng && selected.flare_loc.lat) {
+											return <SelectedMarkerPin key={query.marker} icons={markerIcons} selected={mk} />
 										}
-									})}
-									{selected.flare_loc && !(selected.flare_loc.lng && selected.flare_loc.lat) && (
-										<NewMarkerPin icons={markerIcons} />
-									)}
-								</>)}
+									} else {
+										return <ListedMarkerPin key={mk.id} marker={mk} icons={markerIcons} />
+									}
+								})}
+								{selected.flare_loc && !(selected.flare_loc.lng && selected.flare_loc.lat) && (
+									<NewMarkerPin icons={markerIcons} />
+								)}
 							</OlMap>
 						</Card>
 					</FlexItem>
@@ -137,7 +136,7 @@ export default function Markers() {
 						/>
 					</FlexItem>
 				</Flex>
-				{showModal && <CreateMarkerModal
+				{showModal && layer.id && <CreateMarkerModal
 					onRequestClose={() => setShowModal(false)}
 					layer={layer.id}
 					map={query.map}

@@ -42,7 +42,8 @@ export function MarkerProvider({ selected, layer, icons, children }) {
 			'marker-icons': [],
 			flare_loc: { lng: 0, lat: 0 },
 			type: 'marker',
-		}
+		},
+		[query[wpMarkers.model]],
 	)
 
 	// Add current layer to marker if not included already.
