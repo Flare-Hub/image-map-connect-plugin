@@ -88,7 +88,7 @@ export default function EditLayer({ layers, dispatch }) {
 							<OlMap
 								className={`${cls.border} ${cls.input}`}
 							>
-								{layer.id && <ImageLayer layer={layer} />}
+								<ImageLayer layer={layer} />
 							</OlMap>
 						</BaseControl>
 					</div>

@@ -35,6 +35,6 @@ export default function BaseLayerGroup({ mapId, selLayerId, setSelLayerId }) {
 	if (!layers) return null
 
 	return layers.map(layer => (
-		<ImageLayer layer={layer} visible={layer.id === (selLayerId ?? layers[0].id)} key={layer.id} />
+		<ImageLayer layer={layer} visible={layer.id === (selLayerId ?? layers[0].id)} loaded key={layer.id} />
 	))
 }
