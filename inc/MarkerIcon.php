@@ -8,8 +8,8 @@ namespace Flare\ImageMap;
  * @since 0.1.0
  */
 class MarkerIcon {
-	/** @var string $name The taxonomy name for marker icons. */
-	public static $name = 'marker-icon';
+	/** @var string NAME The taxonomy name for marker icons. */
+	public const NAME = 'marker-icon';
 
 	/**
 	 * Register Marker Icon taxonomy.
@@ -46,7 +46,7 @@ class MarkerIcon {
 			'show_in_rest'       => true,
 			'rest_base'          => 'marker-icons',
 		);
-		register_taxonomy( self::$name, $post_types, $args );
+		register_taxonomy( self::NAME, $post_types, $args );
 	}
 
 	/**
@@ -56,7 +56,7 @@ class MarkerIcon {
 	 **/
 	public function register_colour() {
 		$meta_args = array(
-			'object_subtype' => self::$name,
+			'object_subtype' => self::NAME,
 			'type'           => 'string',
 			'single'         => true,
 			'show_in_rest'   => true,
@@ -71,7 +71,7 @@ class MarkerIcon {
 	 **/
 	public function register_loc() {
 		$meta_args = array(
-			'object_subtype' => self::$name,
+			'object_subtype' => self::NAME,
 			'type'           => 'string',
 			'single'         => true,
 			'show_in_rest'   => true,
@@ -86,7 +86,7 @@ class MarkerIcon {
 	 **/
 	public function register_type() {
 		$meta_args = array(
-			'object_subtype' => self::$name,
+			'object_subtype' => self::NAME,
 			'type'           => 'string',
 			'single'         => true,
 			'show_in_rest'   => true,
@@ -101,7 +101,7 @@ class MarkerIcon {
 	 **/
 	public function register_size() {
 		$meta_args = array(
-			'object_subtype' => self::$name,
+			'object_subtype' => self::NAME,
 			'type'           => 'integer',
 			'single'         => true,
 			'show_in_rest'   => true,
@@ -116,7 +116,7 @@ class MarkerIcon {
 	 **/
 	public function register_anchor() {
 		$meta_args = array(
-			'object_subtype' => self::$name,
+			'object_subtype' => self::NAME,
 			'type'           => 'object',
 			'single'         => true,
 			'show_in_rest'   => array(
@@ -143,7 +143,7 @@ class MarkerIcon {
 	 **/
 	public function register_popup_anchor() {
 		$meta_args = array(
-			'object_subtype' => self::$name,
+			'object_subtype' => self::NAME,
 			'type'           => 'object',
 			'single'         => true,
 			'show_in_rest'   => array(
@@ -187,7 +187,7 @@ class MarkerIcon {
 	 **/
 	public function register_map() {
 		register_rest_field(
-			self::$name,
+			self::NAME,
 			'map',
 			array(
 				'get_callback'    => array( $this, 'get_map' ),

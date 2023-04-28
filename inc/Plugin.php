@@ -96,6 +96,7 @@ class Plugin {
 		$this->image_map->register_max_zoom();
 		$this->image_map->register_min_zoom();
 		$this->image_map->register_connected_post_types();
+		$this->image_map->register_icons();
 		add_action( 'rest_prepare_imagemap', array( $this->image_map, 'add_image_link' ), 10, 2 );
 
 		// Hook marker functions.

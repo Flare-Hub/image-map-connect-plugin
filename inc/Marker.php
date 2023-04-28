@@ -51,7 +51,7 @@ class Marker {
 			'description'         => __( 'Markers on an image map.', 'flare-im' ),
 			'labels'              => $labels,
 			'supports'            => array( 'title', 'excerpt', 'thumbnail', 'author', 'custom-fields' ),
-			'taxonomies'          => array( ImageMap::$name, MarkerIcon::$name ),
+			'taxonomies'          => array( ImageMap::NAME, MarkerIcon::NAME ),
 			'public'              => false,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
@@ -125,7 +125,7 @@ class Marker {
 			return false;
 		}
 
-		$map_hierarchy = get_ancestors( $layer, ImageMap::$name );
+		$map_hierarchy = get_ancestors( $layer, ImageMap::NAME );
 		return $map_hierarchy ? end( $map_hierarchy ) : $layer;
 	}
 
