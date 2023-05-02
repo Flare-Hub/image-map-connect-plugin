@@ -36,7 +36,7 @@ export default function ImageSelector({ label, imageId, onSelect }) {
 		if (!imageId) return
 		wp.media.attachment(imageId).fetch({
 			success: newImg => {
-				setMediaImg(newImg)
+				setMediaImg(newImg.attributes)
 			}
 		})
 	}, [imageId])
