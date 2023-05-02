@@ -1,6 +1,31 @@
 .field {
 	gap: 0;
 
+	&.invalid>div {
+
+		>input,
+		>textarea,
+		>hr,
+		>.input,
+		>:global(.components-range-control__root),
+		>:global(.components-custom-select-control),
+		>:global(.components-combobox-control__suggestions-container) {
+			border: 1px solid red;
+
+			&:focus {
+				outline-color: red;
+			}
+		}
+
+		>.input {
+			padding: 3px;
+
+			&:focus-within {
+				outline: 2px solid red;
+			}
+		}
+	}
+
 	&.map {
 
 		>div>label,
@@ -55,7 +80,6 @@
 			width: 100%;
 		}
 
-
 		.select {
 			>label {
 				display: none;
@@ -80,6 +104,10 @@
 		.iconName {
 			margin-left: 1em;
 		}
+
+		.input {
+			padding: 4px;
+		}
 	}
 
 	.featuredButtons {
@@ -99,6 +127,14 @@
 		>:global(.components-base-control__field)>div {
 			margin-bottom: 8px;
 		}
+	}
+
+	.colXs {
+		flex-basis: 44px;
+	}
+
+	.right {
+		text-align: right;
 	}
 }
 

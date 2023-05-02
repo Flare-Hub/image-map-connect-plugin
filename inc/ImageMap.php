@@ -135,30 +135,36 @@ class ImageMap {
 			'object_subtype' => self::NAME,
 			'type'           => 'array',
 			'single'         => true,
+			// 'sanitize_callback' => array( $this, 'save_marker_icons' ),
 			'show_in_rest'   => array(
 				'schema'           => array(
 					'type'  => 'array',
 					'items' => array(
 						'type'       => 'object',
 						'properties' => array(
-							'id'         => array( 'type' => 'integer' ),
-							'name'       => array( 'type' => 'string' ),
-							'colour'     => array( 'type' => 'string' ),
-							'loc'        => array( 'type' => 'string' ),
-							'type'       => array( 'type' => 'string' ),
-							'size'       => array( 'type' => 'integer' ),
-							'iconAnchor' => array(
+							'id'     => array( 'type' => 'integer' ),
+							'name'   => array( 'type' => 'string' ),
+							'colour' => array( 'type' => 'string' ),
+							'size'   => array( 'type' => 'integer' ),
+							'img'    => array(
 								'type'       => 'object',
 								'properties' => array(
-									'x' => array(
-										'type' => 'number',
-									),
-									'y' => array(
-										'type' => 'number',
+									'ref'        => array( 'type' => 'string' ),
+									'type'       => array( 'type' => 'string' ),
+									'iconAnchor' => array(
+										'type'       => 'object',
+										'properties' => array(
+											'x' => array(
+												'type' => 'number',
+											),
+											'y' => array(
+												'type' => 'number',
+											),
+										),
 									),
 								),
 							),
-							'delete'     => array( 'type' => 'boolean' ),
+							'delete' => array( 'type' => 'boolean' ),
 						),
 					),
 				),
@@ -178,36 +184,73 @@ class ImageMap {
 	 * @return array List of marker icons.
 	 * @since 0.1.0
 	 **/
-	public function get_marker_icons( array $icon_ids, \WP_REST_Request $request, array $args ) {
-		// if ( ! is_array( $icon_ids ) || empty( $icon_ids ) ) {
-		if ( ! is_array( $icon_ids ) ) {
+	public function get_marker_icons( $icon_ids, \WP_REST_Request $request, $args ) {
+		if ( empty( $icon_ids ) ) {
 			return array();
 		}
 
 		$icons = get_terms(
 			array(
-				'taxonomy' => MarkerIcon::NAME,
-				// 'object_ids' => $icon_ids,
-				'parent'   => 37,
+				'taxonomy' => 'marker-icon',
+				'include'  => $icon_ids,
 			)
 		);
 
 		$res = array();
 
 		foreach ( $icons as $icon ) {
-			$meta  = get_term_meta( $icon->term_id, '', true );
+			$meta  = get_term_meta( $icon->term_id );
 			$res[] = array(
-				'id'         => $icon->term_id,
-				'name'       => $icon->name,
-				'colour'     => $meta['colour'][0] ?? '',
-				'loc'        => $meta['loc'][0] ?? '',
-				'type'       => $meta['type'][0] ?? '',
-				'size'       => (int) $meta['size'][0] ?? 0,
-				'iconAnchor' => unserialize( $meta['iconAnchor'][0] ) ?? array(),
-				'delete'     => false,
+				'id'     => $icon->term_id,
+				'name'   => $icon->name,
+				'colour' => $meta['colour'][0] ?? '',
+				'size'   => (int) $meta['size'][0] ?? 0,
+				'img'    => array(
+					'type'       => $meta['type'][0] ?? '',
+					'ref'        => $meta['ref'][0] ?? '',
+					'iconAnchor' => unserialize( $meta['iconAnchor'][0] ) ?? array(),
+				),
+				'delete' => false,
 			);
 		}
 
 		return $res;
+	}
+
+	/**
+	 * Save marker icons as terms and save the term ids on the imagemap.
+	 *
+	 * @param  mixed $meta_value The incoming meta value.
+	 * @return array             The meta value to be saved.
+	 * @since 0.1.0
+	 **/
+	public function save_marker_icons( $meta_value ) {
+		$icon_ids = array();
+		foreach ( $meta_value as $icon ) {
+			if ( $icon['delete'] ) {
+				if ( ! empty( $icon['id'] ) ) {
+					wp_delete_term( $icon['id'], MarkerIcon::NAME );
+				}
+			} else {
+				if ( empty( $icon['id'] ) ) {
+					$term = wp_insert_term( $icon['name'], MarkerIcon::NAME );
+				} else {
+					$term = wp_update_term( $icon['id'], MarkerIcon::NAME, array( 'name' => $icon['name'] ) );
+				}
+
+				if ( is_wp_error( $term ) ) {
+					throw new \Exception( $term->get_error_message() );
+				}
+
+				update_term_meta( $term['term_id'], 'colour', $icon['colour'] );
+				update_term_meta( $term['term_id'], 'size', $icon['size'] );
+				update_term_meta( $term['term_id'], 'type', $icon['img']['type'] );
+				update_term_meta( $term['term_id'], 'ref', $icon['img']['ref'] );
+
+				$icon_ids[] = $term['term_id'];
+			}
+		}
+
+		return $icon_ids;
 	}
 }

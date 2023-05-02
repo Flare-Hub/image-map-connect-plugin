@@ -1,5 +1,5 @@
 import { CheckboxControl, BaseControl } from '@wordpress/components'
-import { useEffect, useState } from '@wordpress/element'
+import { useEffect, useState, forwardRef } from '@wordpress/element'
 
 import apiFetch from '@wordpress/api-fetch'
 
@@ -10,12 +10,16 @@ import cls from './post-types-select.module.scss'
  *
  * @param {object} props
  * @param {Array<string>} props.selected List of selected post types.
- * @param {(types: Array<string>) => any} props.onSelect Callback that is called when a post type is selected.
+ * @param {(types: Array<string>) => void} props.onSelect Callback that is called when a post type is selected.
+ * @param {() => void} props.onBlur Callback that is called when field focus is lost.
  * @param {string} props.baseClass Class to be added to the base controller.
  * @param {string} props.inputClass Class to be added to the checkbox wrapper.
  * 	Will be provided a list of selected post types.
  */
-export default function PostTypesSelect({ selected, onSelect, baseClass, inputClass }) {
+function PostTypesSelect(
+	{ selected, onSelect, onBlur, baseClass, inputClass },
+	ref
+) {
 	const [all, setAll] = useState([])
 
 	useEffect(() => {
@@ -33,7 +37,7 @@ export default function PostTypesSelect({ selected, onSelect, baseClass, inputCl
 
 	return <>
 		<BaseControl label='Post Types' className={baseClass}>
-			<div className={inputClass}>
+			<div className={inputClass} ref={ref}>
 				{all.map(type => (
 					<CheckboxControl
 						key={type}
@@ -41,9 +45,12 @@ export default function PostTypesSelect({ selected, onSelect, baseClass, inputCl
 						checked={selected.includes(type)}
 						onChange={checked => onChange(checked, type)}
 						className={cls.checkbox}
+						onBlur={onBlur}
 					/>
 				))}
 			</div>
 		</BaseControl>
 	</>
 }
+
+export default forwardRef(PostTypesSelect)

@@ -17,8 +17,7 @@ export default function ListedMarkerPin({ marker, icons }) {
 	// Marker icon for the current marker
 	const mi = useMemo(() => {
 		const iconId = marker['marker-icons'][0]
-		const icon = icons.find(i => i.id === iconId)
-		return icon ? icon.meta : null
+		return icons.find(i => i.id === iconId)
 	}, [marker['marker-icons']])
 
 	if (!mi) return null
@@ -26,10 +25,10 @@ export default function ListedMarkerPin({ marker, icons }) {
 	return (
 		<Marker
 			position={marker.flare_loc}
-			anchor={[(-mi.iconAnchor.x * mi.size), (-mi.iconAnchor.y * mi.size)]}
+			anchor={[(-mi.img.iconAnchor.x * mi.size), (-mi.img.iconAnchor.y * mi.size)]}
 		>
 			<Link query={{ marker: marker.id }} className={cls.link} style={{ height: mi.size }} >
-				<i className={mi.loc} style={getStyles(mi)} />
+				<i className={mi.ref} style={getStyles(mi)} />
 			</Link>
 		</Marker>
 	)

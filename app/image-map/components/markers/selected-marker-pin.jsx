@@ -34,8 +34,7 @@ export default function SelectedMarkerPin({ icons, selected }) {
 
 	const mi = useMemo(() => {
 		if (!iconId) return
-		const icon = icons.find(i => i.id === iconId)
-		return icon ? icon.meta : null
+		return icons.find(i => i.id === iconId)
 	}, [marker['marker-icons']])
 
 	// Update the marker pin position as it is being dragged.
@@ -93,10 +92,10 @@ export default function SelectedMarkerPin({ icons, selected }) {
 	return (
 		<Marker
 			position={position}
-			anchor={[(-mi.iconAnchor.x * mi.size), (-mi.iconAnchor.y * mi.size)]}
+			anchor={[(-mi.img.iconAnchor.x * mi.size), (-mi.img.iconAnchor.y * mi.size)]}
 		>
 			<div className={cls.pin} style={{ height: mi.size }} onMouseDown={handleMouseDown} >
-				<i className={mi.loc} style={getStyles(mi)} />
+				<i className={mi.img.ref} style={getStyles(mi)} />
 			</div>
 		</Marker >
 	)

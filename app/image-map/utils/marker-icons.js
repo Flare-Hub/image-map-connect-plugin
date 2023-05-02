@@ -1,6 +1,6 @@
 /**
  * @typedef Icon Marker icon
- * @prop {string} loc Location of the icon image.
+ * @prop {string} ref Location of the icon image.
  * @prop {('remix'|'url'|'media')} type of location.
  * @prop {number} size Size to display the icon at.
  * @prop {{x: number, y: number}} iconAnchor Position on the icon that the marker is located.
@@ -25,87 +25,73 @@ export function getStyles(icon) {
 /** Available icons for markers. */
 export const icons = [
 	{
-		loc: 'ri-checkbox-blank-circle-fill',
+		ref: 'ri-checkbox-blank-circle-fill',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 0.5 },
 	},
 	{
-		loc: 'ri-checkbox-blank-circle-line',
+		ref: 'ri-checkbox-blank-circle-line',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 0.5 },
 	},
 	{
-		loc: 'ri-flag-fill',
+		ref: 'ri-flag-fill',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.1, y: 0.9 },
 	},
 	{
-		loc: 'ri-flag-line',
+		ref: 'ri-flag-line',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.1, y: 0.9 },
 	},
 	{
-		loc: 'ri-heart-fill',
+		ref: 'ri-heart-fill',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 0.5 },
 	},
 	{
-		loc: 'ri-heart-line',
+		ref: 'ri-heart-line',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 0.5 },
 	},
 	{
-		loc: 'ri-map-pin-2-fill',
+		ref: 'ri-map-pin-2-fill',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 1 },
 	},
 	{
-		loc: 'ri-map-pin-2-line',
+		ref: 'ri-map-pin-2-line',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 1 },
 	},
 	{
-		loc: 'ri-map-pin-3-fill',
+		ref: 'ri-map-pin-3-fill',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 1 },
 	},
 	{
-		loc: 'ri-map-pin-3-line',
+		ref: 'ri-map-pin-3-line',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 1 },
 	},
 	{
-		loc: 'ri-pushpin-2-fill',
+		ref: 'ri-pushpin-2-fill',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 1 },
 	},
 	{
-		loc: 'ri-pushpin-2-line',
+		ref: 'ri-pushpin-2-line',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 1 },
 	},
 	{
-		loc: 'ri-star-fill',
+		ref: 'ri-star-fill',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 0.6 },
 	},
 	{
-		loc: 'ri-star-line',
+		ref: 'ri-star-line',
 		type: 'remix',
-		size: 24,
 		iconAnchor: { x: 0.5, y: 0.6 },
 	},
 ]

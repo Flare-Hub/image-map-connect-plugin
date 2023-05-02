@@ -1,11 +1,10 @@
 import { Button, Flex, FlexItem, Card } from '@wordpress/components'
-import { useEffect, useState, useMemo } from '@wordpress/element'
+import { useState, useMemo } from '@wordpress/element'
 
 import { useRouter } from '../../contexts/router'
 import { MarkerProvider } from '../../contexts/marker'
 import useCollection from '../../hooks/useCollection'
 import useSelected from '../../hooks/useSelected'
-import { getCollection } from '../../../common/utils/wp-fetch'
 import transformModel from '../../utils/transform-model'
 import { wpLayers } from '../layers';
 import Layout from '../layout'
@@ -16,6 +15,7 @@ import ImageLayer from 'common/components/ol/image-layer'
 import SelectedMarkerPin from './selected-marker-pin'
 import NewMarkerPin from './new-marker-pin'
 import CreateMarkerModal from './create-marker-modal'
+import { wpMaps } from '../maps'
 
 /** @typedef {import('ol').Map} Map */
 
@@ -65,14 +65,8 @@ export default function Markers() {
 	)
 
 	// Fetch marker icons from Wordpress.
-	const [markerIcons, setMarkerIcons] = useState([])
-
-	useEffect(() => {
-		if (!query.map) return
-		getCollection('marker-icons', { map: query.map, meta: {} }).then(({ body }) => {
-			setMarkerIcons(body)
-		})
-	}, [query.map])
+	const [wpMap, _, loadingMap] = useSelected(wpMaps.endpoint, query[wpMaps.model], {}, {}, [])
+	const icons = wpMap?.meta?.icons
 
 	/** @type {[Map, React.Dispatch<React.SetStateAction<Map>>]} */
 	const [map, setMap] = useState()
@@ -105,7 +99,7 @@ export default function Markers() {
 			}
 		>
 			<MarkerProvider
-				icons={markerIcons}
+				icons={icons}
 				selected={selected}
 				layer={query[wpLayers.model]}
 			>
@@ -114,17 +108,17 @@ export default function Markers() {
 						<Card>
 							<OlMap oneTimeHandlers={{ postrender: e => setMap(e.map) }}>
 								<ImageLayer layer={layer} />
-								{markerIcons.length && markers.list.map(mk => {
+								{!loadingMap && markers.list.map(mk => {
 									if (mk.id == query.marker) {
 										if (selected.flare_loc.lng && selected.flare_loc.lat) {
-											return <SelectedMarkerPin key={query.marker} icons={markerIcons} selected={mk} />
+											return <SelectedMarkerPin key={query.marker} icons={icons} selected={mk} />
 										}
 									} else {
-										return <ListedMarkerPin key={mk.id} marker={mk} icons={markerIcons} />
+										return <ListedMarkerPin key={mk.id} marker={mk} icons={icons} />
 									}
 								})}
 								{selected.flare_loc && !(selected.flare_loc.lng && selected.flare_loc.lat) && (
-									<NewMarkerPin icons={markerIcons} />
+									<NewMarkerPin icons={icons} />
 								)}
 							</OlMap>
 						</Card>

@@ -45,6 +45,7 @@
     "mustache": "^4.2.0",
     "ol": "^7.3.0",
     "ol-ext": "^4.0.7",
+    "react-hook-form": "^7.43.9",
     "reflex-grid": "^2.0.7",
     "remixicon": "^3.2.0"
   }
