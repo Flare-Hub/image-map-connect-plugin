@@ -91,7 +91,7 @@ export default class Layer {
 	async fetchMarkers() {
 		// Get linked markers based on post IDs in the current query.
 		const linkedMarkers = getFullCollection('markers', {
-			imagemaps: this.wpLayer.id,
+			layers: this.wpLayer.id,
 			_fields: 'id,type,marker-icons,flare_loc',
 			post_types: 'linked',
 			include: this.postIds,
@@ -99,7 +99,7 @@ export default class Layer {
 
 		// Get standalone markers.
 		const saMarkers = this.blockAttr.showStandalone ? getFullCollection('markers', {
-			imagemaps: this.wpLayer.id,
+			layers: this.wpLayer.id,
 			_fields: 'id,type,marker-icons,flare_loc',
 			post_types: 'standalone',
 		}) : []

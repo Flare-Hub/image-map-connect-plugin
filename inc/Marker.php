@@ -12,7 +12,7 @@ class Marker {
 	public const POST_TYPE = 'marker';
 
 	/**
-	 * Register Markers post type
+	 * Register Markers post type.
 	 *
 	 * @since 0.1.0
 	 **/
@@ -51,7 +51,7 @@ class Marker {
 			'description'         => __( 'Markers on an image map.', 'flare-im' ),
 			'labels'              => $labels,
 			'supports'            => array( 'title', 'excerpt', 'thumbnail', 'author', 'custom-fields' ),
-			'taxonomies'          => array( ImageMap::NAME, MarkerIcon::NAME ),
+			'taxonomies'          => array( Layer::NAME, MarkerIcon::NAME ),
 			'public'              => false,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
@@ -80,13 +80,18 @@ class Marker {
 	 * @since 0.1.0
 	 **/
 	public function filter_rest_query( array $args, \WP_REST_Request $request ) {
-		$imagemaps = $request->get_param( 'imagemaps' );
+		$imagemaps  = $request->get_param( 'imagemaps' );
+		$post_types = $request->get_param( 'post_types' );
 
 		// If no imagemap is provided, update query to include posts with any imagemap set.
-		$post_types = $request->get_param( 'post_types' );
 		if ( ! $imagemaps && 'unlinked' !== $post_types ) {
-			$tax_query         = array_key_exists( 'tax_query', $args ) ? $args['tax_query'] : array();
-			$args['tax_query'] = $this->get_marker_tax_query( $tax_query ); //phpcs:ignore
+			if ( empty( $args['tax_query'] ) ) {
+				$args['tax_query'] = array(); //phpcs:ignore
+			}
+			$args['tax_query'][] = array(
+				'taxonomy' => 'imagemap',
+				'operator' => 'EXISTS',
+			);
 		}
 
 		// Get all post types to include in the query.
@@ -95,22 +100,6 @@ class Marker {
 		$args['post_type'] = $this->get_req_post_types( $post_types, $args['post_type'], $map_id );
 
 		return $args;
-	}
-
-	/**
-	 * Add search to tax query to include any post with an imagemap.
-	 *
-	 * @param array $tax_query The query arg by the same name.
-	 * @return array The updated tax query.
-	 * @since 0.1.0
-	 **/
-	public function get_marker_tax_query( array $tax_query ) {
-		$tax_query[] = array(
-			'taxonomy' => 'imagemap',
-			'operator' => 'EXISTS',
-		);
-
-		return $tax_query;
 	}
 
 	/**
@@ -125,7 +114,7 @@ class Marker {
 			return false;
 		}
 
-		$map_hierarchy = get_ancestors( $layer, ImageMap::NAME );
+		$map_hierarchy = get_ancestors( $layer, Layer::NAME );
 		return $map_hierarchy ? end( $map_hierarchy ) : $layer;
 	}
 

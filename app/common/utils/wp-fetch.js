@@ -2,7 +2,7 @@ import apiFetch from '@wordpress/api-fetch'
 
 /**
  * @typedef WpResponse
- * @prop {Array.<object>} body
+ * @prop {Array.<Object<string, unknown>>|Object<string, unknown>} body
  * @prop {Response} response
  */
 

@@ -22,16 +22,16 @@ const ICON_SIZE = 24
  * Editable list of marker icons
  *
  * @param {object} props
- * @param {type} props.props description
+ * @param {type} props.name Name of the icons field.
  */
-export default function MarkerIconList() {
+export default function MarkerIconList({ name }) {
 	const { control, setValue, watch } = useFormContext()
 
 	// Make React Hook Form aware of the icon list.
 	const { fields, append } = useFieldArray({
-		name: 'meta.icons',
+		name,
 		control,
-		rules: { required: __('Atleast one icon is required', 'flare') },
+		rules: { required: __('At least one icon is required', 'flare') },
 	})
 
 	return (
@@ -46,7 +46,7 @@ export default function MarkerIconList() {
 					</Flex>
 				</CardBody>
 				{fields.map((icon, i) => (
-					(watch(`meta.icons.${i}.delete`))
+					(watch(`${name}.${i}.delete`))
 						? null
 						: (
 							<Fragment key={icon.id}>
@@ -55,7 +55,7 @@ export default function MarkerIconList() {
 									<Flex>
 										<FlexItem isBlock >
 											<Controller
-												name={`meta.icons.${i}.name`}
+												name={`${name}.${i}.name`}
 												rules={{ required: __('This field is required', 'flare') }}
 												render={({ field, fieldState }) => (
 													<TextControl
@@ -67,14 +67,14 @@ export default function MarkerIconList() {
 										</FlexItem>
 										<FlexItem className={cls.colXs}>
 											<Controller
-												name={`meta.icons.${i}.img`}
+												name={`${name}.${i}.meta.img`}
 												rules={{ required: __('This field is required', 'flare') }}
 												render={({ field, fieldState }) => (
 													<IconToolbarButtons
 														icons={icons}
 														selected={field.value}
-														colour={watch(`meta.icons.${i}.colour`)}
-														size={ICON_SIZE}
+														colour={watch(`${name}.${i}.colour`)}
+														size={icon.size}
 														onSelect={field.onChange}
 														onBlur={field.onBlur}
 														ref={field.ref}
@@ -85,7 +85,7 @@ export default function MarkerIconList() {
 										</FlexItem>
 										<FlexItem className={cls.colXs}>
 											<Controller
-												name={`meta.icons.${i}.colour`}
+												name={`${name}.${i}.meta.colour`}
 												rules={{ required: __('This field is required', 'flare') }}
 												render={({ field, fieldState }) => (
 													<ColorSelect
@@ -96,7 +96,12 @@ export default function MarkerIconList() {
 											/>
 										</FlexItem>
 										<FlexItem className={cls.colXs}>
-											<Button variant='tertiary' icon="no" isDestructive onClick={() => setValue(`meta.icons.${i}.delete`, true)} />
+											<Button
+												variant='tertiary'
+												icon="no"
+												isDestructive
+												onClick={() => setValue(`meta.icons.${i}.delete`, true)}
+											/>
 										</FlexItem>
 									</Flex>
 								</CardBody>
@@ -115,7 +120,7 @@ export default function MarkerIconList() {
 							name: '',
 							colour: '',
 							size: ICON_SIZE,
-							img: { ref: '' }
+							meta: { img: { ref: '' } }
 						})}
 					/>
 				</CardBody>

@@ -15,9 +15,9 @@ import { wpMarkers } from '.'
  * @param {() => void} props.onRequestClose Called when save button is pressed.
  * @param {number} props.layer ID of the selected layer.
  * @param {number} props.map ID of the selected <map name="" className=""></map>
- * @param {import('../../hooks/useCollection').Dispatcher} props.dispatch
+ * @param {import('../../hooks/useCollection').Actions} props.actions
  */
-export default function CreateMarkerModal({ onRequestClose, layer, map, dispatch }) {
+export default function CreateMarkerModal({ onRequestClose, layer, map, actions }) {
 	const [type, setType] = useState('standalone')
 	const [post, setPost] = useState()
 
@@ -26,14 +26,14 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, dispatch
 	const [debouncedSearch, setDebouncedSearch] = useState()
 
 	// Get all posts not yet on the selected layer.
-	const [posts] = useCollection(wpMarkers, useMemo(() => ({
-		imagemaps_exclude: layer,
+	const posts = useCollection(wpMarkers, {
+		layers_exclude: layer,
 		post_types: 'unlinked',
 		map: map,
 		_fields: 'id,title,type,slug',
 		per_page: 100,
 		search: debouncedSearch
-	}), [layer, debouncedSearch]))
+	}, { list: [] }, [layer, debouncedSearch])
 
 	/** Add the selected post to the markers list. */
 	function handleAdd() {
@@ -41,12 +41,11 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, dispatch
 			navigate({ marker: 'new' })
 		} else {
 			const marker = posts.list.find(p => p.id === post)
-			dispatch({
-				type: 'add', payload: {
-					...marker,
-					'marker-icons': [],
-					flare_loc: {},
-				}
+			actions.add({
+				...marker,
+				layers: [layer],
+				'marker-icons': [],
+				flare_loc: {},
 			})
 			navigate({ marker: post })
 		}
@@ -79,7 +78,7 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, dispatch
 				onChange={setType}
 				className={cls.field}
 			/>
-			{posts && <ComboboxControl
+			{!posts.loading && <ComboboxControl
 				label="Post"
 				options={posts.list.map(post => ({
 					value: post.id,

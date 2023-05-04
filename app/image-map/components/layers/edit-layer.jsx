@@ -6,6 +6,8 @@ import { useRouter } from '../../contexts/router';
 import LifeCycleButtons from '../forms/lifecycle-buttons'
 import OlMap from 'common/components/ol/map';
 import ImageLayer from 'common/components/ol/image-layer';
+import { postItem } from 'common/utils/wp-fetch';
+import { mapRefs } from '../maps';
 
 import cls from '../forms/edit-form.module.scss'
 
@@ -13,45 +15,59 @@ import cls from '../forms/edit-form.module.scss'
  * Map details form.
  *
  * @param {Object} props
- * @param {import('../../hooks/useCollection').WpIdentifiers} props.layers
- * @param {import('../../hooks/useCollection').Dispatcher} props.dispatch
+ * @param {import('../../hooks/useCollection').WpIdentifiers} props.references
+ * @param {import('../../hooks/useCollection').Collection} props.layers
  */
-export default function EditLayer({ layers, dispatch }) {
-	const { query } = useRouter()
+export default function EditLayer({ references, layers }) {
+	const { query, navigate } = useRouter()
 
 	// Fetch selected layer from Wordpress.
 	const [layer, setLayer, status] = useSelected(
-		layers.endpoint,
-		query[layers.model],
+		references.endpoint,
+		query[references.model],
 		{ context: 'edit', _embed: 1 },
 		{
 			name: '',
 			description: '',
-			parent: query[layers.parent],
 			meta: { initial_bounds: [] },
 		},
-		[layers.endpoint, query[layers.model]]
+		[references.endpoint, query[references.model]]
 	)
 
 	// Initiate Wordpress media manager to select layer image
-	const mediaMgr = useMediaMgr(false, selImages => setLayer(oldLayer => {
+	const mediaMgr = useMediaMgr(false, async (selImages) => {
 		// Get selected image
-		const selImg = selImages.first()
-		// Mimic rest API structure for image details.
-		return {
-			...oldLayer,
-			meta: { ...oldLayer.meta, image: selImg.attributes.id },
-			_embedded: {
-				'flare:image': [{
-					source_url: selImg.attributes.url,
-					media_details: {
-						width: selImg.attributes.width,
-						height: selImg.attributes.height,
-					},
-				}],
+		const selImg = await selImages.first()
+
+		setLayer(oldLayer => {
+			// Mimic rest API structure for image details.
+			return {
+				...oldLayer,
+				meta: { ...oldLayer.meta, image: selImg.attributes.id },
+				_embedded: {
+					'flare:image': [{
+						source_url: selImg.attributes.url,
+						media_details: {
+							width: selImg.attributes.width,
+							height: selImg.attributes.height,
+						},
+					}],
+				}
 			}
-		}
-	}))
+		})
+	})
+
+	/** Save layer */
+	async function onSave(data) {
+		const layerId = await layers.actions.save(data)
+		await postItem(mapRefs.endpoint, query[references.parent], { layers: [layerId] })
+		if (query[references.model] === 'new') navigate({ [references.model]: layerId })
+	}
+
+	function onDelete() {
+		layers.actions.delete(+query[references.model])
+		navigate({ [references.model]: undefined })
+	}
 
 	return (
 		<Card className="full-height">
@@ -93,7 +109,7 @@ export default function EditLayer({ layers, dispatch }) {
 						</BaseControl>
 					</div>
 					<div className="col-xs-3">
-						<LifeCycleButtons identifiers={layers} item={layer} dispatch={dispatch} />
+						<LifeCycleButtons onSave={() => onSave(layer)} onDelete={onDelete} />
 					</div>
 				</CardBody>
 			)}

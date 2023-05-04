@@ -1,5 +1,4 @@
 import { Button } from '@wordpress/components'
-import { useMemo } from '@wordpress/element'
 
 import useCollection from '../../hooks/useCollection'
 import { useRouter } from '../../contexts/router'
@@ -9,7 +8,7 @@ import EditLayer from './edit-layer'
 /** @type {import('../../hooks/useCollection').WpIdentifiers} */
 export const wpLayers = {
 	model: 'layer',
-	endpoint: 'imagemaps',
+	endpoint: 'layers',
 	parent: 'map',
 }
 
@@ -20,12 +19,11 @@ export default function Layers() {
 	const { query, navigate } = useRouter()
 
 	// Load layers into global state
-	const [layers, dispatchLayers, loading] = useCollection(
+	const layers = useCollection(
 		wpLayers,
-		useMemo(() => (
-			{ parent: Number(query[wpLayers.parent]), _fields: 'name,id' }
-		), [query[wpLayers.parent]]),
-		{ list: [], page: 1 }
+		{ post: Number(query[wpLayers.parent]), _fields: 'name,id' },
+		{ list: [], page: 1 },
+		[query[wpLayers.parent]]
 	)
 
 	return (
@@ -34,7 +32,7 @@ export default function Layers() {
 			titleAttr="name"
 			selected={Number(query.layer)}
 			selectItem={layer => navigate({ layer })}
-			loading={loading}
+			loading={layers.loading}
 			addButton={
 				<Button
 					variant='primary'
@@ -43,7 +41,7 @@ export default function Layers() {
 				>Add Layer</Button>
 			}
 		>
-			<EditLayer layers={wpLayers} dispatch={dispatchLayers} />
+			<EditLayer references={wpLayers} layers={layers} />
 		</Layout>
 	)
 }

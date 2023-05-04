@@ -5,6 +5,7 @@ import LifeCycleButtons from '../forms/lifecycle-buttons'
 import MarkerIconSelect from '../forms/marker-icon-select';
 import RichTextEditor from '../forms/rich-text-editor';
 import ImageSelector from '../forms/image-selector';
+import { wpMarkers } from '.';
 
 import cls from '../forms/edit-form.module.scss'
 
@@ -12,11 +13,21 @@ import cls from '../forms/edit-form.module.scss'
  * Map details form.
  *
  * @param {Object} props
- * @param {import('../../hooks/useCollection').Dispatcher} props.dispatch
+ * @param {import('../../hooks/useCollection').Actions} props.actions
  * @param {Object<string, any>} props.layer
  */
-export default function EditMarker({ dispatch, layer }) {
+export default function EditMarker({ actions, layer }) {
 	const { marker, setMarker, loadStatus, postTypes } = useMarker()
+
+	function onSave(data) {
+		const mapId = actions.save(data)
+		if (query[wpMarkers.model] === 'new') navigate({ [wpMarkers.model]: mapId })
+	}
+
+	function onDelete() {
+		actions.delete(query[wpMarkers.model])
+		navigate({ [wpMarkers.model]: undefined })
+	}
 
 	return (
 		<Card className="full-height">
@@ -66,10 +77,7 @@ export default function EditMarker({ dispatch, layer }) {
 						)}
 					</div>
 					<div className="col-xs-3">
-						<LifeCycleButtons
-							identifiers={{ model: marker.type, endpoint: (postTypes[marker.type] ?? {}).rest_base }}
-							item={marker} dispatch={dispatch}
-						/>
+						<LifeCycleButtons onSave={onSave} onDelete={onDelete} />
 					</div>
 				</CardBody>
 			)}

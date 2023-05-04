@@ -1,4 +1,4 @@
-import { Button } from '@wordpress/components'
+import { Button, Card } from '@wordpress/components'
 
 import Layout from '../layout'
 import useCollection from '../../hooks/useCollection'
@@ -6,13 +6,11 @@ import EditMap from './edit-map'
 import { useRouter } from '../../contexts/router'
 
 /** @type {import('../../hooks/useCollection').WpIdentifiers} */
-export const wpMaps = {
+export const mapRefs = {
 	model: 'map',
-	endpoint: 'imagemaps',
+	endpoint: 'maps',
 	parent: false,
 }
-
-const collectionQuery = { parent: 0, _fields: 'name,id' }
 
 /**
  * List of maps with details of selected map
@@ -20,19 +18,20 @@ const collectionQuery = { parent: 0, _fields: 'name,id' }
 export default function Maps() {
 	// Load maps into global state
 	const { query, navigate } = useRouter()
-	const [maps, dispatchMaps, loading] = useCollection(
-		wpMaps,
-		collectionQuery,
-		{ list: [], page: 1 }
+	const maps = useCollection(
+		mapRefs,
+		{ _fields: 'id,title' },
+		{ list: [], page: 1 },
+		[]
 	)
 
 	return (
 		<Layout
 			list={maps.list}
-			titleAttr="name"
+			titleAttr="title.rendered"
 			selected={Number(query.map)}
 			selectItem={map => navigate({ map })}
-			loading={loading}
+			loading={maps.loading}
 			addButton={
 				<Button
 					variant='primary'
@@ -41,7 +40,10 @@ export default function Maps() {
 				>Add Map</Button>
 			}
 		>
-			<EditMap maps={wpMaps} dispatch={dispatchMaps} />
+			{query[mapRefs.model]
+				? <EditMap references={mapRefs} maps={maps} />
+				: <Card className="full-height" />
+			}
 		</Layout>
 	)
 }

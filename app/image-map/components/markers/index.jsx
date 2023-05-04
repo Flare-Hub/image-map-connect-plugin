@@ -5,7 +5,6 @@ import { useRouter } from '../../contexts/router'
 import { MarkerProvider } from '../../contexts/marker'
 import useCollection from '../../hooks/useCollection'
 import useSelected from '../../hooks/useSelected'
-import transformModel from '../../utils/transform-model'
 import { wpLayers } from '../layers';
 import Layout from '../layout'
 import EditMarker from './edit-marker'
@@ -15,7 +14,7 @@ import ImageLayer from 'common/components/ol/image-layer'
 import SelectedMarkerPin from './selected-marker-pin'
 import NewMarkerPin from './new-marker-pin'
 import CreateMarkerModal from './create-marker-modal'
-import { wpMaps } from '../maps'
+import { mapRefs } from '../maps'
 
 /** @typedef {import('ol').Map} Map */
 
@@ -33,26 +32,25 @@ export default function Markers() {
 	const { query, navigate } = useRouter()
 
 	// Fetch markers from Wordpress.
-	const [markers, dispatchMarkers, loading] = useCollection(
+	const markers = useCollection(
 		wpMarkers,
-		useMemo(() => (
-			{
-				imagemaps: query[wpMarkers.parent],
-				_fields: 'title,id,type,marker-icons,flare_loc',
-				post_types: 'all'
-			}
-		), [query[wpMarkers.parent]]),
-		{ list: [], page: 1 }
+		{
+			layers: query[wpMarkers.parent],
+			_fields: 'title,id,type,marker-icons,flare_loc',
+			post_types: 'all'
+		},
+		{ list: [], page: 1 },
+		[query[wpMarkers.parent]]
 	)
 
 	// Identify the selected marker.
 	const selected = useMemo(
 		() => {
-			if (loading) return {}
+			if (markers.loading) return {}
 			if (query[wpMarkers.model] === 'new') return { flare_loc: {} }
 			return markers.list.find(mk => mk.id == query[wpMarkers.model]) ?? {}
 		},
-		[loading, markers, query[wpMarkers.model]]
+		[markers, query[wpMarkers.model]]
 	)
 
 	// Fetch selected layer from Wordpress.
@@ -65,7 +63,7 @@ export default function Markers() {
 	)
 
 	// Fetch marker icons from Wordpress.
-	const [wpMap, _, loadingMap] = useSelected(wpMaps.endpoint, query[wpMaps.model], {}, {}, [])
+	const [wpMap, _, loadingMap] = useSelected(mapRefs.endpoint, query[mapRefs.model], {}, {}, [])
 	const icons = wpMap?.meta?.icons
 
 	/** @type {[Map, React.Dispatch<React.SetStateAction<Map>>]} */
@@ -89,7 +87,7 @@ export default function Markers() {
 			titleAttr="title.rendered"
 			selected={Number(query.marker)}
 			selectItem={selectMarker}
-			loading={loading}
+			loading={markers.loading}
 			addButton={
 				<Button
 					variant='primary'
@@ -124,17 +122,14 @@ export default function Markers() {
 						</Card>
 					</FlexItem>
 					<FlexItem isBlock>
-						<EditMarker
-							dispatch={action => dispatchMarkers(transformModel(action))}
-							layer={layer}
-						/>
+						<EditMarker actions={markers.actions} layer={layer} />
 					</FlexItem>
 				</Flex>
 				{showModal && layer.id && <CreateMarkerModal
 					onRequestClose={() => setShowModal(false)}
 					layer={layer.id}
 					map={query.map}
-					dispatch={dispatchMarkers}
+					actions={markers.actions}
 				/>}
 			</MarkerProvider>
 		</Layout>

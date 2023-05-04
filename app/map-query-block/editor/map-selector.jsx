@@ -20,9 +20,9 @@ export default function MapSelector({ mapId, setAttr, prevAttr, setPrevAttr }) {
 	// Use counter to ensure imagemaps are fetched from backend whenever counter is updated.
 	const [updCount, setUpdCount] = useState(0)
 
-	// Get imagemaps from backend
+	// Get maps from backend
 	const maps = useSelect(
-		select => select('core').getEntityRecords('taxonomy', 'imagemap', { parent: 0, updCount }),
+		select => select('core').getEntityRecords('postType', 'map', { updCount }),
 		[updCount]
 	) ?? []
 
@@ -62,7 +62,7 @@ export default function MapSelector({ mapId, setAttr, prevAttr, setPrevAttr }) {
 						label={__('Select map', blockMeta.textdomain)}
 						value={mapId}
 						onChange={handleSelectMap}
-						options={maps.map(map => ({ label: map.name, value: map.id }))}
+						options={maps.map(map => ({ label: map.title.rendered, value: map.id }))}
 					/>
 					<Button
 						icon={update}

@@ -19,8 +19,10 @@ export default function BaseLayerGroup({ mapId, selLayerId, setSelLayerId }) {
 	const { controlBar } = useMap()
 
 	// Get layers for selected map from WordPress.
-	const layers = useSelect(select => select('core')
-		.getEntityRecords('taxonomy', 'imagemap', { parent: mapId, per_page: 100, _embed: true }), [mapId])
+	const layers = useSelect(
+		select => select('core').getEntityRecords('taxonomy', 'layer', { post: mapId, per_page: 100, _embed: true }),
+		[mapId]
+	)
 
 	// Get the list of layers for the provided map and pre-select the 1st layer.
 	useEffect(() => {

@@ -17,7 +17,7 @@ export default class Map {
 	/** @type {HTMLTemplateElement} Template for the popup content. */ template
 	/** @type {OlMap} Open Layers map to add the layer to. */ map
 	/** @type {VectorLayer} Layer to display the features */ ftLayer
-	/** @type {Array<Object<string, any>>} WordPress imagemaps. */ wpLayers
+	/** @type {Array<Object<string, any>>} WordPress layers. */ wpLayers
 	/** @type {Popup} Marker popup. */ popup
 	/** @type {Select} Marker selection handler */ selector
 	/** @type {{slug: string, rest_base: string }} Post types that can be linked to markers */  postTypes
@@ -172,10 +172,10 @@ export default class Map {
 	/** Add all base layers for the given WordPress map to the OpenLayers map. */
 	async initBaseLayers(mapId) {
 		// Get layers from WordPress.
-		this.wpLayers = await getFullCollection('imagemaps', {
+		this.wpLayers = await getFullCollection('layers', {
 			_fields: 'id,slug,meta,_links',
 			_embed: 'flare:image',
-			parent: mapId
+			post: mapId
 		})
 
 		// Add layers to map and set map interactions based on the visible layer.

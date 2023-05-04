@@ -20,11 +20,11 @@ export default function MarkerIconSelect({ label, value, onSelect }) {
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
-		getCollection('marker-icons', { map: query.map }).then(({ body }) => {
+		getCollection('marker-icons', { post: query.map }).then(({ body }) => {
 			const newIcons = body.map(icon => ({
 				key: icon.id,
 				name: <span>
-					<i className={icon.meta.loc} style={{ color: icon.meta.colour }} />
+					<i className={icon.meta.img.ref} style={{ color: icon.meta.colour }} />
 					<span className={cls.iconName}>{icon.name}</span>
 				</span>
 			}))

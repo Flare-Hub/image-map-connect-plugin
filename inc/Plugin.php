@@ -17,8 +17,11 @@ class Plugin {
 	/** @var string version */
 	const VERSION = '0.1.0';
 
-	/** @var ImageMap The image map Taxonomy management object. */
-	protected $image_map;
+	/** @var Map The map Post Type management object. */
+	protected $map;
+
+	/** @var Layer The layer Taxonomy management object. */
+	protected $layer;
 
 	/** @var Marker The marker Custom Post Type management object. */
 	protected $marker;
@@ -51,7 +54,8 @@ class Plugin {
 	 **/
 	public function plugins_loaded() {
 		$this->loc_meta    = new LocationMeta();
-		$this->image_map   = new ImageMap();
+		$this->map         = new Map();
+		$this->layer       = new Layer();
 		$this->marker_icon = new MarkerIcon();
 		$this->marker      = new Marker();
 		$this->block_mgr   = new BlockMgr();
@@ -66,8 +70,10 @@ class Plugin {
 	 **/
 	public function init() {
 		$post_types = $this->loc_meta->get_location_post_types();
-		$this->image_map->register_image_map( $post_types );
+
+		$this->layer->register_image_map( $post_types );
 		$this->marker_icon->register_marker_icon( $post_types );
+		$this->map->register_map_cpt();
 		$this->marker->register_marker_cpt();
 		$this->block_mgr->register_blocks();
 		add_filter( 'flare_marker_popup_template', array( $this->block_mgr, 'get_popup_template' ), 1 );
@@ -91,13 +97,14 @@ class Plugin {
 	 * @since 0.1.0
 	 **/
 	public function rest_api_init() {
-		// Hook Image Map functions.
-		$this->image_map->register_image();
-		$this->image_map->register_max_zoom();
-		$this->image_map->register_min_zoom();
-		$this->image_map->register_connected_post_types();
-		$this->image_map->register_icons();
-		add_action( 'rest_prepare_imagemap', array( $this->image_map, 'add_image_link' ), 10, 2 );
+		// Hook Map functions.
+		$this->map->register_connected_post_types();
+
+		// Hook Layer functions.
+		$this->layer->register_image();
+		$this->layer->register_max_zoom();
+		$this->layer->register_min_zoom();
+		add_action( 'rest_prepare_layer', array( $this->layer, 'add_image_link' ), 10, 2 );
 
 		// Hook marker functions.
 		add_action( sprintf( 'rest_%s_query', Marker::POST_TYPE ), array( $this->marker, 'filter_rest_query' ), 10, 2 );
@@ -107,14 +114,8 @@ class Plugin {
 
 		// Hook marker icon functions.
 		$this->marker_icon->register_colour();
-		$this->marker_icon->register_type();
-		$this->marker_icon->register_loc();
-		$this->marker_icon->register_map();
 		$this->marker_icon->register_size();
-		$this->marker_icon->register_anchor();
-		$this->marker_icon->register_popup_anchor();
-		add_filter( 'rest_prepare_marker-icon', array( $this->marker_icon, 'unregister_parent' ), 10, 3 );
-		add_filter( 'rest_marker-icon_query', array( $this->marker_icon, 'query_map' ), 10, 2 );
+		$this->marker_icon->register_img();
 
 		// Hook Post Type Route functions.
 		$types = new PostTypesRoute();

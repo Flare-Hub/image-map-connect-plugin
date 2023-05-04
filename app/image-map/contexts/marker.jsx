@@ -27,7 +27,7 @@ const typesQuery = {}
  */
 export function MarkerProvider({ selected, layer, icons, children }) {
 	const { query } = useRouter()
-	const [postTypes] = useCollection({ endpoint: 'types' }, typesQuery, { list: {} })
+	const postTypes = useCollection({ endpoint: 'types' }, typesQuery, { list: {} }, [])
 
 	// Fetch selected marker from Wordpress.
 	const [marker, setMarker, loadStatus] = useSelected(
@@ -38,12 +38,12 @@ export function MarkerProvider({ selected, layer, icons, children }) {
 			status: 'publish',
 			title: { raw: '' },
 			excerpt: { raw: '' },
-			imagemaps: [layer],
+			layers: [layer],
 			'marker-icons': [],
 			flare_loc: { lng: 0, lat: 0 },
 			type: 'marker',
 		},
-		[query[wpMarkers.model]],
+		[query[wpMarkers.model], postTypes.list[selected.type]],
 	)
 
 	// Add current layer to marker if not included already.

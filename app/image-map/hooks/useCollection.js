@@ -1,7 +1,7 @@
-import { useEffect, useState, useReducer } from '@wordpress/element'
+import { useEffect, useState } from '@wordpress/element'
 
+import { getCollection, postItem, createItem, deleteItem } from "common/utils/wp-fetch";
 import { useRouter } from '../contexts/router'
-import { getCollection } from '../../common/utils/wp-fetch'
 
 /**
  * @typedef WpIdentifiers
@@ -12,64 +12,27 @@ import { getCollection } from '../../common/utils/wp-fetch'
 
 /**
  * @typedef WpCollection
- * @prop {Array.<object>} list
+ * @prop {Array.<Object<string, unknown>>} list
  * @prop {number} page
  * @prop {number} totalPages
  */
 
-/** @typedef {Object.<string, any> | WpCollection | string} Payload */
-
 /**
- * @typedef Action
- * @prop {string} type
- * @prop {Payload} payload
+ * @typedef Actions
+ * @prop {(item: Object<string, unknown>) => void} update Update an item in the collection.
+ * @prop {(item: Object<string, unknown>) => void} add Add an item to the collection.
+ * @prop {(item: Object<string, unknown>) => Promise<string>} save Save the provided item.
+ * @prop {(id: string) => void} delete Remove an item from the list.
  */
 
 /**
- * @typedef {import('react').Dispatch<Action>} Dispatcher
+ * @typedef CollectionState
+ * @prop {Actions} actions
+ * @prop {boolean} loading
+ * @prop {string | false} saving
  */
 
-/** @type {Object.<string, (state: WpCollection, payload: Payload) => WpCollection>} */
-const actions = {
-	/** Update the list of maps */
-	setList(state, newList) {
-		return { ...state, ...newList }
-	},
-
-	/** Update a map in the list */
-	update(state, newItem) {
-		// Get position of updated map in the map list
-		const pos = state.list.findIndex(item => item.id === newItem.id)
-
-		// Create new list with updated map and return state with the new list
-		const newList = Object.assign([], state.list, { [pos]: newItem })
-		return { ...state, list: newList }
-	},
-
-	/** Add a new map to the list and select it if required. */
-	add(state, newItem) {
-		return { ...state, list: [...state.list, newItem] }
-	},
-
-	/** Remove a collection from the list */
-	delete(state, id) {
-		const newList = state.list.filter(item => item.id !== id)
-		return { ...state, list: newList }
-	},
-}
-
-/**
- * @param {State} state
- * @param {Action} action
- * @returns
- */
-function reducer(state, action) {
-	const fn = actions[action.type]
-	if (typeof fn !== 'function') throw new Error(action.type + ' is not a valid dispatch action')
-
-	const newState = fn.call(null, state, action.payload)
-	return newState
-}
+/** @typedef {WpCollection & CollectionState} Collection */
 
 /**
  * Import collection from wordpress and dispatch it to global state.
@@ -77,17 +40,20 @@ function reducer(state, action) {
  * @param {WpIdentifiers} identifiers The name of the collection as registered in wordpress.
  * @param {object} query The query to use when fetching the collection.
  * @param {WpCollection} initialState The initializer value for the collection state. {list: [], page: 1}
- * @returns {[WpCollection, Dispatcher, boolean]}
+ * @param {Array<unknown>} props.deps Dependencies that change the collection.
+ * @returns {Collection}
  */
-export default function useCollection(identifiers, query, initialState) {
+export default function useCollection(identifiers, query, initialState, deps) {
 	const { query: appQuery } = useRouter()
+	const [collection, setCollection] = useState(initialState)
 	const [loading, setLoading] = useState(true)
-	const [collection, dispatch] = useReducer(reducer, initialState)
+	const [saving, setSaving] = useState(false)
 
 	useEffect(() => {
 		// Get collection from rest api, checking that parent is available if needed.
 		(async () => {
-			const { body, totalPages } = (!identifiers.parent || appQuery[identifiers.parent])
+			setLoading(true)
+			const { body, totalPages } = (!identifiers.parent || (appQuery[identifiers.parent] !== 'new'))
 				? await getCollection(
 					identifiers.endpoint,
 					query
@@ -95,16 +61,82 @@ export default function useCollection(identifiers, query, initialState) {
 				: { body: [] }
 
 			// Store the collection in global state.
-			dispatch({
-				type: 'setList',
-				payload: { list: body, page: query.page, totalPages }
-			})
+			setCollection({ list: body, page: query.page, totalPages })
 
 			// Collection is loaded.
 			setLoading(false)
 		})()
-	}, [query])
+	}, deps)
 
-	return [collection, dispatch, loading]
+	/** @type {Actions} */
+	const actions = {
+		/** Update an item in the collection. */
+		update(item) {
+			setCollection(prevCol => {
+				// Get position of updated map in the map list.
+				const pos = prevCol.list.findIndex(prevItem => prevItem.id === item.id)
+
+				// Replace relevant item in list and return state with the new list.
+				return {
+					...prevCol,
+					list: Object.assign([], prevCol.list, { [pos]: item })
+				}
+			})
+		},
+
+		/** Add an item to the collection. */
+		add(item) {
+			setCollection(prevCol => ({
+				...prevCol,
+				list: [...prevCol.list, item]
+			}))
+		},
+
+		/** Update a map in the list. */
+		async save(item) {
+			// Register which item is being saved.
+			setSaving(item.id ?? 'new')
+
+			const saveQuery = { context: 'edit' }
+
+			let res
+
+			// Update item if it has an ID.
+			if (item.id) {
+				res = await postItem(identifiers.endpoint, item.id, item, saveQuery)
+				this.update(res.body)
+
+				// Create a new item if it doesn't have an ID.
+			} else {
+				res = await createItem(identifiers.endpoint, item, saveQuery)
+				this.add(res.body)
+			}
+
+			setSaving(false)
+
+			return res.body.id
+		},
+
+		/** Remove a collection from the list. */
+		async delete(id) {
+			// Register which item is being deleted.
+			setSaving(id)
+
+			// Update WordPress.
+			const { body } = await deleteItem(identifiers.endpoint, id, { force: true })
+			if (!body.deleted) throw new Error('To do: handle this!')
+
+			// Remove item from collection
+			setCollection(prevCol => ({
+				...prevCol,
+				list: prevCol.list.filter(item => item.id !== id)
+			}))
+
+			setSaving(false)
+		},
+	}
+
+
+	return { ...collection, actions, loading, saving }
 }
 
