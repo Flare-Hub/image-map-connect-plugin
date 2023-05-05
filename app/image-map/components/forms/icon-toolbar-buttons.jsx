@@ -4,7 +4,7 @@ import { forwardRef } from '@wordpress/element'
 import cls from './edit-form.module.scss'
 import 'remixicon/fonts/remixicon.css'
 
-/** @typedef {import('../../utils/marker-icons').Icon} Icon */
+/** @typedef {import('../../utils/marker-icons').IconImg} Icon */
 
 /**
  * A list of marker icons to choose from.
@@ -31,20 +31,23 @@ function IconToolbarButtons(
 						icon={<i className={selected.ref} style={{ fontSize: size, color: colour }} />}
 						onClick={onToggle}
 						aria-expanded={isOpen}
+						className={cls.iconBtn}
 						ref={ref}
 					/>
 				)}
 				renderContent={() => (
-					<ToolbarGroup style={{ margin: '0 1px' }}>
-						{icons.map(icon => (
-							<ToolbarButton
-								key={icon.ref}
-								icon={<i className={icon.ref} style={{ fontSize: size, color: colour }} />}
-								onClick={() => onSelect(icon)}
-								isActive={selected === icon.ref}
-								onBlur={onBlur}
-							/>
-						))}
+					<ToolbarGroup className={cls.iconDropdown}>
+						{
+							icons.map(icon => (
+								<ToolbarButton
+									key={icon.ref}
+									icon={<i className={icon.ref} style={{ fontSize: size, color: colour }} />}
+									onClick={() => onSelect(icon)}
+									isActive={selected.ref === icon.ref}
+									onBlur={onBlur}
+								/>
+							))
+						}
 					</ToolbarGroup>
 				)}
 				expandOnMobile

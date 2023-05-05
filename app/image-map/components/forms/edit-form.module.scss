@@ -1,15 +1,16 @@
 .field {
 	gap: 0;
 
-	&.invalid>div {
+	&.invalid {
 
-		>input,
-		>textarea,
-		>hr,
-		>.input,
-		>:global(.components-range-control__root),
-		>:global(.components-custom-select-control),
-		>:global(.components-combobox-control__suggestions-container) {
+		input,
+		textarea,
+		.colorSelect,
+		.iconBtn,
+		>div>.input,
+		:global(.components-range-control__root),
+		:global(.components-custom-select-control),
+		:global(.components-combobox-control__suggestions-container) {
 			border: 1px solid red;
 
 			&:focus {
@@ -17,7 +18,7 @@
 			}
 		}
 
-		>.input {
+		.input {
 			padding: 3px;
 
 			&:focus-within {
@@ -129,10 +130,6 @@
 		}
 	}
 
-	.colXs {
-		flex-basis: 44px;
-	}
-
 	.right {
 		text-align: right;
 	}
@@ -144,4 +141,38 @@
 
 .divider {
 	margin-bottom: 8px;
+}
+
+.iconRow {
+	align-items: center;
+
+	.iconColBtn {
+		flex-basis: 44px;
+		display: flex;
+		justify-content: center;
+
+		.colorSelect {
+			padding: 6px;
+		}
+
+		.iconBtn {
+			height: 32px;
+			min-width: 32px;
+			padding: 3px;
+		}
+	}
+}
+
+.iconDropdown {
+	width: 196px;
+	margin: '0 1px';
+	border: 0;
+
+	>div {
+		display: inline-block;
+	}
+}
+
+.colorSelect {
+	display: flex;
 }

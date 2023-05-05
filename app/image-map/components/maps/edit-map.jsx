@@ -32,7 +32,12 @@ export default function EditMap({ references, maps }) {
 		references.endpoint,
 		mapId,
 		{ context: 'edit', _fields: 'id,title,excerpt,meta,marker-icons', _embed: 1 },
-		{ title: { raw: '' }, excerpt: { raw: '' }, meta: { post_types: [] }, status: 'publish' },
+		{
+			title: { raw: '' },
+			excerpt: { raw: '' },
+			meta: { post_types: [], img: {}, colour: '' },
+			status: 'publish'
+		},
 		[mapId]
 	)
 
@@ -88,7 +93,7 @@ export default function EditMap({ references, maps }) {
 					<div className="col-xs-9">
 						<Controller
 							name="map.title.raw"
-							rules={{ required: __('This field is required', 'flare') }}
+							rules={{ required: true }}
 							render={({ field, fieldState }) => (
 								<TextControl
 									label={__('Map name', 'flare')}
@@ -99,7 +104,7 @@ export default function EditMap({ references, maps }) {
 						/>
 						<Controller
 							name="map.excerpt.raw"
-							rules={{ required: __('This field is required', 'flare') }}
+							rules={{ required: true }}
 							render={({ field, fieldState }) => (
 								<TextControl
 									label={__('Description', 'flare')}

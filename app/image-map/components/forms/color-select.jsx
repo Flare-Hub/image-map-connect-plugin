@@ -1,5 +1,6 @@
 import { ColorIndicator, ColorPicker, Dropdown, BaseControl } from '@wordpress/components'
 import { forwardRef } from '@wordpress/element'
+import cls from './edit-form.module.scss'
 
 /**
  * Colour indicator with dropdown picker to change it.
@@ -16,7 +17,12 @@ function ColorSelect({ label, value, onChange, onBlur, className }, ref) {
 		<BaseControl label={label} className={className}>
 			<Dropdown
 				renderToggle={({ isOpen, onToggle }) => (
-					<ColorIndicator colorValue={value} ref={ref} onClick={onToggle} aria-expanded={isOpen} />
+					<ColorIndicator
+						colorValue={value}
+						onClick={onToggle}
+						aria-expanded={isOpen}
+						ref={ref}
+					/>
 				)}
 				renderContent={() => (
 					<ColorPicker
@@ -26,6 +32,7 @@ function ColorSelect({ label, value, onChange, onBlur, className }, ref) {
 					/>
 				)}
 				expandOnMobile
+				className={cls.colorSelect}
 			/>
 		</BaseControl>
 	)

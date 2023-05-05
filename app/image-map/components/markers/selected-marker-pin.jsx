@@ -11,7 +11,7 @@ import { getStyles } from '../../utils/marker-icons'
  * Set marker coordinates for a new marker
  *
  * @param {object} props
- * @param {Array<import('../../utils/marker-icons').Icon>} props.icons
+ * @param {Array<import('../../utils/marker-icons').IconImg>} props.icons
  * @param {Object<string, any>} props.selected
  */
 export default function SelectedMarkerPin({ icons, selected }) {

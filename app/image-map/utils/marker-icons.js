@@ -1,28 +1,28 @@
 /**
- * @typedef Icon Marker icon
+ * @typedef IconImg Marker icon
  * @prop {string} ref Location of the icon image.
  * @prop {('remix'|'url'|'media')} type of location.
- * @prop {number} size Size to display the icon at.
+ * @prop {number} [size] Size to display the icon at.
  * @prop {{x: number, y: number}} iconAnchor Position on the icon that the marker is located.
  */
 
 /**
  * Style a marker icon according to it's settings.
- * @param {Object<string, any} icon The metadata of the icon to style.
+ * @param {Object<string, any} meta The metadata of the icon to style.
  * @param {boolean} setPosition Whether to position the icon to show the accurate location.
  * @returns {React.CSSProperties}
  */
-export function getStyles(icon) {
+export function getStyles(meta) {
 	/** @type {React.CSSProperties} */
 	return {
-		color: icon.colour,
-		height: icon.size,
-		lineHeight: icon.size + 'px',
-		fontSize: icon.size,
+		color: meta.colour,
+		height: meta.size,
+		lineHeight: meta.size + 'px',
+		fontSize: meta.size,
 	}
 }
 
-/** Available icons for markers. */
+/** @type {IconImg} Available icons for markers. **/
 export const icons = [
 	{
 		ref: 'ri-checkbox-blank-circle-fill',

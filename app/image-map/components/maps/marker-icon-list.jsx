@@ -25,24 +25,26 @@ const ICON_SIZE = 24
  * @param {type} props.name Name of the icons field.
  */
 export default function MarkerIconList({ name }) {
-	const { control, setValue, watch } = useFormContext()
+	const { control, setValue, watch, formState } = useFormContext()
 
 	// Make React Hook Form aware of the icon list.
 	const { fields, append } = useFieldArray({
 		name,
 		control,
-		rules: { required: __('At least one icon is required', 'flare') },
+		rules: { required: true },
 	})
 
+	const iconsClass = cls.field + (formState.errors[name] && formState.errors[name].root ? ' ' + cls.invalid : '')
+
 	return (
-		<BaseControl label="Icon categories" className={cls.field}>
+		<BaseControl label="Icon categories" className={iconsClass}>
 			<Card size='xSmall' className={cls.input}>
 				<CardBody>
-					<Flex>
+					<Flex className={cls.iconRow}>
 						<FlexItem isBlock><BaseControl label={__('Icon Name', 'flare')} /></FlexItem>
-						<FlexItem className={cls.colXs}><BaseControl label={__('Icon', 'flare')} /></FlexItem>
-						<FlexItem className={cls.colXs}><BaseControl label={__('Colour', 'flare')} /></FlexItem>
-						<FlexItem className={cls.colXs}><BaseControl label={__('Delete', 'flare')} /></FlexItem>
+						<FlexItem className={cls.iconColBtn}><BaseControl label={__('Icon', 'flare')} /></FlexItem>
+						<FlexItem className={cls.iconColBtn}><BaseControl label={__('Colour', 'flare')} /></FlexItem>
+						<FlexItem className={cls.iconColBtn}><BaseControl label={__('Delete', 'flare')} /></FlexItem>
 					</Flex>
 				</CardBody>
 				{fields.map((icon, i) => (
@@ -52,11 +54,11 @@ export default function MarkerIconList({ name }) {
 							<Fragment key={icon.id}>
 								<CardDivider />
 								<CardBody>
-									<Flex>
+									<Flex className={cls.iconRow}>
 										<FlexItem isBlock >
 											<Controller
 												name={`${name}.${i}.name`}
-												rules={{ required: __('This field is required', 'flare') }}
+												rules={{ required: true }}
 												render={({ field, fieldState }) => (
 													<TextControl
 														{...field}
@@ -65,16 +67,16 @@ export default function MarkerIconList({ name }) {
 												)}
 											/>
 										</FlexItem>
-										<FlexItem className={cls.colXs}>
+										<FlexItem className={cls.iconColBtn}>
 											<Controller
 												name={`${name}.${i}.meta.img`}
-												rules={{ required: __('This field is required', 'flare') }}
+												rules={{ validate: img => !!img.ref }}
 												render={({ field, fieldState }) => (
 													<IconToolbarButtons
 														icons={icons}
 														selected={field.value}
-														colour={watch(`${name}.${i}.colour`)}
-														size={icon.size}
+														colour={watch(`${name}.${i}.meta.colour`)}
+														size={ICON_SIZE}
 														onSelect={field.onChange}
 														onBlur={field.onBlur}
 														ref={field.ref}
@@ -83,10 +85,10 @@ export default function MarkerIconList({ name }) {
 												)}
 											/>
 										</FlexItem>
-										<FlexItem className={cls.colXs}>
+										<FlexItem className={cls.iconColBtn}>
 											<Controller
 												name={`${name}.${i}.meta.colour`}
-												rules={{ required: __('This field is required', 'flare') }}
+												rules={{ required: true }}
 												render={({ field, fieldState }) => (
 													<ColorSelect
 														{...field}
@@ -95,13 +97,15 @@ export default function MarkerIconList({ name }) {
 												)}
 											/>
 										</FlexItem>
-										<FlexItem className={cls.colXs}>
-											<Button
-												variant='tertiary'
-												icon="no"
-												isDestructive
-												onClick={() => setValue(`meta.icons.${i}.delete`, true)}
-											/>
+										<FlexItem className={cls.iconColBtn}>
+											<BaseControl>
+												<Button
+													variant='tertiary'
+													icon="no"
+													isDestructive
+													onClick={() => setValue(`meta.icons.${i}.delete`, true)}
+												/>
+											</BaseControl>
 										</FlexItem>
 									</Flex>
 								</CardBody>
@@ -118,9 +122,7 @@ export default function MarkerIconList({ name }) {
 						type='button'
 						onClick={() => append({
 							name: '',
-							colour: '',
-							size: ICON_SIZE,
-							meta: { img: { ref: '' } }
+							meta: { colour: '', size: ICON_SIZE, img: { ref: '' } }
 						})}
 					/>
 				</CardBody>
