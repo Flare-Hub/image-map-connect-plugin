@@ -8,8 +8,31 @@ namespace Flare\ImageMap;
  * @since 0.1.0
  */
 class MarkerIcon {
-	/** @var string NAME The taxonomy name for marker icons. */
+	/** @var string The taxonomy name for marker icons. */
 	public const NAME = 'marker-icon';
+
+	/** @var array The API schema for the img meta field. */
+	public const IMG_SCHEMA = array(
+		'type'       => 'object',
+		'properties' => array(
+			'ref'         => array( 'type' => 'string' ),
+			'type'        => array( 'type' => 'string' ),
+			'iconAnchor'  => array(
+				'type'       => 'object',
+				'properties' => array(
+					'x' => array( 'type' => 'number' ),
+					'y' => array( 'type' => 'number' ),
+				),
+			),
+			'popupAnchor' => array(
+				'type'       => 'object',
+				'properties' => array(
+					'x' => array( 'type' => 'number' ),
+					'y' => array( 'type' => 'number' ),
+				),
+			),
+		),
+	);
 
 	/**
 	 * Register Marker Icon taxonomy.
@@ -65,52 +88,6 @@ class MarkerIcon {
 	}
 
 	/**
-	 * Register Marker Icon's location field with the rest API.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function register_img() {
-		$meta_args = array(
-			'object_subtype' => self::NAME,
-			'type'           => 'object',
-			'single'         => true,
-			'show_in_rest'   => array(
-				'schema' => array(
-					'type'       => 'object',
-					'properties' => array(
-						'ref'         => array( 'type' => 'string' ),
-						'type'        => array( 'type' => 'string' ),
-						'iconAnchor'  => array(
-							'type'       => 'object',
-							'properties' => array(
-								'x' => array(
-									'type' => 'number',
-								),
-								'y' => array(
-									'type' => 'number',
-								),
-							),
-						),
-						'popupAnchor' => array(
-							'type'       => 'object',
-							'properties' => array(
-								'x' => array(
-									'type' => 'number',
-								),
-								'y' => array(
-									'type' => 'number',
-								),
-							),
-
-						),
-					),
-				),
-			),
-		);
-		register_meta( 'term', 'img', $meta_args );
-	}
-
-	/**
 	 * Register Marker Icon's size field with the rest API.
 	 *
 	 * @since 0.1.0
@@ -123,5 +100,22 @@ class MarkerIcon {
 			'show_in_rest'   => true,
 		);
 		register_meta( 'term', 'size', $meta_args );
+	}
+
+	/**
+	 * Register Marker Icon's location field with the rest API.
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_img() {
+		$meta_args = array(
+			'object_subtype' => self::NAME,
+			'type'           => 'object',
+			'single'         => true,
+			'show_in_rest'   => array(
+				'schema' => self::IMG_SCHEMA,
+			),
+		);
+		register_meta( 'term', 'img', $meta_args );
 	}
 }

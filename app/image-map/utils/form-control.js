@@ -9,6 +9,6 @@ export { cls }
  * @returns
  */
 export function getControlClass(fieldState) {
-	const isValid = fieldState.isTouched && fieldState.invalid
+	const isValid = fieldState.invalid
 	return cls.field + (isValid ? ' ' + cls.invalid : '')
 }

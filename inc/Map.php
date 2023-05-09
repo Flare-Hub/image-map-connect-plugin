@@ -74,7 +74,7 @@ class Map {
 	}
 
 	/**
-	 * Register Image Map's post types field with the rest API.
+	 * Register Image Map's post types metadata with the rest API.
 	 *
 	 * @since 0.1.0
 	 **/
@@ -86,5 +86,134 @@ class Map {
 			'show_in_rest'   => true,
 		);
 		register_meta( 'post', 'post_types', $meta_args );
+	}
+
+	/**
+	 * Register icon list field with the rest API.
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_icons() {
+		register_rest_field(
+			self::NAME,
+			'icon_details',
+			array(
+				'get_callback'    => array( $this, 'get_icons' ),
+				'update_callback' => array( $this, 'update_icons' ),
+				'schema'          => array(
+					'type'  => 'array',
+					'items' => array(
+						'type'       => 'object',
+						'properties' => array(
+							'id'     => array( 'type' => 'integer' ),
+							'name'   => array( 'type' => 'string' ),
+							'slug'   => array( 'type' => 'string' ),
+							'colour' => array( 'type' => 'string' ),
+							'size'   => array( 'type' => 'integer' ),
+							'img'    => MarkerIcon::IMG_SCHEMA,
+							'delete' => array( 'type' => 'boolean' ),
+						),
+					),
+				),
+			),
+		);
+	}
+
+	/**
+	 * Get the marker icons for the provided post.
+	 *
+	 * @param array $post the current post.
+	 * @return array Simplified models of the marker icons related to the post.
+	 * @since 0.1.0
+	 **/
+	public function get_icons( $post ) {
+		$terms = get_terms(
+			array(
+				'taxonomy'   => MarkerIcon::NAME,
+				'object_ids' => $post['id'],
+			)
+		);
+
+		$icons = array_map(
+			/** @param \WP_Term $term */
+			fn ( $term) => array(
+				'id'     => $term->term_id,
+				'name'   => $term->name,
+				'slug'   => $term->slug,
+				'colour' => get_term_meta( $term->term_id, 'colour', true ),
+				'size'   => (int) get_term_meta( $term->term_id, 'size', true ),
+				'img'    => get_term_meta( $term->term_id, 'img', true ),
+				'delete' => false,
+			),
+			$terms
+		);
+
+		return $icons;
+	}
+
+	/**
+	 * Add, delete or remove the marker icons as defined in the provided post.
+	 *
+	 * @param array    $icons The list of icons to update.
+	 * @param \WP_Post $map The map that these icons belong to.
+	 * @since 0.1.0
+	 **/
+	public function update_icons( array $icons, \WP_Post $map ) {
+		foreach ( $icons as $icon ) {
+			$id = $icon['id'];
+
+			switch ( true ) {
+					// Delete the existing icon.
+				case $icon['delete'] && $id:
+					wp_delete_term( $id, MarkerIcon::NAME );
+					break;
+
+				case ! $icon['delete'] && $id && $icon['name']:
+					// The icon already exists.
+					wp_update_term( $id, MarkerIcon::NAME, array( 'name' => $icon['name'] ) );
+					$this->update_icon_meta( $id, $icon );
+					break;
+
+				case ! $icon['delete'] && ! $id:
+					// Create a new icon with a unique slug and link it to the map.
+					// Get unique slug for the icon.
+					$term_args = array(
+						'slug' => wp_unique_term_slug(
+							sanitize_title( $icon['name'] ),
+							(object) array(
+								'taxonomy' => MarkerIcon::NAME,
+								'parent'   => 0,
+							)
+						),
+					);
+
+					// Create the icon.
+					$term = wp_insert_term( $icon['name'], MarkerIcon::NAME, $term_args );
+					$this->update_icon_meta( $term['term_id'], $icon );
+
+					// Link the icon to the map.
+					wp_set_post_terms( $map->ID, array( $term['term_id'] ), MarkerIcon::NAME, true );
+					break;
+			}
+		}
+	}
+
+	/**
+	 * Update meta fields included in the updated icon.
+	 *
+	 * @param string $id id of the marker-icon term.
+	 * @param array  $icon updated icon.
+	 * @since 0.1.0
+	 **/
+	public function update_icon_meta( string $id, array $icon ) {
+		if ( $icon['colour'] ) {
+			update_term_meta( $id, 'colour', $icon['colour'] );
+		}
+		if ( $icon['size'] ) {
+			update_term_meta( $id, 'size', $icon['size'] );
+		}
+		if ( $icon['img'] ) {
+			update_term_meta( $id, 'img', $icon['img'] );
+		}
 	}
 }

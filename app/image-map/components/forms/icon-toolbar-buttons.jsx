@@ -12,10 +12,10 @@ import 'remixicon/fonts/remixicon.css'
  * @param {Object} props
  * @param {string} props.label The label for the field.
  * @param {Array<Icon>} props.icons A list of icons to select from.
- * @param {string} props.selected The name of the selected marker icon.
+ * @param {Icon} props.selected The name of the selected marker icon.
  * @param {string} props.colour The selected colour.
  * @param {number} props.size The default icon size.
- * @param {(icon: Icon) => void} props.onSelect The callback to call when a button is clicked, passing the name of the icon.
+ * @param {(img: Icon, size: number) => void} props.onSelect The callback to call when a button is clicked, passing the name of the icon.
  * @param {() => void} props.onBlur Triggered when a button looses focus
  * @param {string} props.className
  */
@@ -42,15 +42,15 @@ function IconToolbarButtons(
 								<ToolbarButton
 									key={icon.ref}
 									icon={<i className={icon.ref} style={{ fontSize: size, color: colour }} />}
-									onClick={() => onSelect(icon)}
+									onClick={() => onSelect(icon, size)}
 									isActive={selected.ref === icon.ref}
-									onBlur={onBlur}
 								/>
 							))
 						}
 					</ToolbarGroup>
 				)}
 				expandOnMobile
+				onClose={onBlur}
 			/>
 
 		</BaseControl>

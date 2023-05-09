@@ -105,9 +105,9 @@ export default function useCollection(identifiers, query, initialState, deps) {
 			if (item.id) {
 				res = await postItem(identifiers.endpoint, item.id, item, saveQuery)
 				this.update(res.body)
-
-				// Create a new item if it doesn't have an ID.
-			} else {
+			}
+			// Create a new item if it doesn't have an ID.
+			else {
 				res = await createItem(identifiers.endpoint, item, saveQuery)
 				this.add(res.body)
 			}
@@ -122,14 +122,18 @@ export default function useCollection(identifiers, query, initialState, deps) {
 			// Register which item is being deleted.
 			setSaving(id)
 
+			// Ensure ID is valid
+			const itemId = Number(id)
+			if (isNaN(itemId)) return
+
 			// Update WordPress.
-			const { body } = await deleteItem(identifiers.endpoint, id, { force: true })
+			const { body } = await deleteItem(identifiers.endpoint, itemId, { force: true })
 			if (!body.deleted) throw new Error('To do: handle this!')
 
 			// Remove item from collection
 			setCollection(prevCol => ({
 				...prevCol,
-				list: prevCol.list.filter(item => item.id !== id)
+				list: prevCol.list.filter(item => item.id !== itemId)
 			}))
 
 			setSaving(false)

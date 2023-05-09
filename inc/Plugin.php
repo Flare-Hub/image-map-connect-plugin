@@ -99,6 +99,7 @@ class Plugin {
 	public function rest_api_init() {
 		// Hook Map functions.
 		$this->map->register_connected_post_types();
+		$this->map->register_icons();
 
 		// Hook Layer functions.
 		$this->layer->register_image();
