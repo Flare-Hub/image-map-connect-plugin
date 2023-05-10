@@ -46,8 +46,7 @@ export default function MarkerIconRow({ name }) {
 									size={getValues(name + '.size')}
 									colour={watch(name + '.colour')}
 									onSelect={(img, size) => {
-										// field.onChange(img)
-										setValue(name + '.img', img, { shouldDirty: true, shouldTouch: true, shouldValidate: true })
+										field.onChange(img)
 										setValue(name + '.size', size, { shouldDirty: true })
 									}}
 									onBlur={field.onBlur}

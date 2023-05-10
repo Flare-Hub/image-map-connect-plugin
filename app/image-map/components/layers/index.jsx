@@ -1,4 +1,4 @@
-import { Button } from '@wordpress/components'
+import { Button, Card } from '@wordpress/components'
 
 import useCollection from '../../hooks/useCollection'
 import { useRouter } from '../../contexts/router'
@@ -41,7 +41,10 @@ export default function Layers() {
 				>Add Layer</Button>
 			}
 		>
-			<EditLayer references={wpLayers} layers={layers} />
+			{query[wpLayers.model]
+				? <EditLayer references={wpLayers} layers={layers} />
+				: <Card className="full-height" />
+			}
 		</Layout>
 	)
 }

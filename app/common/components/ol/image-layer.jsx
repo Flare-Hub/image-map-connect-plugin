@@ -69,14 +69,15 @@ export default function ImageLayer({ layer = {}, visible = true, children }) {
 		}
 	}, [projection])
 
-	// Provide a new view using the current props.
+	// Provide a new view using the current props and zoom.
 	useEffect(() => {
+		const zoom = context.map.getView().getZoom()
+
 		if (hasImg && visible) context.map.setView(new View({
-			// minZoom: layer.meta.min_zoom,
-			// maxZoom: layer.meta.max_zoom,
 			projection,
 			extent,
 			constrainOnlyCenter: true,
+			zoom,
 		}))
 	}, [visible, projection])
 

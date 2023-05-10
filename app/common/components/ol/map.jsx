@@ -43,7 +43,7 @@ export default function OlMap({ eventHandlers = {}, oneTimeHandlers = {}, center
 			if (!view) throw new Error('No view found for map. Has a visible base layer been provided?')
 			const extent = view.getProjection().getExtent()
 			view.setCenter(center ?? getCenter(extent))
-			view.setZoom(zoom ?? view.getMinZoom())
+			if (!view.getZoom()) view.setZoom(zoom ?? view.getMinZoom())
 		}
 
 		map.on('change:view', setPosition)

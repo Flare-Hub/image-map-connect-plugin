@@ -1,15 +1,15 @@
-import { TextControl, Button, BaseControl, RangeControl, Card, CardBody, Spinner } from '@wordpress/components'
+import { TextControl, BaseControl, RangeControl, Card, CardBody, Spinner } from '@wordpress/components'
+import { __ } from '@wordpress/i18n'
+import { useEffect } from '@wordpress/element';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import useSelected from '../../hooks/useSelected'
-import useMediaMgr from '../../hooks/useMediaMgr';
 import { useRouter } from '../../contexts/router';
-import LifeCycleButtons from '../forms/lifecycle-buttons'
+import { getControlClass, cls } from '../../utils/form-control';
 import OlMap from 'common/components/ol/map';
 import ImageLayer from 'common/components/ol/image-layer';
-import { postItem } from 'common/utils/wp-fetch';
-import { mapRefs } from '../maps';
-
-import cls from '../forms/edit-form.module.scss'
+import SelectImage from './select-image';
+import LayerLifecycle from './layer-lifecycle';
 
 /**
  * Map details form.
@@ -19,7 +19,7 @@ import cls from '../forms/edit-form.module.scss'
  * @param {import('../../hooks/useCollection').Collection} props.layers
  */
 export default function EditLayer({ references, layers }) {
-	const { query, navigate } = useRouter()
+	const { query } = useRouter()
 
 	// Fetch selected layer from Wordpress.
 	const [layer, setLayer, status] = useSelected(
@@ -34,85 +34,88 @@ export default function EditLayer({ references, layers }) {
 		[references.endpoint, query[references.model]]
 	)
 
-	// Initiate Wordpress media manager to select layer image
-	const mediaMgr = useMediaMgr(false, async (selImages) => {
-		// Get selected image
-		const selImg = await selImages.first()
-
-		setLayer(oldLayer => {
-			// Mimic rest API structure for image details.
-			return {
-				...oldLayer,
-				meta: { ...oldLayer.meta, image: selImg.attributes.id },
-				_embedded: {
-					'flare:image': [{
-						source_url: selImg.attributes.url,
-						media_details: {
-							width: selImg.attributes.width,
-							height: selImg.attributes.height,
-						},
-					}],
-				}
-			}
-		})
+	// Create form validation handler.
+	const form = useForm({
+		mode: 'onTouched',
+		values: layer,
 	})
 
-	/** Save layer */
-	async function onSave(data) {
-		const layerId = await layers.actions.save(data)
-		await postItem(mapRefs.endpoint, query[references.parent], { layers: [layerId] })
-		if (query[references.model] === 'new') navigate({ [references.model]: layerId })
-	}
+	// Reset form after successful submission.
+	useEffect(() => {
+		if (form.formState.isSubmitSuccessful) {
+			setLayer(form.getValues())
+		}
+	}, [form.formState.isSubmitSuccessful])
 
-	function onDelete() {
-		layers.actions.delete(+query[references.model])
-		navigate({ [references.model]: undefined })
-	}
+	// Show a spinner until the layer has loaded.
+	if (status === 'loading') return (
+		<Card className="full-height">
+			<Spinner style={{ width: '100px', height: '100px' }} />
+		</Card>
+	)
 
 	return (
 		<Card className="full-height">
-			{status === 'loading' && <Spinner style={{ width: '100px', height: '100px' }} />}
-			{(status === 'new' || status === 'loaded') && (
+			<FormProvider {...form}>
 				<CardBody>
 					<div className="col-xs-9">
-						<TextControl
-							label="Name"
-							value={layer.name}
-							onChange={val => setLayer(oldLayer => ({ ...oldLayer, name: val }))}
-							className={cls.field}
+						<Controller
+							name="name"
+							rules={{ required: true }}
+							render={({ field, fieldState }) => (
+								<TextControl
+									label={__('Name', 'flare')}
+									{...field}
+									className={getControlClass(fieldState)}
+								/>
+							)}
 						/>
-						<BaseControl label='Image' className={cls.field}>
-							<Button variant='secondary' onClick={() => mediaMgr.open()}>Select image</Button>
-						</BaseControl>
-						<RangeControl
-							label="Maximum zoom"
-							value={layer.meta.max_zoom}
-							onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, max_zoom: val } }))}
-							min="0"
-							max="10"
-							className={`${cls.field} ${cls.center}`}
+						<Controller
+							name="meta.image"
+							rules={{ required: true }}
+							render={({ field, fieldState }) => (
+								<BaseControl label='Image' className={cls.field}>
+									<SelectImage onChange={field.onChange} invalid={fieldState.invalid} />
+								</BaseControl>
+							)}
 						/>
-						<RangeControl
-							label="Minimum zoom"
-							value={layer.meta.min_zoom}
-							onChange={val => setLayer(oldLayer => ({ ...oldLayer, meta: { ...oldLayer.meta, min_zoom: val } }))}
-							min="0"
-							max="10"
-							className={`${cls.field} ${cls.center}`}
+						<Controller
+							name="meta.min_zoom"
+							rules={{ required: true }}
+							render={({ field, fieldState }) => (
+								<RangeControl
+									label={__('Minimum zoom', 'flare')}
+									min="0"
+									max="10"
+									{...field}
+									className={`${getControlClass(fieldState)} ${cls.center}`}
+								/>
+							)}
+						/>
+						<Controller
+							name="meta.max_zoom"
+							rules={{ required: true }}
+							render={({ field, fieldState }) => (
+								<RangeControl
+									label={__('Maximum zoom', 'flare')}
+									min="0"
+									max="10"
+									{...field}
+									className={`${getControlClass(fieldState)} ${cls.center}`}
+								/>
+							)}
 						/>
 						<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
-							<OlMap
-								className={`${cls.border} ${cls.input}`}
-							>
-								<ImageLayer layer={layer} />
+							<OlMap className={`${cls.border} ${cls.input}`}>
+								<ImageLayer layer={form.watch()} />
 							</OlMap>
 						</BaseControl>
 					</div>
 					<div className="col-xs-3">
-						<LifeCycleButtons onSave={() => onSave(layer)} onDelete={onDelete} />
+						<LayerLifecycle layers={layers} references={references} />
 					</div>
 				</CardBody>
-			)}
+			</FormProvider>
 		</Card>
 	)
 }
