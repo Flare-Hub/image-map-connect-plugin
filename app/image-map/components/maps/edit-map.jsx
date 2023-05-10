@@ -43,7 +43,7 @@ export default function EditMap({ references, maps }) {
 		}
 	}, [form.formState.isSubmitSuccessful])
 
-	// Show a spinner until the map and icons have loaded.
+	// Show a spinner until the map has loaded.
 	if (mapStatus === 'loading') return (
 		<Card className="full-height">
 			<Spinner style={{ width: '100px', height: '100px' }} />
