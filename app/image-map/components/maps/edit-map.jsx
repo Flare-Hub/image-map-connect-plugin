@@ -43,71 +43,67 @@ export default function EditMap({ references, maps }) {
 		}
 	}, [form.formState.isSubmitSuccessful])
 
-	// Show a spinner until the map has loaded.
-	if (mapStatus === 'loading') return (
-		<Card className="full-height">
-			<Spinner style={{ width: '100px', height: '100px' }} />
-		</Card>
-	)
-
 	return (
 		<Card className="full-height">
-			<CardBody>
-				<FormProvider {...form}>
-					<div className="col-xs-9">
-						<Controller
-							name="title.raw"
-							rules={{ required: true }}
-							render={({ field, fieldState }) => (
-								<TextControl
-									label={__('Map name', 'flare')}
-									{...field}
-									className={getControlClass(fieldState)}
-								/>
-							)}
-						/>
-						<Controller
-							name="excerpt.raw"
-							rules={{ required: true }}
-							render={({ field, fieldState }) => (
-								<TextControl
-									label={__('Description', 'flare')}
-									{...field}
-									className={getControlClass(fieldState)}
-								/>
-							)}
-						/>
-						<Controller
-							name="meta.post_types"
-							rules={{ required: true }}
-							render={({ field, fieldState }) => (
-								<BaseControl label={__('Post Types', 'flare')} className={getControlClass(fieldState)}>
-									<PostTypesSelect
-										selected={field.value}
-										onSelect={field.onChange}
-										onBlur={field.onBlur}
-										inputClass={cls.input}
-										ref={field.ref}
+			{mapStatus === 'loading' && <Spinner style={{ width: '100px', height: '100px' }} />}
+			{(mapStatus === 'new' || mapStatus === 'loaded') && (
+				<CardBody>
+					<FormProvider {...form}>
+						<div className="col-xs-9">
+							<Controller
+								name="title.raw"
+								rules={{ required: true }}
+								render={({ field, fieldState }) => (
+									<TextControl
+										label={__('Map name', 'flare')}
+										{...field}
+										className={getControlClass(fieldState)}
 									/>
-								</BaseControl>
-							)}
-						/>
-						<BaseControl
-							label={__('Icon categories', 'flare')}
-							className={cls.field +
-								(form.formState.errors.icon_details && form.formState.errors.icon_details.root
-									? ' ' + cls.invalid
-									: '')
-							}
-						>
-							<MarkerIconList name={'icon_details'} />
-						</BaseControl>
-					</div>
-					<div className="col-xs-3">
-						<MapLifecycle maps={maps} references={references} />
-					</div>
-				</FormProvider>
-			</CardBody>
+								)}
+							/>
+							<Controller
+								name="excerpt.raw"
+								rules={{ required: true }}
+								render={({ field, fieldState }) => (
+									<TextControl
+										label={__('Description', 'flare')}
+										{...field}
+										className={getControlClass(fieldState)}
+									/>
+								)}
+							/>
+							<Controller
+								name="meta.post_types"
+								rules={{ required: true }}
+								render={({ field, fieldState }) => (
+									<BaseControl label={__('Post Types', 'flare')} className={getControlClass(fieldState)}>
+										<PostTypesSelect
+											selected={field.value}
+											onSelect={field.onChange}
+											onBlur={field.onBlur}
+											inputClass={cls.input}
+											ref={field.ref}
+										/>
+									</BaseControl>
+								)}
+							/>
+							<BaseControl
+								label={__('Icon categories', 'flare')}
+								className={cls.field +
+									(form.formState.errors.icon_details && form.formState.errors.icon_details.root
+										? ' ' + cls.invalid
+										: '')
+								}
+							>
+								<MarkerIconList name={'icon_details'} />
+							</BaseControl>
+						</div>
+						<div className="col-xs-3">
+							<MapLifecycle maps={maps} references={references} />
+						</div>
+					</FormProvider>
+				</CardBody>
+			)}
 		</Card>
 	)
 }

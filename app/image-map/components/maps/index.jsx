@@ -40,10 +40,7 @@ export default function Maps() {
 				>Add Map</Button>
 			}
 		>
-			{query[mapRefs.model]
-				? <EditMap references={mapRefs} maps={maps} />
-				: <Card className="full-height" />
-			}
+			<EditMap references={mapRefs} maps={maps} />
 		</Layout>
 	)
 }

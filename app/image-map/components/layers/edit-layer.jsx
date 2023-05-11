@@ -47,75 +47,71 @@ export default function EditLayer({ references, layers }) {
 		}
 	}, [form.formState.isSubmitSuccessful])
 
-	// Show a spinner until the layer has loaded.
-	if (status === 'loading') return (
-		<Card className="full-height">
-			<Spinner style={{ width: '100px', height: '100px' }} />
-		</Card>
-	)
-
 	return (
 		<Card className="full-height">
-			<FormProvider {...form}>
-				<CardBody>
-					<div className="col-xs-9">
-						<Controller
-							name="name"
-							rules={{ required: true }}
-							render={({ field, fieldState }) => (
-								<TextControl
-									label={__('Name', 'flare')}
-									{...field}
-									className={getControlClass(fieldState)}
-								/>
-							)}
-						/>
-						<Controller
-							name="meta.image"
-							rules={{ required: true }}
-							render={({ field, fieldState }) => (
-								<BaseControl label='Image' className={cls.field}>
-									<SelectImage onChange={field.onChange} invalid={fieldState.invalid} />
-								</BaseControl>
-							)}
-						/>
-						<Controller
-							name="meta.min_zoom"
-							rules={{ required: true }}
-							render={({ field, fieldState }) => (
-								<RangeControl
-									label={__('Minimum zoom', 'flare')}
-									min="0"
-									max="10"
-									{...field}
-									className={`${getControlClass(fieldState)} ${cls.center}`}
-								/>
-							)}
-						/>
-						<Controller
-							name="meta.max_zoom"
-							rules={{ required: true }}
-							render={({ field, fieldState }) => (
-								<RangeControl
-									label={__('Maximum zoom', 'flare')}
-									min="0"
-									max="10"
-									{...field}
-									className={`${getControlClass(fieldState)} ${cls.center}`}
-								/>
-							)}
-						/>
-						<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
-							<OlMap className={`${cls.border} ${cls.input}`}>
-								<ImageLayer layer={form.watch()} />
-							</OlMap>
-						</BaseControl>
-					</div>
-					<div className="col-xs-3">
-						<LayerLifecycle layers={layers} references={references} />
-					</div>
-				</CardBody>
-			</FormProvider>
+			{status === 'loading' && <Spinner style={{ width: '100px', height: '100px' }} />}
+			{(status === 'new' || status === 'loaded') && (
+				<FormProvider {...form}>
+					<CardBody>
+						<div className="col-xs-9">
+							<Controller
+								name="name"
+								rules={{ required: true }}
+								render={({ field, fieldState }) => (
+									<TextControl
+										label={__('Name', 'flare')}
+										{...field}
+										className={getControlClass(fieldState)}
+									/>
+								)}
+							/>
+							<Controller
+								name="meta.image"
+								rules={{ required: true }}
+								render={({ field, fieldState }) => (
+									<BaseControl label='Image' className={cls.field}>
+										<SelectImage onChange={field.onChange} invalid={fieldState.invalid} />
+									</BaseControl>
+								)}
+							/>
+							<Controller
+								name="meta.min_zoom"
+								rules={{ required: true }}
+								render={({ field, fieldState }) => (
+									<RangeControl
+										label={__('Minimum zoom', 'flare')}
+										min="0"
+										max="10"
+										{...field}
+										className={`${getControlClass(fieldState)} ${cls.center}`}
+									/>
+								)}
+							/>
+							<Controller
+								name="meta.max_zoom"
+								rules={{ required: true }}
+								render={({ field, fieldState }) => (
+									<RangeControl
+										label={__('Maximum zoom', 'flare')}
+										min="0"
+										max="10"
+										{...field}
+										className={`${getControlClass(fieldState)} ${cls.center}`}
+									/>
+								)}
+							/>
+							<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
+								<OlMap className={`${cls.border} ${cls.input}`}>
+									<ImageLayer layer={form.watch()} />
+								</OlMap>
+							</BaseControl>
+						</div>
+						<div className="col-xs-3">
+							<LayerLifecycle layers={layers} references={references} />
+						</div>
+					</CardBody>
+				</FormProvider>
+			)}
 		</Card>
 	)
 }

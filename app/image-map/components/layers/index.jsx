@@ -41,10 +41,7 @@ export default function Layers() {
 				>Add Layer</Button>
 			}
 		>
-			{query[wpLayers.model]
-				? <EditLayer references={wpLayers} layers={layers} />
-				: <Card className="full-height" />
-			}
+			<EditLayer references={wpLayers} layers={layers} />
 		</Layout>
 	)
 }
