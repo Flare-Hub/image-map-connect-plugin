@@ -66,10 +66,10 @@ export default class Map {
 			text: new Text({
 				// Display marker icons using remix icon font characters.
 				font: icon.size + "px remixicon",
-				text: String.fromCharCode(parseInt(remixMap[icon.loc], 16)),
+				text: String.fromCharCode(parseInt(remixMap[icon.img.ref], 16)),
 				fill: new Fill({ color: icon.colour }),
-				offsetX: (0.5 - icon.iconAnchor.x) * icon.size,
-				offsetY: (0.5 - icon.iconAnchor.y) * icon.size,
+				offsetX: (0.5 - icon.img.iconAnchor.x) * icon.size,
+				offsetY: (0.5 - icon.img.iconAnchor.y) * icon.size,
 			})
 		})
 	}
