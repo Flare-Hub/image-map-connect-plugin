@@ -1,37 +1,24 @@
-import { useContext, createContext, useEffect } from '@wordpress/element'
+import { useEffect } from '@wordpress/element'
 import useSelected from '../hooks/useSelected'
 import { wpMarkers } from '../components/markers'
-import useCollection from '../hooks/useCollection'
 import { useRouter } from './router'
-
-/**
- * @typedef MarkerContext
- * @property {Object<string, any>} marker
- * @property {React.Dispatch<React.SetStateAction<Object<string, any>>>} setMarker
- * @property {string} loadStatus
- * @property {Array<Object<string, any>>} postTypes
- */
-
-/** @type {React.Context<MarkerContext>} Create router context */
-const markerContext = createContext(null)
-
-const typesQuery = {}
+import { FormProvider, useForm } from 'react-hook-form'
 
 /**
  * Context provider for the selected marker state.
  *
  * @param {object} props
- * @param {{id: string, type: string}} props.selected list fields from the selected marker.
+ * @param {import('../components/markers').MarkerListing} props.selected list fields from the selected marker.
  * @param {number} props.layer ID of the selected layer
- * @param {Array<Object<string, any>>} props.icons List of icons available to Markers.
+ * @param {Array<Object<string, unknown>>} props.icons List of icons available to Markers.
+ * @param {Array.<Object<string, unknown>>} props.postTypes All post types applicable to markers.
  */
-export function MarkerProvider({ selected, layer, icons, children }) {
+export function MarkerProvider({ selected, layer, icons, postTypes, children }) {
 	const { query } = useRouter()
-	const postTypes = useCollection({ endpoint: 'types' }, typesQuery, { list: {} }, [])
 
 	// Fetch selected marker from Wordpress.
-	const [marker, setMarker, loadStatus] = useSelected(
-		(postTypes.list[selected.type] ?? {}).rest_base,
+	const [marker, setMarker] = useSelected(
+		(postTypes[selected.type] ?? {}).rest_base,
 		query[wpMarkers.model],
 		{ context: 'edit' },
 		{
@@ -39,37 +26,43 @@ export function MarkerProvider({ selected, layer, icons, children }) {
 			title: { raw: '' },
 			excerpt: { raw: '' },
 			layers: [layer],
-			'marker-icons': [],
-			flare_loc: { lng: 0, lat: 0 },
-			type: 'marker',
+			'marker-icons': selected['marker-icons'] ?? [],
+			flare_loc: selected.flare_loc ?? { lng: 0, lat: 0 },
+			type: selected.type ?? 'marker',
 		},
-		[query[wpMarkers.model], postTypes.list[selected.type]],
+		[query[wpMarkers.model], postTypes[selected.type]],
 	)
 
 	// Add current layer to marker if not included already.
 	useEffect(() => {
-		if (Array.isArray(marker.imagemaps) && !marker.imagemaps.includes(layer)) {
-			marker.imagemaps.push(layer)
+		if (Array.isArray(marker.layers) && !marker.layers.includes(layer)) {
+			marker.layers.push(layer)
 		}
-	}, [marker.imagemaps])
+	}, [marker.layers])
+
+	// Create form validation handler.
+	const form = useForm({
+		mode: 'onTouched',
+		values: marker,
+	})
 
 	// Select 1st marker icon by default on new markers.
 	useEffect(() => {
 		if (icons && icons.length && marker['marker-icons'] && !marker['marker-icons'][0]) {
-			setMarker(oldMarker => ({ ...oldMarker, 'marker-icons': [icons[0].id] }))
+			form.setValue('marker-icons', [icons[0].id])
 		}
-	}, [marker.id, marker.status, icons])
+	}, [marker['marker-icons'], icons])
+
+	// Reset form after successful submission.
+	useEffect(() => {
+		if (form.formState.isSubmitSuccessful) {
+			setMarker(form.getValues())
+		}
+	}, [form.formState.isSubmitSuccessful])
 
 	return (
-		<markerContext.Provider value={{ marker, setMarker, loadStatus, postTypes: postTypes.list }} >
+		<FormProvider {...form}>
 			{children}
-		</markerContext.Provider>
+		</FormProvider>
 	)
-}
-
-/**
- * Get the context provided by the marker provider.
- */
-export function useMarker() {
-	return useContext(markerContext)
 }

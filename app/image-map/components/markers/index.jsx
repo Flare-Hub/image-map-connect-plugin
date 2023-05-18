@@ -15,8 +15,22 @@ import SelectedMarkerPin from './selected-marker-pin'
 import NewMarkerPin from './new-marker-pin'
 import CreateMarkerModal from './create-marker-modal'
 import { mapRefs } from '../maps'
+import { Controller } from 'react-hook-form'
+
+import cls from './markers.module.scss'
 
 /** @typedef {import('ol').Map} Map */
+
+/** @typedef {{lng: number, lat: number}} Position */
+
+/**
+ * @typedef MarkerListing
+ * @prop {string} id
+ * @prop {{raw: string}} title
+ * @prop {string} type
+ * @prop {Array<number>} marker-icons
+ * @prop {Position} flare_loc
+ */
 
 /** @type {import('../../hooks/useCollection').WpIdentifiers} */
 export const wpMarkers = {
@@ -31,23 +45,23 @@ export const wpMarkers = {
 export default function Markers() {
 	const { query, navigate } = useRouter()
 
-	// Fetch markers from Wordpress.
+	/** @type {Array<MarkerListing>} Fetch markers from Wordpress. */
 	const markers = useCollection(
 		wpMarkers,
 		{
 			layers: query[wpMarkers.parent],
 			_fields: 'title,id,type,marker-icons,flare_loc',
-			post_types: 'all'
+			post_types: 'all',
+			map: query[mapRefs.model],
 		},
 		{ list: [], page: 1 },
 		[query[wpMarkers.parent]]
 	)
 
-	// Identify the selected marker.
+	/** @type {MarkerListing} Identify the selected marker. */
 	const selected = useMemo(
 		() => {
-			if (markers.loading) return {}
-			if (query[wpMarkers.model] === 'new') return { flare_loc: {} }
+			if (markers.loading || query[wpMarkers.model] === 'new') return {}
 			return markers.list.find(mk => mk.id == query[wpMarkers.model]) ?? {}
 		},
 		[markers, query[wpMarkers.model]]
@@ -63,10 +77,20 @@ export default function Markers() {
 	)
 
 	// Fetch marker icons from Wordpress.
-	const [wpMap, _, loadingMap] = useSelected(mapRefs.endpoint, query[mapRefs.model], {}, {}, [])
-	const icons = wpMap?.meta?.icons
+	const [wpMap] = useSelected(
+		mapRefs.endpoint,
+		query[mapRefs.model],
+		{ _fields: 'icon_details' },
+		{},
+		[]
+	)
+	const icons = wpMap?.icon_details
 
-	/** @type {[Map, React.Dispatch<React.SetStateAction<Map>>]} */
+	// Get all post types applicable to markers.
+	const postTypes = useCollection({ endpoint: 'types' }, {}, { list: {} }, [])
+
+	// Center map when selecting a marker from the list.
+	/**@type {[Map, React.Dispatch<React.SetStateAction<Map>>]} */
 	const [map, setMap] = useState()
 
 	function selectMarker(id) {
@@ -85,7 +109,7 @@ export default function Markers() {
 		<Layout
 			list={markers.list}
 			titleAttr="title.rendered"
-			selected={Number(query.marker)}
+			selected={+query[wpMarkers.model]}
 			selectItem={selectMarker}
 			loading={markers.loading}
 			addButton={
@@ -99,35 +123,38 @@ export default function Markers() {
 			<MarkerProvider
 				icons={icons}
 				selected={selected}
-				layer={query[wpLayers.model]}
+				layer={+query[wpLayers.model]}
+				postTypes={postTypes.list}
 			>
 				<Flex direction="column" gap="1px" className="full-height">
 					<FlexItem>
-						<Card>
-							<OlMap oneTimeHandlers={{ postrender: e => setMap(e.map) }}>
-								<ImageLayer layer={layer} />
-								{!loadingMap && markers.list.map(mk => {
-									if (mk.id == query.marker) {
-										if (selected.flare_loc.lng && selected.flare_loc.lat) {
-											return <SelectedMarkerPin key={query.marker} icons={icons} selected={mk} />
-										}
-									} else {
-										return <ListedMarkerPin key={mk.id} marker={mk} icons={icons} />
-									}
-								})}
-								{selected.flare_loc && !(selected.flare_loc.lng && selected.flare_loc.lat) && (
-									<NewMarkerPin icons={icons} />
-								)}
-							</OlMap>
-						</Card>
+						<Controller
+							name='flare_loc'
+							rules={{ validate: val => val && val.lat > 0 && val.lng > 0 }}
+							render={({ field, fieldState }) => (
+								<Card className={fieldState.invalid && cls.invalid}>
+									<OlMap oneTimeHandlers={{ postrender: e => setMap(e.map) }}>
+										<ImageLayer layer={layer} />
+										{icons && markers.list.map(mk => (
+											(mk.id !== +query.marker) && <ListedMarkerPin key={mk.id} marker={mk} icons={icons} />
+										))}
+										{!markers.loading && query[wpMarkers.model] && (
+											field.value && field.value.lat && field.value.lng
+												? <SelectedMarkerPin icons={icons} newPosition={field.value} onMove={field.onChange} />
+												: <NewMarkerPin onSet={field.onChange} />
+										)}
+									</OlMap>
+								</Card>
+							)}
+						/>
 					</FlexItem>
 					<FlexItem isBlock>
-						<EditMarker actions={markers.actions} layer={layer} />
+						<EditMarker actions={markers.actions} layer={layer} postTypes={postTypes.list} />
 					</FlexItem>
 				</Flex>
 				{showModal && layer.id && <CreateMarkerModal
 					onRequestClose={() => setShowModal(false)}
-					layer={layer.id}
+					layer={+layer.id}
 					map={query.map}
 					actions={markers.actions}
 				/>}

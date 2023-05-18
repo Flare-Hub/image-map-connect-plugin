@@ -35,6 +35,7 @@ export default function useSelected(path, id, query, placeholder, deps) {
 			default:
 				if (!path) break
 				setStatus('loading')
+				setItem(placeholder)
 				getItem(path, id, query).then(({ body }) => {
 					setItem(body)
 					setStatus('loaded')

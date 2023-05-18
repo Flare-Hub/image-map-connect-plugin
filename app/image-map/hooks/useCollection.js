@@ -1,4 +1,4 @@
-import { useEffect, useState } from '@wordpress/element'
+import { useEffect, useMemo, useState } from '@wordpress/element'
 
 import { getCollection, postItem, createItem, deleteItem } from "common/utils/wp-fetch";
 import { useRouter } from '../contexts/router'
@@ -21,7 +21,7 @@ import { useRouter } from '../contexts/router'
  * @typedef Actions
  * @prop {(item: Object<string, unknown>) => void} update Update an item in the collection.
  * @prop {(item: Object<string, unknown>) => void} add Add an item to the collection.
- * @prop {(item: Object<string, unknown>) => Promise<string>} save Save the provided item.
+ * @prop {(item: Object<string, unknown>, endpoint: string) => Promise<string>} save Save the provided item.
  * @prop {(id: string) => void} delete Remove an item from the list.
  */
 
@@ -68,79 +68,85 @@ export default function useCollection(identifiers, query, initialState, deps) {
 		})()
 	}, deps)
 
-	/** @type {Actions} */
-	const actions = {
-		/** Update an item in the collection. */
-		update(item) {
-			setCollection(prevCol => {
-				// Get position of updated map in the map list.
-				const pos = prevCol.list.findIndex(prevItem => prevItem.id === item.id)
+	/** @type {Collection} */
+	const response = useMemo(() => ({
+		...collection,
+		loading,
+		saving,
+		actions: {
+			/** Update an item in the collection. */
+			update(item) {
+				setCollection(prevCol => {
+					// Get position of updated map in the map list.
+					const pos = prevCol.list.findIndex(prevItem => prevItem.id === item.id)
 
-				// Replace relevant item in list and return state with the new list.
-				return {
+					// Replace relevant item in list and return state with the new list.
+					return {
+						...prevCol,
+						list: Object.assign([], prevCol.list, { [pos]: item })
+					}
+				})
+			},
+
+			/** Add an item to the collection. */
+			add(item) {
+				setCollection(prevCol => ({
 					...prevCol,
-					list: Object.assign([], prevCol.list, { [pos]: item })
+					list: [...prevCol.list, item]
+				}))
+			},
+
+			/** Update a map in the list. */
+			async save(item, endpoint) {
+				// Register which item is being saved.
+				setSaving(item.id ?? 'new')
+
+				const saveQuery = { context: 'edit' }
+
+				let res
+
+				const ep = endpoint ?? identifiers.endpoint
+
+				// Update item if it has an ID.
+				if (item.id) {
+					res = await postItem(ep, item.id, item, saveQuery)
+					this.update(res.body)
 				}
-			})
-		},
+				// Create a new item if it doesn't have an ID.
+				else {
+					res = await createItem(ep, item, saveQuery)
+					this.add(res.body)
+				}
 
-		/** Add an item to the collection. */
-		add(item) {
-			setCollection(prevCol => ({
-				...prevCol,
-				list: [...prevCol.list, item]
-			}))
-		},
+				setSaving(false)
 
-		/** Update a map in the list. */
-		async save(item) {
-			// Register which item is being saved.
-			setSaving(item.id ?? 'new')
+				return res.body.id
+			},
 
-			const saveQuery = { context: 'edit' }
+			/** Remove a collection from the list. */
+			async delete(id) {
+				// Register which item is being deleted.
+				setSaving(id)
 
-			let res
+				// Ensure ID is valid
+				const itemId = Number(id)
+				if (isNaN(itemId)) return
 
-			// Update item if it has an ID.
-			if (item.id) {
-				res = await postItem(identifiers.endpoint, item.id, item, saveQuery)
-				this.update(res.body)
-			}
-			// Create a new item if it doesn't have an ID.
-			else {
-				res = await createItem(identifiers.endpoint, item, saveQuery)
-				this.add(res.body)
-			}
+				// Update WordPress.
+				const { body } = await deleteItem(identifiers.endpoint, itemId, { force: true })
+				if (!body.deleted) throw new Error('To do: handle this!')
 
-			setSaving(false)
+				// Remove item from collection
+				setCollection(prevCol => ({
+					...prevCol,
+					list: prevCol.list.filter(item => item.id !== itemId)
+				}))
 
-			return res.body.id
-		},
+				setSaving(false)
+			},
+		}
+	}), [collection, loading, saving])
 
-		/** Remove a collection from the list. */
-		async delete(id) {
-			// Register which item is being deleted.
-			setSaving(id)
-
-			// Ensure ID is valid
-			const itemId = Number(id)
-			if (isNaN(itemId)) return
-
-			// Update WordPress.
-			const { body } = await deleteItem(identifiers.endpoint, itemId, { force: true })
-			if (!body.deleted) throw new Error('To do: handle this!')
-
-			// Remove item from collection
-			setCollection(prevCol => ({
-				...prevCol,
-				list: prevCol.list.filter(item => item.id !== itemId)
-			}))
-
-			setSaving(false)
-		},
-	}
-
-
-	return { ...collection, actions, loading, saving }
+	return response
 }
 

@@ -1,4 +1,4 @@
-import { createContext, useContext } from '@wordpress/element'
+import { createContext, useContext, forwardRef } from '@wordpress/element'
 import { BaseControl, Toolbar, ToolbarGroup, ToolbarButton } from "@wordpress/components";
 import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -38,20 +38,21 @@ function StyleButton({ icon, style, config, toggler }) {
  *
  * @param {object} props
  * @param {string} props.label Form label visible to the end user.
- * @param {string} props.content The html to edit.
+ * @param {string} props.value The html to edit.
  * @param {(content: string) => void} props.onChange Provide changed content on blur.
+ * @param {string} props.className
  */
-export default function RichTextEditor({ label, content, onChange }) {
+function RichTextEditor({ label, value, onChange, className }, ref) {
 	// Initialize TipTap editor
 	const editor = useEditor({
 		extensions: [StarterKit, Underline],
-		content: content,
+		content: value,
 		onBlur: ({ editor }) => onChange && onChange(editor.getHTML())
 	})
 
 	return (
 		<EditorContext.Provider value={editor} >
-			<BaseControl label={label} className={cls.field}>
+			<BaseControl label={label} className={className}>
 				<div className={`${cls.input} ${cls.border} ${editor && editor.isFocused && rteCls.focused}`}>
 					<Toolbar label={label} className={rteCls.toolbar}>
 						<ToolbarGroup>
@@ -77,9 +78,11 @@ export default function RichTextEditor({ label, content, onChange }) {
 							<div className={rteCls.filler}></div>
 						</ToolbarGroup>
 					</Toolbar>
-					<EditorContent editor={editor} className={rteCls.editor} />
+					<EditorContent editor={editor} className={rteCls.editor} ref={ref} />
 				</div>
 			</BaseControl >
 		</EditorContext.Provider>
 	)
 }
+
+export default forwardRef(RichTextEditor)

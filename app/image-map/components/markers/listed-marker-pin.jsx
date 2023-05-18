@@ -28,7 +28,7 @@ export default function ListedMarkerPin({ marker, icons }) {
 			anchor={[(-mi.img.iconAnchor.x * mi.size), (-mi.img.iconAnchor.y * mi.size)]}
 		>
 			<Link query={{ marker: marker.id }} className={cls.link} style={{ height: mi.size }} >
-				<i className={mi.ref} style={getStyles(mi)} />
+				<i className={mi.img.ref} style={getStyles(mi)} />
 			</Link>
 		</Marker>
 	)

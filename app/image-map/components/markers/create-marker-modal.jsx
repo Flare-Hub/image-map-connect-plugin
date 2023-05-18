@@ -1,5 +1,6 @@
 import { Button, RadioControl, ComboboxControl, Modal } from '@wordpress/components'
-import { useState, useMemo, useRef } from '@wordpress/element'
+import { useState, useRef } from '@wordpress/element'
+import { __ } from '@wordpress/i18n';
 
 import { navigate } from '../../contexts/router'
 
@@ -78,14 +79,16 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, actions 
 				onChange={setType}
 				className={cls.field}
 			/>
-			{!posts.loading && <ComboboxControl
+			<ComboboxControl
 				label="Post"
-				options={posts.list.map(post => ({
-					value: post.id,
-					label: post.title.rendered,
-					type: post.type,
-					slug: post.slug,
-				}))}
+				options={posts.loading
+					? [{ label: __('Loading', 'flare') + '...' }]
+					: posts.list.map(post => ({
+						value: post.id,
+						label: post.title.rendered,
+						type: post.type,
+						slug: post.slug,
+					}))}
 				className={cls.field + (type === 'standalone' ? ' ' + mdlCls.hidden : '')}
 				value={post}
 				onChange={setPost}
@@ -93,13 +96,13 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, actions 
 				__experimentalRenderItem={({ item }) => <>
 					<div>{item.label}</div>
 					<small>
-						<div>Type: {item.type} | Slug: {item.slug}</div>
+						<div>{__('Type', 'flare')}: {item.type} | {__('Slug', 'flare')}: {item.slug}</div>
 					</small>
 				</>}
-			/>}
+			/>
 			<div className={mdlCls.right}>
 				<Button className="short" onClick={handleAdd} variant='primary'>
-					Add
+					{__('Add', 'flare')}
 				</Button>
 			</div>
 		</Modal>

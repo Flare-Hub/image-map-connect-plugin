@@ -1,13 +1,14 @@
 import { BaseControl, TextControl, Card, CardBody, Spinner } from '@wordpress/components'
+import { __ } from '@wordpress/i18n';
+import { Controller, useFormContext } from 'react-hook-form';
 
-import { useMarker } from '../../contexts/marker';
-import LifeCycleButtons from '../forms/lifecycle-buttons'
+import { useRouter } from '../../contexts/router';
 import MarkerIconSelect from '../forms/marker-icon-select';
 import RichTextEditor from '../forms/rich-text-editor';
 import ImageSelector from '../forms/image-selector';
+import { getControlClass, cls } from '../../utils/form-control';
 import { wpMarkers } from '.';
-
-import cls from '../forms/edit-form.module.scss'
+import MarkerLifecycle from './marker-lifecycle';
 
 /**
  * Map details form.
@@ -15,69 +16,81 @@ import cls from '../forms/edit-form.module.scss'
  * @param {Object} props
  * @param {import('../../hooks/useCollection').Actions} props.actions
  * @param {Object<string, any>} props.layer
+ * @param {Array.<Object<string, unknown>>} props.postTypes
  */
-export default function EditMarker({ actions, layer }) {
-	const { marker, setMarker, loadStatus, postTypes } = useMarker()
+export default function EditMarker({ actions, layer, postTypes }) {
+	const { query } = useRouter()
+	const { watch } = useFormContext()
 
-	function onSave(data) {
-		const mapId = actions.save(data)
-		if (query[wpMarkers.model] === 'new') navigate({ [wpMarkers.model]: mapId })
-	}
-
-	function onDelete() {
-		actions.delete(query[wpMarkers.model])
-		navigate({ [wpMarkers.model]: undefined })
-	}
+	const markerType = watch('type')
+	const markerId = watch('id')
 
 	return (
 		<Card className="full-height">
-			{loadStatus === 'loading' && <Spinner style={{ width: '100px', height: '100px' }} />}
-			{(loadStatus === 'new' || loadStatus === 'loaded') && (
+			{(!isNaN(query[wpMarkers.model]) && !markerId) && <Spinner style={{ width: '100px', height: '100px' }} />}
+			{(query[wpMarkers.model] === 'new' || markerId) && (
 				<CardBody>
 					<div className="col-xs-9">
-						<BaseControl label="Layer" className={cls.field}>{layer.name}</BaseControl>
-						{postTypes && marker && (
-							<BaseControl label="Type" className={cls.field}>
-								{marker.type === 'marker' ? 'Standalone marker' : postTypes[marker.type].name}
+						<BaseControl label={__('Layer', 'flare')} className={cls.field}>{layer.name}</BaseControl>
+						{postTypes && markerType && (
+							<BaseControl label={__('Type', 'flare')} className={cls.field}>
+								{markerType === 'marker' ? 'Standalone marker' : postTypes[markerType].name}
 							</BaseControl>
 						)}
-						{marker.type !== 'marker' && (
-							<BaseControl label="Post" className={cls.field}>{marker.title.raw}</BaseControl>
+						{markerType !== 'marker' && (
+							<BaseControl label={__('Post', 'flare')} className={cls.field}>{watch('title.raw')}</BaseControl>
 						)}
-						<MarkerIconSelect
-							label="Icon"
-							value={marker['marker-icons'][0]}
-							onSelect={val => {
-								setMarker(oldMarker => ({
-									...oldMarker, 'marker-icons': [val]
-								}))
-							}}
+						<Controller
+							name='marker-icons.0'
+							rules={{ required: true }}
+							render={({ field, fieldState }) => (
+								<MarkerIconSelect
+									label={__('Icon', 'flare')}
+									value={field.value}
+									onSelect={field.onChange}
+									onBlur={field.onBlur}
+									className={getControlClass(fieldState)}
+								/>
+							)}
 						/>
-						{marker.type === 'marker' && (
+						{markerType === 'marker' && (
 							<>
-								<TextControl
-									label="Title"
-									value={marker.title.raw}
-									onChange={val => setMarker(oldMarker => ({ ...oldMarker, title: { raw: val } }))}
-									className={cls.field}
+								<Controller
+									name='title.raw'
+									rules={{ required: true }}
+									render={({ field, fieldState }) => (
+										<TextControl
+											label={__('Title', 'flare')}
+											{...field}
+											className={getControlClass(fieldState)}
+										/>
+									)}
 								/>
-								<RichTextEditor
-									label="Content"
-									content={marker.excerpt.raw}
-									onChange={content => setMarker(oldMarker => ({
-										...oldMarker, excerpt: { raw: content }
-									}))}
+								<Controller
+									name='excerpt.raw'
+									render={({ field, fieldState }) => (
+										<RichTextEditor
+											label={__('Content', 'flare')}
+											{...field}
+											className={getControlClass(fieldState)}
+										/>
+									)}
 								/>
-								<ImageSelector
-									label='Featured Image'
-									imageId={marker.featured_media}
-									onSelect={img => setMarker(oldMarker => ({ ...oldMarker, featured_media: img }))}
+								<Controller
+									name='featured_media'
+									render={({ field, fieldState }) => (
+										<ImageSelector
+											label={__('Featured Image', 'flare')}
+											{...field}
+											className={getControlClass(fieldState)}
+										/>
+									)}
 								/>
 							</>
 						)}
 					</div>
 					<div className="col-xs-3">
-						<LifeCycleButtons onSave={onSave} onDelete={onDelete} />
+						<MarkerLifecycle actions={actions} />
 					</div>
 				</CardBody>
 			)}

@@ -80,42 +80,66 @@ class Marker {
 	 * @since 0.1.0
 	 **/
 	public function filter_rest_query( array $args, \WP_REST_Request $request ) {
-		$imagemaps  = $request->get_param( 'imagemaps' );
+		$layers     = $request->get_param( 'layers' );
 		$post_types = $request->get_param( 'post_types' );
 
-		// If no imagemap is provided, update query to include posts with any imagemap set.
-		if ( ! $imagemaps && 'unlinked' !== $post_types ) {
-			if ( empty( $args['tax_query'] ) ) {
-				$args['tax_query'] = array(); //phpcs:ignore
+		if ( ! $layers ) {
+			// For unlinked posts, query for posts that do not have a location set.
+			if ( 'unlinked' === $post_types ) {
+				if ( empty( $args['meta_query'] ) ) {
+					$args['meta_query'] = array( 'relation' => 'OR' ); //phpcs:ignore
+				}
+				$args['meta_query'][] = array(
+					array(
+						'key'         => 'lat',
+						'compare_key' => 'NOT EXISTS',
+					),
+					array(
+						'key'         => 'lng',
+						'compare_key' => 'NOT EXISTS',
+					),
+				);
+				// If no layer is provided, update query to include posts with any layer set.
+			} else {
+				if ( empty( $args['tax_query'] ) ) {
+					$args['tax_query'] = array(); //phpcs:ignore
+				}
+				$args['tax_query'][] = array(
+					'taxonomy' => 'layer',
+					'operator' => 'EXISTS',
+				);
 			}
-			$args['tax_query'][] = array(
-				'taxonomy' => 'imagemap',
-				'operator' => 'EXISTS',
-			);
 		}
 
 		// Get all post types to include in the query.
-		$map_id            = $request->get_param( 'map' )
-			?? $this->get_parent_map( $imagemaps ? $imagemaps[0] : false );
+		$map_id = $request->get_param( 'map' );
+			// ?? $this->get_parent_map( $layers ? $layers[0] : 0 );
 		$args['post_type'] = $this->get_req_post_types( $post_types, $args['post_type'], $map_id );
 
 		return $args;
 	}
 
 	/**
-	 * Get parent map for a given layer.
+	 * Get parent map ID for a given layer.
+	 * NOTE! Currently not used. Can be removed once properly tested without this.
 	 *
 	 * @param int $layer Child layer.
 	 * @return int|false Map ID.
 	 * @since 0.1.0
 	 **/
 	public function get_parent_map( int $layer ) {
-		if ( ! $layer ) {
-			return false;
-		}
+		$maps = get_posts(
+			array(
+				'post_type' => 'map',
+				'tax_query' => array( //phpcs:ignore
+					'taxonomy' => 'layer',
+					'terms'    => $layer,
+				),
+				'fields'    => 'ids',
+			)
+		);
 
-		$map_hierarchy = get_ancestors( $layer, Layer::NAME );
-		return $map_hierarchy ? end( $map_hierarchy ) : $layer;
+		return $maps[0];
 	}
 
 	/**
@@ -133,7 +157,7 @@ class Marker {
 			case 'unlinked':
 				// Get post types linked to map.
 				if ( $map_id ) {
-					return get_term_meta( $map_id, 'post_types', false );
+					return get_post_meta( $map_id, 'post_types', false );
 				}
 				// If no map provided, return post type as is.
 
@@ -144,7 +168,7 @@ class Marker {
 			default:
 				// Get standalone and map post types.
 				$arg_types = is_array( $post_type ) ? $post_type : array( $post_type );
-				$map_types = $map_id ? get_term_meta( $map_id, 'post_types', false ) : array();
+				$map_types = $map_id ? get_post_meta( $map_id, 'post_types', false ) : array();
 				return array_merge( $map_types, $arg_types ?? array() );
 		}
 	}

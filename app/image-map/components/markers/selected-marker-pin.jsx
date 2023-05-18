@@ -1,41 +1,45 @@
 import { useMemo, useState, useEffect, useCallback } from '@wordpress/element'
-import { useMarker } from "../../contexts/marker"
-import Marker from 'common/components/ol/marker'
-import { useMap } from 'common/components/ol/context'
+import { useFormContext } from 'react-hook-form'
 import { DragPan } from 'ol/interaction'
 
-import cls from './selected-marker-pin.module.scss'
+import Marker from 'common/components/ol/marker'
+import { useMap } from 'common/components/ol/context'
 import { getStyles } from '../../utils/marker-icons'
+
+import cls from './selected-marker-pin.module.scss'
+
+/** @typedef {import ('.').Position} Position */
 
 /**
  * Set marker coordinates for a new marker
  *
  * @param {object} props
- * @param {Array<import('../../utils/marker-icons').IconImg>} props.icons
- * @param {Object<string, any>} props.selected
+ * @param {Array<import('../../utils/marker-icons').IconImg>} props.icons List of possible pin icons.
+ * @param {Position} props.newPosition Position where a new marker is added.
+ * @param {(pos: Position) => void} props.onMove Called when a pin move is complete.
  */
-export default function SelectedMarkerPin({ icons, selected }) {
+export default function SelectedMarkerPin({ icons, newPosition, onMove }) {
 	// Set up state
-	const { marker, setMarker } = useMarker()
+	const { watch } = useFormContext()
 	const { map } = useMap()
 
-	/** @typedef {{lng: number, lat: number}} Position */
-	/**
-	 * Coordinates of the marker
-	 * @type {[Position, (pos: Position) => void]}
-	 * */
-	const [position, setPosition] = useState(selected.flare_loc)
+	/** @type {[Position, (pos: Position) => void]} Coordinates of the marker */
+	const [position, setPosition] = useState({})
+
+	// Reset coordinates when marker selection changes.
+	useEffect(() => {
+		if (newPosition) setPosition(newPosition)
+	}, [newPosition])
 
 	// True after a move is complete.
 	const [moved, setMoved] = useState(false)
 
 	// Set marker icon for the current marker
-	const iconId = selected['marker-icons'][0]
-
+	const iconId = watch('marker-icons.0')
 	const mi = useMemo(() => {
 		if (!iconId) return
 		return icons.find(i => i.id === iconId)
-	}, [marker['marker-icons']])
+	}, [iconId])
 
 	// Update the marker pin position as it is being dragged.
 	const handlePointerMove = useCallback(
@@ -81,13 +85,11 @@ export default function SelectedMarkerPin({ icons, selected }) {
 
 	// Save the pin position to the marker when dragging is complete
 	useEffect(() => {
-		if (moved) {
-			setMarker(oldMarker => ({ ...oldMarker, flare_loc: position }))
-		}
+		if (moved) onMove(position)
 	}, [moved])
 
 	// Make sure everything is loaded.
-	if (!mi) return null
+	if (!mi || !position.lat || !position.lng) return null
 
 	return (
 		<Marker
