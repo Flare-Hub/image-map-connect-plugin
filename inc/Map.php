@@ -168,9 +168,11 @@ class Map {
 					wp_delete_term( $id, MarkerIcon::NAME );
 					break;
 
-				case ! $icon['delete'] && $id && $icon['name']:
+				case ! $icon['delete'] && $id:
 					// The icon already exists.
-					wp_update_term( $id, MarkerIcon::NAME, array( 'name' => $icon['name'] ) );
+					if ( $icon['name'] ) {
+						wp_update_term( $id, MarkerIcon::NAME, array( 'name' => $icon['name'] ) );
+					}
 					$this->update_icon_meta( $id, $icon );
 					break;
 
