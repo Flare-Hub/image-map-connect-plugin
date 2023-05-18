@@ -3,7 +3,6 @@ import { Map } from 'ol'
 
 import { MapProvider } from './context'
 
-import cls from './map.module.scss'
 import { getCenter } from 'ol/extent'
 
 /**
@@ -16,9 +15,8 @@ import { getCenter } from 'ol/extent'
  * @param {Object<string, (any) => void>} props.eventHandlers Event handlers for OL map events.
  * @param {Object<string, (any) => void>} props.oneTimeHandlers One time event handlers for OL map events.
  * @param {string} props.className Class for the map container.
- * @param {import('react').CSSProperties} props.style Inline styling.
  */
-export default function OlMap({ eventHandlers = {}, oneTimeHandlers = {}, center, zoom, className, style, children }) {
+export default function OlMap({ eventHandlers = {}, oneTimeHandlers = {}, center, zoom, className, children }) {
 	// Div to add the map to.
 	const mapTarget = useRef()
 
@@ -65,7 +63,7 @@ export default function OlMap({ eventHandlers = {}, oneTimeHandlers = {}, center
 
 	return (
 		<MapProvider value={{ map }}>
-			<div className={cls.map + (className ? ' ' + className : '')} style={style} ref={mapTarget}>
+			<div className={className} ref={mapTarget}>
 				{children}
 			</div>
 		</MapProvider>

@@ -60,13 +60,6 @@ export default function Edit({
 				showStandAlone={showStandAlone}
 				setShowStandAlone={setAttr.bind(null, 'showStandAlone')}
 			/>
-			<PanelBody title={__('Size', blockMeta.textdomain)} initialOpen={false}>
-				<UnitControl
-					label={__('Height', blockMeta.textdomain)}
-					value={height}
-					onChange={val => setAttributes({ height: val })}
-				/>
-			</PanelBody>
 		</InspectorControls>
 		{mapId ? (
 			<Map

@@ -18,6 +18,7 @@ import { mapRefs } from '../maps'
 import { Controller } from 'react-hook-form'
 
 import cls from './markers.module.scss'
+import mapCls from '../map.module.scss'
 
 /** @typedef {import('ol').Map} Map */
 
@@ -133,7 +134,7 @@ export default function Markers() {
 							rules={{ validate: val => val && val.lat > 0 && val.lng > 0 }}
 							render={({ field, fieldState }) => (
 								<Card className={fieldState.invalid && cls.invalid}>
-									<OlMap oneTimeHandlers={{ postrender: e => setMap(e.map) }}>
+									<OlMap oneTimeHandlers={{ postrender: e => setMap(e.map) }} className={mapCls.canvas}>
 										<ImageLayer layer={layer} />
 										{icons && markers.list.map(mk => (
 											(mk.id !== +query.marker) && <ListedMarkerPin key={mk.id} marker={mk} icons={icons} />

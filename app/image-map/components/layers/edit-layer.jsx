@@ -11,6 +11,8 @@ import ImageLayer from 'common/components/ol/image-layer';
 import SelectImage from './select-image';
 import LayerLifecycle from './layer-lifecycle';
 
+import mapCls from '../map.module.scss'
+
 /**
  * Map details form.
  *
@@ -100,8 +102,8 @@ export default function EditLayer({ references, layers }) {
 									/>
 								)}
 							/>
-							<BaseControl label="Initial position" className={`${cls.field} ${cls.map}`}>
-								<OlMap className={`${cls.border} ${cls.input}`}>
+							<BaseControl label={__('Initial position', 'flare')} className={`${cls.field} ${cls.map}`}>
+								<OlMap className={`${cls.border} ${cls.input} ${mapCls.canvas}`}>
 									<ImageLayer layer={form.watch()} />
 								</OlMap>
 							</BaseControl>

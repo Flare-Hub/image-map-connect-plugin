@@ -4,13 +4,13 @@ import { useEffect, useState } from "@wordpress/element"
 import OlMap from "common/components/ol/map"
 import BaseLayerGroup from "common/components/ol/base-layer-group"
 import ControlBar from "common/components/ol/control-bar"
-
-import blockMeta from "../block.json"
-import cls from "./map.module.scss"
 import SaveView from "./save-view"
 import MarkerPins from "./marker-pins"
 import useMarkerPosts from "./use-marker-posts"
 import useMarkers from "./use-markers"
+import blockMeta from "../block.json"
+
+import cls from "./map.module.scss"
 
 /**
  * Show preview of the map with markers.
@@ -35,7 +35,6 @@ export default function Map({
 	queryType,
 	showStandAlone,
 	page,
-	height,
 	initialView,
 	setView
 }) {
@@ -44,7 +43,7 @@ export default function Map({
 	const markers = useMarkers(mapId, selLayer, posts, showStandAlone)
 
 	return (
-		<OlMap center={initialView.center} zoom={initialView.zoom} style={{ height }}>
+		<OlMap center={initialView.center} zoom={initialView.zoom} className={cls.canvas}>
 			<ControlBar position="top-right" className={cls.withSwitcher}>
 				<BaseLayerGroup
 					mapId={mapId}

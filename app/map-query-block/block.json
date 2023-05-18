@@ -17,10 +17,6 @@
     "mapId": {
       "type": "number"
     },
-    "height": {
-      "type": "string",
-      "default": "400px"
-    },
     "queryType": {
       "type": "string",
       "default": "query"
@@ -32,6 +28,17 @@
     "initialView": {
       "type": "object",
       "default": {}
+    },
+    "style": {
+      "type": "object",
+      "default": {
+        "color": {
+          "background": "#d1d1d1"
+        },
+        "dimensions": {
+          "minHeight": "400px"
+        }
+      }
     }
   },
   "usesContext": [
@@ -41,6 +48,24 @@
     "templateSlug",
     "previewPostType"
   ],
+  "supports": {
+    "anchor": true,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "color": {
+      "text": false,
+      "background": true
+    },
+    "dimensions": {
+      "minHeight": true
+    },
+    "html": false,
+    "spacing": {
+      "margin": true
+    }
+  },
   "editorScript": "file:./editor/index.js",
   "editorStyle": "file:./editor/index.css",
   "viewScript": "file:./view/index.js",
