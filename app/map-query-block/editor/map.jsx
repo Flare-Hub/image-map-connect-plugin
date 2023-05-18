@@ -41,7 +41,7 @@ export default function Map({
 }) {
 	const [selLayer, setSelLayer] = useState(initialView.layer)
 	const posts = useMarkerPosts(queryParams, templateSlug, previewPostType, queryType, page)
-	const markers = useMarkers(selLayer, posts, showStandAlone)
+	const markers = useMarkers(mapId, selLayer, posts, showStandAlone)
 
 	return (
 		<OlMap center={initialView.center} zoom={initialView.zoom} style={{ height }}>
