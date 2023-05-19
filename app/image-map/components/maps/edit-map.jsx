@@ -88,12 +88,10 @@ export default function EditMap({ references, maps }) {
 								)}
 							/>
 							<BaseControl
-								label={__('Icon categories', 'flare')}
-								className={cls.field +
-									(form.formState.errors.icon_details && form.formState.errors.icon_details.root
-										? ' ' + cls.invalid
-										: '')
-								}
+								label={__('Marker icons', 'flare')}
+								className={getControlClass({
+									invalid: form.formState.errors.icon_details && form.formState.errors.icon_details.root
+								})}
 							>
 								<MarkerIconList name={'icon_details'} />
 							</BaseControl>

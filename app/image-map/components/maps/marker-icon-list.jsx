@@ -45,7 +45,7 @@ export default function MarkerIconList({ name }) {
 					text='Add category'
 					variant='secondary'
 					type='button'
-					onClick={() => append({ name: '', colour: '', img: { ref: '' }, size: ICON_SIZE, delete: false })}
+					onClick={() => append({ name: '', count: 1, colour: '', img: { ref: '' }, size: ICON_SIZE, delete: false })}
 				/>
 			</CardBody>
 		</Card>

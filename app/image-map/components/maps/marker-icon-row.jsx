@@ -3,6 +3,7 @@ import { __ } from '@wordpress/i18n'
 import { Controller, useFormContext } from 'react-hook-form'
 import ColorSelect from '../forms/color-select'
 import IconToolbarButtons from '../forms/icon-toolbar-buttons'
+import useNotice from '../../hooks/useNotice'
 import { getControlClass, cls } from '../../utils/form-control'
 import { icons } from '../../utils/marker-icons'
 
@@ -17,6 +18,23 @@ import { icons } from '../../utils/marker-icons'
  */
 export default function MarkerIconRow({ name }) {
 	const { setValue, getValues, watch } = useFormContext()
+	const createNotice = useNotice()
+
+	/** Delete icon if not used on any markers. */
+	function deleteIcon() {
+		// Show error message if icon is used on markers.
+		if (getValues(name + '.count') > 1) {
+			createNotice({
+				style: 'error',
+				message: __('Cannot delete icon that is used by markers.', 'flare'),
+				timeout: 10,
+			})
+
+			return
+		}
+
+		setValue(name + '.delete', true, { shouldDirty: true })
+	}
 
 	return (
 		<>
@@ -74,7 +92,7 @@ export default function MarkerIconRow({ name }) {
 								variant='tertiary'
 								icon="no"
 								isDestructive
-								onClick={() => setValue(name + '.delete', true, { shouldDirty: true })}
+								onClick={deleteIcon}
 							/>
 						</BaseControl>
 					</FlexItem>
