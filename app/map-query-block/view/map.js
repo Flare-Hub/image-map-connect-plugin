@@ -42,9 +42,11 @@ export default class Map {
 		})
 
 		this.popup = new Popup({
-			popupClass: 'default flare-marker-popup',
+			popupClass: 'flare-marker-popup',
 			closeBox: true,
-			onclose: () => this.selector.getFeatures().clear()
+			positioning: 'auto',
+			onclose: () => this.selector.getFeatures().clear(),
+			autoPan: { animation: { duration: 500 } },
 		})
 
 		wpFetch('/wp/v2/types').then(types => {
@@ -122,7 +124,10 @@ export default class Map {
 	onSelectFeature = async (e) => {
 		// Show loading indicator.
 		const point = e.element.getGeometry().getCoordinates()
-		this.popup.show(point, 'Loading...')
+		this.popup.show(
+			point,
+			'<p class="flare-popup-desc flare-popup-title"><strong>Loading...</string></p>'
+		)
 
 		// Get marker from WordPress based on the marker's post type.
 		const collection = this.postTypes[e.element.get('postType')]
@@ -147,6 +152,7 @@ export default class Map {
 
 		// Update popup with marker content.
 		this.popup.show(point, content)
+		this.popup.performAutoPan()
 	}
 
 	/** Close popup for deselected feature. */

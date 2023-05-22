@@ -127,23 +127,32 @@ class BlockMgr {
 	public function get_popup_template( string $template ) {
 		ob_start();
 		?>
-		{{#standalone}}
-			<h4>{{ title.rendered }}</h4>
-		{{/standalone}}
-		{{^standalone}}
-			<a href="{{ link }}"><h4>{{ title.rendered }}</h4></a>
-		{{/standalone}}
-		<div>
+		{{ ^standalone }}
+			<a class="flare-popup-link" href="{{ link }}">
+		{{ /standalone }}
+		{{ #featured_media.media_details.sizes.thumbnail }}
 			<img
 				class="flare-popup-thumbnail"
 				src="{{ featured_media.media_details.sizes.thumbnail.source_url }}"
 				alt="{{ featured_media.alt_text }}"
 			/>
-			{{{ excerpt.rendered }}}
+		{{ /featured_media.media_details.sizes.thumbnail }}
+		<div class="flare-popup-desc">
+			<div class="flare-popup-title">
+				<strong>{{ title.rendered }}</strong>
+			</div>
+			{{ #excerpt.rendered }}
+				<div class="flare-popup-excerpt">
+					{{{ excerpt.rendered }}}
+				</div>
+			{{ /excerpt.rendered }}
+			{{ ^standalone }}
+				<div class="flare-popup-readmore"><?php /* phpcs:ignore */ _e( 'Read more' ); ?>...</div>
+			{{ /standalone }}
 		</div>
-		{{^standalone}}
-			<a href="{{ link }}"><?php /* phpcs:ignore */ _e( 'Read more' ); ?>...</a>
-		{{/standalone}}
+		{{ ^standalone }}
+			</a>
+		{{ /standalone }}
 		<?php
 
 		return ob_get_clean();
