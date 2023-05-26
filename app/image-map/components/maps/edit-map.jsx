@@ -1,47 +1,62 @@
 import { TextControl, Card, CardBody, Spinner, BaseControl } from '@wordpress/components'
 import { __ } from '@wordpress/i18n'
-import { useEffect } from '@wordpress/element';
-import { FormProvider, useForm, Controller } from "react-hook-form";
+import { useEffect } from '@wordpress/element'
+import { FormProvider, useForm, Controller } from "react-hook-form"
 
-import useSelected from "../../hooks/useSelected";
 import { useRouter } from '../../contexts/router'
 import { cls, getControlClass } from '../../utils/form-control'
+import useRecord from '../../hooks/useRecord'
 import PostTypesSelect from '../forms/post-types-select'
 import MarkerIconList from './marker-icon-list'
-import MapLifecycle from './map-lifecycle';
+import MapLifecycle from './map-lifecycle'
+
+/** Default values for a new map. */
+const EMPTY_MAP = {
+	title: { raw: '' },
+	excerpt: { raw: '' },
+	meta: { post_types: [] },
+	icon_details: [],
+	status: 'publish'
+}
 
 /**
  * Map details form.
  *
  * @param {object} props
- * @param {import('../../hooks/useCollection').WpIdentifiers} props.references
- * @param {import('../../hooks/useCollection').Collection} props.maps
+ * @param {import('../../hooks/useCollectionNew').WpIdentifiers} props.references
  */
-export default function EditMap({ references, maps }) {
+export default function EditMap({ references }) {
 	const { query } = useRouter()
 	const mapId = query[references.model]
 
 	// Get map from WordPress.
-	const [map, setMap, mapStatus] = useSelected(
-		references.endpoint,
+	const {
+		record: map,
+		status: mapStatus,
+		saveRecord: saveMap,
+		delRecord: deleteMap
+	} = useRecord(
 		mapId,
-		{ context: 'edit', _fields: 'id,title,excerpt,meta,icon_details,status' },
-		{ title: { raw: '' }, excerpt: { raw: '' }, meta: { post_types: [] }, icon_details: [], status: 'publish' },
-		[mapId]
+		references.type,
+		references.model,
+		{ _fields: 'id,title,excerpt,meta,icon_details,status' },
+		EMPTY_MAP
 	)
 
 	// Create form validation handler.
 	const form = useForm({
 		mode: 'onTouched',
-		values: map
+		defaultValues: map
 	})
 
-	// Reset form after successful submission.
+	const { isSubmitSuccessful, errors } = form.formState
+
+	// Reset form validator when a new map has been fetched or the map is saved.
 	useEffect(() => {
-		if (form.formState.isSubmitSuccessful) {
-			setMap(form.getValues())
+		if (mapStatus === 'new' || mapStatus === 'loaded' || isSubmitSuccessful) {
+			form.reset(map)
 		}
-	}, [form.formState.isSubmitSuccessful])
+	}, [mapStatus, mapId, isSubmitSuccessful])
 
 	return (
 		<Card className="full-height">
@@ -90,14 +105,14 @@ export default function EditMap({ references, maps }) {
 							<BaseControl
 								label={__('Marker icons', 'flare')}
 								className={getControlClass({
-									invalid: form.formState.errors.icon_details && form.formState.errors.icon_details.root
+									invalid: errors.icon_details && errors.icon_details.root
 								})}
 							>
 								<MarkerIconList name={'icon_details'} />
 							</BaseControl>
 						</div>
 						<div className="col-xs-3">
-							<MapLifecycle maps={maps} references={references} />
+							<MapLifecycle save={saveMap} delete={deleteMap} id={mapId} />
 						</div>
 					</FormProvider>
 				</CardBody>

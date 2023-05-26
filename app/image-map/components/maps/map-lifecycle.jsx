@@ -1,56 +1,47 @@
 import { useFormContext } from 'react-hook-form';
-import filterObject from '../../utils/filter-object';
+import useNotice from '../../hooks/useNotice'
+import { navigate } from '../../contexts/router';
 import LifeCycleButtons from "../forms/lifecycle-buttons";
-import { useRouter } from '../../contexts/router';
+import { mapRefs } from '.';
+
+/** @typedef {import('@wordpress/core-data').EntityRecord} EntityRecord */
 
 /**
  * Buttons to save or delete a map.
  *
  * @param {object} props
- * @param {import('../../hooks/useCollection').Collection} props.maps
- * @param {import('../../hooks/useCollection').WpIdentifiers} props.references
+ * @param {(values: EntityRecord) => Promise<void>} props.save
+ * @param {() => Promise<void>} props.delete
+ * @param {string} props.id
  */
-export default function MapLifecycle({ maps, references }) {
-	const { query, navigate } = useRouter()
-	const mapId = query[references.model]
-
+export default function MapLifecycle({ save, delete: del, id: mapId }) {
 	const { formState, handleSubmit } = useFormContext()
-
-	/** Save the provided map and its icons. */
-	async function onSave(data) {
-		const keepValues = {
-			...formState.dirtyFields,
-			icon_details: formState.dirtyFields.icon_details
-				? formState.dirtyFields.icon_details.map(icon => ({
-					...icon,
-					id: true,
-					delete: true,
-				}))
-				: [],
-			id: true
-		}
-		const newMap = data.id ? filterObject(keepValues, data) : data
-
-		const wpId = await maps.actions.save(newMap)
-		if (mapId === 'new') navigate({ [references.model]: wpId })
+	/**
+	 * Save map to WordPress and update url query with the map id.
+	 */
+	async function saveMap(values) {
+		const { id } = await save(values)
+		if (mapId === 'new' && id) navigate({ [mapRefs.model]: id })
 	}
 
-	/** Handle any errors when saving the map */
-	function onError(err) {
-		// TODO: Handle form submission errors.
-		console.log(err);
+	async function delMap() {
+		const success = await del()
+		if (success) navigate({ [mapRefs.model]: undefined })
 	}
 
-	/** Delete the provided map and its icons. */
-	function onDelete() {
-		maps.actions.delete(mapId)
-		// TODO: Handle Icons
-		navigate({ [references.model]: undefined })
+	// Notify user if form fields fail validation on submit.
+	const createNotice = useNotice()
+
+	function handleValidationError() {
+		createNotice({
+			message: __('Please fill out the highlighted required fields.', 'flare'),
+			style: 'error',
+		})
 	}
 
 	return <LifeCycleButtons
-		canSave={formState.isDirty && !formState.isSubmitting && !formState.isSubmitSuccessful}
-		onSave={handleSubmit(onSave, onError)}
-		onDelete={onDelete}
+		canSave={formState.isDirty && !formState.isSubmitting}
+		onSave={handleSubmit(saveMap, handleValidationError)}
+		onDelete={delMap}
 	/>
 }

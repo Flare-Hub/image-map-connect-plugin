@@ -1,14 +1,15 @@
-import { Button, Card } from '@wordpress/components'
+import { Button } from '@wordpress/components'
+import { __ } from '@wordpress/i18n'
 
-import Layout from '../layout'
-import useCollection from '../../hooks/useCollection'
-import EditMap from './edit-map'
+import useCollection from '../../hooks/useCollectionNew'
 import { useRouter } from '../../contexts/router'
+import Layout from '../layout'
+import EditMap from './edit-map'
 
-/** @type {import('../../hooks/useCollection').WpIdentifiers} */
+/** @type {import('../../hooks/useCollectionNew').WpIdentifiers} */
 export const mapRefs = {
 	model: 'map',
-	endpoint: 'maps',
+	type: 'postType',
 	parent: false,
 }
 
@@ -18,29 +19,28 @@ export const mapRefs = {
 export default function Maps() {
 	// Load maps into global state
 	const { query, navigate } = useRouter()
-	const maps = useCollection(
+	const { list, loading } = useCollection(
 		mapRefs,
 		{ _fields: 'id,title' },
-		{ list: [], page: 1 },
 		[]
 	)
 
 	return (
 		<Layout
-			list={maps.list}
+			list={list}
 			titleAttr="title.rendered"
 			selected={Number(query.map)}
 			selectItem={map => navigate({ map })}
-			loading={maps.loading}
+			loading={loading && !(list && list.length)}
 			addButton={
 				<Button
 					variant='primary'
 					className='medium'
 					onClick={() => navigate({ map: 'new' })}
-				>Add Map</Button>
+				>{__('Add Map')}</Button>
 			}
 		>
-			<EditMap references={mapRefs} maps={maps} />
+			<EditMap references={mapRefs} />
 		</Layout>
 	)
 }

@@ -26,10 +26,10 @@ export default function useNotice() {
 	 * @param {boolean} [options.explicitDismiss]
 	 * @param {Function} [options.onDismiss]
 	 */
-	return async ({ message, style, timeout, ...options }) => {
+	return async ({ message, style, timeout = 10, ...options }) => {
 		const action = await createNotice(style, message, options)
 
-		if (timeout) {
+		if (timeout > 0) {
 			clearTimeout(timers.current[action.notice.id])
 			timers.current[action.notice.id] = setTimeout(
 				() => removeNotice(action.notice.id),
