@@ -7,7 +7,9 @@ import { navigate } from '../../contexts/router'
 import mdlCls from './create-marker-modal.module.scss'
 import cls from '../forms/edit-form.module.scss'
 import useCollection from '../../hooks/useCollection'
-import { wpMarkers } from '.'
+import { MARKER_REFS } from '.'
+
+/** @typedef {import('@wordpress/core-data').EntityRecord} EntityRecord */
 
 /**
  * Modal to show when pressing the New Marker button.
@@ -15,10 +17,10 @@ import { wpMarkers } from '.'
  * @param {object} props
  * @param {() => void} props.onRequestClose Called when save button is pressed.
  * @param {number} props.layer ID of the selected layer.
- * @param {number} props.map ID of the selected <map name="" className=""></map>
- * @param {import('../../hooks/useCollection').Actions} props.actions
+ * @param {number} props.map ID of the selected map.
+ * @param {(marker: EntityRecord) => void} props.onRegisterMarker Callback to register existing post as marker.
  */
-export default function CreateMarkerModal({ onRequestClose, layer, map, actions }) {
+export default function CreateMarkerModal({ onRequestClose, layer, map, onRegisterMarker }) {
 	const [type, setType] = useState('standalone')
 	const [post, setPost] = useState()
 
@@ -27,14 +29,14 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, actions 
 	const [debouncedSearch, setDebouncedSearch] = useState()
 
 	// Get all posts not yet on the selected layer.
-	const posts = useCollection(wpMarkers, {
+	const posts = useCollection(MARKER_REFS, {
 		layers_exclude: layer,
 		post_types: 'unlinked',
 		map: map,
 		_fields: 'id,title,type,slug',
 		per_page: 100,
 		search: debouncedSearch
-	}, { list: [] }, [layer, debouncedSearch])
+	}, [layer, debouncedSearch])
 
 	/** Add the selected post to the markers list. */
 	function handleAdd() {
@@ -42,9 +44,8 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, actions 
 			navigate({ marker: 'new' })
 		} else {
 			const marker = posts.list.find(p => p.id === post)
-			actions.add({
+			onRegisterMarker({
 				...marker,
-				layers: [layer],
 				'marker-icons': [],
 				flare_loc: {},
 			})

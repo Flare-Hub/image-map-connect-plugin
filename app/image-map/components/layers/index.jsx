@@ -1,4 +1,5 @@
-import { Button, Card } from '@wordpress/components'
+import { Button } from '@wordpress/components'
+import { __ } from '@wordpress/i18n'
 
 import useCollection from '../../hooks/useCollection'
 import { useRouter } from '../../contexts/router'
@@ -6,9 +7,9 @@ import Layout from '../layout'
 import EditLayer from './edit-layer'
 
 /** @type {import('../../hooks/useCollection').WpIdentifiers} */
-export const wpLayers = {
+export const LAYER_REFS = {
 	model: 'layer',
-	endpoint: 'layers',
+	type: 'taxonomy',
 	parent: 'map',
 }
 
@@ -19,29 +20,28 @@ export default function Layers() {
 	const { query, navigate } = useRouter()
 
 	// Load layers into global state
-	const layers = useCollection(
-		wpLayers,
-		{ post: Number(query[wpLayers.parent]), _fields: 'name,id' },
-		{ list: [], page: 1 },
-		[query[wpLayers.parent]]
+	const { list, loading } = useCollection(
+		LAYER_REFS,
+		{ post: +query[LAYER_REFS.parent], _fields: 'name,id' },
+		[query[LAYER_REFS.parent]]
 	)
 
 	return (
 		<Layout
-			list={layers.list}
+			list={list}
 			titleAttr="name"
-			selected={Number(query.layer)}
+			selected={+query[LAYER_REFS.model]}
 			selectItem={layer => navigate({ layer })}
-			loading={layers.loading}
+			loading={loading && !(list && list.length)}
 			addButton={
 				<Button
 					variant='primary'
 					className='medium'
 					onClick={() => navigate({ layer: 'new' })}
-				>Add Layer</Button>
+				>{__('Add Layer')}</Button>
 			}
 		>
-			<EditLayer references={wpLayers} layers={layers} />
+			<EditLayer references={LAYER_REFS} />
 		</Layout>
 	)
 }

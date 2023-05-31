@@ -8,7 +8,7 @@ import { cls, getControlClass } from '../../utils/form-control'
 import useRecord from '../../hooks/useRecord'
 import PostTypesSelect from '../forms/post-types-select'
 import MarkerIconList from './marker-icon-list'
-import MapLifecycle from './map-lifecycle'
+import LifeCycleButtons from '../forms/lifecycle-buttons'
 
 /** Default values for a new map. */
 const EMPTY_MAP = {
@@ -23,7 +23,7 @@ const EMPTY_MAP = {
  * Map details form.
  *
  * @param {object} props
- * @param {import('../../hooks/useCollectionNew').WpIdentifiers} props.references
+ * @param {import('../../hooks/useCollection').WpIdentifiers} props.references
  */
 export default function EditMap({ references }) {
 	const { query } = useRouter()
@@ -112,7 +112,7 @@ export default function EditMap({ references }) {
 							</BaseControl>
 						</div>
 						<div className="col-xs-3">
-							<MapLifecycle save={saveMap} delete={deleteMap} id={mapId} />
+							<LifeCycleButtons model={references.model} id={mapId} onSave={saveMap} onDelete={deleteMap} />
 						</div>
 					</FormProvider>
 				</CardBody>

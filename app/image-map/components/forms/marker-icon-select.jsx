@@ -22,9 +22,8 @@ export default function MarkerIconSelect({ label, value, onSelect, onBlur, class
 
 	// Get icons from WordPress.
 	const { list, loading } = useCollection(
-		{ endpoint: 'marker-icons' },
+		{ type: 'taxonomy', model: 'marker-icon' },
 		{ post: +query[mapRefs.model] },
-		{ list: [] },
 		[query[mapRefs.model]]
 	)
 

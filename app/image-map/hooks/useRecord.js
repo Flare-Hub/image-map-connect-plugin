@@ -20,9 +20,12 @@ import useNotice from './useNotice'
  * @param {string} type Type of WP entity record.
  * @param {string} name Name of the WP entity record.
  * @param {EntityRecord} placeholder Empty object as placeholder for a new item.
+ * @param {Array<unknown>} deps Dependencies other than id, type and name.
  * @returns {RecordHandler} Item state
  */
-export default function useRecord(id, type, name, query, placeholder) {
+export default function useRecord(id, type, name, query, placeholder = {}, deps = []) {
+
+
 	const {
 		saveEntityRecord,
 		deleteEntityRecord
@@ -51,7 +54,7 @@ export default function useRecord(id, type, name, query, placeholder) {
 					record: getEntityRecord(type, name, id, query),
 				}
 		}
-	}, [type, name, id, query])
+	}, [type, name, id, ...deps])
 
 	/** Save record changes to WordPress. */
 	function saveRecord(values) {

@@ -1,12 +1,12 @@
 import { Button } from '@wordpress/components'
 import { __ } from '@wordpress/i18n'
 
-import useCollection from '../../hooks/useCollectionNew'
+import useCollection from '../../hooks/useCollection'
 import { useRouter } from '../../contexts/router'
 import Layout from '../layout'
 import EditMap from './edit-map'
 
-/** @type {import('../../hooks/useCollectionNew').WpIdentifiers} */
+/** @type {import('../../hooks/useCollection').WpIdentifiers} */
 export const mapRefs = {
 	model: 'map',
 	type: 'postType',
