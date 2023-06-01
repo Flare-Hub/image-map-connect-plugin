@@ -1,6 +1,6 @@
 import { TextControl, BaseControl, RangeControl, Card, CardBody, Spinner } from '@wordpress/components'
 import { __ } from '@wordpress/i18n'
-import { useEffect } from '@wordpress/element';
+import { useEffect, useMemo } from '@wordpress/element';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import { useRouter } from '../../contexts/router';
@@ -13,21 +13,20 @@ import SelectImage from './select-image';
 
 import mapCls from '../map.module.scss'
 
-const EMPTY_LAYER = {
-	name: '',
-	description: '',
-	meta: { initial_bounds: [] },
-}
-
 /**
  * Map details form.
  *
  * @param {Object} props
- * @param {import('../../hooks/useCollection').WpIdentifiers} props.references
  */
-export default function EditLayer({ references }) {
+export default function EditLayer() {
 	const { query } = useRouter()
-	const layerId = query[references.model]
+
+	const emptyLayer = useMemo(() => ({
+		name: '',
+		description: '',
+		meta: { initial_bounds: [] },
+		map: +query.map,
+	}), [query.map])
 
 	// Fetch selected layer from Wordpress.
 	const {
@@ -36,11 +35,11 @@ export default function EditLayer({ references }) {
 		saveRecord: save,
 		delRecord: del
 	} = useRecord(
-		layerId,
-		references.type,
-		references.model,
+		query.layer,
+		'taxonomy',
+		'layer',
 		{ _fields: 'id,name,meta,_links.flare:image,_embedded', _embed: 1 },
-		EMPTY_LAYER
+		emptyLayer
 	)
 
 	// Create form validation handler.
@@ -54,7 +53,7 @@ export default function EditLayer({ references }) {
 		if (status === 'new' || status === 'loaded' || form.formState.isSubmitSuccessful) {
 			form.reset(layer)
 		}
-	}, [status, layerId, form.formState.isSubmitSuccessful])
+	}, [status, query.layer, form.formState.isSubmitSuccessful])
 
 	return (
 		<Card className="full-height">
@@ -116,7 +115,7 @@ export default function EditLayer({ references }) {
 							</BaseControl>
 						</div>
 						<div className="col-xs-3">
-							<LifeCycleButtons model={references.model} id={layerId} onSave={save} onDelete={del} />
+							<LifeCycleButtons model="layer" id={query.layer} onSave={save} onDelete={del} />
 						</div>
 					</CardBody>
 				</FormProvider>
