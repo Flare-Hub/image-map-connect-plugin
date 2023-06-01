@@ -17,8 +17,8 @@ import useNotice from './useNotice'
  * Get controlled state for an item selected from a collection.
  *
  * @param {number} id ID of the item to fetch from the collection.
- * @param {string} type Type of WP entity record.
- * @param {string} name Name of the WP entity record.
+ * @param {'postType' | 'taxonomy'} type Type of WP entity record.
+ * @param {'map' | 'layer' | 'marker' | 'marker-icon'} name Name of the WP entity record.
  * @param {EntityRecord} placeholder Empty object as placeholder for a new item.
  * @param {Array<unknown>} deps Dependencies other than id, type and name.
  * @returns {RecordHandler} Item state
@@ -63,7 +63,7 @@ export default function useRecord(id, type, name, query, placeholder = {}, deps 
 
 	/** Delete record from WordPress. */
 	function delRecord() {
-		return deleteEntityRecord(type, name, id);
+		return deleteEntityRecord(type, name, id, { force: true });
 	}
 
 	/** Get syncing errors for the record. */
