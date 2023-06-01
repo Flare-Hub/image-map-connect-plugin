@@ -1,15 +1,6 @@
 import { useSelect } from '@wordpress/data'
 import { store } from '@wordpress/core-data'
 
-import { useRouter } from '../contexts/router'
-
-/**
- * @typedef WpIdentifiers
- * @prop {string} model
- * @prop {string} type
- * @prop {string} parent
- */
-
 /**
  * @typedef Collection
  * @prop {Array<import('@wordpress/core-data').EntityRecord>} list List of WordPress records.
@@ -19,25 +10,21 @@ import { useRouter } from '../contexts/router'
 /**
  * Import collection from wordpress and dispatch it to global state.
  *
- * @param {WpIdentifiers} identifiers The name of the collection as registered in wordpress.
+ * @param {'postType' | 'taxonomy'} type The type of WordPress object that the collection consists of.
+ * @param {'map' | 'layer' | 'marker' | 'marker-icon'} model The name of the collection as registered in WordPress.
  * @param {object} query The query to use when fetching the collection.
- * @param {Array<unknown>} props.deps Dependencies that change the collection.
+ * @param {Array<unknown>} deps Dependencies that change the collection.
  * @returns {Collection}
  */
-export default function useCollection(identifiers, query, deps = []) {
-	const { query: appQuery } = useRouter()
-
+export default function useCollection(type, model, query, deps = []) {
 	return useSelect(select => {
 		const { getEntityRecords, hasFinishedResolution } = select(store)
-		const fetchArgs = [identifiers.type, identifiers.model, query]
+		const fetchArgs = [type, model, query]
 
-		const list = appQuery[identifiers.parent] === 'new'
-			? null
-			: getEntityRecords(...fetchArgs)
-
-		const loading = !hasFinishedResolution('getEntityRecords', fetchArgs)
-
-		return { list: list ?? [], loading }
+		return {
+			list: getEntityRecords(...fetchArgs) ?? [],
+			loading: !hasFinishedResolution('getEntityRecords', fetchArgs),
+		}
 	}, deps)
 }
 

@@ -23,11 +23,9 @@ const EMPTY_MAP = {
  * Map details form.
  *
  * @param {object} props
- * @param {import('../../hooks/useCollection').WpIdentifiers} props.references
  */
-export default function EditMap({ references }) {
+export default function EditMap() {
 	const { query } = useRouter()
-	const mapId = query[references.model]
 
 	// Get map from WordPress.
 	const {
@@ -36,9 +34,9 @@ export default function EditMap({ references }) {
 		saveRecord: saveMap,
 		delRecord: deleteMap
 	} = useRecord(
-		mapId,
-		references.type,
-		references.model,
+		query.map,
+		'postType',
+		'map',
 		{ _fields: 'id,title,excerpt,meta,icon_details,status' },
 		EMPTY_MAP
 	)
@@ -56,7 +54,7 @@ export default function EditMap({ references }) {
 		if (mapStatus === 'new' || mapStatus === 'loaded' || isSubmitSuccessful) {
 			form.reset(map)
 		}
-	}, [mapStatus, mapId, isSubmitSuccessful])
+	}, [mapStatus, query.map, isSubmitSuccessful])
 
 	return (
 		<Card className="full-height">
@@ -112,7 +110,7 @@ export default function EditMap({ references }) {
 							</BaseControl>
 						</div>
 						<div className="col-xs-3">
-							<LifeCycleButtons model={references.model} id={mapId} onSave={saveMap} onDelete={deleteMap} />
+							<LifeCycleButtons model="map" id={query.map} onSave={saveMap} onDelete={deleteMap} />
 						</div>
 					</FormProvider>
 				</CardBody>

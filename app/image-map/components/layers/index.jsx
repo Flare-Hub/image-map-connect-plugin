@@ -6,13 +6,6 @@ import { useRouter } from '../../contexts/router'
 import Layout from '../layout'
 import EditLayer from './edit-layer'
 
-/** @type {import('../../hooks/useCollection').WpIdentifiers} */
-export const LAYER_REFS = {
-	model: 'layer',
-	type: 'taxonomy',
-	parent: 'map',
-}
-
 /**
  * List of maps with details of selected map
  */
@@ -21,27 +14,36 @@ export default function Layers() {
 
 	// Load layers into global state
 	const { list, loading } = useCollection(
-		LAYER_REFS,
-		{ post: +query[LAYER_REFS.parent], _fields: 'name,id' },
-		[query[LAYER_REFS.parent]]
+		'taxonomy',
+		'layer',
+		{ post: +query.map ?? 0, _fields: 'name,id' },
+		[query.map]
 	)
+
+	/** Update layer in query attributes and unset marker. */
+	function setLayer(layer) {
+		navigate({
+			layer,
+			marker: null,
+		})
+	}
 
 	return (
 		<Layout
 			list={list}
 			titleAttr="name"
-			selected={+query[LAYER_REFS.model]}
-			selectItem={layer => navigate({ layer })}
+			selected={+query.layer}
+			selectItem={setLayer}
 			loading={loading && !(list && list.length)}
 			addButton={
 				<Button
 					variant='primary'
 					className='medium'
-					onClick={() => navigate({ layer: 'new' })}
+					onClick={() => setLayer('new')}
 				>{__('Add Layer')}</Button>
 			}
 		>
-			<EditLayer references={LAYER_REFS} />
+			<EditLayer />
 		</Layout>
 	)
 }

@@ -4,9 +4,6 @@ import { Controller, useForm } from 'react-hook-form'
 
 import { useRouter } from '../../contexts/router'
 import useRecord from '../../hooks/useRecord'
-import { LAYER_REFS } from '../layers';
-import { MARKER_REFS } from '.';
-import { mapRefs } from '../maps'
 import OlMap from 'common/components/ol/map'
 import ListedMarkerPin from './listed-marker-pin'
 import ImageLayer from 'common/components/ol/image-layer'
@@ -29,20 +26,15 @@ export default function MarkerLocations({ onMapLoaded, markers }) {
 
 	// Fetch selected layer from Wordpress.
 	const { record: layer, status } = useRecord(
-		[query[LAYER_REFS.model]],
-		LAYER_REFS.type,
-		LAYER_REFS.model,
+		[query.layer],
+		'taxonomy',
+		'layer',
 		{ _fields: 'id,name,meta,_links.flare:image,_embedded', _embed: 1 },
 		{ meta: {} }
 	)
 
 	// Fetch marker icons from Wordpress.
-	const { record: wpMap } = useRecord(
-		query[mapRefs.model],
-		mapRefs.type,
-		mapRefs.model,
-		{ _fields: 'icon_details' }
-	)
+	const { record: wpMap } = useRecord(query.map, 'postType', 'map', { _fields: 'icon_details' })
 
 	const mapIcons = wpMap?.icon_details
 	const icons = watch('marker-icons')
@@ -67,9 +59,9 @@ export default function MarkerLocations({ onMapLoaded, markers }) {
 							<>
 								<ImageLayer layer={layer} />
 								{mapIcons && markers.list.map(mk => (
-									(mk.id !== +query[MARKER_REFS.model]) && <ListedMarkerPin key={mk.id} marker={mk} icons={mapIcons} />
+									(mk.id !== +query.marker) && <ListedMarkerPin key={mk.id} marker={mk} icons={mapIcons} />
 								))}
-								{mapIcons && !markers.loading && query[MARKER_REFS.model] && (
+								{mapIcons && !markers.loading && query.marker && (
 									field.value && field.value.lat && field.value.lng
 										? <SelectedMarkerPin icons={mapIcons} newPosition={field.value} onMove={field.onChange} />
 										: <NewMarkerPin onSet={field.onChange} />

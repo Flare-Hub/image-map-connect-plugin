@@ -7,7 +7,6 @@ import { navigate } from '../../contexts/router'
 import mdlCls from './create-marker-modal.module.scss'
 import cls from '../forms/edit-form.module.scss'
 import useCollection from '../../hooks/useCollection'
-import { MARKER_REFS } from '.'
 
 /** @typedef {import('@wordpress/core-data').EntityRecord} EntityRecord */
 
@@ -29,7 +28,7 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, onRegist
 	const [debouncedSearch, setDebouncedSearch] = useState()
 
 	// Get all posts not yet on the selected layer.
-	const posts = useCollection(MARKER_REFS, {
+	const posts = useCollection('postType', 'marker', {
 		layers_exclude: layer,
 		post_types: 'unlinked',
 		map: map,

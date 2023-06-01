@@ -3,7 +3,6 @@ import { useMemo } from '@wordpress/element'
 
 import { useRouter } from '../../contexts/router'
 import useCollection from '../../hooks/useCollection'
-import { mapRefs } from '../maps'
 
 import cls from './edit-form.module.scss'
 
@@ -22,9 +21,10 @@ export default function MarkerIconSelect({ label, value, onSelect, onBlur, class
 
 	// Get icons from WordPress.
 	const { list, loading } = useCollection(
-		{ type: 'taxonomy', model: 'marker-icon' },
-		{ post: +query[mapRefs.model] },
-		[query[mapRefs.model]]
+		'taxonomy',
+		'marker-icon',
+		{ post: +query.map ?? 0 },
+		[query.map]
 	)
 
 	// Format icon for dropdown.

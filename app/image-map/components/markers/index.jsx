@@ -1,13 +1,12 @@
 import { Button } from '@wordpress/components'
 import { useState, useEffect } from '@wordpress/element'
+import { __ } from '@wordpress/i18n'
 
 import { useRouter } from '../../contexts/router'
 import { MarkerForm } from './marker-form'
 import useCollection from '../../hooks/useCollection'
-import { LAYER_REFS } from '../layers';
 import Layout from '../layout'
 import CreateMarkerModal from './create-marker-modal'
-import { mapRefs } from '../maps'
 
 /** @typedef {import('ol').Map} Map */
 
@@ -22,13 +21,6 @@ import { mapRefs } from '../maps'
  * @prop {Position} flare_loc
  */
 
-/** @type {import('../../hooks/useCollection').WpIdentifiers} */
-export const MARKER_REFS = {
-	model: 'marker',
-	type: 'postType',
-	parent: 'layer',
-}
-
 /**
  * List of maps with details of selected map.
  */
@@ -36,24 +28,20 @@ export default function Markers() {
 	const { query, navigate } = useRouter()
 
 	// Fetch markers from Wordpress.
-	const markers = useCollection(
-		MARKER_REFS,
-		{
-			layers: query[MARKER_REFS.parent],
-			_fields: 'title,id,type,marker-icons,flare_loc',
-			post_types: 'all',
-			map: query[mapRefs.model],
-		},
-		[query[MARKER_REFS.parent]]
-	)
+	const markers = useCollection('postType', 'marker', {
+		layers: +query.layer ?? 0,
+		_fields: 'title,id,type,marker-icons,flare_loc',
+		post_types: 'all',
+		map: query.map,
+	}, [query.layer, query.map])
 
 	// Get selected marker from marker list or create marker popup.
 	const [selected, setSelected] = useState()
 
 	useEffect(() => {
-		const marker = markers.list.find(mk => mk.id === +query[MARKER_REFS.model])
+		const marker = markers.list.find(mk => mk.id === +query.marker)
 		if (marker) setSelected(marker)
-	}, [markers.list, query[MARKER_REFS.model]])
+	}, [markers.list, query.marker])
 
 	// Center map when selecting a marker from the list.
 	/**@type {[Map, React.Dispatch<React.SetStateAction<Map>>]} */
@@ -75,7 +63,7 @@ export default function Markers() {
 		<Layout
 			list={markers.list}
 			titleAttr="title.rendered"
-			selected={+query[MARKER_REFS.model]}
+			selected={+query.marker}
 			selectItem={selectMarker}
 			loading={markers.loading}
 			addButton={
@@ -83,7 +71,7 @@ export default function Markers() {
 					variant='primary'
 					className='medium'
 					onClick={() => setShowModal(true)}
-				>Add Marker</Button>
+				>{__('Add Marker', 'flare')}</Button>
 			}
 		>
 			<MarkerForm
@@ -93,8 +81,8 @@ export default function Markers() {
 			/>
 			{showModal && <CreateMarkerModal
 				onRequestClose={() => setShowModal(false)}
-				layer={+query[LAYER_REFS.model]}
-				map={query[LAYER_REFS.parent]}
+				layer={+query.marker}
+				map={+query.map}
 				onRegisterMarker={setSelected}
 			/>}
 		</Layout>
