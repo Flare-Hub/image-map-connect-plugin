@@ -1,15 +1,15 @@
 import { TextControl, BaseControl, RangeControl, Card, CardBody, Spinner } from '@wordpress/components'
 import { __ } from '@wordpress/i18n'
-import { useEffect } from '@wordpress/element';
+import { useEffect, useMemo } from '@wordpress/element';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
-import useSelected from '../../hooks/useSelected'
 import { useRouter } from '../../contexts/router';
 import { getControlClass, cls } from '../../utils/form-control';
+import useRecord from '../../hooks/useRecord';
 import OlMap from 'common/components/ol/map';
 import ImageLayer from 'common/components/ol/image-layer';
+import LifeCycleButtons from '../forms/lifecycle-buttons';
 import SelectImage from './select-image';
-import LayerLifecycle from './layer-lifecycle';
 
 import mapCls from '../map.module.scss'
 
@@ -17,37 +17,43 @@ import mapCls from '../map.module.scss'
  * Map details form.
  *
  * @param {Object} props
- * @param {import('../../hooks/useCollection').WpIdentifiers} props.references
- * @param {import('../../hooks/useCollection').Collection} props.layers
  */
-export default function EditLayer({ references, layers }) {
+export default function EditLayer() {
 	const { query } = useRouter()
 
+	const emptyLayer = useMemo(() => ({
+		name: '',
+		description: '',
+		meta: { initial_bounds: [] },
+		map: +query.map,
+	}), [query.map])
+
 	// Fetch selected layer from Wordpress.
-	const [layer, setLayer, status] = useSelected(
-		references.endpoint,
-		query[references.model],
-		{ context: 'edit', _embed: 1 },
-		{
-			name: '',
-			description: '',
-			meta: { initial_bounds: [] },
-		},
-		[references.endpoint, query[references.model]]
+	const {
+		record: layer,
+		status,
+		saveRecord: save,
+		delRecord: del
+	} = useRecord(
+		query.layer,
+		'taxonomy',
+		'layer',
+		{ _fields: 'id,name,meta,_links.flare:image,_embedded', _embed: 1 },
+		emptyLayer
 	)
 
 	// Create form validation handler.
 	const form = useForm({
 		mode: 'onTouched',
-		values: layer,
+		defaultValues: layer,
 	})
 
-	// Reset form after successful submission.
+	// Reset form validator when a new layer has been fetched or layer map is saved.
 	useEffect(() => {
-		if (form.formState.isSubmitSuccessful) {
-			setLayer(form.getValues())
+		if (status === 'new' || status === 'loaded' || form.formState.isSubmitSuccessful) {
+			form.reset(layer)
 		}
-	}, [form.formState.isSubmitSuccessful])
+	}, [status, query.layer, form.formState.isSubmitSuccessful])
 
 	return (
 		<Card className="full-height">
@@ -109,7 +115,7 @@ export default function EditLayer({ references, layers }) {
 							</BaseControl>
 						</div>
 						<div className="col-xs-3">
-							<LayerLifecycle layers={layers} references={references} />
+							<LifeCycleButtons model="layer" id={query.layer} onSave={save} onDelete={del} />
 						</div>
 					</CardBody>
 				</FormProvider>

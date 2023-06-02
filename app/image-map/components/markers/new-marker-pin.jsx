@@ -2,7 +2,6 @@ import { useEffect } from '@wordpress/element'
 
 import { useMap } from "common/components/ol/context"
 import { useRouter } from '../../contexts/router'
-import { wpMarkers } from '.'
 
 /**
  * List of Leaflet markers to display on a map.
@@ -21,7 +20,7 @@ export default function NewMarkerPin({ onSet }) {
 		// Add event listener to map and clean up afterwards.
 		map.on('click', handleClick)
 		return () => map.un('click', handleClick)
-	}, [query[wpMarkers.model]])
+	}, [query.marker])
 
 	return null
 }

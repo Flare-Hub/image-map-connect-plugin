@@ -105,6 +105,7 @@ class Plugin {
 		$this->layer->register_image();
 		$this->layer->register_max_zoom();
 		$this->layer->register_min_zoom();
+		$this->layer->register_map();
 		add_action( 'rest_prepare_layer', array( $this->layer, 'add_image_link' ), 10, 2 );
 
 		// Hook marker functions.

@@ -5,8 +5,15 @@ import { createBrowserHistory } from 'history'
 const globalHistory = createBrowserHistory()
 
 /**
+ * @typedef Query
+ * @prop {string} map The selected map ID.
+ * @prop {string} layer The selected layer ID.
+ * @prop {string} marker THe slected marker ID.
+ */
+
+/**
  * @typedef RouteContext
- * @property {object} query The Query parameters currently in the url.
+ * @property {Query} query The Query parameters currently in the url.
  * @property {import('history').BrowserHistory} history
  *   See https://github.com/remix-run/history/blob/main/docs/api-reference.md
  * @property {navigate} navigate Function to navigate to new query parameters.
@@ -19,12 +26,12 @@ const routeContext = createContext(null)
 /**
  * Create a URL with updated query parameters.
  *
- * @param {object} query The query parameters to change.
+ * @param {Query} query The query parameters to change.
  */
 function createUrl(query) {
 	const search = new URLSearchParams(globalHistory.location.search)
 	for (const param in query) {
-		if (query[param] === undefined) {
+		if (query[param] === null) {
 			search.delete(param)
 		} else {
 			search.set(param, query[param])
@@ -36,7 +43,7 @@ function createUrl(query) {
 /**
  * Navigate to new query parameters using client side routing.
  *
- * @param {Object} query The query parameters to change.
+ * @param {Query} query The query parameters to change.
  * @param {Object} state Any state to pass to the next page.
  * @param {boolean} replace Replace url in history instead of pushing a new entry.
  */

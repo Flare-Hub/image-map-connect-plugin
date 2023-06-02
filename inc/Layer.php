@@ -111,4 +111,31 @@ class Layer {
 		);
 		register_meta( 'term', 'min_zoom', $meta_args );
 	}
+
+	/**
+	 * Register Layers map field to add the layer to a map.
+	 *
+	 * @since 0.1.0
+	 **/
+	public function register_map() {
+		register_rest_field(
+			'layer',
+			'map',
+			array(
+				'update_callback' => array( $this, 'add_layer_to_map' ),
+				'schema'          => array( 'type' => 'integer' ),
+			)
+		);
+	}
+
+	/**
+	 * Add layer to map.
+	 *
+	 * @param int      $map_id Id of the map to add the layer to.
+	 * @param \WP_Term $layer The layer to add to the post.
+	 * @since 0.1.0
+	 **/
+	public function add_layer_to_map( int $map_id, \WP_Term $layer ) {
+		wp_set_post_terms( $map_id, $layer->slug, self::NAME, true );
+	}
 }
