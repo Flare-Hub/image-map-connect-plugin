@@ -30,7 +30,7 @@ export default function LifeCycleButtons({ model, id: recordId, onSave, onDelete
 	/** Delete record from wordpress and deselect it. */
 	async function delRecord() {
 		const success = await onDelete()
-		if (success) navigate({ [model]: undefined })
+		if (success) navigate({ [model]: null })
 	}
 
 	// Notify user if form fields fail validation on submit.

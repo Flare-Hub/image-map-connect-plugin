@@ -33,12 +33,15 @@ export default function Markers() {
 		_fields: 'title,id,type,marker-icons,flare_loc',
 		post_types: 'all',
 		map: query.map,
+		per_page: -1,
 	}, [query.layer, query.map])
 
 	// Get selected marker from marker list or create marker popup.
 	const [selected, setSelected] = useState()
 
 	useEffect(() => {
+		if (query.marker === 'new') return
+
 		const marker = markers.list.find(mk => mk.id === +query.marker)
 		if (marker) setSelected(marker)
 	}, [markers.list, query.marker])
@@ -65,7 +68,7 @@ export default function Markers() {
 			titleAttr="title.rendered"
 			selected={+query.marker}
 			selectItem={selectMarker}
-			loading={markers.loading}
+			loading={markers.loading && !markers.list.length}
 			addButton={
 				<Button
 					variant='primary'
@@ -81,7 +84,7 @@ export default function Markers() {
 			/>
 			{showModal && <CreateMarkerModal
 				onRequestClose={() => setShowModal(false)}
-				layer={+query.marker}
+				layer={+query.layer}
 				map={+query.map}
 				onRegisterMarker={setSelected}
 			/>}

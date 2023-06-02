@@ -1,8 +1,8 @@
 import { CustomSelectControl, BaseControl } from '@wordpress/components'
-import { useMemo } from '@wordpress/element'
+import { useEffect, useMemo } from '@wordpress/element'
 
 import { useRouter } from '../../contexts/router'
-import useCollection from '../../hooks/useCollection'
+import useRecord from '../../hooks/useRecord'
 
 import cls from './edit-form.module.scss'
 
@@ -20,21 +20,23 @@ export default function MarkerIconSelect({ label, value, onSelect, onBlur, class
 	const { query } = useRouter()
 
 	// Get icons from WordPress.
-	const { list, loading } = useCollection(
-		'taxonomy',
-		'marker-icon',
-		{ post: +query.map ?? 0 },
-		[query.map]
-	)
+	const { record, status } = useRecord(query.map, 'postType', 'map', { _fields: 'icon_details' })
 
 	// Format icon for dropdown.
-	const icons = useMemo(() => list.map(icon => ({
+	const icons = useMemo(() => record?.icon_details?.map(icon => ({
 		key: icon.id,
 		name: <span>
-			<i className={icon.meta.img.ref} style={{ color: icon.meta.colour }} />
+			<i className={icon.img.ref} style={{ color: icon.colour }} />
 			<span className={cls.iconName}>{icon.name}</span>
 		</span>
-	})), [list])
+	})) ?? [], [record])
+
+	// Set first icon in list by default if no icon is provided.
+	useEffect(() => {
+		if (!value && icons) {
+			onSelect(icons[0].key)
+		}
+	}, [value, icons])
 
 	return (
 		<BaseControl label={label} className={className}>
@@ -42,7 +44,7 @@ export default function MarkerIconSelect({ label, value, onSelect, onBlur, class
 				value={icons.find(icon => icon.key === value)}
 				onChange={item => onSelect(item.selectedItem.key)}
 				onBlur={onBlur}
-				options={loading ? { name: 'Loading...' } : icons}
+				options={status === 'loading' ? { name: 'Loading...' } : icons}
 				__nextUnconstrainedWidth
 				className={cls.select}
 			/>
