@@ -1,3 +1,13 @@
-:global(.ol-control) .saveButton {
-	font-size: 1.7em;
+:global(.ol-control) {
+
+	button {
+		&.saveButton {
+			font-size: 1.7em;
+
+		}
+
+		&:active {
+			background-color: var(--ol-accent-background-color);
+		}
+	}
 }
