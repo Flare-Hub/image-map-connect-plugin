@@ -194,6 +194,9 @@ export default class Map {
 				this.setFeatures(layer)
 			}
 		})
+
+		// Add layer switcher if there are multiple layers.
+		if (this.wpLayers.length > 1) this.addLayerSwitcher()
 	}
 
 	/** Add layer switcher for base layers to the map. */
