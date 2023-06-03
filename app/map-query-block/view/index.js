@@ -12,6 +12,5 @@ addEventListener("DOMContentLoaded", () => {
 		const map = new Map(blockEl)
 		map.addMarkerSupport()
 		map.initBaseLayers(+blockEl.dataset.mapId)
-		map.addLayerSwitcher()
 	})
 })

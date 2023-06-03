@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n"
-import { useEffect, useState } from "@wordpress/element"
+import { useState } from "@wordpress/element"
 
 import OlMap from "common/components/ol/map"
 import BaseLayerGroup from "common/components/ol/base-layer-group"
