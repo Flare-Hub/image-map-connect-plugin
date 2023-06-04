@@ -32,8 +32,8 @@ export default function App() {
 				<TabPanel
 					tabs={[
 						{ name: 'maps', title: 'Maps' },
-						{ name: 'layers', title: 'Layers' },
-						{ name: 'markers', title: 'Markers' },
+						{ name: 'layers', title: 'Layers', disabled: !query.map },
+						{ name: 'markers', title: 'Markers', disabled: !query.layer },
 						{ name: 'info', title: <Icon icon="info" /> },
 					]}
 					onSelect={tab => navigate({ tab })}
