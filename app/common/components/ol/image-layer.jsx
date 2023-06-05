@@ -14,7 +14,6 @@ import { useMap, MapProvider } from './context'
  * @param {boolean} props.visible Whether to show the layer.
  */
 export default function ImageLayer({ layer = {}, visible = true, children }) {
-	const hasImg = layer._embedded && layer._embedded['flare:image']
 	// Get OpenLayer objects
 	const context = useMap()
 
@@ -22,8 +21,8 @@ export default function ImageLayer({ layer = {}, visible = true, children }) {
 	const extent = [
 		0,
 		0,
-		hasImg ? layer._embedded['flare:image'][0].media_details.width : 0,
-		hasImg ? layer._embedded['flare:image'][0].media_details.height : 0,
+		layer.image_source?.width ?? 0,
+		layer.image_source?.height ?? 0,
 	]
 
 	// OpenLayers image layer for source.
@@ -46,21 +45,21 @@ export default function ImageLayer({ layer = {}, visible = true, children }) {
 
 	// Coordinate system to use in the map.
 	const projection = useMemo(
-		() => hasImg
+		() => layer.image_source
 			? new Projection({
 				code: 'layer-image',
 				units: 'pixels',
 				extent,
 			})
 			: null,
-		[(hasImg ? layer._embedded['flare:image'][0].source_url : null)]
+		[layer.image_source?.url]
 	)
 
 	// Set static source based on the image url.
 	useLayoutEffect(() => {
 		if (projection) {
 			imgLayer.setSource(new Static({
-				url: layer._embedded['flare:image'][0].source_url,
+				url: layer.image_source?.url,
 				projection,
 				imageExtent: extent,
 			}))
@@ -73,7 +72,7 @@ export default function ImageLayer({ layer = {}, visible = true, children }) {
 	useEffect(() => {
 		const zoom = context.map.getView().getZoom()
 
-		if (hasImg && visible) context.map.setView(new View({
+		if (visible) context.map.setView(new View({
 			projection,
 			extent,
 			constrainOnlyCenter: true,

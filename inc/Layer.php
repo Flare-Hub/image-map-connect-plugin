@@ -56,7 +56,7 @@ class Layer {
 	 *
 	 * @since 0.1.0
 	 **/
-	public function register_image() {
+	public function register_image_meta() {
 		$meta_args = array(
 			'object_subtype' => self::NAME,
 			'type'           => 'number',
@@ -67,19 +67,33 @@ class Layer {
 	}
 
 	/**
-	 * Get the image field link for the rest API.
+	 * Register flare_image field.
 	 *
-	 * @param \WP_REST_Response $response The response object to send.
-	 * @param \WP_Term          $item The original term object.
-	 * @return \WP_REST_Response The ID of the image attachment
 	 * @since 0.1.0
 	 **/
-	public function add_image_link( \WP_REST_Response $response, \WP_Term $item ) {
-		$media = get_term_meta( $item->term_id, 'image', true );
-		if ( $media ) {
-			$response->add_link( 'flare:image', rest_url( "/wp/v2/media/{$media}" ), array( 'embeddable' => true ) );
+	public function register_image_source() {
+		$field_args = array( 'get_callback' => array( $this, 'get_image_source' ) );
+
+		register_rest_field( 'layer', 'image_source', $field_args );
+	}
+
+	/**
+	 * Get details for the related image.
+	 *
+	 * @param array $layer Layer array.
+	 * @since 0.1.0
+	 **/
+	public function get_image_source( array $layer ) {
+		if ( isset( $layer['meta']['image'] ) ) {
+			$image = wp_get_attachment_image_src( $layer['meta']['image'], 'full' );
+			return array(
+				'url'    => $image[0],
+				'width'  => $image[1],
+				'height' => $image[2],
+			);
 		}
-		return $response;
+
+		return array();
 	}
 
 	/**

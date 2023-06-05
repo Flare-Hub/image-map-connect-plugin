@@ -102,11 +102,11 @@ class Plugin {
 		$this->map->register_icons();
 
 		// Hook Layer functions.
-		$this->layer->register_image();
+		$this->layer->register_image_meta();
+		$this->layer->register_image_source();
 		$this->layer->register_max_zoom();
 		$this->layer->register_min_zoom();
 		$this->layer->register_map();
-		add_action( 'rest_prepare_layer', array( $this->layer, 'add_image_link' ), 10, 2 );
 
 		// Hook marker functions.
 		add_action( sprintf( 'rest_%s_query', Marker::POST_TYPE ), array( $this->marker, 'filter_rest_query' ), 10, 2 );

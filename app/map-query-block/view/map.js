@@ -179,8 +179,7 @@ export default class Map {
 	async initBaseLayers(mapId) {
 		// Get layers from WordPress.
 		this.wpLayers = await getFullCollection('layers', {
-			_fields: 'id,slug,meta,_links',
-			_embed: 'flare:image',
+			_fields: 'id,slug,meta,image_source',
 			post: mapId
 		})
 
