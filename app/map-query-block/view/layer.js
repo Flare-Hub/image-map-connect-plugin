@@ -47,8 +47,8 @@ export default class Layer {
 		this.extent = [
 			0,
 			0,
-			layer._embedded['flare:image'][0].media_details.width,
-			layer._embedded['flare:image'][0].media_details.height
+			layer.image_source?.width,
+			layer.image_source?.height
 		]
 
 		// Map coordinates one-to-one with image pixels.
@@ -60,7 +60,7 @@ export default class Layer {
 
 		// Take full sized image from WordPress.
 		this.source = new Static({
-			url: layer._embedded['flare:image'][0].source_url,
+			url: layer.image_source?.url,
 			projection: this.projection,
 			imageExtent: this.extent,
 		})

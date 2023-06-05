@@ -38,7 +38,7 @@ export default function EditLayer() {
 		query.layer,
 		'taxonomy',
 		'layer',
-		{ _fields: 'id,name,meta,_links.flare:image,_embedded', _embed: 1 },
+		{ _fields: 'id,name,meta,image_source' },
 		emptyLayer
 	)
 

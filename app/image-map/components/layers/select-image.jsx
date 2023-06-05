@@ -24,13 +24,11 @@ export default function SelectImage({ onChange, invalid }) {
 
 		// TODO: Handle error in selImg
 
-		setValue('_embedded.flare:image', [{
-			source_url: selImg.attributes.url,
-			media_details: {
-				width: selImg.attributes.width,
-				height: selImg.attributes.height,
-			},
-		}])
+		setValue('image_source', {
+			url: selImg.attributes.url,
+			width: selImg.attributes.width,
+			height: selImg.attributes.height,
+		})
 
 		onChange(selImg.attributes.id)
 

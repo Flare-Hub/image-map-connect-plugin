@@ -28,7 +28,7 @@ export default function MarkerLocations({ onMapLoaded, markers, selected }) {
 		[query.layer],
 		'taxonomy',
 		'layer',
-		{ _fields: 'id,name,meta,_links.flare:image,_embedded', _embed: 1 },
+		{ _fields: 'id,name,meta,image_source' },
 		{ meta: {} }
 	)
 
