@@ -33,19 +33,20 @@ class Layer {
 		);
 
 		$args = array(
-			'labels'             => $labels,
-			'description'        => __( 'Layers', 'flare-im' ),
-			'hierarchical'       => false,
-			'public'             => true,
-			'publicly_queryable' => false,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'show_in_nav_menus'  => false,
-			'show_tagcloud'      => false,
-			'show_in_quick_edit' => false,
-			'show_admin_column'  => false,
-			'show_in_rest'       => true,
-			'rest_base'          => 'layers',
+			'labels'                => $labels,
+			'description'           => __( 'Layers', 'flare-im' ),
+			'hierarchical'          => false,
+			'public'                => true,
+			'publicly_queryable'    => false,
+			'show_ui'               => true,
+			'show_in_menu'          => true,
+			'show_in_nav_menus'     => false,
+			'show_tagcloud'         => false,
+			'show_in_quick_edit'    => false,
+			'show_admin_column'     => false,
+			'show_in_rest'          => true,
+			'rest_base'             => 'layers',
+			'rest_controller_class' => 'Flare\ImageMap\RestLayersController',
 		);
 
 		register_taxonomy( self::NAME, $post_types, $args );

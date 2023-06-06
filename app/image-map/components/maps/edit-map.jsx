@@ -32,7 +32,7 @@ export default function EditMap() {
 		record: map,
 		status: mapStatus,
 		saveRecord: saveMap,
-		delRecord: deleteMap
+		delRecord: deleteMap,
 	} = useRecord(
 		query.map,
 		'postType',
@@ -110,7 +110,13 @@ export default function EditMap() {
 							</BaseControl>
 						</div>
 						<div className="col-xs-3">
-							<LifeCycleButtons model="map" id={query.map} onSave={saveMap} onDelete={deleteMap} />
+							<LifeCycleButtons
+								model="map"
+								id={query.map}
+								onSave={saveMap}
+								onDelete={deleteMap}
+								confirmDeleteText={__('Are you sure you want to delete this map?')}
+							/>
 						</div>
 					</FormProvider>
 				</CardBody>
