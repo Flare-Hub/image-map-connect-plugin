@@ -28,13 +28,17 @@ export default function Markers() {
 	const { query, navigate } = useRouter()
 
 	// Fetch markers from Wordpress.
-	const markers = useCollection('postType', 'marker', {
+	const apiQuery = {
 		layers: +query.layer ?? 0,
 		_fields: 'title,id,type,marker-icons,flare_loc',
 		post_types: 'all',
 		map: query.map,
 		per_page: -1,
-	}, [query.layer, query.map])
+	}
+
+	const markers = useCollection(
+		'postType', 'marker', apiQuery, [query.layer, query.map]
+	)
 
 	// Get selected marker from marker list or create marker popup.
 	const [selected, setSelected] = useState()
@@ -42,8 +46,7 @@ export default function Markers() {
 	useEffect(() => {
 		if (query.marker === 'new') return
 
-		const marker = markers.list.find(mk => mk.id === +query.marker)
-		if (marker) setSelected(marker)
+		setSelected(markers.list.find(mk => mk.id === +query.marker))
 	}, [markers.list, query.marker])
 
 	// Center map when selecting a marker from the list.
@@ -78,6 +81,7 @@ export default function Markers() {
 			}
 		>
 			<MarkerForm
+				listQuery={apiQuery}
 				selected={selected}
 				markers={markers}
 				onMapLoaded={setMap}

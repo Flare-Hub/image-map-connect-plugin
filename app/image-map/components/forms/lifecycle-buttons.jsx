@@ -1,4 +1,5 @@
-import { Button } from '@wordpress/components'
+import { Button, Flex, Modal } from '@wordpress/components'
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n'
 import { useFormContext } from 'react-hook-form';
 
@@ -17,9 +18,12 @@ import cls from './lifecycle-buttons.module.scss'
  * @param {string} props.id ID of the record to update.
  * @param {(values: EntityRecord) => Promise<void>} props.onSave Action to when clicking save.
  * @param {() => Promise<void>} props.onDelete Action to take when clicking delete
+ * @param {string} props.confirmDeleteText Question to ask in the confirm delete dialog.
  */
-export default function LifeCycleButtons({ model, id: recordId, onSave, onDelete, }) {
+export default function LifeCycleButtons({ model, id: recordId, onSave, onDelete, confirmDeleteText }) {
 	const { formState, handleSubmit } = useFormContext()
+
+	const [dialogOpen, setDialogOpen] = useState(false)
 
 	/** Save record to WordPress and select it if it was created. */
 	async function saveRecord(values) {
@@ -30,6 +34,7 @@ export default function LifeCycleButtons({ model, id: recordId, onSave, onDelete
 	/** Delete record from wordpress and deselect it. */
 	async function delRecord() {
 		const success = await onDelete()
+		setDialogOpen(false)
 		if (success) navigate({ [model]: null })
 	}
 
@@ -52,13 +57,24 @@ export default function LifeCycleButtons({ model, id: recordId, onSave, onDelete
 					type="button"
 					onClick={handleSubmit(saveRecord, handleValidationError)}
 					disabled={!formState.isDirty || formState.isSubmitting}
-				>{__('Save', 'flare')}</Button>
+				>{__('Save')}</Button>
 			</div>
 			<div className={cls.btn}>
-				<Button isDestructive className="medium" type="button" onClick={delRecord}>
-					{__('Delete', 'flare')}
+				<Button isDestructive className="medium" type="button" onClick={() => setDialogOpen(true)}>
+					{__('Delete')}
 				</Button>
 			</div>
+			{dialogOpen && <Modal title={__('Delete')} onRequestClose={() => setDialogOpen(false)}>
+				<p>{confirmDeleteText}</p>
+				<Flex justify="end" gap={4} >
+					<Button variant="secondary" className="medium" type="button" onClick={() => setDialogOpen(false)}>
+						{__('Cancel')}
+					</Button>
+					<Button variant="primary" isDestructive className="medium" type="button" onClick={delRecord}>
+						{__('Delete')}
+					</Button>
+				</Flex>
+			</Modal>}
 		</>
 	)
 }

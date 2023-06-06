@@ -12,10 +12,16 @@ class LocationMeta {
 	public const REST_FIELD = 'flare_loc';
 
 	/** @var string $lat_field Name of the latitude field in the post meta. */
-	public const LAT_FIELD = 'lat'; // '_flare_loc_lat';
+	public const LAT_FIELD = array(
+		'meta' => 'lat',
+		'rest' => 'lat',
+	); // '_flare_loc_lat';
 
 	/** @var string $lng_field Name of the longitude field in the post meta. */
-	public const LNG_FIELD = 'lng'; // '_flare_loc_lng';
+	public const LNG_FIELD = array(
+		'meta' => 'lng',
+		'rest' => 'lng',
+	); // '_flare_loc_lng';
 
 	/**
 	 * Register the Flare location REST API fields with the provided post type.
@@ -33,8 +39,8 @@ class LocationMeta {
 				'schema'          => array(
 					'type'        => 'object',
 					'properties'  => array(
-						'lat' => array( 'type' => 'number' ),
-						'lng' => array( 'type' => 'number' ),
+						self::LAT_FIELD['rest'] => array( 'type' => 'number' ),
+						self::LNG_FIELD['rest'] => array( 'type' => 'number' ),
 					),
 					'arg_options' => array(
 						'validate_callback' => array( $this, 'validate_fields' ),
@@ -53,8 +59,8 @@ class LocationMeta {
 	 **/
 	public function get_fields( array $post ) {
 		return array(
-			'lat' => (float) get_post_meta( $post['id'], self::LAT_FIELD, true ),
-			'lng' => (float) get_post_meta( $post['id'], self::LNG_FIELD, true ),
+			self::LAT_FIELD['rest'] => (float) get_post_meta( $post['id'], self::LAT_FIELD['meta'], true ),
+			self::LNG_FIELD['rest'] => (float) get_post_meta( $post['id'], self::LNG_FIELD['meta'], true ),
 		);
 	}
 
@@ -66,25 +72,26 @@ class LocationMeta {
 	 * @since 0.1.0
 	 **/
 	public function validate_fields( array $value ) {
-		$lat = $value['lat'];
-		$lng = $value['lng'];
+		$lat = $value[ self::LAT_FIELD['rest'] ];
+		$lng = $value[ self::LNG_FIELD['rest'] ];
 		return ( ( $lat && $lng ) || ( ! $lat && ! $lng ) );
 	}
 
 	/**
 	 * Update the location fields from the REST request.
 	 *
-	 * @param array    $value Value provided with the REST post request.
+	 * @param array    $coordinates Value provided with the REST post request.
 	 * @param \WP_Post $post The WordPress post object.
 	 * @since 0.1.0
 	 **/
-	public function update_fields( array $value, \WP_Post $post ) {
-		$lat = $value['lat'];
-		$lng = $value['lng'];
-
-		if ( $lat && $lng ) {
-			update_post_meta( $post->ID, self::LAT_FIELD, $lat );
-			update_post_meta( $post->ID, self::LNG_FIELD, $lng );
+	public function update_fields( array $coordinates, \WP_Post $post ) {
+		foreach ( array( self::LAT_FIELD, self::LNG_FIELD ) as $field ) {
+			$value = $coordinates[ $field['rest'] ];
+			if ( $value ) {
+				update_post_meta( $post->ID, $field['meta'], $value );
+			} else {
+				delete_post_meta( $post->ID, $field['meta'] );
+			}
 		}
 	}
 

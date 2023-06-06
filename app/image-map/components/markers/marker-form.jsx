@@ -4,11 +4,9 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import { useRouter } from '../../contexts/router'
 import useRecord from '../../hooks/useRecord'
-import LifeCycleButtons from '../forms/lifecycle-buttons'
+import MarkerLifecycle from './marker-lifecycle'
 import EditMarker from './edit-marker'
 import MarkerLocations from './marker-locations'
-import { select } from '@wordpress/data'
-import { store as dataStore } from '@wordpress/core-data'
 
 /**
  * Context provider for the selected marker state.
@@ -16,9 +14,10 @@ import { store as dataStore } from '@wordpress/core-data'
  * @param {object} props
  * @param {import('.').MarkerListing} props.selected List fields from the selected marker.
  * @param {import('../../hooks/useCollection').Collection} props.markers Marker list.
+ * @param {Object<string, unknown>} props.listQuery Query for refreshing the markers list.
  * @param {(map: import('ol').Map) => void} props.onMapLoaded Callback triggered when the map is rendered.
  */
-export function MarkerForm({ selected = {}, markers, onMapLoaded }) {
+export function MarkerForm({ selected = {}, markers, onMapLoaded, listQuery }) {
 	const { query } = useRouter()
 
 	const newMarker = useMemo(() => ({
@@ -39,23 +38,6 @@ export function MarkerForm({ selected = {}, markers, onMapLoaded }) {
 		{},
 		newMarker,
 	)
-
-	// Save marker and force marker list update for connected posts.
-	async function save(fields) {
-		const post = await saveRecord(fields)
-
-		if (post.type !== 'marker') {
-			select(dataStore).getEntityRecords('postType', 'marker', {
-				layers: +query.layer ?? 0,
-				_fields: 'title,id,type,marker-icons,flare_loc',
-				post_types: 'all',
-				map: query.map,
-				per_page: -1,
-			}, {}, true)
-		}
-
-		return post
-	}
 
 	// Create form validation handler.
 	const form = useForm({
@@ -94,12 +76,7 @@ export function MarkerForm({ selected = {}, markers, onMapLoaded }) {
 							<CardBody>
 								<EditMarker markerType={marker.type} title={marker.title.raw} layers={marker.layers} />
 								<div className="col-xs-3">
-									<LifeCycleButtons
-										model="marker"
-										id={query.marker}
-										onDelete={delRecord}
-										onSave={save}
-									/>
+									<MarkerLifecycle marker={marker} save={saveRecord} delete={delRecord} listQuery={listQuery} />
 								</div>
 							</CardBody>
 						)}

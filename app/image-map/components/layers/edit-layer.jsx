@@ -32,8 +32,8 @@ export default function EditLayer() {
 	const {
 		record: layer,
 		status,
-		saveRecord: save,
-		delRecord: del
+		saveRecord: saveLayer,
+		delRecord: delLayer,
 	} = useRecord(
 		query.layer,
 		'taxonomy',
@@ -115,7 +115,13 @@ export default function EditLayer() {
 							</BaseControl>
 						</div>
 						<div className="col-xs-3">
-							<LifeCycleButtons model="layer" id={query.layer} onSave={save} onDelete={del} />
+							<LifeCycleButtons
+								model="layer"
+								id={query.layer}
+								onSave={saveLayer}
+								onDelete={delLayer}
+								confirmDeleteText={__('Are you sure you want to delete this layer?')}
+							/>
 						</div>
 					</CardBody>
 				</FormProvider>

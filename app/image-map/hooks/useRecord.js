@@ -9,8 +9,8 @@ import useNotice from './useNotice'
  * @typedef RecordHandler
  * @prop {EntityRecord} record Fetched WordPress record.
  * @prop {string} status Loading status for the record.
- * @prop {(values: EntityRecord) => Promise<void>} saveRecord Save record changes to WordPress.
- * @prop {() => Promise<void>} delRecord Delete record from WordPress.
+ * @prop {(values: EntityRecord) => Promise<EntityRecord>} saveRecord Save record changes to WordPress.
+ * @prop {() => Promise<boolean>} delRecord Delete record from WordPress.
  **/
 
 /**
