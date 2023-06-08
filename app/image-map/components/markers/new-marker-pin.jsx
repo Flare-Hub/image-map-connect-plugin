@@ -18,8 +18,8 @@ export default function NewMarkerPin({ onSet }) {
 		const handleClick = e => onSet({ lng: e.coordinate[0], lat: e.coordinate[1] })
 
 		// Add event listener to map and clean up afterwards.
-		map.on('click', handleClick)
-		return () => map.un('click', handleClick)
+		map?.on('click', handleClick)
+		return () => map?.un('click', handleClick)
 	}, [query.marker])
 
 	return null

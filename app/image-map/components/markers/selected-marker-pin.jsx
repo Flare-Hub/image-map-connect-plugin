@@ -38,7 +38,7 @@ export default function SelectedMarkerPin({ icons, newPosition, onMove }) {
 	const iconId = watch('marker-icons.0')
 	const mi = useMemo(() => {
 		if (!iconId) return
-		return icons.find(i => i.id === iconId)
+		return icons?.find(i => i.id === iconId)
 	}, [iconId])
 
 	// Update the marker pin position as it is being dragged.
@@ -51,11 +51,11 @@ export default function SelectedMarkerPin({ icons, newPosition, onMove }) {
 	// Reset handlers when drag is complete.
 	const handleMouseUp = useCallback(() => {
 		// Unregister handlers
-		map.un('pointermove', handlePointerMove)
+		ma?.un('pointermove', handlePointerMove)
 		window.removeEventListener('mouseup', handleMouseUp)
 
 		// Reenable map panning.
-		map.getInteractions().forEach(i => {
+		map?.getInteractions().forEach(i => {
 			if (i instanceof DragPan) i.setActive(true)
 		})
 
@@ -71,7 +71,7 @@ export default function SelectedMarkerPin({ icons, newPosition, onMove }) {
 	function handleMouseDown(e) {
 		e.stopPropagation()
 		// Disable map panning.
-		map.getInteractions().forEach(i => {
+		map?.getInteractions().forEach(i => {
 			if (i instanceof DragPan) i.setActive(false)
 		})
 
@@ -79,7 +79,7 @@ export default function SelectedMarkerPin({ icons, newPosition, onMove }) {
 		setMoved(false)
 
 		// Register drag handlers
-		map.on('pointermove', handlePointerMove)
+		map?.on('pointermove', handlePointerMove)
 		window.addEventListener('mouseup', handleMouseUp)
 	}
 

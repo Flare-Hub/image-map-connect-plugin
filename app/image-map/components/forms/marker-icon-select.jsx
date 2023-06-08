@@ -33,7 +33,7 @@ export default function MarkerIconSelect({ label, value, onSelect, onBlur, class
 
 	// Set first icon in list by default if no icon is provided.
 	useEffect(() => {
-		if (!value && icons) {
+		if (!value && icons && icons.length) {
 			onSelect(icons[0].key)
 		}
 	}, [value, icons])

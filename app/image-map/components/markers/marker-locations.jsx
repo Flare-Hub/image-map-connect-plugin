@@ -42,7 +42,10 @@ export default function MarkerLocations({ onMapLoaded, markers, selected }) {
 			rules={{ validate: val => val && val.lat > 0 && val.lng > 0 }}
 			render={({ field, fieldState }) => (
 				<Card className={fieldState.invalid && cls.invalid}>
-					<OlMap oneTimeHandlers={{ postrender: e => onMapLoaded(e.map) }} className={mapCls.canvas}>
+					<OlMap
+						eventHandlers={[{ event: 'postrender', handler: e => onMapLoaded(e.map), once: true }]}
+						className={mapCls.canvas}
+					>
 						{status === 'loaded' && (
 							<>
 								<ImageLayer layer={layer} />

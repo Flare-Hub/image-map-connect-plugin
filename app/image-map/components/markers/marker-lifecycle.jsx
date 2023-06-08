@@ -21,7 +21,7 @@ export default function MarkerLifecycle({ marker, save, delete: delMarker, listQ
 	async function handleSave(fields) {
 		const post = await save(fields)
 
-		if (post.type !== 'marker') {
+		if (post?.type !== 'marker') {
 			select(dataStore).getEntityRecords('postType', 'marker', listQuery, {}, true)
 		}
 

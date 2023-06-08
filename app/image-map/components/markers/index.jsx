@@ -56,7 +56,7 @@ export default function Markers() {
 	function selectMarker(id) {
 		navigate({ marker: id })
 		const marker = markers.list.find(m => m.id === id)
-		map.getView().animate({
+		map?.getView().animate({
 			center: [marker.flare_loc.lng, marker.flare_loc.lat],
 			duration: 500,
 		})

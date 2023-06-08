@@ -30,7 +30,7 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, onRegist
 	const [debouncedSearch, setDebouncedSearch] = useState()
 
 	// Get all posts not yet on the selected layer.
-	const posts = useCollection('postType', 'marker', {
+	const { list: posts, loading } = useCollection('postType', 'marker', {
 		layers_exclude: layer,
 		post_types: 'unlinked',
 		map: map,
@@ -50,7 +50,7 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, onRegist
 	/** Add the selected post to the markers list. */
 	function handleAdd(fields) {
 		const post = fields.type === 'post'
-			? posts.list.find(p => p.id === fields.post)
+			? posts.find(p => p.id === fields.post)
 			: { id: 'new' }
 
 		navigate({ marker: 'new' })
@@ -85,9 +85,9 @@ export default function CreateMarkerModal({ onRequestClose, layer, map, onRegist
 					render={({ field, fieldState }) => (
 						<ComboboxControl
 							label="Post"
-							options={posts.loading
+							options={loading
 								? [{ label: __('Loading', 'flare') + '...' }]
-								: posts.list.map(post => ({
+								: posts.map(post => ({
 									value: post.id,
 									label: post.title.rendered,
 									type: post.type,

@@ -1,7 +1,7 @@
 import { BaseControl, TextControl } from '@wordpress/components'
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import MarkerIconSelect from '../forms/marker-icon-select';
 import RichTextEditor from '../forms/rich-text-editor';
@@ -19,6 +19,7 @@ import { getControlClass, cls } from '../../utils/form-control';
 export default function EditMarker({ markerType, title }) {
 	// Get all post types applicable to markers.
 	const postTypes = useSelect(select => select('core').getPostTypes())
+	const { watch } = useFormContext()
 
 	return (
 		<div className="col-xs-9">
@@ -66,6 +67,7 @@ export default function EditMarker({ markerType, title }) {
 								label={__('Content', 'flare')}
 								{...field}
 								className={getControlClass(fieldState)}
+								dependencies={[watch('id'), field.onChange]}
 							/>
 						)}
 					/>

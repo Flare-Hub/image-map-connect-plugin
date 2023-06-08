@@ -29,7 +29,7 @@ export default function Marker({ position, anchor, events, className, children }
 	// Add overlay to map after component is mounted.
 	useEffect(() => {
 		overlay.setElement(markerDiv.current)
-		map.addOverlay(overlay)
+		map?.addOverlay(overlay)
 
 		// Remove overlay when component is unmounted.
 		return () => {
