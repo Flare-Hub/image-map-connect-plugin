@@ -45,10 +45,10 @@ export default function MarkerQueryPanel({ hasQuery, queryType, setQueryType, sh
 				</>
 			)}
 			{!hasQuery && (
-				<p>
-					This block will show all posts on the selected map.
-					To filter the posts, place this block inside a query block.
-				</p>
+				<p>{
+					__('This block will show all posts on the selected map.', 'flare') + ' ' +
+					__('To filter the posts, place this block inside a query block.', 'flare')
+				}</p>
 			)}
 		</PanelBody>
 	)

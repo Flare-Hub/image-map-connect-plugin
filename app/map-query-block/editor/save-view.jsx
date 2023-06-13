@@ -25,23 +25,22 @@ export default function SaveView({ view, setView }) {
 
 	/** Save map position and layer to block attributes */
 	function save() {
-		console.log('Saved');
-		const mapView = map.getView()
+		const mapView = map?.getView()
 		setView({
-			center: mapView.getCenter(),
-			zoom: mapView.getZoom(),
-			layer: map.getLayers().getArray().find(l => l.getVisible() && l.get('baseLayer')).get('wpId')
+			center: mapView?.getCenter(),
+			zoom: mapView?.getZoom(),
+			layer: map?.getLayers().getArray().find(l => l.getVisible() && l.get('baseLayer')).get('wpId')
 		})
 	}
 
 	function setInitialView() {
-		if (!view.layer && map.getLayers().getLength()) save()
+		if (!view.layer && map?.getLayers().getLength()) save()
 	}
 
 	useEffect(() => {
-		map.on('loadend', setInitialView)
+		map?.on('loadend', setInitialView)
 
-		return () => map.un('loadend', setInitialView)
+		return () => map?.un('loadend', setInitialView)
 	}, [map])
 
 	return (

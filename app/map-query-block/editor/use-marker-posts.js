@@ -1,5 +1,9 @@
 import { useMemo } from "@wordpress/element"
 import { useSelect } from "@wordpress/data"
+import { useEntityRecords } from "@wordpress/core-data"
+import { __ } from "@wordpress/i18n"
+import useNotice from "common/utils/use-notice"
+
 /**
  * Fetch post IDs for posts to show on the map.
  *
@@ -22,15 +26,13 @@ export default function useMarkerPosts(queryParams, templateSlug, previewPostTyp
 	// Get all taxonomies that can be applied to the entity's post type.
 	const taxonomies = useSelect(select => {
 		// Only needed if there is a tax query.
-		if (!queryParams || !taxQuery) return false
+		if (!taxQuery) return false
 
-		const tax = select('core').getTaxonomies({
+		return select('core').getTaxonomies({
 			type: entityPostType,
 			per_page: -1,
 			context: 'view',
 		})
-
-		return tax
 	}, [entityPostType])
 
 	// Contruct the query used to fetch the post IDs to include in the map.
@@ -83,10 +85,14 @@ export default function useMarkerPosts(queryParams, templateSlug, previewPostTyp
 	])
 
 	// Get all post IDs matching the query above.
-	const posts = useSelect(
-		select => postQuery && select('core').getEntityRecords('postType', entityPostType, postQuery),
-		[postQuery, entityPostType]
+	const { records, status } = useEntityRecords('postType', entityPostType, postQuery)
+
+	// Notify user if there is an issue fetching the posts.
+	useNotice(
+		postQuery && status === 'ERROR',
+		__('Error loading correct markers. Please refresh the application to try again.', 'flare'),
+		[postQuery, status]
 	)
 
-	return posts ? posts.reduce((acc, p) => acc + ',' + p.id, '') : false
+	return records ? records.reduce((acc, p) => acc + ',' + p.id, '') : false
 }

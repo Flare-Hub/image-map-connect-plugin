@@ -1,4 +1,6 @@
-import { useSelect } from "@wordpress/data"
+import { useEntityRecords } from "@wordpress/core-data"
+import { __ } from "@wordpress/i18n"
+import useNotice from "common/utils/use-notice"
 
 /**
  * Get marker details from provided posts and standalone markers
@@ -9,31 +11,41 @@ import { useSelect } from "@wordpress/data"
  * @returns list of WordPress markers
  */
 export default function useMarkers(map, layer, posts, showStandAlone) {
-	return useSelect(
-		select => {
-			const { getEntityRecords } = select('core')
+	// Get marker details for provided post IDs.
+	const linkedQuery = posts ? {
+		layers: layer,
+		_fields: 'id,marker-icons,flare_loc',
+		post_types: 'linked',
+		include: posts,
+		map,
+	} : false
 
-			// Get marker details for provided post IDs.
-			const linkedMarkers = posts ? getEntityRecords('postType', 'marker', {
-				layers: layer,
-				_fields: 'id,marker-icons,flare_loc',
-				post_types: 'linked',
-				include: posts,
-				map,
-			}) : []
+	const linked = useEntityRecords('postType', 'marker', linkedQuery)
 
-			// Get standalone markers.
-			const saMarkers = showStandAlone ? getEntityRecords('postType', 'marker', {
-				layers: layer,
-				_fields: 'id,marker-icons,flare_loc',
-				post_types: 'standalone',
-				map,
-			}) : []
+	const linkedMarkerRecords = posts ? (linked.records ? linked.records : false) : []
 
-			// Merge post and standalone markers once both have been fetched.
-			if (!Array.isArray(linkedMarkers) || !Array.isArray(saMarkers)) return []
-			return [...linkedMarkers, ...saMarkers]
-		},
-		[posts, layer, showStandAlone]
+	// Get standalone markers.
+	const saQuery = showStandAlone ? {
+		layers: layer,
+		_fields: 'id,marker-icons,flare_loc',
+		post_types: 'standalone',
+		map,
+	} : false
+
+	const standAlone = useEntityRecords('postType', 'marker', saQuery)
+
+	const saMarkerRecords = showStandAlone ? (standAlone.records ? standAlone.records : false) : []
+
+	// Notify user if there is an issue fetching the markers.
+	useNotice(
+		((posts && linked.status === 'ERROR') || (showStandAlone && standAlone.status === 'ERROR')),
+		__('Error loading correct markers. Please refresh the application to try again.', 'flare'),
+		[posts, linked.status, showStandAlone, standAlone.status]
 	)
+
+	// Merge post and standalone markers once both have been fetched.
+	if (!Array.isArray(linkedMarkerRecords) || !Array.isArray(saMarkerRecords)) return []
+
+	return [...linkedMarkerRecords, ...saMarkerRecords]
+
 }

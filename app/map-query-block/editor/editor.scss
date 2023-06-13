@@ -6,29 +6,4 @@
 	.components-placeholder__fieldset {
 		display: block;
 	}
-
-	.flare-map-options {
-		display: flex;
-		gap: 3em;
-
-		.flare-select-map {
-			flex-grow: 1;
-			display: flex;
-			align-items: flex-end;
-
-			>.components-button {
-				flex: 0 0;
-				margin-bottom: 6px;
-			}
-
-			>div {
-				flex: 0 1 100%;
-			}
-		}
-
-		.flare-cancel-replace {
-			display: flex;
-			align-items: flex-end;
-		}
-	}
 }
