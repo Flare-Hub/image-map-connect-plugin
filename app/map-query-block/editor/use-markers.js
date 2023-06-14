@@ -34,13 +34,13 @@ export default function useMarkers(map, layer, posts, showStandAlone) {
 
 	const standAlone = useEntityRecords('postType', 'marker', saQuery)
 
-	const saMarkerRecords = showStandAlone ? (standAlone.records ? standAlone.records : false) : []
+	const saMarkerRecords = showStandAlone ? (standAlone?.records ? standAlone.records : false) : []
 
 	// Notify user if there is an issue fetching the markers.
 	useNotice(
-		((posts && linked.status === 'ERROR') || (showStandAlone && standAlone.status === 'ERROR')),
+		((posts && linked.status === 'ERROR') || (showStandAlone && standAlone?.status === 'ERROR')),
 		__('Error loading correct markers. Please refresh the application to try again.', 'flare'),
-		[posts, linked.status, showStandAlone, standAlone.status]
+		[posts, linked.status, showStandAlone, standAlone?.status]
 	)
 
 	// Merge post and standalone markers once both have been fetched.

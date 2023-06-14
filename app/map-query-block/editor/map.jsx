@@ -40,12 +40,12 @@ export default function Map({
 	initialView,
 	setView
 }) {
-	const [selLayer, setSelLayer] = useState(initialView.layer)
+	const [selLayer, setSelLayer] = useState(initialView?.layer)
 	const posts = useMarkerPosts(queryParams, templateSlug, previewPostType, queryType, page)
 	const markers = useMarkers(mapId, selLayer, posts, showStandAlone)
 
 	return (
-		<OlMap center={initialView.center} zoom={initialView.zoom} className={cls.canvas}>
+		<OlMap center={initialView?.center} zoom={initialView?.zoom} className={cls.canvas}>
 			<ControlBar position="top-right" className={cls.withSwitcher}>
 				<BaseLayerGroup
 					mapId={mapId}
@@ -53,7 +53,7 @@ export default function Map({
 					selLayerId={selLayer}
 					setSelLayerId={setSelLayer}
 				/>
-				<SaveView view={initialView} setView={setView} />
+				<SaveView layer={initialView?.layer} setView={setView} />
 			</ControlBar>
 			<MarkerPins mapId={mapId} markers={markers} />
 		</OlMap>
