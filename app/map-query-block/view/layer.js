@@ -1,3 +1,4 @@
+import { __ } from "@wordpress/i18n"
 import { Feature, Map as OlMap, View } from "ol"
 import ImageLayer from "ol/layer/Image"
 import Projection from "ol/proj/Projection"
@@ -18,9 +19,8 @@ import { Point } from "ol/geom"
 
 /** Open Layers layer from WordPress Imagemap. */
 export default class Layer {
-	/** @type {OlMap} Open Layers map to add the layer to. */ map
+	/** @type {import('./map').default} Flare map instance. */ map
 	/** @type {Object<string, any>} WordPress imagemap. */ wpLayer
-	/** @type {BlockAttr} Dataset from the map element. */ blockAttr
 	/** @type {Array<string>} List of post IDs in the current query. */ postIds
 	/** @type {boolean} Whether the layer is visible on the map. */ visible
 	/** @type {import('ol/extent')} boundaries of the layer.  */ extent
@@ -32,16 +32,14 @@ export default class Layer {
 	/**
 	 * @param {OlMap} map Open Layers map.
 	 * @param {Object<string, any>} layer WordPress layer
-	 * @param {BlockAttr} blockAttr Dataset from the map element.
 	 */
-	constructor(map, layer, blockAttr) {
+	constructor(map, layer) {
 		this.map = map
 		this.wpLayer = layer
-		this.blockAttr = blockAttr
-		this.postIds = blockAttr.postIds ? blockAttr.postIds.split(',') : []
+		this.postIds = map.blockAttr?.postIds ? map.blockAttr.postIds.split(',') : []
 
 		// The layer is visible if it is the initial layer in the block attributes.
-		this.visible = layer.id === +blockAttr.initialLayer
+		this.visible = layer.id === +map.blockAttr.initialLayer
 
 		// The size of the layer's image.
 		this.extent = [
@@ -77,39 +75,63 @@ export default class Layer {
 
 	}
 
-	/** Add base laery to the instance's map. */
+	/** Add base layer to the instance's map. */
 	addToMap() {
-		this.map.addLayer(this.baseLayer)
+		if (!this.source.getUrl()) {
+			this.map.setError(
+				__('Unable to load layer image.', 'flare') + ' '
+				+ __('Please refresh this page to try again.', 'flare')
+			)
+		}
+		this.map.olMap.addLayer(this.baseLayer)
 	}
 
 	/** Get marker icons from WordPress for the instance's map. */
 	fetchMarkerIcons() {
-		return getFullCollection('marker-icons', { map: this.blockAttr.mapId })
+		try {
+			return getFullCollection('marker-icons', { map: this.map.blockAttr.mapId })
+
+		} catch (e) {
+			console.error(error)
+			this.map.setError(
+				__('Unable to load marker icons.', 'flare') + ' '
+				+ __('Please refresh this page to try again.', 'flare')
+			)
+		}
 	}
 
 	/** Get markers from WordPress for the instance's layer. */
 	async fetchMarkers() {
-		// Get linked markers based on post IDs in the current query.
-		const linkedMarkers = getFullCollection('markers', {
-			layers: this.wpLayer.id,
-			map: this.blockAttr.mapId,
-			_fields: 'id,type,marker-icons,flare_loc',
-			post_types: 'linked',
-			include: this.postIds,
-		})
+		try {
+			// Get linked markers based on post IDs in the current query.
+			const linkedMarkers = getFullCollection('markers', {
+				layers: this.wpLayer.id,
+				map: this.map.blockAttr.mapId,
+				_fields: 'id,type,marker-icons,flare_loc',
+				post_types: 'linked',
+				include: this.postIds,
+			})
 
-		// Get standalone markers.
-		const saMarkers = this.blockAttr.showStandalone ? getFullCollection('markers', {
-			layers: this.wpLayer.id,
-			map: this.blockAttr.mapId,
-			_fields: 'id,type,marker-icons,flare_loc',
-			post_types: 'standalone',
-		}) : []
+			// Get standalone markers.
+			const saMarkers = this.map.blockAttr.showStandalone ? getFullCollection('markers', {
+				layers: this.wpLayer.id,
+				map: this.map.blockAttr.mapId,
+				_fields: 'id,type,marker-icons,flare_loc',
+				post_types: 'standalone',
+			}) : []
 
-		// Merge post and standalone markers once both have been fetched.
-		const markers = await Promise.all([linkedMarkers, saMarkers])
+			// Merge post and standalone markers once both have been fetched.
+			const markers = await Promise.all([linkedMarkers, saMarkers])
 
-		return markers.flat()
+			return markers.flat()
+
+		} catch (error) {
+			console.error(error)
+			this.map.setError(
+				__('Unable to load markers.', 'flare') + ' '
+				+ __('Please refresh this page to try again.', 'flare')
+			)
+		}
 	}
 
 	/** Get point features for the instance's layer, creating them if needed. */
@@ -127,7 +149,7 @@ export default class Layer {
 			const icon = icons.find(mi => mi.id === marker['marker-icons'][0])
 			if (icon) {
 				fts.push(new Feature({
-					geometry: new Point([marker.flare_loc.lng, marker.flare_loc.lat]),
+					geometry: new Point([marker.flare_loc?.lng, marker.flare_loc?.lat]),
 					icon: { ...icon.meta },
 					markerId: marker.id,
 					postType: marker.type,
@@ -143,14 +165,14 @@ export default class Layer {
 
 	/** Set map interactions based on the visible view. */
 	setMapView() {
-		if (this.visible) this.map.setView(new View({
-			minZoom: this.wpLayer.meta.min_zoom,
-			maxZoom: this.wpLayer.meta.max_zoom,
+		if (this.visible) this.map.olMap.setView(new View({
+			minZoom: this.wpLayer.meta?.min_zoom,
+			maxZoom: this.wpLayer.meta?.max_zoom,
 			projection: this.projection,
 			extent: this.extent,
 			constrainOnlyCenter: true,
-			center: [this.blockAttr.initialCenterX, this.blockAttr.initialCenterY],
-			zoom: this.blockAttr.initialZoom
+			center: [this.map.blockAttr?.initialCenterX, this.map.blockAttr?.initialCenterY],
+			zoom: this.map.blockAttr?.initialZoom
 		}))
 	}
 }
