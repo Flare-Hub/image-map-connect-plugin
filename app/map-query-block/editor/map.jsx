@@ -12,6 +12,8 @@ import blockMeta from "../block.json"
 
 import cls from "./map.module.scss"
 
+/** @typedef {import('./save-view').MapView} MapView */
+
 /**
  * Show preview of the map with markers.
  *
@@ -24,7 +26,7 @@ import cls from "./map.module.scss"
  * @param {boolean} props.showStandAlone Whether to show standalone markers.
  * @param {number} [props.page] Current page in the query loop.
  * @param {string} [props.height] Height of the map container.
- * @param {import('./save-view').MapView} [props.initialView] Initial settings for the map view.
+ * @param {MapView} [props.initialView] Initial settings for the map view.
  * @param {(mapView: MapView) => void} props.setView Update the initialView attribute.
  */
 export default function Map({
@@ -38,12 +40,12 @@ export default function Map({
 	initialView,
 	setView
 }) {
-	const [selLayer, setSelLayer] = useState(initialView.layer)
+	const [selLayer, setSelLayer] = useState(initialView?.layer)
 	const posts = useMarkerPosts(queryParams, templateSlug, previewPostType, queryType, page)
 	const markers = useMarkers(mapId, selLayer, posts, showStandAlone)
 
 	return (
-		<OlMap center={initialView.center} zoom={initialView.zoom} className={cls.canvas}>
+		<OlMap center={initialView?.center} zoom={initialView?.zoom} className={cls.canvas}>
 			<ControlBar position="top-right" className={cls.withSwitcher}>
 				<BaseLayerGroup
 					mapId={mapId}
@@ -51,7 +53,7 @@ export default function Map({
 					selLayerId={selLayer}
 					setSelLayerId={setSelLayer}
 				/>
-				<SaveView view={initialView} setView={setView} />
+				<SaveView layer={initialView?.layer} setView={setView} />
 			</ControlBar>
 			<MarkerPins mapId={mapId} markers={markers} />
 		</OlMap>

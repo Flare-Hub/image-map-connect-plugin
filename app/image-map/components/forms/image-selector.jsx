@@ -1,7 +1,9 @@
 import { useEffect, useState, forwardRef } from '@wordpress/element'
 import { BaseControl, Button } from '@wordpress/components'
+import { __ } from '@wordpress/i18n';
 
 import useMediaMgr from '../../hooks/useMediaMgr';
+import useNotice from '../../hooks/useNotice';
 
 import cls from '../forms/edit-form.module.scss'
 
@@ -32,15 +34,28 @@ function ImageSelector({ label, value, onChange, className }, ref) {
 	// Initiate Wordpress media manager to select a featured image.
 	const mediaMgr = useMediaMgr(false, handleSelect)
 
+	const createNotice = useNotice()
+
 	// Update the image state when the image id changes.
 	useEffect(() => {
-		if (!value) return
-		wp.media.attachment(value).fetch({
-			success: newImg => {
-				setMediaImg(newImg.attributes)
-			}
+		const promise = value
+			? wp.media.attachment(value).fetch()
+			: Promise.resolve(null)
+
+		promise.then(newImg => {
+			console.log({ value, newImg });
+			setMediaImg(newImg)
 		})
+			.catch(() => createNotice({
+				message: __('Unable to load featured image.', 'flare'),
+				style: 'error'
+			}))
 	}, [value])
+
+	// Reset image state before unmounting component.
+	useEffect(() => {
+		return () => onChange(null)
+	}, [])
 
 	return (
 		<BaseControl label={label} className={className}>

@@ -1,11 +1,30 @@
 import { ComboboxControl, Button, Placeholder, BaseControl } from "@wordpress/components"
-import { useEntityProp } from "@wordpress/core-data"
-import { useSelect } from "@wordpress/data"
+import { useEntityProp, useEntityRecords } from "@wordpress/core-data"
 import { useState } from "@wordpress/element"
 import { __ } from "@wordpress/i18n"
 import { update } from "@wordpress/icons"
 
 import blockMeta from "../block.json"
+import cls from "./map-selector.module.scss"
+import useNotice from "common/utils/use-notice"
+
+/**
+ * Get Combobox options from a list of entity records.
+ * @param {ReturnType<import('@wordpress/core-data').useEntityRecords>} maps
+ */
+function getMapOptions({ status, records: maps }) {
+	switch (status) {
+		case 'ERROR':
+			return []
+
+		case 'SUCCESS':
+			return maps.map(map => ({ label: map.title.rendered, value: map.id }))
+
+		default:
+			return [{ label: __('Loading...', 'flare'), value: '' }]
+	}
+}
+
 
 /**
  * Map selector to display when no map is selected
@@ -18,13 +37,17 @@ import blockMeta from "../block.json"
  */
 export default function MapSelector({ mapId, setAttr, prevAttr, setPrevAttr }) {
 	// Use counter to ensure imagemaps are fetched from backend whenever counter is updated.
-	const [updCount, setUpdCount] = useState(0)
+	const [fetchCount, setFetchCount] = useState(1)
 
 	// Get maps from backend
-	const maps = useSelect(
-		select => select('core').getEntityRecords('postType', 'map', { updCount }),
-		[updCount]
-	) ?? []
+	const maps = useEntityRecords('postType', 'map', { enabled: fetchCount })
+
+	// Display error if maps cannot be fetched
+	useNotice(
+		maps.status === 'ERROR',
+		__('An error occurred retrieving the maps. Please refresh the page to try again.', 'flare'),
+		[maps.status]
+	)
 
 	const [baseUrl] = useEntityProp('root', 'site', 'url')
 
@@ -56,39 +79,37 @@ export default function MapSelector({ mapId, setAttr, prevAttr, setPrevAttr }) {
 			label={__('Image map', blockMeta.textdomain)}
 			instructions={__('Select a map or add a new map to display in this block.')}
 		>
-			<div className="flare-map-options">
-				<div className="flare-select-map">
+			<div className={cls.controls}>
+				<div className={cls.select}>
 					<ComboboxControl
 						label={__('Select map', blockMeta.textdomain)}
 						value={mapId}
 						onChange={handleSelectMap}
-						options={maps.map(map => ({ label: map.title.rendered, value: map.id }))}
+						options={getMapOptions(maps)}
 					/>
 					<Button
 						icon={update}
-						onClick={() => setUpdCount(updCount + 1)}
+						onClick={() => setFetchCount(fetchCount + 1)}
 						label={__('Refresh map list', blockMeta.textdomain)}
 					/>
 				</div>
 				<BaseControl label={__('Or add new map', blockMeta.textdomain)} >
-					<div>
+					<div className={cls.buttons}>
 						<Button
 							variant="primary"
 							onClick={handleAddMap}
 							text={__('Add map', blockMeta.textdomain)}
 						/>
+						{prevAttr && (
+							<Button
+								variant="primary"
+								isDestructive
+								text={__('Cancel', blockMeta.textdomain)}
+								onClick={handleCancelReplace}
+							/>
+						)}
 					</div>
 				</BaseControl>
-				{prevAttr && (
-					<BaseControl className="flare-cancel-replace">
-						<Button
-							variant="primary"
-							isDestructive
-							text={__('Cancel', blockMeta.textdomain)}
-							onClick={handleCancelReplace}
-						/>
-					</BaseControl>
-				)}
 			</div>
 		</Placeholder>
 	)

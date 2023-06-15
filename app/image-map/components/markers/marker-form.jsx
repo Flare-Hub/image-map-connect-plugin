@@ -56,7 +56,9 @@ export function MarkerForm({ selected = {}, markers, onMapLoaded, listQuery }) {
 	}, [form.watch])
 
 	// Reset form if the marker is updated
-	useEffect(() => form.reset(marker), [marker.id])
+	useEffect(() => {
+		if (status === 'new' || status === 'loaded') form.reset(marker)
+	}, [marker, status])
 
 	// Reset form after successful submission.
 	useEffect(() => {
@@ -74,7 +76,7 @@ export function MarkerForm({ selected = {}, markers, onMapLoaded, listQuery }) {
 						{status === 'loading' && <Spinner style={{ width: '100px', height: '100px' }} />}
 						{(status === 'new' || status === 'loaded') && (
 							<CardBody>
-								<EditMarker markerType={marker.type} title={marker.title.raw} layers={marker.layers} />
+								<EditMarker markerType={marker.type} title={marker.title.raw} />
 								<div className="col-xs-3">
 									<MarkerLifecycle marker={marker} save={saveRecord} delete={delRecord} listQuery={listQuery} />
 								</div>

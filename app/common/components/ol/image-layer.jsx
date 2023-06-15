@@ -34,7 +34,7 @@ export default function ImageLayer({ layer = {}, visible = true, children }) {
 	}), [])
 
 	// Add the layer to the map after mounting.
-	useLayoutEffect(() => context.map.addLayer(imgLayer), [])
+	useLayoutEffect(() => context.map?.addLayer(imgLayer), [])
 
 	useLayoutEffect(() => {
 		imgLayer.setProperties({
@@ -57,20 +57,17 @@ export default function ImageLayer({ layer = {}, visible = true, children }) {
 
 	// Set static source based on the image url.
 	useLayoutEffect(() => {
-		if (projection) {
-			imgLayer.setSource(new Static({
-				url: layer.image_source?.url,
-				projection,
-				imageExtent: extent,
-			}))
-		} else {
-			imgLayer.setSource()
-		}
+		const img = projection ? new Static({
+			url: layer.image_source?.url,
+			projection,
+			imageExtent: extent,
+		}) : null
+		imgLayer.setSource(img)
 	}, [projection])
 
 	// Provide a new view using the current props and zoom.
 	useEffect(() => {
-		const zoom = context.map.getView().getZoom()
+		const zoom = context.map?.getView().getZoom()
 
 		if (visible) context.map.setView(new View({
 			projection,
@@ -83,9 +80,9 @@ export default function ImageLayer({ layer = {}, visible = true, children }) {
 	// Update min and max zoom based on layer.
 	useEffect(() => {
 		if (visible) {
-			const view = context.map.getView()
-			view.setMinZoom(layer.meta.min_zoom)
-			view.setMaxZoom(layer.meta.max_zoom)
+			const view = context.map?.getView()
+			view?.setMinZoom(layer.meta.min_zoom)
+			view?.setMaxZoom(layer.meta.max_zoom)
 		}
 	}, [layer.meta.min_zoom, layer.meta.max_zoom])
 

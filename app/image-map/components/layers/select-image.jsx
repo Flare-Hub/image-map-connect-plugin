@@ -1,8 +1,9 @@
 import { Button } from '@wordpress/components'
 import { __ } from '@wordpress/i18n'
 import { useState } from '@wordpress/element'
-import useMediaMgr from '../../hooks/useMediaMgr'
 import { useFormContext } from 'react-hook-form'
+import useMediaMgr from '../../hooks/useMediaMgr'
+import useNotice from '../../hooks/useNotice'
 
 /**
  * Select Image from media manager.
@@ -16,14 +17,28 @@ export default function SelectImage({ onChange, invalid }) {
 
 	const { setValue } = useFormContext()
 
+	const createNotice = useNotice()
+
 	// Initiate Wordpress media manager to select layer image
 	const mediaMgr = useMediaMgr(false, async (selImages) => {
 		setLoading(true)
-		// Get selected image
-		const selImg = await selImages.first()
 
-		// TODO: Handle error in selImg
+		let selImg
 
+		try {
+			// Get selected image
+			selImg = await selImages.first()
+
+		} catch (error) {
+			createNotice({
+				message: error.message,
+				style: 'error'
+			})
+
+			return
+		}
+
+		// Show selected image in the map.
 		setValue('image_source', {
 			url: selImg.attributes.url,
 			width: selImg.attributes.width,

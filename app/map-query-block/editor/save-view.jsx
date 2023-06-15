@@ -17,31 +17,30 @@ import cls from './save-view.module.scss'
  * Save initial setting for the map view.
  *
  * @param {object} props
- * @param {MapView} view Initial settings for the map view.
+ * @param {MapView} layer Initial layer.
  * @param {(mapView: MapView) => void} props.setView Update the initialView attribute.
  */
-export default function SaveView({ view, setView }) {
+export default function SaveView({ layer, setView }) {
 	const { map } = useMap()
 
 	/** Save map position and layer to block attributes */
 	function save() {
-		console.log('Saved');
-		const mapView = map.getView()
+		const mapView = map?.getView()
 		setView({
-			center: mapView.getCenter(),
-			zoom: mapView.getZoom(),
-			layer: map.getLayers().getArray().find(l => l.getVisible() && l.get('baseLayer')).get('wpId')
+			center: mapView?.getCenter(),
+			zoom: mapView?.getZoom(),
+			layer: map?.getLayers()?.getArray()?.find(l => l.getVisible() && l.get('baseLayer')).get('wpId')
 		})
 	}
 
 	function setInitialView() {
-		if (!view.layer && map.getLayers().getLength()) save()
+		if (!layer && map?.getLayers()?.getLength()) save()
 	}
 
 	useEffect(() => {
-		map.on('loadend', setInitialView)
+		map?.on('loadend', setInitialView)
 
-		return () => map.un('loadend', setInitialView)
+		return () => map?.un('loadend', setInitialView)
 	}, [map])
 
 	return (

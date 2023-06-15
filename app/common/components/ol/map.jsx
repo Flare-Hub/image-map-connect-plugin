@@ -6,17 +6,23 @@ import { MapProvider } from './context'
 import { getCenter } from 'ol/extent'
 
 /**
+ * @typedef MapEventHandler
+ * @prop {string} event
+ * @prop {boolean} once
+ * @prop {(any) => void} handler
+ */
+
+/**
  * Map with image overlay.
  *
  * @param {object} props
  * @param {Object<string, any>} props.layer The Wordpress layer
  * @param {import('ol/coordinate').Coordinate} [props.center] Initial center to focus the map on.
  * @param {number} [props.zoom] Initial zoom level of the map.
- * @param {Object<string, (any) => void>} props.eventHandlers Event handlers for OL map events.
- * @param {Object<string, (any) => void>} props.oneTimeHandlers One time event handlers for OL map events.
+ * @param {Array<MapEventHandler>} props.eventHandlers Event handlers for OL map events.
  * @param {string} props.className Class for the map container.
  */
-export default function OlMap({ eventHandlers = {}, oneTimeHandlers = {}, center, zoom, className, children }) {
+export default function OlMap({ eventHandlers = [], center, zoom, className, children }) {
 	// Div to add the map to.
 	const mapTarget = useRef()
 
@@ -25,14 +31,10 @@ export default function OlMap({ eventHandlers = {}, oneTimeHandlers = {}, center
 
 	// After mounting the component.
 	useLayoutEffect(() => {
-		// Register one time event handlers.
-		Object.entries(oneTimeHandlers).forEach(([evt, handler]) => {
-			map.once(evt, handler)
-		})
-
 		// Register event handlers.
-		Object.entries(eventHandlers).forEach(([evt, handler]) => {
-			map.on(evt, handler)
+		eventHandlers.forEach(({ event, handler, once }) => {
+			const register = once ? 'once' : 'on'
+			map[register].call(map, event, handler)
 		})
 
 		/** Set the initial position of the map */
@@ -48,8 +50,8 @@ export default function OlMap({ eventHandlers = {}, oneTimeHandlers = {}, center
 
 		// Remove event handlers on unmount
 		return () => {
-			Object.entries(eventHandlers).forEach(([evt, handler]) => {
-				map.un(evt, handler)
+			eventHandlers.forEach(({ event, handler, once }) => {
+				if (!once) map.un(event, handler)
 			})
 
 			map.un('change:view', setPosition)

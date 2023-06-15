@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from '@wordpress/element'
-import { useSelect } from '@wordpress/data'
+import { useEntityRecords } from '@wordpress/core-data'
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher'
-
+import { __ } from '@wordpress/i18n'
+import useNotice from 'common/utils/use-notice'
 import { useMap } from './context'
 import ImageLayer from './image-layer'
 
@@ -20,9 +21,12 @@ export default function BaseLayerGroup({ mapId, selLayerId, setSelLayerId }) {
 	const { controlBar } = useMap()
 
 	// Get layers for selected map from WordPress.
-	const layers = useSelect(
-		select => select('core').getEntityRecords('taxonomy', 'layer', { post: mapId, per_page: 100, _embed: true }),
-		[mapId]
+	const { records: layers, status } = useEntityRecords('taxonomy', 'layer', { post: mapId, per_page: -1, _embed: true })
+
+	useNotice(
+		status === 'ERROR',
+		__('Error loading layers. Please refresh the application to try again.', 'flare'),
+		[status]
 	)
 
 	// Layer switcher control to switch base layers.

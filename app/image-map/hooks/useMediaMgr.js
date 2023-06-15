@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from '@wordpress/element'
-
+import { __ } from '@wordpress/i18n'
 /**
  * Provide the default Wordpress media manager with a handler for selected images.
  *
@@ -10,8 +10,8 @@ import { useEffect, useMemo } from '@wordpress/element'
 export default function useMediaMgr(multiple, onSelect) {
 	// Initialise media manager
 	const mediaMgr = useMemo(() => window.wp.media({
-		title: 'Select image',
-		button: { text: 'Select image' },
+		title: __('Select image'),
+		button: { text: __('Select image') },
 		multiple: multiple,
 	}), [])
 

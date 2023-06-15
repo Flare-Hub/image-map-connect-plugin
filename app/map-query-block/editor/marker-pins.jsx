@@ -1,5 +1,7 @@
 import { useEffect, useMemo } from "@wordpress/element"
-import { useSelect } from "@wordpress/data"
+import { useEntityRecords } from "@wordpress/core-data"
+import { __ } from "@wordpress/i18n"
+import useNotice from "common/utils/use-notice"
 import { useMap } from "common/components/ol/context"
 import VectorLayer from "ol/layer/Vector"
 import VectorSource from "ol/source/Vector"
@@ -20,8 +22,13 @@ import "remixicon/fonts/remixicon.css"
  */
 export default function MarkerPins({ mapId, markers }) {
 	/** Icon settings for the selected map. */
-	const markerIcons = useSelect(select => select('core')
-		.getEntityRecords('taxonomy', 'marker-icon', { map: mapId }), [])
+	const { records: markerIcons, status } = useEntityRecords('taxonomy', 'marker-icon', { map: mapId })
+
+	useNotice(
+		status === 'ERROR',
+		__('Error loading icons. Please refresh the application to try again.', 'flare'),
+		[status]
+	)
 
 	/** Vector source containing the marker features. */
 	const mkSource = useMemo(() => new VectorSource(), [])
@@ -32,14 +39,15 @@ export default function MarkerPins({ mapId, markers }) {
 		style: (feature) => {
 			// Icon settings are passed to the feature below.
 			const icon = feature.get('icon')
+			if (!icon) return
 			return new Style({
 				text: new Text({
 					// Display marker icons using remix icon font characters.
-					font: icon.size + "px remixicon",
-					text: String.fromCharCode(parseInt(remixMap[icon.img.ref], 16)),
-					fill: new Fill({ color: icon.colour }),
-					offsetX: (0.5 - icon.img.iconAnchor.x) * icon.size,
-					offsetY: (0.5 - icon.img.iconAnchor.y) * icon.size,
+					font: (icon.size ?? 24) + "px remixicon",
+					text: icon.img?.ref && String.fromCharCode(parseInt(remixMap[icon.img.ref], 16)),
+					fill: icon.colour && new Fill({ color: icon.colour }),
+					offsetX: (icon.img?.iconAnchor?.x && icon.size) && (0.5 - icon.img.iconAnchor.x) * icon.size,
+					offsetY: (icon.img?.iconAnchor?.y && icon.size) && (0.5 - icon.img.iconAnchor.y) * icon.size,
 				})
 			})
 		},

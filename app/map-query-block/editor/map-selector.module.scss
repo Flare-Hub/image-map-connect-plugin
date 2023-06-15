@@ -1,0 +1,29 @@
+	.controls {
+		display: flex;
+		gap: 3em;
+
+		.select {
+			flex-grow: 1;
+			display: flex;
+			align-items: flex-end;
+
+			>:global(.components-button) {
+				flex: 0 0;
+				margin-bottom: 6px;
+			}
+
+			>div {
+				flex: 0 1 100%;
+			}
+		}
+
+		.buttons {
+			display: flex;
+			gap: 3.25em;
+			align-items: flex-end;
+
+			button {
+				margin: 0;
+			}
+		}
+	}

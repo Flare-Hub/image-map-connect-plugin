@@ -1,7 +1,9 @@
 import { CheckboxControl } from '@wordpress/components'
 import { useEffect, useState, forwardRef } from '@wordpress/element'
-
 import apiFetch from '@wordpress/api-fetch'
+import { __ } from '@wordpress/i18n'
+
+import useNotice from '../../hooks/useNotice'
 
 import cls from './post-types-select.module.scss'
 
@@ -19,11 +21,17 @@ function PostTypesSelect(
 	{ selected, onSelect, onBlur, inputClass },
 	ref
 ) {
-	const [all, setAll] = useState([])
+	const [types, setAll] = useState([])
+	const createNotice = useNotice()
 
 	useEffect(() => {
 		apiFetch({ path: 'flare/v1/post-types' }).then(types => {
 			setAll(Object.values(types))
+		}).catch(e => {
+			createNotice({
+				message: __('Unable to load post types. Please refresh to try again.', 'flare'),
+				style: 'error',
+			})
 		})
 	}, [])
 
@@ -36,7 +44,7 @@ function PostTypesSelect(
 
 	return (
 		<div className={inputClass} ref={ref}>
-			{all.map(type => (
+			{types.map(type => (
 				<CheckboxControl
 					key={type}
 					label={type}

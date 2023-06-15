@@ -40,15 +40,16 @@ function StyleButton({ icon, style, config, toggler }) {
  * @param {string} props.label Form label visible to the end user.
  * @param {string} props.value The html to edit.
  * @param {(content: string) => void} props.onChange Provide changed content on blur.
+ * @param {Array<any>} props.dependencies Dependencies that should reload the editor.
  * @param {string} props.className
  */
-function RichTextEditor({ label, value, onChange, className }, ref) {
+function RichTextEditor({ label, value, onChange, dependencies = [], className }, ref) {
 	// Initialize TipTap editor
 	const editor = useEditor({
 		extensions: [StarterKit, Underline],
 		content: value,
 		onBlur: ({ editor }) => onChange && onChange(editor.getHTML())
-	})
+	}, dependencies)
 
 	return (
 		<EditorContext.Provider value={editor} >
