@@ -17,4 +17,7 @@
     }
   ],
   "task.allowAutomaticTasks": "on",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
 }
