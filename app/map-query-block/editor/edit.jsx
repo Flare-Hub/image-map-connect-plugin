@@ -1,86 +1,90 @@
-import { BlockControls, InspectorControls, useBlockProps } from "@wordpress/block-editor"
 import {
-	ToolbarButton,
-} from "@wordpress/components"
-import { useState } from "@wordpress/element"
-import { __ } from "@wordpress/i18n"
+	BlockControls,
+	InspectorControls,
+	useBlockProps,
+} from '@wordpress/block-editor';
+import { ToolbarButton } from '@wordpress/components';
+import { useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
-import MapSelector from "./map-selector"
-import blockMeta from "../block.json"
-import MarkerQueryPanel from "./marker-query"
-import Map from "./map"
+import MapSelector from './map-selector';
+import MarkerQueryPanel from './marker-query';
+import Map from './map';
 
 /**
  * Edit map query block.
  *
- * @param {object} props
- * @param {object} props.attributes
- * @param {number} props.attributes.mapId ID of the selected map.
+ * @param {Object}                       props
+ * @param {Object<string, any>}          props.attributes
  * @param {(attrs: Partial<{}>) => void} props.setAttributes
+ * @param {Object<string, any>}          props.context
  */
-export default function Edit({
-	attributes: { mapId, height, queryType, showStandAlone, initialView },
-	setAttributes,
-	context: {
+export default function Edit( { attributes, setAttributes, context } ) {
+	const { mapId, queryType, showStandAlone, initialView } = attributes;
+	const {
 		query,
 		templateSlug,
 		previewPostType,
-		queryContext: [{ page }] = [{}]
-	},
-}) {
-	const [prevAttr, setPrevAttr] = useState(null)
+		queryContext: [ { page } ] = [ {} ],
+	} = context;
+
+	const [ prevAttr, setPrevAttr ] = useState( null );
 
 	/** Store backup of mapId (to enable cancel) and clear value. */
 	function handleReplace() {
-		setAttributes({ mapId: null, initialView: {} })
-		setPrevAttr({ mapId, initialView })
+		setAttributes( { mapId: null, initialView: {} } );
+		setPrevAttr( { mapId, initialView } );
 	}
 
-	/** Set mapId attribute */
-	function setAttr(attr, val) {
-		setAttributes({ [attr]: val })
+	/**
+	 * Set mapId attribute
+	 *
+	 * @param {string} attr
+	 * @param {any}    val
+	 */
+	function setAttr( attr, val ) {
+		setAttributes( { [ attr ]: val } );
 	}
 
 	return (
-		<div {...useBlockProps()}>
-			{mapId && (
+		<div { ...useBlockProps() }>
+			{ mapId && (
 				<BlockControls group="inline">
 					<ToolbarButton
-						text={__('Replace map', blockMeta.textdomain)}
-						onClick={handleReplace}
+						text={ __( 'Replace map', 'flare-im' ) }
+						onClick={ handleReplace }
 					/>
 				</BlockControls>
-			)}
+			) }
 			<InspectorControls>
 				<MarkerQueryPanel
-					hasQuery={!!query}
-					queryType={queryType}
-					setQueryType={setAttr.bind(null, 'queryType')}
-					showStandAlone={showStandAlone}
-					setShowStandAlone={setAttr.bind(null, 'showStandAlone')}
+					hasQuery={ !! query }
+					queryType={ queryType }
+					setQueryType={ setAttr.bind( null, 'queryType' ) }
+					showStandAlone={ showStandAlone }
+					setShowStandAlone={ setAttr.bind( null, 'showStandAlone' ) }
 				/>
 			</InspectorControls>
-			{mapId ? (
+			{ mapId ? (
 				<Map
-					mapId={mapId}
-					queryType={queryType}
-					queryParams={query}
-					templateSlug={templateSlug}
-					previewPostType={previewPostType}
-					showStandAlone={showStandAlone}
-					page={page}
-					height={height}
-					initialView={initialView}
-					setView={setAttr.bind(null, 'initialView')}
+					mapId={ mapId }
+					queryType={ queryType }
+					queryParams={ query }
+					templateSlug={ templateSlug }
+					previewPostType={ previewPostType }
+					showStandAlone={ showStandAlone }
+					page={ page }
+					initialView={ initialView }
+					setView={ setAttr.bind( null, 'initialView' ) }
 				/>
 			) : (
 				<MapSelector
-					mapId={mapId}
-					setAttr={setAttributes}
-					prevAttr={prevAttr}
-					setPrevAttr={setPrevAttr}
+					mapId={ mapId }
+					setAttr={ setAttributes }
+					prevAttr={ prevAttr }
+					setPrevAttr={ setPrevAttr }
 				/>
-			)}
+			) }
 		</div>
-	)
+	);
 }
