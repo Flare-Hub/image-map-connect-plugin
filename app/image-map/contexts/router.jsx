@@ -56,16 +56,18 @@ function createUrl( query ) {
  */
 export function navigate( query, state, replace = false ) {
 	const route = createUrl( query );
-	replace
-		? globalHistory.replace( route, state )
-		: globalHistory.push( route, state );
+	if ( replace ) {
+		globalHistory.replace( route, state );
+	} else {
+		globalHistory.push( route, state );
+	}
 }
 
 /**
  * Context provider providing routing state.
  *
- * @param root0
- * @param root0.children
+ * @param {Object}                    props
+ * @param {import('react').ReactNode} props.children Child nodes.
  */
 export function RouterProvider( { children } ) {
 	// Filter the child Route components to provide only the route matching the routing parameter.
@@ -120,24 +122,22 @@ export function useRouter() {
 /**
  * Display only the children of the child route component that has a path matching the provided query parameter.
  *
- * @param {Object} props
- * @param {string} props.param     The query parameter to use for routing.
- * @param {string} props.rootPath  The path to route to if the query parameter has no value.
- * @param {string} props.errorPath The path to route to if the query parameter value can not be matched to a path.
- * @param          props.children
- * @return The Router provider wrapper.
+ * @param {Object}                    props
+ * @param {string}                    props.param     The query parameter to use for routing.
+ * @param {string}                    props.rootPath  The path to route to if the query parameter has no value.
+ * @param {string}                    props.errorPath The path to route to if the query parameter value can not be matched to a path.
+ * @param {import('react').ReactNode} props.children  Child nodes.
  */
 export function Router( { param, rootPath, errorPath, children } ) {
 	// Get current query parameters.
 	const { query } = useRouter();
 
 	// Set routing query parameter to the root parameter if it has no value.
-
 	useEffect( () => {
 		if ( ! query[ param ] ) {
 			navigate( { [ param ]: rootPath }, null, true );
 		}
-	}, [] );
+	}, [ param, query, rootPath ] );
 
 	// Get route component that corresponds to the route in the current query.
 	const route = useMemo( () => {
@@ -151,7 +151,7 @@ export function Router( { param, rootPath, errorPath, children } ) {
 				( child ) => child.props.path && child.props.path === errorPath
 			)
 		);
-	}, [ query ] );
+	}, [ children, errorPath, param, query, rootPath ] );
 
 	return route.props.children;
 }
@@ -160,10 +160,9 @@ export function Router( { param, rootPath, errorPath, children } ) {
  * A component to allow the router to filter by route.
  *
  * @param {Object} props
- * @param {string} props.path     The route to filter by
- * @param          props.children
- * @return The Route component
+ * @param {string} props.path The route to filter by
  */
-export function Route( { path, children } ) {
+// eslint-disable-next-line no-unused-vars
+export function Route( props ) {
 	return <></>;
 }

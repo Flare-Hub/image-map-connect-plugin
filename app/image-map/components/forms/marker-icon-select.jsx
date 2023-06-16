@@ -65,6 +65,7 @@ export default function MarkerIconSelect( {
 				options={
 					status === 'loading' ? { name: 'Loading...' } : icons
 				}
+				__nextUnconstrainedWidth
 			/>
 		</div>
 	);
