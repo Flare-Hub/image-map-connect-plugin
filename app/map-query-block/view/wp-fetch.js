@@ -1,144 +1,106 @@
-import apiFetch from '@wordpress/api-fetch'
+import apiFetch from '@wordpress/api-fetch';
 
 /**
  * @typedef WpResponse
- * @prop {Array.<Object<string, unknown>>|Object<string, unknown>} body
- * @prop {Response} response
+ * @property {Array.<Object<string, unknown>>|Object<string, unknown>} body     Response body.
+ * @property {Response}                                                response Full response.
  */
 
 /**
  * @typedef CollectionResponse
- * @prop {number} total
- * @prop {number} totalPages
+ * @property {number} total      Total number of records in collection.
+ * @property {number} totalPages Total number of pages in collection.
  */
 
 /**
  * Interact wit the Wordpress rest API
  *
- * @param {string} path Path to the endpoint
+ * @param {string}                      path   Path to the endpoint
  * @param {'GET'|'POST'|'PUT'|'DELETE'} method The http method.
- * @param {object} body The content of the message. Will be stringified.
- * @param {Object.<string, string>} query Query parameters to append to the endpoint.
- * @returns {Promise<WpResponse>} The response from Wordpress.
+ * @param {Object}                      body   The content of the message. Will be stringified.
+ * @param {Object.<string, string>}     query  Query parameters to append to the endpoint.
+ * @return {Promise<WpResponse>} The response from Wordpress.
  */
-export async function wpFetch(path, method = 'GET', body, query = {}) {
+export async function wpFetch( path, method = 'GET', body, query = {} ) {
 	// Create the full query path
-	const params = new URLSearchParams(query)
+	const params = new URLSearchParams( query );
 
 	// Send request
-	const response = await apiFetch({
+	const response = await apiFetch( {
 		path: path + '?' + params.toString(),
 		parse: false,
 		method,
 		data: body,
-	})
+	} );
 
 	// Return response parsed
-	const data = await response.json()
+	const data = await response.json();
 	return {
 		body: data,
 		response,
-	}
+	};
 }
 
 /**
  * Request a collection from the Wordpress rest API.
  *
- * @param {string} collection The type of wordpress objects to get.
- * @param {Object.<string, string>} query Query parameters to append to the endpoint.
- * @returns {Promise<WpResponse & CollectionResponse>} The response from Wordpress.
+ * @param {string}                  collection The type of wordpress objects to get.
+ * @param {Object.<string, string>} query      Query parameters to append to the endpoint.
+ * @return {Promise<WpResponse & CollectionResponse>} The response from Wordpress.
  */
-export async function getCollection(collection, query) {
-	const path = `/wp/v2/${collection}/`
-	const { body, response } = await wpFetch(path, 'GET', null, query)
+export async function getCollection( collection, query ) {
+	const path = `/wp/v2/${ collection }/`;
+	const { body, response } = await wpFetch( path, 'GET', null, query );
 
 	return {
 		body,
-		total: Number(response.headers.get('X-WP-TotalPages')),
-		totalPages: Number(response.headers.get('X-WP-TotalPages')),
-		response
-	}
+		total: Number( response.headers.get( 'X-WP-TotalPages' ) ),
+		totalPages: Number( response.headers.get( 'X-WP-TotalPages' ) ),
+		response,
+	};
 }
 
 /**
  * Request all pages of a collection from the Wordpress rest API.
  *
- * @param {string} collection The type of wordpress objects to get.
- * @param {Object.<string, string>} query Query parameters to append to the endpoint.
- * @returns {Promise<Array<object>>} The response from Wordpress.
+ * @param {string}                  collection The type of wordpress objects to get.
+ * @param {Object.<string, string>} query      Query parameters to append to the endpoint.
+ * @return {Promise<Array<object>>} The response from Wordpress.
  */
-export async function getFullCollection(collection, query = {}) {
+export async function getFullCollection( collection, query = {} ) {
 	/** @type {Array<Promise<WpResponse & CollectionResponse>>} */
-	const requests = []
-	const q = { ...query }
+	const requests = [];
+	const q = { ...query };
 
-	q.page = 1
-	if (!query.per_page) q.per_page = 100
-	const firstReq = getCollection(collection, q)
-	requests.push(firstReq)
+	q.page = 1;
+	if ( ! query.per_page ) q.per_page = 100;
+	const firstReq = getCollection( collection, q );
+	requests.push( firstReq );
 
-	const totalPages = (await firstReq).totalPages
+	const totalPages = ( await firstReq ).totalPages;
 
-	while (q.page < totalPages) {
-		q.page++
-		requests.push(getCollection(collection, q))
+	while ( q.page < totalPages ) {
+		q.page++;
+		requests.push( getCollection( collection, q ) );
 	}
 
 	try {
-		const responses = await Promise.all(requests)
-		return responses.reduce((acc, res) => [...acc, ...res.body], [])
-	} catch (error) {
-		console.error(error)
-		return []
+		const responses = await Promise.all( requests );
+		return responses.reduce( ( acc, res ) => [ ...acc, ...res.body ], [] );
+	} catch ( error ) {
+		console.error( error ); // eslint-disable-line no-console
+		return [];
 	}
 }
 
 /**
  * Request a collection from the Wordpress rest API.
  *
- * @param {string} collection The type of wordpress object to get.
- * @param {string} id The ID of the object.
- * @param {Object.<string, string>} query Query parameters to append to the endpoint.
+ * @param {string}                  collection The type of wordpress object to get.
+ * @param {string}                  id         The ID of the object.
+ * @param {Object.<string, string>} query      Query parameters to append to the endpoint.
  */
-export function getItem(collection, id, query) {
-	const path = `/wp/v2/${collection}/${id}`
-	return wpFetch(path, 'GET', null, query)
-}
-
-/**
- * Add an object to Wordpress through the rest API.
- *
- * @param {string} collection The type of wordpress object to get.
- * @param {string} id The ID of the object.
- * @param {object} body The content of the message. Will be stringified.
- * @param {Object.<string, string>} query Query parameters to append to the endpoint.
- */
-export function createItem(collection, body, query) {
-	const path = `/wp/v2/${collection}/`
-	return wpFetch(path, 'POST', body, query)
-}
-
-/**
- * Update an object to Wordpress through the rest API.
- *
- * @param {string} collection The type of wordpress object to get.
- * @param {string} id The ID of the object.
- * @param {object} body The content of the message. Will be stringified.
- * @param {Object.<string, string>} query Query parameters to append to the endpoint.
- */
-export function postItem(collection, id, body, query) {
-	const path = `/wp/v2/${collection}/${id}`
-	return wpFetch(path, 'POST', body, query)
-}
-
-/**
- * Remove an object from Wordpress through the rest API.
- *
- * @param {string} collection The type of wordpress object to get.
- * @param {string} id The ID of the object.
- * @param {object} body The content of the message. Will be stringified.
- */
-export function deleteItem(collection, id, body) {
-	const path = `/wp/v2/${collection}/${id}`
-	return wpFetch(path, 'DELETE', body)
+export function getItem( collection, id, query ) {
+	const path = `/wp/v2/${ collection }/${ id }`;
+	return wpFetch( path, 'GET', null, query );
 }

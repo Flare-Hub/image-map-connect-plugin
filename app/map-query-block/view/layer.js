@@ -8,13 +8,13 @@ import { Point } from 'ol/geom';
 
 /**
  * @typedef BlockAttr
- * @property {string} mapId
- * @property {string} initialLayer
- * @property {string} initialZoom
- * @property {string} initialCenterX
- * @property {string} initialCenterY
- * @property     {string} postIds
- * @prop     {string} showStandalone
+ * @property {string} mapId          Map ID.
+ * @property {string} initialLayer   Layer on first render.
+ * @property {string} initialZoom    Map zoom level on first render.
+ * @property {string} initialCenterX Map center x coordinate on first render.
+ * @property {string} initialCenterY Map center y coordinate on first render.
+ * @property {string} postIds        IDs of posts to show on the map.
+ * @property {string} showStandalone Show stand-alone markers, as well as linked posts.
  */
 
 /** Open Layers layer from WordPress Imagemap. */
@@ -94,8 +94,8 @@ export default class Layer {
 			return getFullCollection( 'marker-icons', {
 				map: this.map.blockAttr.mapId,
 			} );
-		} catch ( e ) {
-			console.error( error );
+		} catch ( error ) {
+			console.error( error ); // eslint-disable-line no-console
 			this.map.setError(
 				__( 'Unable to load marker icons.', 'flare' ) +
 					' ' +
@@ -131,7 +131,7 @@ export default class Layer {
 
 			return markers.flat();
 		} catch ( error ) {
-			console.error( error );
+			console.error( error ); // eslint-disable-line no-console
 			this.map.setError(
 				__( 'Unable to load markers.', 'flare' ) +
 					' ' +

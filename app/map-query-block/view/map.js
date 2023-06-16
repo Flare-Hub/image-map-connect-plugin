@@ -63,9 +63,11 @@ export default class Map {
 				);
 			} )
 			.catch( () => {
-				this.setError( __( 'Unable to load marker types.', 'flare' ) ) +
-					' ' +
-					__( 'Please refresh this page to try again.', 'flare' );
+				this.setError(
+					__( 'Unable to load marker types.', 'flare' ) +
+						' ' +
+						__( 'Please refresh this page to try again.', 'flare' )
+				);
 			} );
 	}
 
@@ -120,6 +122,7 @@ export default class Map {
 			this.olMap.removeOverlay( this.popup );
 			this.olMap.addOverlay( this.popup );
 		} else {
+			// eslint-disable-next-line no-console
 			console.warn(
 				'Unable to add popup overlay because no overlay was found.'
 			);
@@ -147,6 +150,7 @@ export default class Map {
 			this.olMap.un( 'pointermove', this.setPointer );
 			this.olMap.on( 'pointermove', this.setPointer );
 		} else {
+			// eslint-disable-next-line no-console
 			console.warn(
 				'Unable to add listener because no selector was found.'
 			);
@@ -215,7 +219,7 @@ export default class Map {
 	/**
 	 * Set mouse cursor to pointer on markers
 	 *
-	 * @param e
+	 * @param {import('ol').MapBrowserEvent} e
 	 */
 	setPointer = ( e ) => {
 		const pixel = this.olMap.getEventPixel( e.originalEvent );
@@ -236,7 +240,7 @@ export default class Map {
 	/**
 	 * Add all base layers for the given WordPress map to the OpenLayers map.
 	 *
-	 * @param mapId
+	 * @param {number} mapId
 	 */
 	async initBaseLayers( mapId ) {
 		try {
