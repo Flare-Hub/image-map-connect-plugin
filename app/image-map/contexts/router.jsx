@@ -15,7 +15,7 @@ const globalHistory = createBrowserHistory();
  * @typedef Query
  * @property {string|null} [map]    The selected map ID.
  * @property {string|null} [layer]  The selected layer ID.
- * @property {string|null} [marker] THe slected marker ID.
+ * @property {string|null} [marker] THe selected marker ID.
  */
 
 /**

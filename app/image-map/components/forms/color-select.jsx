@@ -4,7 +4,7 @@ import {
 	Dropdown,
 	BaseControl,
 } from '@wordpress/components';
-import { forwardRef } from '@wordpress/element';
+import { forwardRef, useRef } from '@wordpress/element';
 import cls from './edit-form.module.scss';
 
 /**
@@ -19,19 +19,20 @@ import cls from './edit-form.module.scss';
  * @param {import('react').Ref}     ref             Color indicator ref.
  */
 function ColorSelect( { label, value, onChange, onBlur, className }, ref ) {
-	const clrIndicatorId =
-		'clr-indicator-' + Math.floor( Math.random() * 100000000 );
+	const clrIndicatorId = useRef(
+		'clr-indicator-' + Math.floor( Math.random() * 100000000 )
+	);
 
 	return (
 		<BaseControl
 			label={ label }
-			id={ clrIndicatorId }
+			id={ clrIndicatorId.current }
 			className={ className }
 		>
 			<Dropdown
 				renderToggle={ ( { isOpen, onToggle } ) => (
 					<ColorIndicator
-						id={ clrIndicatorId }
+						id={ clrIndicatorId.current }
 						colorValue={ value }
 						onClick={ onToggle }
 						aria-expanded={ isOpen }

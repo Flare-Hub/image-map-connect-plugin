@@ -1,4 +1,5 @@
 import { BaseControl, ButtonGroup, Button } from '@wordpress/components';
+import { useRef } from '@wordpress/element';
 
 import cls from './edit-form.module.scss';
 /**
@@ -21,11 +22,17 @@ export default function ButtonSelector( {
 	const getVariant = ( val ) =>
 		val === selected ? 'primary' : 'secondary';
 
-	const btnGroupId = 'btn-group-' + Math.floor( Math.random() * 100000000 );
+	const btnGroupId = useRef(
+		'btn-group-' + Math.floor( Math.random() * 100000000 )
+	);
 
 	return (
-		<BaseControl label={ label } id={ btnGroupId } className={ cls.field }>
-			<ButtonGroup id={ btnGroupId }>
+		<BaseControl
+			label={ label }
+			id={ btnGroupId.current }
+			className={ cls.field }
+		>
+			<ButtonGroup id={ btnGroupId.current }>
 				{ items.map( ( item ) => (
 					<Button
 						key={ item.value }

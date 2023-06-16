@@ -1,4 +1,4 @@
-import { useEffect, useState, forwardRef } from '@wordpress/element';
+import { useEffect, useState, forwardRef, useRef } from '@wordpress/element';
 import { BaseControl, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
@@ -64,10 +64,14 @@ function ImageSelector( { label, value, onChange, className }, ref ) {
 		return () => onChange( null );
 	}, [ onChange ] );
 
-	const imgBtnId = 'img-' + Math.floor( Math.random() * 100000000 );
+	const imgBtnId = useRef( 'img-' + Math.floor( Math.random() * 100000000 ) );
 
 	return (
-		<BaseControl label={ label } className={ className } id={ imgBtnId }>
+		<BaseControl
+			label={ label }
+			className={ className }
+			id={ imgBtnId.current }
+		>
 			{ mediaImg && (
 				<img
 					src={ mediaImg.sizes.thumbnail.url }
@@ -79,7 +83,7 @@ function ImageSelector( { label, value, onChange, className }, ref ) {
 			) }
 			<div className={ cls.featuredButtons }>
 				<Button
-					id={ imgBtnId }
+					id={ imgBtnId.current }
 					variant="secondary"
 					onClick={ () => mediaMgr.open() }
 					ref={ ref }

@@ -6,7 +6,7 @@ import {
 	BaseControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useRef } from '@wordpress/element';
 import { FormProvider, useForm, Controller } from 'react-hook-form';
 
 import { useRouter } from '../../contexts/router';
@@ -63,7 +63,9 @@ export default function EditMap() {
 	}, [ form, isSubmitSuccessful, map, mapStatus ] );
 
 	// generate IDs for the base controls
-	const postTypesId = 'post-types-' + Math.floor( Math.random() * 100000000 );
+	const postTypesId = useRef(
+		'post-types-' + Math.floor( Math.random() * 100000000 )
+	);
 
 	return (
 		<Card className="full-height">
@@ -109,7 +111,7 @@ export default function EditMap() {
 										className={ getControlClass(
 											fieldState
 										) }
-										id={ postTypesId }
+										id={ postTypesId.current }
 									>
 										<PostTypesSelect
 											selected={ field.value }
@@ -117,7 +119,7 @@ export default function EditMap() {
 											onBlur={ field.onBlur }
 											inputClass={ cls.input }
 											ref={ field.ref }
-											id={ postTypesId }
+											id={ postTypesId.current }
 										/>
 									</BaseControl>
 								) }

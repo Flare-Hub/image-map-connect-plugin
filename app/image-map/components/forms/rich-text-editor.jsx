@@ -1,4 +1,9 @@
-import { createContext, useContext, forwardRef } from '@wordpress/element';
+import {
+	createContext,
+	useContext,
+	forwardRef,
+	useRef,
+} from '@wordpress/element';
 import {
 	BaseControl,
 	Toolbar,
@@ -65,12 +70,14 @@ function RichTextEditor(
 		dependencies
 	);
 
-	const toolBarId = 'toolbar-' + Math.floor( Math.random() * 100000000 );
+	const toolBarId = useRef(
+		'toolbar-' + Math.floor( Math.random() * 100000000 )
+	);
 
 	return (
 		<EditorContext.Provider value={ tiptap }>
 			<BaseControl
-				id={ toolBarId }
+				id={ toolBarId.current }
 				label={ label }
 				className={ className }
 			>
@@ -82,7 +89,7 @@ function RichTextEditor(
 					<Toolbar
 						label={ label }
 						className={ rteCls.toolbar }
-						id={ toolBarId }
+						id={ toolBarId.current }
 					>
 						<ToolbarGroup>
 							<StyleButton

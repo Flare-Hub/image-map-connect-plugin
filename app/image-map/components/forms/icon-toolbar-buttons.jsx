@@ -4,7 +4,7 @@ import {
 	ToolbarGroup,
 	Dropdown,
 } from '@wordpress/components';
-import { forwardRef } from '@wordpress/element';
+import { forwardRef, useRef } from '@wordpress/element';
 
 import cls from './edit-form.module.scss';
 import 'remixicon/fonts/remixicon.css';
@@ -29,18 +29,18 @@ function IconToolbarButtons(
 	{ label, icons, selected, colour, size, onSelect, onBlur, className },
 	ref
 ) {
-	const btnId = 'btn-' + Math.floor( Math.random() * 100000000 );
+	const btnId = useRef( 'btn-' + Math.floor( Math.random() * 100000000 ) );
 
 	return (
 		<BaseControl
 			label={ label }
 			className={ `${ cls.iconGroup } ${ className }` }
-			id={ btnId }
+			id={ btnId.current }
 		>
 			<Dropdown
 				renderToggle={ ( { isOpen, onToggle } ) => (
 					<ToolbarButton
-						id={ btnId }
+						id={ btnId.current }
 						icon={
 							<i
 								className={ selected.ref }

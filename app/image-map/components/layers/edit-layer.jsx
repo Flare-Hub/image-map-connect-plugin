@@ -7,7 +7,7 @@ import {
 	Spinner,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useEffect, useMemo } from '@wordpress/element';
+import { useEffect, useMemo, useRef } from '@wordpress/element';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import { useRouter } from '../../contexts/router';
@@ -66,8 +66,8 @@ export default function EditLayer() {
 	}, [ status, form.formState.isSubmitSuccessful, form, layer ] );
 
 	// Define ids to map the base controls to.
-	const imgId = 'img-' + Math.floor( Math.random() * 100000000 );
-	const mapDivId = 'map-' + Math.floor( Math.random() * 100000000 );
+	const imgId = useRef( 'img-' + Math.floor( Math.random() * 100000000 ) );
+	const mapDivId = useRef( 'map-' + Math.floor( Math.random() * 100000000 ) );
 
 	return (
 		<Card className="full-height">
@@ -98,12 +98,12 @@ export default function EditLayer() {
 									<BaseControl
 										label="Image"
 										className={ cls.field }
-										id={ imgId }
+										id={ imgId.current }
 									>
 										<SelectImage
 											onChange={ field.onChange }
 											invalid={ fieldState.invalid }
-											id={ imgId }
+											id={ imgId.current }
 										/>
 									</BaseControl>
 								) }
@@ -141,11 +141,11 @@ export default function EditLayer() {
 							<BaseControl
 								label={ __( 'Initial position', 'flare' ) }
 								className={ `${ cls.field } ${ cls.map }` }
-								id={ mapDivId }
+								id={ mapDivId.current }
 							>
 								<OlMap
 									className={ `${ cls.border } ${ cls.input } ${ mapCls.canvas }` }
-									id={ mapDivId }
+									id={ mapDivId.current }
 								>
 									<ImageLayer layer={ form.watch() } />
 								</OlMap>
