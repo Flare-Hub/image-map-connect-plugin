@@ -1,5 +1,7 @@
+@import "~@wordpress/base-styles/colors";
+
 :global(#wpcontent) {
-	background-color: white;
+	background-color: $white;
 	padding: 0;
 }
 
@@ -20,7 +22,7 @@
 
 .title h1 {
 	padding: 0;
-	margin: .5rem 1rem;
+	margin: 0.5rem 1rem;
 	line-height: normal;
 }
 

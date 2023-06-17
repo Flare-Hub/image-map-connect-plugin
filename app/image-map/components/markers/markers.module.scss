@@ -1,7 +1,9 @@
+@import "~@wordpress/base-styles/colors";
+
 .invalid {
-	border: 1px solid red;
+	border: 1px solid $alert-red;
 
 	&:focus {
-		outline-color: red;
+		outline-color: $alert-red;
 	}
 }
