@@ -1,7 +1,6 @@
 import './view.scss';
 import 'ol/ol.css';
 import 'ol-ext/dist/ol-ext.css';
-import 'remixicon/fonts/remixicon.css';
 import Map from './map';
 
 /* global addEventListener */

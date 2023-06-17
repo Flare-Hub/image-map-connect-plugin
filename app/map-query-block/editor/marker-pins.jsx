@@ -11,8 +11,6 @@ import { Point } from 'ol/geom';
 
 import remixMap from 'common/remix-unicode.json';
 
-import 'remixicon/fonts/remixicon.css';
-
 /**
  * Add markers in query to map.
  *

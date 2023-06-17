@@ -5,10 +5,9 @@ import {
 	useMemo,
 } from '@wordpress/element';
 import { Map } from 'ol';
+import { getCenter } from 'ol/extent';
 
 import { MapProvider } from './context';
-
-import { getCenter } from 'ol/extent';
 
 /**
  * @typedef MapEventHandler

@@ -7,7 +7,6 @@ import {
 import { forwardRef, useRef } from '@wordpress/element';
 
 import cls from './edit-form.module.scss';
-import 'remixicon/fonts/remixicon.css';
 
 /** @typedef {import('../../utils/marker-icons').IconImg} Icon */
 

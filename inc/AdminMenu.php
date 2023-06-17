@@ -12,19 +12,30 @@ class AdminMenu {
 	/** @var string $capability The Capability needed to manage this plugin. */
 	const CAPABILITY = 'manage_categories';
 
-		/** @var WpScriptsAsset Handler to provide build location. */
+	/** @var WpScriptsAsset Handler to provide build location. */
 	public $assets;
 
 	/** @var string $id Id for the objects registered with WordPress. */
 	protected $id;
 
+	/** @var array<string> $style_deps Dependencies that the menu's stylesheet depends on. */
+	protected $style_deps;
+
+	/** @var array<string> $script_deps Dependencies that the menu's script depends on. */
+	protected $script_deps;
+
 	/**
 	 * Constructor.
 	 *
-	 * @param string $id Id for the objects registered with WordPress.
+	 * @param string        $id Id for the objects registered with WordPress.
+	 * @param array<string> $style_deps Dependencies that the menu's stylesheet depends on.
+	 * @param array<string> $script_deps Dependencies that the menu's script depends on.
 	 */
-	public function __construct( $id ) {
-		$this->id = $id;
+	public function __construct( string $id, array $style_deps = array(), array $script_deps = array() ) {
+		$this->id          = $id;
+		$this->style_deps  = $style_deps;
+		$this->script_deps = $script_deps;
+		$this->assets      = new WpScriptsAsset( 'image-map/index', $id, false, $this->style_deps );
 	}
 
 	/**
@@ -33,8 +44,6 @@ class AdminMenu {
 	 * @since 0.1.0
 	 **/
 	public function init() {
-		$this->assets = new WpScriptsAsset( 'image-map/index', $this->id );
-
 		add_menu_page(
 			__( 'Image Maps', 'flare-im' ),
 			__( 'Image Maps', 'flare-im' ),
@@ -54,7 +63,7 @@ class AdminMenu {
 	public function load_app() {
 		wp_enqueue_media();
 		wp_enqueue_script( $this->id );
-		$this->assets->enqueue_style();
+		wp_enqueue_style( $this->id );
 
 		$div_attr = "class=\"hide-if-no-js\" id=\"$this->id\"";
 
@@ -62,7 +71,7 @@ class AdminMenu {
 			<div <?php echo wp_kses_data( $div_attr ); ?>>
 				<img src="/wp-admin/images/spinner-2x.gif" alt="Loading" class="center-img">
 			</div>
-			<noscript>This metabox requires javascript</noscript>
+			<noscript><?php esc_html_e( 'This metabox requires javascript', 'flare-im' ); ?></noscript>
 		<?php
 	}
 }

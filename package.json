@@ -10,7 +10,7 @@
     "dockerup": "docker compose --env-file docker.env --file ./docker/docker-compose.yml up",
     "dockerdown": "docker compose --env-file docker.env --file ./docker/docker-compose.yml down",
     "wp": "docker compose --env-file docker.env --file ./docker/docker-compose.yml exec wordpress wp",
-    "lint": "eslint **/*.{js,jsx} && stylelint **/*.{css,scss}"
+    "lint": "eslint app/**/*.{js,jsx} && stylelint app/**/*.{css,scss}"
   },
   "keywords": [
     "wordpress",

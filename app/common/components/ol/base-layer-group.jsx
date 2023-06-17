@@ -6,7 +6,6 @@ import useNotice from 'common/utils/use-notice';
 import { useMap } from './context';
 import ImageLayer from './image-layer';
 
-import 'ol-ext/dist/ol-ext.css';
 import cls from './ol.module.scss';
 
 /**
