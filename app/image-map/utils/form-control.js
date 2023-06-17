@@ -1,14 +1,13 @@
-import cls from '../components/forms/edit-form.module.scss'
+import cls from '../components/forms/edit-form.module.scss';
 
-export { cls }
+export { cls };
 
 /**
  * Get classes to add to a controlled form field.
  *
  * @param {import('react-hook-form').ControllerFieldState} fieldState As provided by the controller.
- * @returns
  */
-export function getControlClass(fieldState) {
-	const isValid = fieldState.invalid
-	return cls.field + (isValid ? ' ' + cls.invalid : '')
+export function getControlClass( fieldState ) {
+	const isValid = fieldState.invalid;
+	return cls.field + ( isValid ? ' ' + cls.invalid : '' );
 }

@@ -1,0 +1,16 @@
+{
+	"extends": [
+		"@wordpress/stylelint-config/scss",
+		"stylelint-config-css-modules"
+	],
+	"overrides": [
+		{
+			"files": [
+				"**/*.module.scss"
+			],
+			"rules": {
+				"selector-class-pattern": null
+			}
+		}
+	]
+}

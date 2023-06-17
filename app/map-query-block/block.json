@@ -69,5 +69,8 @@
   "editorScript": "file:./editor/index.js",
   "editorStyle": "file:./editor/index.css",
   "viewScript": "file:./view/index.js",
-  "style": "file:./view/index.css"
+  "style": [
+    "file:./view/index.css",
+    "file:../remixicon/remixicon.css"
+  ]
 }

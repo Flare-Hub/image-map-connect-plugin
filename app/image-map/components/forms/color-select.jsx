@@ -1,41 +1,56 @@
-import { ColorIndicator, ColorPicker, Dropdown, BaseControl } from '@wordpress/components'
-import { forwardRef } from '@wordpress/element'
-import cls from './edit-form.module.scss'
+import {
+	ColorIndicator,
+	ColorPicker,
+	Dropdown,
+	BaseControl,
+} from '@wordpress/components';
+import { forwardRef, useRef } from '@wordpress/element';
+import cls from './edit-form.module.scss';
 
 /**
  * Colour indicator with dropdown picker to change it.
  *
- * @param {object} props
- * @param {string} props.label Field label.
- * @param {string} props.value Selected colour.
- * @param {(value: string) => void} props.onChange New colour handler.
- * @param {() => void} props.onBlur Called when focus is lost on the colour picker.
- * @param {string} props.className
+ * @param {Object}                  props
+ * @param {string}                  props.label     Field label.
+ * @param {string}                  props.value     Selected colour.
+ * @param {(value: string) => void} props.onChange  New colour handler.
+ * @param {() => void}              props.onBlur    Called when focus is lost on the colour picker.
+ * @param {string}                  props.className Base control class.
+ * @param {import('react').Ref}     ref             Color indicator ref.
  */
-function ColorSelect({ label, value, onChange, onBlur, className }, ref) {
+function ColorSelect( { label, value, onChange, onBlur, className }, ref ) {
+	const clrIndicatorId = useRef(
+		'clr-indicator-' + Math.floor( Math.random() * 100000000 )
+	);
+
 	return (
-		<BaseControl label={label} className={className}>
+		<BaseControl
+			label={ label }
+			id={ clrIndicatorId.current }
+			className={ className }
+		>
 			<Dropdown
-				renderToggle={({ isOpen, onToggle }) => (
+				renderToggle={ ( { isOpen, onToggle } ) => (
 					<ColorIndicator
-						colorValue={value}
-						onClick={onToggle}
-						aria-expanded={isOpen}
-						ref={ref}
+						id={ clrIndicatorId.current }
+						colorValue={ value }
+						onClick={ onToggle }
+						aria-expanded={ isOpen }
+						ref={ ref }
 					/>
-				)}
-				renderContent={() => (
+				) }
+				renderContent={ () => (
 					<ColorPicker
-						color={value}
-						onChange={onChange}
-						onBlur={onBlur}
+						color={ value }
+						onChange={ onChange }
+						onBlur={ onBlur }
 					/>
-				)}
+				) }
 				expandOnMobile
-				className={cls.colorSelect}
+				className={ cls.colorSelect }
 			/>
 		</BaseControl>
-	)
+	);
 }
 
-export default forwardRef(ColorSelect)
+export default forwardRef( ColorSelect );
