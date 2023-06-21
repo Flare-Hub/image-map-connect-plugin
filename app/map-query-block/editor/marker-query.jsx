@@ -35,7 +35,10 @@ export default function MarkerQueryPanel( {
 				<>
 					<BaseControl
 						label={ __( 'Show markers for', 'flare-im' ) }
-						help={ __( 'Help text goes here', 'flare-im' ) }
+						help={ __(
+							'Whether to respect pagination in the markers displayed on the map.',
+							'flare-im'
+						) }
 						id={ btnGroupId.current }
 					>
 						<ButtonGroup id={ btnGroupId.current }>
@@ -68,7 +71,10 @@ export default function MarkerQueryPanel( {
 						) }
 						checked={ showStandAlone }
 						onChange={ () => setShowStandAlone( ! showStandAlone ) }
-						help={ __( 'Help text goes here', 'flare-im' ) }
+						help={ __(
+							'Show only markers from the query loop or also markers not linked to any posts.',
+							'flare-im'
+						) }
 					/>
 				</>
 			) }
@@ -80,7 +86,7 @@ export default function MarkerQueryPanel( {
 					) +
 						' ' +
 						__(
-							'To filter the posts, place this block inside a query block.',
+							'To filter the posts, place this block inside a Query Loop block.',
 							'flare'
 						) }
 				</p>

@@ -27,16 +27,14 @@
 }
 
 .tabPanel {
-	flex: 1 0;
-	display: flex;
-	flex-direction: column;
-
-	> :global(.components-tab-panel__tab-content) {
-		flex: 1 0;
-	}
+	flex: 0 0;
 }
 
 .notices {
 	position: fixed;
 	z-index: 999;
+}
+
+.notFound {
+	margin: 1em;
 }
