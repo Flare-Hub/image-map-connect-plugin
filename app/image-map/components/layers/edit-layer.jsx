@@ -19,6 +19,7 @@ import LifeCycleButtons from '../forms/lifecycle-buttons';
 import SelectImage from './select-image';
 
 import mapCls from '../map.module.scss';
+import Label from '../forms/label';
 
 /** Map details form. */
 export default function EditLayer() {
@@ -71,19 +72,32 @@ export default function EditLayer() {
 
 	return (
 		<Card className="full-height">
-			{ status === 'loading' && (
-				<Spinner style={ { width: '100px', height: '100px' } } />
-			) }
-			{ ( status === 'new' || status === 'loaded' ) && (
-				<FormProvider { ...form }>
-					<CardBody>
+			<CardBody>
+				{ status === 'none' && (
+					<h3>
+						{ __(
+							'Select a layer from the list or add a new one.',
+							'flare'
+						) }
+					</h3>
+				) }
+				{ status === 'loading' && (
+					<Spinner style={ { width: '100px', height: '100px' } } />
+				) }
+				{ ( status === 'new' || status === 'loaded' ) && (
+					<FormProvider { ...form }>
+						<h2>{ __( 'Edit Layer', 'flare' ) }</h2>
 						<div className="col-xs-9">
 							<Controller
 								name="name"
 								rules={ { required: true } }
 								render={ ( { field, fieldState } ) => (
 									<TextControl
-										label={ __( 'Name', 'flare' ) }
+										label={
+											<div className={ cls.plainLabel }>
+												{ __( 'Name', 'flare' ) }
+											</div>
+										}
 										{ ...field }
 										className={ getControlClass(
 											fieldState
@@ -96,7 +110,11 @@ export default function EditLayer() {
 								rules={ { required: true } }
 								render={ ( { field, fieldState } ) => (
 									<BaseControl
-										label="Image"
+										label={
+											<div className={ cls.plainLabel }>
+												{ __( 'Image', 'flare' ) }
+											</div>
+										}
 										className={ cls.field }
 										id={ imgId.current }
 									>
@@ -113,7 +131,18 @@ export default function EditLayer() {
 								rules={ { required: true } }
 								render={ ( { field, fieldState } ) => (
 									<RangeControl
-										label={ __( 'Minimum zoom', 'flare' ) }
+										label={
+											<Label
+												name={ __(
+													'Minimum zoom',
+													'flare'
+												) }
+												tooltip={ __(
+													'The amount you can zoom in on the image. Check the preview to see the effect of your selection.',
+													'flare'
+												) }
+											/>
+										}
 										min="0"
 										max="10"
 										{ ...field }
@@ -128,7 +157,18 @@ export default function EditLayer() {
 								rules={ { required: true } }
 								render={ ( { field, fieldState } ) => (
 									<RangeControl
-										label={ __( 'Maximum zoom', 'flare' ) }
+										label={
+											<Label
+												name={ __(
+													'Maximum zoom',
+													'flare'
+												) }
+												tooltip={ __(
+													'The amount you can zoom out on the image. Check the preview to see the effect of your selection.',
+													'flare'
+												) }
+											/>
+										}
 										min="0"
 										max="10"
 										{ ...field }
@@ -139,7 +179,11 @@ export default function EditLayer() {
 								) }
 							/>
 							<BaseControl
-								label={ __( 'Initial position', 'flare' ) }
+								label={
+									<div className={ cls.plainLabel }>
+										{ __( 'Preview', 'flare' ) }
+									</div>
+								}
 								className={ `${ cls.field } ${ cls.map }` }
 								id={ mapDivId.current }
 							>
@@ -162,9 +206,9 @@ export default function EditLayer() {
 								) }
 							/>
 						</div>
-					</CardBody>
-				</FormProvider>
-			) }
+					</FormProvider>
+				) }
+			</CardBody>
 		</Card>
 	);
 }

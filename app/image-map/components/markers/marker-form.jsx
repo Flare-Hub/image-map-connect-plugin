@@ -5,6 +5,7 @@ import {
 	useMemo,
 	useState,
 } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { useRouter } from '../../contexts/router';
@@ -12,6 +13,8 @@ import useRecord from '../../hooks/useRecord';
 import MarkerLifecycle from './marker-lifecycle';
 import EditMarker from './edit-marker';
 import MarkerLocations from './marker-locations';
+
+import cls from '../forms/edit-form.module.scss';
 
 /**
  * Context provider for the selected marker state.
@@ -97,28 +100,42 @@ export function MarkerForm( {
 				</FlexItem>
 				<FlexItem isBlock>
 					<Card className="full-height">
-						{ status === 'loading' && (
-							<Spinner
-								style={ { width: '100px', height: '100px' } }
-							/>
-						) }
-						{ ( status === 'new' || status === 'loaded' ) &&
-							showForm && (
-								<CardBody>
-									<EditMarker
-										markerType={ marker.type }
-										title={ marker.title.raw }
-									/>
-									<div className="col-xs-3">
-										<MarkerLifecycle
-											marker={ marker }
-											save={ saveRecord }
-											delete={ delRecord }
-											listQuery={ listQuery }
-										/>
-									</div>
-								</CardBody>
+						<CardBody>
+							{ status === 'none' && (
+								<h3 className={ cls.noSelection }>
+									{ __(
+										'Select a map from the list or add a new one.',
+										'flare'
+									) }
+								</h3>
 							) }
+
+							{ status === 'loading' && (
+								<Spinner
+									style={ {
+										width: '100px',
+										height: '100px',
+									} }
+								/>
+							) }
+							{ ( status === 'new' || status === 'loaded' ) &&
+								showForm && (
+									<>
+										<EditMarker
+											markerType={ marker.type }
+											title={ marker.title.raw }
+										/>
+										<div className="col-xs-3">
+											<MarkerLifecycle
+												marker={ marker }
+												save={ saveRecord }
+												delete={ delRecord }
+												listQuery={ listQuery }
+											/>
+										</div>
+									</>
+								) }
+						</CardBody>
 					</Card>
 				</FlexItem>
 			</Flex>

@@ -15,6 +15,7 @@ import useRecord from '../../hooks/useRecord';
 import PostTypesSelect from '../forms/post-types-select';
 import MarkerIconList from './marker-icon-list';
 import LifeCycleButtons from '../forms/lifecycle-buttons';
+import Label from '../forms/label';
 
 /** Default values for a new map. */
 const EMPTY_MAP = {
@@ -69,19 +70,32 @@ export default function EditMap() {
 
 	return (
 		<Card className="full-height">
-			{ mapStatus === 'loading' && (
-				<Spinner style={ { width: '100px', height: '100px' } } />
-			) }
-			{ ( mapStatus === 'new' || mapStatus === 'loaded' ) && (
-				<CardBody>
+			<CardBody>
+				{ mapStatus === 'none' && (
+					<h3>
+						{ __(
+							'Select a map from the list or add a new one.',
+							'flare-im'
+						) }
+					</h3>
+				) }
+				{ mapStatus === 'loading' && (
+					<Spinner style={ { width: '100px', height: '100px' } } />
+				) }
+				{ ( mapStatus === 'new' || mapStatus === 'loaded' ) && (
 					<FormProvider { ...form }>
+						<h2>{ __( 'Edit Map', 'flare-im' ) }</h2>
 						<div className="col-xs-9">
 							<Controller
 								name="title.raw"
 								rules={ { required: true } }
 								render={ ( { field, fieldState } ) => (
 									<TextControl
-										label={ __( 'Map name', 'flare' ) }
+										label={
+											<div className={ cls.plainLabel }>
+												{ __( 'Map name', 'flare' ) }
+											</div>
+										}
 										{ ...field }
 										className={ getControlClass(
 											fieldState
@@ -94,7 +108,18 @@ export default function EditMap() {
 								rules={ { required: true } }
 								render={ ( { field, fieldState } ) => (
 									<TextControl
-										label={ __( 'Description', 'flare' ) }
+										label={
+											<Label
+												name={ __(
+													'Description',
+													'flare'
+												) }
+												tooltip={ __(
+													'Used for internal clarification only.',
+													'flare-im'
+												) }
+											/>
+										}
 										{ ...field }
 										className={ getControlClass(
 											fieldState
@@ -107,7 +132,18 @@ export default function EditMap() {
 								rules={ { required: true } }
 								render={ ( { field, fieldState } ) => (
 									<BaseControl
-										label={ __( 'Post Types', 'flare' ) }
+										label={
+											<Label
+												name={ __(
+													'Post Types',
+													'flare-im'
+												) }
+												tooltip={ __(
+													'Select the types of posts that can be referenced on this image map.',
+													'flare-im'
+												) }
+											/>
+										}
 										className={ getControlClass(
 											fieldState
 										) }
@@ -124,14 +160,22 @@ export default function EditMap() {
 									</BaseControl>
 								) }
 							/>
-							{ /* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */ }
 							<BaseControl
-								label={ __( 'Marker icons', 'flare' ) }
+								label={
+									<Label
+										name={ __( 'Icon types', 'flare' ) }
+										tooltip={ __(
+											'Icon options for each marker on the map.',
+											'flare-im'
+										) }
+									/>
+								}
 								className={ getControlClass( {
 									invalid:
 										errors.icon_details &&
 										errors.icon_details.root,
 								} ) }
+								id="no-input-to-focus-on"
 							>
 								<MarkerIconList name={ 'icon_details' } />
 							</BaseControl>
@@ -143,13 +187,14 @@ export default function EditMap() {
 								onSave={ saveMap }
 								onDelete={ deleteMap }
 								confirmDeleteText={ __(
-									'Are you sure you want to delete this map?'
+									'Are you sure you want to delete this map?',
+									'flare-im'
 								) }
 							/>
 						</div>
 					</FormProvider>
-				</CardBody>
-			) }
+				) }
+			</CardBody>
 		</Card>
 	);
 }

@@ -43,10 +43,30 @@
 		align-items: baseline;
 
 		>label,
+		>.label {
+			width: 124px;
+		}
+
+		>label,
 		>.label,
 		>:global(.components-base-control__label) {
-			flex: 0 0 100px;
-			width: 100px;
+
+			.plainLabel {
+				text-align: right;
+				margin-right: 28px;
+			}
+
+			.infoLabel {
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				gap: 4px;
+				margin-right: 8px;
+
+				:global(.components-tooltip) {
+					text-transform: none;
+				}
+			}
 		}
 
 		>input,
@@ -61,7 +81,7 @@
 		}
 
 		.row {
-			margin-bottom: 4px;
+			margin-bottom: 6px;
 		}
 
 		.alignColour {
@@ -182,4 +202,3 @@
 .divider {
 	margin-bottom: 8px;
 }
-

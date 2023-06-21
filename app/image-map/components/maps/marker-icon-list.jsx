@@ -1,3 +1,4 @@
+/* eslint-disable @wordpress/no-base-control-with-label-without-id */
 import {
 	Card,
 	CardBody,
@@ -10,6 +11,7 @@ import {
 import { __ } from '@wordpress/i18n';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import cls from '../forms/edit-form.module.scss';
+import Label from '../forms/label';
 import MarkerIconRow from './marker-icon-row';
 
 const ICON_SIZE = 24;
@@ -35,19 +37,26 @@ export default function MarkerIconList( { name } ) {
 			<CardBody>
 				<Flex className={ cls.iconRow }>
 					<FlexItem isBlock>
-						{ /* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */ }
-						<BaseControl label={ __( 'Icon Name', 'flare' ) } />
+						<BaseControl
+							className={ cls.field }
+							label={
+								<Label
+									name={ __( 'Icon Name', 'flare' ) }
+									tooltip={ __(
+										'Used when selecting an icon on a marker in the admin UI.',
+										'flare'
+									) }
+								/>
+							}
+						/>
 					</FlexItem>
 					<FlexItem className={ cls.iconColBtn }>
-						{ /* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */ }
 						<BaseControl label={ __( 'Icon', 'flare' ) } />
 					</FlexItem>
 					<FlexItem className={ cls.iconColBtn }>
-						{ /* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */ }
 						<BaseControl label={ __( 'Colour', 'flare' ) } />
 					</FlexItem>
 					<FlexItem className={ cls.iconColBtn }>
-						{ /* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */ }
 						<BaseControl label={ __( 'Delete', 'flare' ) } />
 					</FlexItem>
 				</Flex>
@@ -65,7 +74,7 @@ export default function MarkerIconList( { name } ) {
 				<Button
 					icon="plus-alt"
 					iconPosition="left"
-					text="Add category"
+					text={ __( 'Add icon', 'flare' ) }
 					variant="secondary"
 					type="button"
 					onClick={ () =>
