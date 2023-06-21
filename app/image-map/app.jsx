@@ -2,11 +2,13 @@ import { TabPanel, Icon, CardDivider, NoticeList } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
+import { info } from '@wordpress/icons';
 
 import { useRouter, Router, Route } from './contexts/router';
 import Maps from './components/maps';
 import Layers from './components/layers';
 import Markers from './components/markers';
+import InfoPage from './components/info-page';
 
 import cls from './app.module.scss';
 
@@ -48,7 +50,7 @@ export default function App() {
 							title: 'Markers',
 							disabled: ! query.layer,
 						},
-						{ name: 'info', title: <Icon icon="info" /> },
+						{ name: 'info', title: <Icon icon={ info } /> },
 					] }
 					onSelect={ ( tab ) => navigate( { tab } ) }
 					initialTabName={ query.tab }
@@ -65,6 +67,9 @@ export default function App() {
 					</Route>
 					<Route path="markers">
 						<Markers />
+					</Route>
+					<Route path="info">
+						<InfoPage />
 					</Route>
 					<Route path="error">
 						<h2 className={ cls.notFound }>404: Page not found</h2>

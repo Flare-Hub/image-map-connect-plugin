@@ -1,0 +1,44 @@
+.content {
+	max-width: 800px;
+	margin: auto;
+	font-size: 1.2em;
+
+	p {
+		font-size: 1em;
+		margin-bottom: 0.5em;
+	}
+
+	h2,
+	h3,
+	h4 {
+		margin-top: 2em;
+		margin-bottom: 1em;
+	}
+
+	ul {
+		list-style: inherit;
+		padding-left: 2em;
+		margin: 0 0.5em;
+
+		ul {
+			list-style: circle;
+		}
+	}
+}
+
+.diagram {
+	padding-top: 6px;
+
+	img {
+		width: 100%;
+	}
+
+	figcaption {
+		font-size: 0.8em;
+		text-align: center;
+	}
+}
+
+.toc ul ul {
+	padding-left: 1.5em;
+}
