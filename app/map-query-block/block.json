@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 2,
-  "name": "flare/image-map",
+  "name": "flare-hub/image-map",
   "title": "Interactive Image Map",
   "category": "widgets",
   "icon": "location-alt",
@@ -12,7 +12,7 @@
     "markers",
     "list"
   ],
-  "textdomain": "flare",
+  "textdomain": "flare-imc",
   "attributes": {
     "mapId": {
       "type": "number"

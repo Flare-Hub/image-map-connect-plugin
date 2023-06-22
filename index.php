@@ -1,6 +1,6 @@
 <?php
 /**
- * @package flare-hub/image-map-connect
+ * @package flare-hub_image-map-connect
  *
  * @wordpress-plugin
  * Plugin Name:         Image Map Connect - Display posts as image hotspots

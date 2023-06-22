@@ -12,7 +12,7 @@ class Plugin {
 	use \Flare\ImageMap\Traits\Singleton;
 
 	/** @var string name */
-	const NAME = 'flare-image-map';
+	const NAME = 'image-map-connect';
 
 	/** @var string version */
 	const VERSION = '0.1.0';
