@@ -7,7 +7,7 @@
  * Plugin URI:          https://github.com/Flare-Hub/image-map-connect-plugin
  * Description:         Provides a block to display image maps on a post or template. Markers on the map can reference your posts.
  * Author:              Flare Hub team
- * Author URI:          https://github.com/Flare-Hub
+ * Author URI:          https://flarehub.io
  * Text Domain:         flare-imc
  * Domain Path:         /languages
  * Version:             0.1.0

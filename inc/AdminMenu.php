@@ -51,7 +51,7 @@ class AdminMenu {
 			$this->id,
 			array( $this, 'load_app' ),
 			'dashicons-location-alt',
-			6
+			30
 		);
 	}
 
@@ -73,5 +73,36 @@ class AdminMenu {
 			</div>
 			<noscript><?php esc_html_e( 'This metabox requires javascript', 'flare-imc' ); ?></noscript>
 		<?php
+	}
+
+	/**
+	 * Add getting started link to plugin in plugins list.
+	 *
+	 * @param array $actions An array of plugin action links.
+	 * @return type Description
+	 * @since 0.1.0
+	 **/
+	public function add_start_link( $actions ) {
+		// Build and escape the URL.
+		$url = esc_url(
+			add_query_arg(
+				array(
+					'page' => $this->id,
+					'tab'  => 'info',
+				),
+				get_admin_url() . 'admin.php'
+			)
+		);
+
+		// Create the link.
+		$start_link = "<a href='$url'>" . __( 'Getting started', 'flare-imc' ) . '</a>';
+
+		// Adds the link to the end of the array.
+		array_unshift(
+			$actions,
+			$start_link
+		);
+
+		return $actions;
 	}
 }

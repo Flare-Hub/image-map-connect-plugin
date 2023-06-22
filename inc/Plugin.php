@@ -93,6 +93,7 @@ class Plugin {
 		$map_menu->init();
 		add_action( 'admin_enqueue_scripts', array( $map_menu->assets, 'register_script' ) );
 		add_action( 'admin_enqueue_scripts', array( $map_menu->assets, 'register_style' ) );
+		add_filter( 'plugin_action_links_image-map-connect/index.php', array( $map_menu, 'add_start_link' ) );
 	}
 
 	/**
