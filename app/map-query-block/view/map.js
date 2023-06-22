@@ -64,9 +64,12 @@ export default class Map {
 			} )
 			.catch( () => {
 				this.setError(
-					__( 'Unable to load marker types.', 'flare' ) +
+					__( 'Unable to load marker types.', 'flare-imc' ) +
 						' ' +
-						__( 'Please refresh this page to try again.', 'flare' )
+						__(
+							'Please refresh this page to try again.',
+							'flare-imc'
+						)
 				);
 			} );
 	}
@@ -109,9 +112,9 @@ export default class Map {
 			this.olMap.addLayer( this.ftLayer );
 		} else {
 			this.setError(
-				__( 'Unable to load marker layer.', 'flare' ) +
+				__( 'Unable to load marker layer.', 'flare-imc' ) +
 					' ' +
-					__( 'Please refresh this page to try again.', 'flare' )
+					__( 'Please refresh this page to try again.', 'flare-imc' )
 			);
 		}
 	}
@@ -206,9 +209,9 @@ export default class Map {
 			this.popup.performAutoPan();
 		} catch ( error ) {
 			this.setError(
-				__( 'Unable to load marker.', 'flare' ) +
+				__( 'Unable to load marker.', 'flare-imc' ) +
 					' ' +
-					__( 'Please refresh this page to try again.', 'flare' )
+					__( 'Please refresh this page to try again.', 'flare-imc' )
 			);
 		}
 	};
@@ -251,9 +254,9 @@ export default class Map {
 			} );
 		} catch ( error ) {
 			this.setError(
-				__( 'Unable to load layers.', 'flare' ) +
+				__( 'Unable to load layers.', 'flare-imc' ) +
 					' ' +
-					__( 'Please refresh this page to try again.', 'flare' )
+					__( 'Please refresh this page to try again.', 'flare-imc' )
 			);
 		}
 

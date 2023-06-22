@@ -25,17 +25,17 @@ export default function EditMarker( { markerType, title } ) {
 
 	return (
 		<>
-			<h2>{ __( 'Edit Marker', 'flare' ) }</h2>
+			<h2>{ __( 'Edit Marker', 'flare-imc' ) }</h2>
 			<div className="col-xs-9">
-				{ /* <BaseControl label={__('Layer', 'flare')} className={cls.field}>{watch('layers')}</BaseControl> */ }
+				{ /* <BaseControl label={__('Layer', 'flare-imc')} className={cls.field}>{watch('layers')}</BaseControl> */ }
 				{ postTypes && markerType && (
 					<BaseControl
 						label={
 							<Label
-								name={ __( 'Type', 'flare' ) }
+								name={ __( 'Type', 'flare-imc' ) }
 								tooltip={ __(
 									'Post type linked to the marker, or standalone marker if not linked.',
-									'flare'
+									'flare-imc'
 								) }
 							/>
 						}
@@ -43,14 +43,14 @@ export default function EditMarker( { markerType, title } ) {
 						id="no-input-to-focus-on"
 					>
 						{ markerType === 'marker'
-							? __( 'Standalone marker', 'flare' )
+							? __( 'Standalone marker', 'flare-imc' )
 							: postTypes.find( ( pt ) => pt.slug === markerType )
 									?.name }
 					</BaseControl>
 				) }
 				{ markerType !== 'marker' && (
 					<BaseControl
-						label={ __( 'Post', 'flare' ) }
+						label={ __( 'Post', 'flare-imc' ) }
 						className={ cls.field }
 						id="no-input-to-focus-on"
 					>
@@ -64,10 +64,10 @@ export default function EditMarker( { markerType, title } ) {
 						<MarkerIconSelect
 							label={
 								<Label
-									name={ __( 'Icon', 'flare' ) }
+									name={ __( 'Icon', 'flare-imc' ) }
 									tooltip={ __(
 										'Select from the icon types defined on the map.',
-										'flare'
+										'flare-imc'
 									) }
 								/>
 							}
@@ -87,10 +87,10 @@ export default function EditMarker( { markerType, title } ) {
 								<TextControl
 									label={
 										<Label
-											name={ __( 'Title', 'flare' ) }
+											name={ __( 'Title', 'flare-imc' ) }
 											tooltip={ __(
 												'Shows in the popup when selecting the marker on the public user interface.',
-												'flare'
+												'flare-imc'
 											) }
 										/>
 									}
@@ -105,10 +105,13 @@ export default function EditMarker( { markerType, title } ) {
 								<RichTextEditor
 									label={
 										<Label
-											name={ __( 'Content', 'flare' ) }
+											name={ __(
+												'Content',
+												'flare-imc'
+											) }
 											tooltip={ __(
 												'Shows in the popup when selecting the marker on the public user interface.',
-												'flare'
+												'flare-imc'
 											) }
 										/>
 									}
@@ -129,11 +132,11 @@ export default function EditMarker( { markerType, title } ) {
 										<Label
 											name={ __(
 												'Featured Image',
-												'flare'
+												'flare-imc'
 											) }
 											tooltip={ __(
 												'Shows in the popup when selecting the marker on the public user interface. Note that the image will be cropped in the popup as shown here.',
-												'flare'
+												'flare-imc'
 											) }
 										/>
 									}

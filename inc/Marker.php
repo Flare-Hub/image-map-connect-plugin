@@ -18,37 +18,37 @@ class Marker {
 	 **/
 	public function register_marker_cpt() {
 		$labels = array(
-			'name'                  => _x( 'Markers', 'Post Type General Name', 'flare-im' ),
-			'singular_name'         => _x( 'Marker', 'Post Type Singular Name', 'flare-im' ),
-			'menu_name'             => _x( 'Markers', 'Admin Menu text', 'flare-im' ),
-			'name_admin_bar'        => _x( 'Marker', 'Add New on Toolbar', 'flare-im' ),
-			'archives'              => __( 'Marker Archives', 'flare-im' ),
-			'attributes'            => __( 'Marker Attributes', 'flare-im' ),
-			'parent_item_colon'     => __( 'Parent Marker:', 'flare-im' ),
-			'all_items'             => __( 'All Markers', 'flare-im' ),
-			'add_new_item'          => __( 'Add New Marker', 'flare-im' ),
-			'add_new'               => __( 'Add New', 'flare-im' ),
-			'new_item'              => __( 'New Marker', 'flare-im' ),
-			'edit_item'             => __( 'Edit Marker', 'flare-im' ),
-			'update_item'           => __( 'Update Marker', 'flare-im' ),
-			'view_item'             => __( 'View Marker', 'flare-im' ),
-			'view_items'            => __( 'View Markers', 'flare-im' ),
-			'search_items'          => __( 'Search Marker', 'flare-im' ),
-			'not_found'             => __( 'Not found', 'flare-im' ),
-			'not_found_in_trash'    => __( 'Not found in Trash', 'flare-im' ),
-			'featured_image'        => __( 'Featured Image', 'flare-im' ),
-			'set_featured_image'    => __( 'Set featured image', 'flare-im' ),
-			'remove_featured_image' => __( 'Remove featured image', 'flare-im' ),
-			'use_featured_image'    => __( 'Use as featured image', 'flare-im' ),
-			'insert_into_item'      => __( 'Insert into Marker', 'flare-im' ),
-			'uploaded_to_this_item' => __( 'Uploaded to this Marker', 'flare-im' ),
-			'items_list'            => __( 'Markers list', 'flare-im' ),
-			'items_list_navigation' => __( 'Markers list navigation', 'flare-im' ),
-			'filter_items_list'     => __( 'Filter Markers list', 'flare-im' ),
+			'name'                  => _x( 'Markers', 'Post Type General Name', 'flare-imc' ),
+			'singular_name'         => _x( 'Marker', 'Post Type Singular Name', 'flare-imc' ),
+			'menu_name'             => _x( 'Markers', 'Admin Menu text', 'flare-imc' ),
+			'name_admin_bar'        => _x( 'Marker', 'Add New on Toolbar', 'flare-imc' ),
+			'archives'              => __( 'Marker Archives', 'flare-imc' ),
+			'attributes'            => __( 'Marker Attributes', 'flare-imc' ),
+			'parent_item_colon'     => __( 'Parent Marker:', 'flare-imc' ),
+			'all_items'             => __( 'All Markers', 'flare-imc' ),
+			'add_new_item'          => __( 'Add New Marker', 'flare-imc' ),
+			'add_new'               => __( 'Add New', 'flare-imc' ),
+			'new_item'              => __( 'New Marker', 'flare-imc' ),
+			'edit_item'             => __( 'Edit Marker', 'flare-imc' ),
+			'update_item'           => __( 'Update Marker', 'flare-imc' ),
+			'view_item'             => __( 'View Marker', 'flare-imc' ),
+			'view_items'            => __( 'View Markers', 'flare-imc' ),
+			'search_items'          => __( 'Search Marker', 'flare-imc' ),
+			'not_found'             => __( 'Not found', 'flare-imc' ),
+			'not_found_in_trash'    => __( 'Not found in Trash', 'flare-imc' ),
+			'featured_image'        => __( 'Featured Image', 'flare-imc' ),
+			'set_featured_image'    => __( 'Set featured image', 'flare-imc' ),
+			'remove_featured_image' => __( 'Remove featured image', 'flare-imc' ),
+			'use_featured_image'    => __( 'Use as featured image', 'flare-imc' ),
+			'insert_into_item'      => __( 'Insert into Marker', 'flare-imc' ),
+			'uploaded_to_this_item' => __( 'Uploaded to this Marker', 'flare-imc' ),
+			'items_list'            => __( 'Markers list', 'flare-imc' ),
+			'items_list_navigation' => __( 'Markers list navigation', 'flare-imc' ),
+			'filter_items_list'     => __( 'Filter Markers list', 'flare-imc' ),
 		);
 		$args   = array(
-			'label'               => __( 'Marker', 'flare-im' ),
-			'description'         => __( 'Markers on an image map.', 'flare-im' ),
+			'label'               => __( 'Marker', 'flare-imc' ),
+			'description'         => __( 'Markers on an image map.', 'flare-imc' ),
 			'labels'              => $labels,
 			'supports'            => array( 'title', 'excerpt', 'thumbnail', 'author', 'custom-fields' ),
 			'taxonomies'          => array( Layer::NAME, MarkerIcon::NAME ),
@@ -112,8 +112,7 @@ class Marker {
 		}
 
 		// Get all post types to include in the query.
-		$map_id = $request->get_param( 'map' );
-			// ?? $this->get_parent_map( $layers ? $layers[0] : 0 );
+		$map_id            = $request->get_param( 'map' );
 		$args['post_type'] = $this->get_req_post_types( $post_types, $args['post_type'], $map_id );
 
 		return $args;

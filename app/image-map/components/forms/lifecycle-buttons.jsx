@@ -55,7 +55,7 @@ export default function LifeCycleButtons( {
 		createNotice( {
 			message: __(
 				'Please fill out the highlighted required fields.',
-				'flare'
+				'flare-imc'
 			),
 			style: 'error',
 		} );

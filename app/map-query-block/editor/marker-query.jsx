@@ -34,10 +34,10 @@ export default function MarkerQueryPanel( {
 			{ hasQuery && (
 				<>
 					<BaseControl
-						label={ __( 'Show markers for', 'flare-im' ) }
+						label={ __( 'Show markers for', 'flare-imc' ) }
 						help={ __(
 							'Whether to respect pagination in the markers displayed on the map.',
-							'flare-im'
+							'flare-imc'
 						) }
 						id={ btnGroupId.current }
 					>
@@ -67,13 +67,13 @@ export default function MarkerQueryPanel( {
 					<ToggleControl
 						label={ __(
 							'Also display standalone markers',
-							'flare-im'
+							'flare-imc'
 						) }
 						checked={ showStandAlone }
 						onChange={ () => setShowStandAlone( ! showStandAlone ) }
 						help={ __(
 							'Show only markers from the query loop or also markers not linked to any posts.',
-							'flare-im'
+							'flare-imc'
 						) }
 					/>
 				</>
@@ -82,12 +82,12 @@ export default function MarkerQueryPanel( {
 				<p>
 					{ __(
 						'This block will show all posts on the selected map.',
-						'flare'
+						'flare-imc'
 					) +
 						' ' +
 						__(
 							'To filter the posts, place this block inside a Query Loop block.',
-							'flare'
+							'flare-imc'
 						) }
 				</p>
 			) }

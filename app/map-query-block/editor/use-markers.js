@@ -62,7 +62,7 @@ export default function useMarkers( map, layer, posts, showStandAlone ) {
 			( showStandAlone && standAlone?.status === 'ERROR' ),
 		__(
 			'Error loading correct markers. Please refresh the application to try again.',
-			'flare'
+			'flare-imc'
 		),
 		[ posts, linked.status, showStandAlone, standAlone?.status ]
 	);

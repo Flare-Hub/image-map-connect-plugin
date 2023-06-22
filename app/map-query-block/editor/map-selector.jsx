@@ -29,7 +29,7 @@ function getMapOptions( { status, records: maps } ) {
 			} ) );
 
 		default:
-			return [ { label: __( 'Loading…', 'flare' ), value: '' } ];
+			return [ { label: __( 'Loading…', 'flare-imc' ), value: '' } ];
 	}
 }
 
@@ -59,7 +59,7 @@ export default function MapSelector( {
 		maps.status === 'ERROR',
 		__(
 			'An error occurred retrieving the maps. Please refresh the page to try again.',
-			'flare'
+			'flare-imc'
 		),
 		[ maps.status ]
 	);
@@ -99,7 +99,7 @@ export default function MapSelector( {
 	return (
 		<Placeholder
 			icon="location-alt"
-			label={ __( 'Image map', 'flare-im' ) }
+			label={ __( 'Image map', 'flare-imc' ) }
 			instructions={ __(
 				'Select a map or add a new map to display in this block.'
 			) }
@@ -107,7 +107,7 @@ export default function MapSelector( {
 			<div className={ cls.controls }>
 				<div className={ cls.select }>
 					<ComboboxControl
-						label={ __( 'Select map', 'flare-im' ) }
+						label={ __( 'Select map', 'flare-imc' ) }
 						value={ mapId }
 						onChange={ handleSelectMap }
 						options={ getMapOptions( maps ) }
@@ -115,25 +115,25 @@ export default function MapSelector( {
 					<Button
 						icon={ update }
 						onClick={ () => setFetchCount( fetchCount + 1 ) }
-						label={ __( 'Refresh map list', 'flare-im' ) }
+						label={ __( 'Refresh map list', 'flare-imc' ) }
 					/>
 				</div>
 				<BaseControl
-					label={ __( 'Or add new map', 'flare-im' ) }
+					label={ __( 'Or add new map', 'flare-imc' ) }
 					id={ addBtnId.current }
 				>
 					<div className={ cls.buttons }>
 						<Button
 							variant="primary"
 							onClick={ handleAddMap }
-							text={ __( 'Add map', 'flare-im' ) }
+							text={ __( 'Add map', 'flare-imc' ) }
 							id={ addBtnId.current }
 						/>
 						{ prevAttr && (
 							<Button
 								variant="primary"
 								isDestructive
-								text={ __( 'Cancel', 'flare-im' ) }
+								text={ __( 'Cancel', 'flare-imc' ) }
 								onClick={ handleCancelReplace }
 							/>
 						) }

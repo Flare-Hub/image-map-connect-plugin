@@ -33,7 +33,7 @@ export default function App() {
 			<div className={ cls.app }>
 				<div className={ cls.title }>
 					<h1 className="wp-heading-inline">
-						{ __( 'Image Maps', 'flare' ) }
+						{ __( 'Image Maps', 'flare-imc' ) }
 					</h1>
 				</div>
 				<CardDivider />

@@ -105,7 +105,7 @@ export function MarkerForm( {
 								<h3 className={ cls.noSelection }>
 									{ __(
 										'Select a map from the list or add a new one.',
-										'flare'
+										'flare-imc'
 									) }
 								</h3>
 							) }

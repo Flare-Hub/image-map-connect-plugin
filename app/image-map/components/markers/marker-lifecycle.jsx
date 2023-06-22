@@ -73,16 +73,19 @@ export default function MarkerLifecycle( {
 			onDelete={ handleDelete }
 			onSave={ handleSave }
 			confirmDeleteText={
-				__( 'Are you sure you want to delete this marker?', 'flare' ) +
+				__(
+					'Are you sure you want to delete this marker?',
+					'flare-imc'
+				) +
 				' ' +
 				( marker.type === 'marker'
 					? __(
 							'This will remove the marker and all its content.',
-							'flare'
+							'flare-imc'
 					  )
 					: __(
 							'This will remove the marker. The related post will not be removed',
-							'flare'
+							'flare-imc'
 					  ) )
 			}
 		/>

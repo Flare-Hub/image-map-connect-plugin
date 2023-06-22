@@ -45,8 +45,8 @@ class AdminMenu {
 	 **/
 	public function init() {
 		add_menu_page(
-			__( 'Image Maps', 'flare-im' ),
-			__( 'Image Maps', 'flare-im' ),
+			__( 'Image Maps', 'flare-imc' ),
+			__( 'Image Maps', 'flare-imc' ),
 			self::CAPABILITY,
 			$this->id,
 			array( $this, 'load_app' ),
@@ -71,7 +71,7 @@ class AdminMenu {
 			<div <?php echo wp_kses_data( $div_attr ); ?>>
 				<img src="/wp-admin/images/spinner-2x.gif" alt="Loading" class="center-img">
 			</div>
-			<noscript><?php esc_html_e( 'This metabox requires javascript', 'flare-im' ); ?></noscript>
+			<noscript><?php esc_html_e( 'This metabox requires javascript', 'flare-imc' ); ?></noscript>
 		<?php
 	}
 }

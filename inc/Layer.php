@@ -19,22 +19,22 @@ class Layer {
 	 **/
 	public function register_image_map( array $post_types ) {
 		$labels = array(
-			'name'              => _x( 'Layers', 'taxonomy general name', 'flare-im' ),
-			'singular_name'     => _x( 'Layer', 'taxonomy singular name', 'flare-im' ),
-			'search_items'      => __( 'Search Layers', 'flare-im' ),
-			'all_items'         => __( 'All Layers', 'flare-im' ),
-			'parent_item'       => __( 'Parent Layer', 'flare-im' ),
-			'parent_item_colon' => __( 'Parent Layer:', 'flare-im' ),
-			'edit_item'         => __( 'Edit Layer', 'flare-im' ),
-			'update_item'       => __( 'Update Layer', 'flare-im' ),
-			'add_new_item'      => __( 'Add New Layer', 'flare-im' ),
-			'new_item_name'     => __( 'New Layer Name', 'flare-im' ),
-			'menu_name'         => __( 'Layer', 'flare-im' ),
+			'name'              => _x( 'Layers', 'taxonomy general name', 'flare-imc' ),
+			'singular_name'     => _x( 'Layer', 'taxonomy singular name', 'flare-imc' ),
+			'search_items'      => __( 'Search Layers', 'flare-imc' ),
+			'all_items'         => __( 'All Layers', 'flare-imc' ),
+			'parent_item'       => __( 'Parent Layer', 'flare-imc' ),
+			'parent_item_colon' => __( 'Parent Layer:', 'flare-imc' ),
+			'edit_item'         => __( 'Edit Layer', 'flare-imc' ),
+			'update_item'       => __( 'Update Layer', 'flare-imc' ),
+			'add_new_item'      => __( 'Add New Layer', 'flare-imc' ),
+			'new_item_name'     => __( 'New Layer Name', 'flare-imc' ),
+			'menu_name'         => __( 'Layer', 'flare-imc' ),
 		);
 
 		$args = array(
 			'labels'                => $labels,
-			'description'           => __( 'Layers', 'flare-im' ),
+			'description'           => __( 'Layers', 'flare-imc' ),
 			'hierarchical'          => false,
 			'public'                => true,
 			'publicly_queryable'    => false,

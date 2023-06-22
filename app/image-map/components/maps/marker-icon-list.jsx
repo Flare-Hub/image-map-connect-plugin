@@ -41,23 +41,23 @@ export default function MarkerIconList( { name } ) {
 							className={ cls.field }
 							label={
 								<Label
-									name={ __( 'Icon Name', 'flare' ) }
+									name={ __( 'Icon Name', 'flare-imc' ) }
 									tooltip={ __(
 										'Used when selecting an icon on a marker in the admin UI.',
-										'flare'
+										'flare-imc'
 									) }
 								/>
 							}
 						/>
 					</FlexItem>
 					<FlexItem className={ cls.iconColBtn }>
-						<BaseControl label={ __( 'Icon', 'flare' ) } />
+						<BaseControl label={ __( 'Icon', 'flare-imc' ) } />
 					</FlexItem>
 					<FlexItem className={ cls.iconColBtn }>
-						<BaseControl label={ __( 'Colour', 'flare' ) } />
+						<BaseControl label={ __( 'Colour', 'flare-imc' ) } />
 					</FlexItem>
 					<FlexItem className={ cls.iconColBtn }>
-						<BaseControl label={ __( 'Delete', 'flare' ) } />
+						<BaseControl label={ __( 'Delete', 'flare-imc' ) } />
 					</FlexItem>
 				</Flex>
 			</CardBody>
@@ -74,7 +74,7 @@ export default function MarkerIconList( { name } ) {
 				<Button
 					icon="plus-alt"
 					iconPosition="left"
-					text={ __( 'Add icon', 'flare' ) }
+					text={ __( 'Add icon', 'flare-imc' ) }
 					variant="secondary"
 					type="button"
 					onClick={ () =>

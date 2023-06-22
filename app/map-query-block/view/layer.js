@@ -80,9 +80,9 @@ export default class Layer {
 	addToMap() {
 		if ( ! this.source.getUrl() ) {
 			this.map.setError(
-				__( 'Unable to load layer image.', 'flare' ) +
+				__( 'Unable to load layer image.', 'flare-imc' ) +
 					' ' +
-					__( 'Please refresh this page to try again.', 'flare' )
+					__( 'Please refresh this page to try again.', 'flare-imc' )
 			);
 		}
 		this.map.olMap.addLayer( this.baseLayer );
@@ -97,9 +97,9 @@ export default class Layer {
 		} catch ( error ) {
 			console.error( error ); // eslint-disable-line no-console
 			this.map.setError(
-				__( 'Unable to load marker icons.', 'flare' ) +
+				__( 'Unable to load marker icons.', 'flare-imc' ) +
 					' ' +
-					__( 'Please refresh this page to try again.', 'flare' )
+					__( 'Please refresh this page to try again.', 'flare-imc' )
 			);
 		}
 	}
@@ -133,9 +133,9 @@ export default class Layer {
 		} catch ( error ) {
 			console.error( error ); // eslint-disable-line no-console
 			this.map.setError(
-				__( 'Unable to load markers.', 'flare' ) +
+				__( 'Unable to load markers.', 'flare-imc' ) +
 					' ' +
-					__( 'Please refresh this page to try again.', 'flare' )
+					__( 'Please refresh this page to try again.', 'flare-imc' )
 			);
 		}
 	}

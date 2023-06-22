@@ -30,7 +30,7 @@ export default function MarkerPins( { mapId, markers } ) {
 		status === 'ERROR',
 		__(
 			'Error loading icons. Please refresh the application to try again.',
-			'flare'
+			'flare-imc'
 		),
 		[ status ]
 	);

@@ -42,21 +42,21 @@ class MarkerIcon {
 	 **/
 	public function register_marker_icon( array $post_types ) {
 		$labels = array(
-			'name'              => _x( 'Marker Icons', 'taxonomy general name', 'flare-im' ),
-			'singular_name'     => _x( 'Marker Icon', 'taxonomy singular name', 'flare-im' ),
-			'search_items'      => __( 'Search Marker Icons', 'flare-im' ),
-			'all_items'         => __( 'All Marker Icons', 'flare-im' ),
-			'parent_item'       => __( 'Parent Marker Icon', 'flare-im' ),
-			'parent_item_colon' => __( 'Parent Marker Icon:', 'flare-im' ),
-			'edit_item'         => __( 'Edit Marker Icon', 'flare-im' ),
-			'update_item'       => __( 'Update Marker Icon', 'flare-im' ),
-			'add_new_item'      => __( 'Add New Marker Icon', 'flare-im' ),
-			'new_item_name'     => __( 'New Marker Icon Name', 'flare-im' ),
-			'menu_name'         => __( 'Marker Icon', 'flare-im' ),
+			'name'              => _x( 'Marker Icons', 'taxonomy general name', 'flare-imc' ),
+			'singular_name'     => _x( 'Marker Icon', 'taxonomy singular name', 'flare-imc' ),
+			'search_items'      => __( 'Search Marker Icons', 'flare-imc' ),
+			'all_items'         => __( 'All Marker Icons', 'flare-imc' ),
+			'parent_item'       => __( 'Parent Marker Icon', 'flare-imc' ),
+			'parent_item_colon' => __( 'Parent Marker Icon:', 'flare-imc' ),
+			'edit_item'         => __( 'Edit Marker Icon', 'flare-imc' ),
+			'update_item'       => __( 'Update Marker Icon', 'flare-imc' ),
+			'add_new_item'      => __( 'Add New Marker Icon', 'flare-imc' ),
+			'new_item_name'     => __( 'New Marker Icon Name', 'flare-imc' ),
+			'menu_name'         => __( 'Marker Icon', 'flare-imc' ),
 		);
 		$args   = array(
 			'labels'             => $labels,
-			'description'        => __( 'Marker Icons', 'flare-im' ),
+			'description'        => __( 'Marker Icons', 'flare-imc' ),
 			'hierarchical'       => false,
 			'public'             => true,
 			'publicly_queryable' => false,

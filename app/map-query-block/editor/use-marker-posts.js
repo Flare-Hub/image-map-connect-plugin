@@ -132,7 +132,7 @@ export default function useMarkerPosts(
 		postQuery && status === 'ERROR',
 		__(
 			'Error loading correct markers. Please refresh the application to try again.',
-			'flare'
+			'flare-imc'
 		),
 		[ postQuery, status ]
 	);

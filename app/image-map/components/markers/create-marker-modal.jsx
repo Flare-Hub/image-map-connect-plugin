@@ -28,8 +28,8 @@ function PostItem( { item } ) {
 			<div>{ item.label }</div>
 			<small>
 				<div>
-					{ __( 'Type', 'flare' ) }: { item.type } |{ ' ' }
-					{ __( 'Slug', 'flare' ) }: { item.slug }
+					{ __( 'Type', 'flare-imc' ) }: { item.type } |{ ' ' }
+					{ __( 'Slug', 'flare-imc' ) }: { item.slug }
 				</div>
 			</small>
 		</>
@@ -77,7 +77,7 @@ export default function CreateMarkerModal( {
 	const postOptions = loading
 		? [
 				{
-					label: __( 'Loading', 'flare' ) + '...',
+					label: __( 'Loading', 'flare-imc' ) + '...',
 				},
 		  ]
 		: posts.map( ( post ) => ( {
@@ -162,7 +162,7 @@ export default function CreateMarkerModal( {
 					onClick={ handleSubmit( handleAdd ) }
 					variant="primary"
 				>
-					{ __( 'Add', 'flare' ) }
+					{ __( 'Add', 'flare-imc' ) }
 				</Button>
 			</div>
 		</Modal>

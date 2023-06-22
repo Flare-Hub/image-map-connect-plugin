@@ -79,7 +79,7 @@ export default function Markers() {
 					className="medium"
 					onClick={ () => setShowModal( true ) }
 				>
-					{ __( 'Add Marker', 'flare' ) }
+					{ __( 'Add Marker', 'flare-imc' ) }
 				</Button>
 			}
 		>
