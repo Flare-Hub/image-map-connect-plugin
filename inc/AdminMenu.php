@@ -69,7 +69,7 @@ class AdminMenu {
 
 		?>
 			<div <?php echo wp_kses_data( $div_attr ); ?>>
-				<img src="/wp-admin/images/spinner-2x.gif" alt="Loading" class="center-img">
+				<div><i class="ri-loader-4-line flare-loader-spin"></i></div>
 			</div>
 			<noscript><?php esc_html_e( 'This metabox requires javascript', 'flare-imc' ); ?></noscript>
 		<?php

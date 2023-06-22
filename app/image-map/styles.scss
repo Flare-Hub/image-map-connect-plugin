@@ -23,3 +23,26 @@
 .full-height {
 	height: 100%;
 }
+
+.flare-loader-spin {
+	display: block;
+	color: var(--wp-admin-theme-color-darker-20);
+	font-size: 10em;
+	line-height: 1;
+	margin: 3rem;
+	animation-name: spin;
+	animation-duration: 5000ms;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes spin {
+
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
+}
