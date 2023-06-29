@@ -70,7 +70,8 @@ export default function MarkerIconRow( { name } ) {
 							render={ ( { field, fieldState } ) => (
 								<IconToolbarButtons
 									icons={ icons }
-									selected={ field.value }
+									// selected={ field.value }
+									fieldName={ name + '.img' }
 									size={ getValues( name + '.size' ) }
 									colour={ watch( name + '.colour' ) }
 									onSelect={ ( img, size ) => {

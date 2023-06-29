@@ -51,10 +51,32 @@ export default function MarkerIconList( { name } ) {
 						/>
 					</FlexItem>
 					<FlexItem className={ cls.iconColBtn }>
-						<BaseControl label={ __( 'Icon', 'flare-imc' ) } />
+						<BaseControl
+							className={ cls.field }
+							label={
+								<Label
+									name={ __( 'Icon', 'flare-imc' ) }
+									tooltip={ __(
+										'Select the icon to change it',
+										'flare-imc'
+									) }
+								/>
+							}
+						/>
 					</FlexItem>
 					<FlexItem className={ cls.iconColBtn }>
-						<BaseControl label={ __( 'Colour', 'flare-imc' ) } />
+						<BaseControl
+							className={ cls.field }
+							label={
+								<Label
+									name={ __( 'Colour', 'flare-imc' ) }
+									tooltip={ __(
+										'Select the colour to change it',
+										'flare-imc'
+									) }
+								/>
+							}
+						/>
 					</FlexItem>
 					<FlexItem className={ cls.iconColBtn }>
 						<BaseControl label={ __( 'Delete', 'flare-imc' ) } />
