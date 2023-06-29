@@ -27,14 +27,14 @@ export default function useMarkers( map, layer, posts, showStandAlone ) {
 	const linkedQuery = posts
 		? {
 				layers: layer,
-				_fields: 'id,marker-icons,flare_loc',
+				_fields: 'id,imc_icons,imc_loc',
 				post_types: 'linked',
 				include: posts,
 				map,
 		  }
 		: false;
 
-	const linked = useEntityRecords( 'postType', 'marker', linkedQuery );
+	const linked = useEntityRecords( 'postType', 'imc-marker', linkedQuery );
 
 	// eslint-disable-next-line no-nested-ternary
 	const linkedMarkerRecords = listIfIncluded( posts, linked.records );
@@ -43,13 +43,13 @@ export default function useMarkers( map, layer, posts, showStandAlone ) {
 	const saQuery = showStandAlone
 		? {
 				layers: layer,
-				_fields: 'id,marker-icons,flare_loc',
+				_fields: 'id,imc_icons,imc_loc',
 				post_types: 'standalone',
 				map,
 		  }
 		: false;
 
-	const standAlone = useEntityRecords( 'postType', 'marker', saQuery );
+	const standAlone = useEntityRecords( 'postType', 'imc-marker', saQuery );
 
 	const saMarkerRecords = listIfIncluded(
 		showStandAlone,

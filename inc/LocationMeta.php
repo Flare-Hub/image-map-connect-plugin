@@ -9,19 +9,13 @@ namespace Flare\ImageMap;
  */
 class LocationMeta {
 	/** @var string $rest_field Name of the rest field t register. */
-	public const REST_FIELD = 'flare_loc';
+	public const FIELD_NAME = 'imc_loc';
 
 	/** @var string $lat_field Name of the latitude field in the post meta. */
-	public const LAT_FIELD = array(
-		'meta' => 'lat',
-		'rest' => 'lat',
-	); // '_flare_loc_lat';
+	public const LAT_FIELD = 'lat';
 
 	/** @var string $lng_field Name of the longitude field in the post meta. */
-	public const LNG_FIELD = array(
-		'meta' => 'lng',
-		'rest' => 'lng',
-	); // '_flare_loc_lng';
+	public const LNG_FIELD = 'lng';
 
 	/**
 	 * Register the Flare location REST API fields with the provided post type.
@@ -32,15 +26,15 @@ class LocationMeta {
 	public function register_flare_field( string $post_type ) {
 		register_rest_field(
 			$post_type,
-			self::REST_FIELD,
+			self::FIELD_NAME,
 			array(
 				'get_callback'    => array( $this, 'get_fields' ),
 				'update_callback' => array( $this, 'update_fields' ),
 				'schema'          => array(
 					'type'        => 'object',
 					'properties'  => array(
-						self::LAT_FIELD['rest'] => array( 'type' => 'number' ),
-						self::LNG_FIELD['rest'] => array( 'type' => 'number' ),
+						self::LAT_FIELD => array( 'type' => 'number' ),
+						self::LNG_FIELD => array( 'type' => 'number' ),
 					),
 					'arg_options' => array(
 						'validate_callback' => array( $this, 'validate_fields' ),
@@ -58,10 +52,7 @@ class LocationMeta {
 	 * @since 0.1.0
 	 **/
 	public function get_fields( array $post ) {
-		return array(
-			self::LAT_FIELD['rest'] => (float) get_post_meta( $post['id'], self::LAT_FIELD['meta'], true ),
-			self::LNG_FIELD['rest'] => (float) get_post_meta( $post['id'], self::LNG_FIELD['meta'], true ),
-		);
+		return get_post_meta( $post['id'], self::FIELD_NAME, true );
 	}
 
 	/**
@@ -72,8 +63,8 @@ class LocationMeta {
 	 * @since 0.1.0
 	 **/
 	public function validate_fields( array $value ) {
-		$lat = $value[ self::LAT_FIELD['rest'] ];
-		$lng = $value[ self::LNG_FIELD['rest'] ];
+		$lat = $value[ self::LAT_FIELD ];
+		$lng = $value[ self::LNG_FIELD ];
 		return ( ( $lat && $lng ) || ( ! $lat && ! $lng ) );
 	}
 
@@ -85,13 +76,10 @@ class LocationMeta {
 	 * @since 0.1.0
 	 **/
 	public function update_fields( array $coordinates, \WP_Post $post ) {
-		foreach ( array( self::LAT_FIELD, self::LNG_FIELD ) as $field ) {
-			$value = $coordinates[ $field['rest'] ];
-			if ( $value ) {
-				update_post_meta( $post->ID, $field['meta'], $value );
-			} else {
-				delete_post_meta( $post->ID, $field['meta'] );
-			}
+		if ( $coordinates ) {
+			update_post_meta( $post->ID, self::FIELD_NAME, $coordinates );
+		} else {
+			delete_post_meta( $post->ID, self::FIELD_NAME );
 		}
 	}
 

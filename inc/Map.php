@@ -9,7 +9,7 @@ namespace Flare\ImageMap;
  */
 class Map {
 	/** @var string NAME The post type name for maps. */
-	public const NAME = 'map';
+	public const NAME = 'imc-map';
 
 	/**
 	 * Register map post type.
@@ -51,13 +51,11 @@ class Map {
 			'label'                 => __( 'Map', 'flare-imc' ),
 			'description'           => __( 'Base image map', 'flare-imc' ),
 			'labels'                => $labels,
-			'menu_icon'             => 'dashicons-palmtree',
 			'supports'              => array( 'title', 'excerpt', 'author', 'custom-fields' ),
 			'taxonomies'            => array( Layer::NAME, MarkerIcon::NAME ),
 			'public'                => false,
-			'show_ui'               => true,
-			'show_in_menu'          => true,
-			'menu_position'         => 5,
+			'show_ui'               => false,
+			'show_in_menu'          => false,
 			'show_in_admin_bar'     => false,
 			'show_in_nav_menus'     => false,
 			'can_export'            => true,
@@ -65,13 +63,13 @@ class Map {
 			'hierarchical'          => false,
 			'exclude_from_search'   => false,
 			'show_in_rest'          => true,
-			'rest_base'             => 'maps',
+			'rest_base'             => 'imc_maps',
 			'rest_controller_class' => 'Flare\ImageMap\RestMapsController',
 			'publicly_queryable'    => true,
 			'capability_type'       => 'post',
 		);
 
-		register_post_type( 'map', $args );
+		register_post_type( self::NAME, $args );
 	}
 
 	/**
@@ -206,7 +204,7 @@ class Map {
 	/**
 	 * Update meta fields included in the updated icon.
 	 *
-	 * @param string $id id of the marker-icon term.
+	 * @param string $id id of the Icon Type term.
 	 * @param array  $icon updated icon.
 	 * @since 0.1.0
 	 **/

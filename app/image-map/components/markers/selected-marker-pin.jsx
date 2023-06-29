@@ -35,7 +35,7 @@ export default function SelectedMarkerPin( { icons, newPosition, onMove } ) {
 	const [ moved, setMoved ] = useState( false );
 
 	// Set marker icon for the current marker
-	const iconId = watch( 'marker-icons.0' );
+	const iconId = watch( 'imc_icons.0' );
 	const mi = useMemo( () => {
 		if ( ! iconId ) return;
 		return icons?.find( ( i ) => i.id === iconId );

@@ -20,11 +20,15 @@ export default function BaseLayerGroup( { mapId, selLayerId, setSelLayerId } ) {
 	const { controlBar } = useMap();
 
 	// Get layers for selected map from WordPress.
-	const { records: layers, status } = useEntityRecords( 'taxonomy', 'layer', {
-		post: mapId,
-		per_page: -1,
-		_embed: true,
-	} );
+	const { records: layers, status } = useEntityRecords(
+		'taxonomy',
+		'imc-layer',
+		{
+			post: mapId,
+			per_page: -1,
+			_embed: true,
+		}
+	);
 
 	useNotice(
 		status === 'ERROR',

@@ -44,7 +44,7 @@ export default function EditLayer() {
 	} = useRecord(
 		query.layer,
 		'taxonomy',
-		'layer',
+		'imc-layer',
 		{ _fields: 'id,name,meta,image_source' },
 		emptyLayer
 	);

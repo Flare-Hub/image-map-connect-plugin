@@ -62,7 +62,7 @@ export default function CreateMarkerModal( {
 	// Get all posts not yet on the selected layer.
 	const { list: posts, loading } = useCollection(
 		'postType',
-		'marker',
+		'imc-marker',
 		{
 			layers_exclude: layer,
 			post_types: 'unlinked',

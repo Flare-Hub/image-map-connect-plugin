@@ -91,7 +91,7 @@ export default class Layer {
 	/** Get marker icons from WordPress for the instance's map. */
 	fetchMarkerIcons() {
 		try {
-			return getFullCollection( 'marker-icons', {
+			return getFullCollection( 'imc_icons', {
 				map: this.map.blockAttr.mapId,
 			} );
 		} catch ( error ) {
@@ -108,20 +108,20 @@ export default class Layer {
 	async fetchMarkers() {
 		try {
 			// Get linked markers based on post IDs in the current query.
-			const linkedMarkers = getFullCollection( 'markers', {
+			const linkedMarkers = getFullCollection( 'imc_markers', {
 				layers: this.wpLayer.id,
 				map: this.map.blockAttr.mapId,
-				_fields: 'id,type,marker-icons,flare_loc',
+				_fields: 'id,type,imc_icons,imc_loc',
 				post_types: 'linked',
 				include: this.postIds,
 			} );
 
 			// Get standalone markers.
 			const saMarkers = this.map.blockAttr.showStandalone
-				? getFullCollection( 'markers', {
+				? getFullCollection( 'imc_markers', {
 						layers: this.wpLayer.id,
 						map: this.map.blockAttr.mapId,
-						_fields: 'id,type,marker-icons,flare_loc',
+						_fields: 'id,type,imc_icons,imc_loc',
 						post_types: 'standalone',
 				  } )
 				: [];
@@ -153,14 +153,14 @@ export default class Layer {
 		// Create list that includes a feature for each marker with a valid icon.
 		const features = markers.reduce( ( fts, marker ) => {
 			const icon = icons.find(
-				( mi ) => mi.id === marker[ 'marker-icons' ][ 0 ]
+				( mi ) => mi.id === marker.imc_icons[ 0 ]
 			);
 			if ( icon ) {
 				fts.push(
 					new Feature( {
 						geometry: new Point( [
-							marker.flare_loc?.lng,
-							marker.flare_loc?.lat,
+							marker.imc_loc?.lng,
+							marker.imc_loc?.lat,
 						] ),
 						icon: { ...icon.meta },
 						markerId: marker.id,

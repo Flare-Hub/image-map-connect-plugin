@@ -9,7 +9,7 @@ namespace Flare\ImageMap;
  */
 class Layer {
 	/** @var string NAME The taxonomy name for markers. */
-	public const NAME = 'layer';
+	public const NAME = 'imc-layer';
 
 	/**
 	 * Register Layer taxonomy.
@@ -19,8 +19,8 @@ class Layer {
 	 **/
 	public function register_image_map( array $post_types ) {
 		$labels = array(
-			'name'              => _x( 'Layers', 'taxonomy general name', 'flare-imc' ),
-			'singular_name'     => _x( 'Layer', 'taxonomy singular name', 'flare-imc' ),
+			'name'              => _x( 'Image Map Layers', 'taxonomy general name', 'flare-imc' ),
+			'singular_name'     => _x( 'Image Map Layer', 'taxonomy singular name', 'flare-imc' ),
 			'search_items'      => __( 'Search Layers', 'flare-imc' ),
 			'all_items'         => __( 'All Layers', 'flare-imc' ),
 			'parent_item'       => __( 'Parent Layer', 'flare-imc' ),
@@ -34,18 +34,18 @@ class Layer {
 
 		$args = array(
 			'labels'                => $labels,
-			'description'           => __( 'Layers', 'flare-imc' ),
+			'description'           => __( 'Image Map Layers', 'flare-imc' ),
 			'hierarchical'          => false,
-			'public'                => true,
+			'public'                => false,
 			'publicly_queryable'    => false,
-			'show_ui'               => true,
-			'show_in_menu'          => true,
+			'show_ui'               => false,
+			'show_in_menu'          => false,
 			'show_in_nav_menus'     => false,
 			'show_tagcloud'         => false,
 			'show_in_quick_edit'    => false,
-			'show_admin_column'     => false,
+			'show_admin_column'     => true,
 			'show_in_rest'          => true,
-			'rest_base'             => 'layers',
+			'rest_base'             => 'imc_layers',
 			'rest_controller_class' => 'Flare\ImageMap\RestLayersController',
 		);
 
@@ -75,7 +75,7 @@ class Layer {
 	public function register_image_source() {
 		$field_args = array( 'get_callback' => array( $this, 'get_image_source' ) );
 
-		register_rest_field( 'layer', 'image_source', $field_args );
+		register_rest_field( self::NAME, 'image_source', $field_args );
 	}
 
 	/**
@@ -134,7 +134,7 @@ class Layer {
 	 **/
 	public function register_map() {
 		register_rest_field(
-			'layer',
+			self::NAME,
 			'map',
 			array(
 				'update_callback' => array( $this, 'add_layer_to_map' ),

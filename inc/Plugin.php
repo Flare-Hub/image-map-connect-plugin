@@ -89,7 +89,7 @@ class Plugin {
 		$remix_icons = new WpScriptsAsset( 'remixicon/remixicon', 'remixicon', self::VERSION );
 		add_action( 'admin_enqueue_scripts', array( $remix_icons, 'register_style' ) );
 
-		$map_menu = new AdminMenu( 'image-map', array( 'wp-components', 'remixicon' ) );
+		$map_menu = new AdminMenu( 'image-map-connect', array( 'wp-components', 'remixicon' ) );
 		$map_menu->init();
 		add_action( 'admin_enqueue_scripts', array( $map_menu->assets, 'register_script' ) );
 		add_action( 'admin_enqueue_scripts', array( $map_menu->assets, 'register_style' ) );

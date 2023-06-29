@@ -184,7 +184,7 @@ export default class Map {
 				e.element.get( 'markerId' ),
 				{
 					_fields:
-						'date,modified,slug,type,link,title,excerpt,author,meta,marker-icons,_embedded',
+						'date,modified,slug,type,link,title,excerpt,author,meta,imc_icons,_embedded',
 					_embed: 'author,wp:featuredmedia',
 				}
 			);
@@ -193,7 +193,7 @@ export default class Map {
 			const view = {
 				...marker.body,
 				author: marker.body._embedded.author[ 0 ],
-				standalone: marker.body.type === 'marker',
+				standalone: marker.body.type === 'imc-marker',
 			};
 
 			if ( marker.body._embedded[ 'wp:featuredmedia' ] ) {
@@ -248,7 +248,7 @@ export default class Map {
 	async initBaseLayers( mapId ) {
 		try {
 			// Get layers from WordPress.
-			this.wpLayers = await getFullCollection( 'layers', {
+			this.wpLayers = await getFullCollection( 'imc_layers', {
 				_fields: 'id,slug,meta,image_source',
 				post: mapId,
 			} );

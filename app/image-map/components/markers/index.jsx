@@ -14,11 +14,11 @@ import CreateMarkerModal from './create-marker-modal';
 
 /**
  * @typedef WpMarker
- * @property {string}        id           Post ID
- * @property {{raw: string}} title        Post title
- * @property {string}        type         Post type
- * @property {Array<number>} marker-icons Marker icon IDs
- * @property {Position}      flare_loc    Marker coordinates.
+ * @property {string}        id        Post ID
+ * @property {{raw: string}} title     Post title
+ * @property {string}        type      Post type
+ * @property {Array<number>} imc_icons Marker icon IDs
+ * @property {Position}      imc_loc   Marker coordinates.
  */
 
 /**
@@ -29,14 +29,14 @@ export default function Markers() {
 
 	// Fetch markers from Wordpress.
 	const apiQuery = {
-		layers: +query.layer ?? 0,
-		_fields: 'title,id,type,marker-icons,flare_loc',
+		imc_layers: +query.layer ?? 0,
+		_fields: 'title,id,type,imc_icons,imc_loc',
 		post_types: 'all',
 		map: query.map,
 		per_page: -1,
 	};
 
-	const markers = useCollection( 'postType', 'marker', apiQuery, [
+	const markers = useCollection( 'postType', 'imc-marker', apiQuery, [
 		query.layer,
 		query.map,
 	] );
@@ -58,7 +58,7 @@ export default function Markers() {
 		navigate( { marker: id } );
 		const marker = markers.list.find( ( m ) => m.id === id );
 		map?.getView().animate( {
-			center: [ marker.flare_loc.lng, marker.flare_loc.lat ],
+			center: [ marker.imc_loc.lng, marker.imc_loc.lat ],
 			duration: 500,
 		} );
 	}

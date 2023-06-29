@@ -3,13 +3,13 @@
 namespace Flare\ImageMap;
 
 /**
- * Manage Marker Icon taxonomy.
+ * Manage Icon Type taxonomy.
  *
  * @since 0.1.0
  */
 class MarkerIcon {
 	/** @var string The taxonomy name for marker icons. */
-	public const NAME = 'marker-icon';
+	public const NAME = 'imc-icon';
 
 	/** @var array The API schema for the img meta field. */
 	public const IMG_SCHEMA = array(
@@ -35,45 +35,45 @@ class MarkerIcon {
 	);
 
 	/**
-	 * Register Marker Icon taxonomy.
+	 * Register Icon Type taxonomy.
 	 *
 	 * @param array $post_types The post types that should support image maps.
 	 * @since 0.1.0
 	 **/
 	public function register_marker_icon( array $post_types ) {
 		$labels = array(
-			'name'              => _x( 'Marker Icons', 'taxonomy general name', 'flare-imc' ),
-			'singular_name'     => _x( 'Marker Icon', 'taxonomy singular name', 'flare-imc' ),
-			'search_items'      => __( 'Search Marker Icons', 'flare-imc' ),
-			'all_items'         => __( 'All Marker Icons', 'flare-imc' ),
-			'parent_item'       => __( 'Parent Marker Icon', 'flare-imc' ),
-			'parent_item_colon' => __( 'Parent Marker Icon:', 'flare-imc' ),
-			'edit_item'         => __( 'Edit Marker Icon', 'flare-imc' ),
-			'update_item'       => __( 'Update Marker Icon', 'flare-imc' ),
-			'add_new_item'      => __( 'Add New Marker Icon', 'flare-imc' ),
-			'new_item_name'     => __( 'New Marker Icon Name', 'flare-imc' ),
-			'menu_name'         => __( 'Marker Icon', 'flare-imc' ),
+			'name'              => _x( 'Icon Types', 'taxonomy general name', 'flare-imc' ),
+			'singular_name'     => _x( 'Icon Type', 'taxonomy singular name', 'flare-imc' ),
+			'search_items'      => __( 'Search Icon Types', 'flare-imc' ),
+			'all_items'         => __( 'All Icon Types', 'flare-imc' ),
+			'parent_item'       => __( 'Parent Icon Type', 'flare-imc' ),
+			'parent_item_colon' => __( 'Parent Icon Type:', 'flare-imc' ),
+			'edit_item'         => __( 'Edit Icon Type', 'flare-imc' ),
+			'update_item'       => __( 'Update Icon Type', 'flare-imc' ),
+			'add_new_item'      => __( 'Add New Icon Type', 'flare-imc' ),
+			'new_item_name'     => __( 'New Icon Type Name', 'flare-imc' ),
+			'menu_name'         => __( 'Icon Type', 'flare-imc' ),
 		);
 		$args   = array(
 			'labels'             => $labels,
-			'description'        => __( 'Marker Icons', 'flare-imc' ),
+			'description'        => __( 'Icon Types', 'flare-imc' ),
 			'hierarchical'       => false,
-			'public'             => true,
+			'public'             => false,
 			'publicly_queryable' => false,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
+			'show_ui'            => false,
+			'show_in_menu'       => false,
 			'show_in_nav_menus'  => false,
 			'show_tagcloud'      => false,
 			'show_in_quick_edit' => false,
 			'show_admin_column'  => false,
 			'show_in_rest'       => true,
-			'rest_base'          => 'marker-icons',
+			'rest_base'          => 'imc_icons',
 		);
 		register_taxonomy( self::NAME, $post_types, $args );
 	}
 
 	/**
-	 * Register Marker Icon's colour field with the rest API.
+	 * Register Icon Type's colour field with the rest API.
 	 *
 	 * @since 0.1.0
 	 **/
@@ -88,7 +88,7 @@ class MarkerIcon {
 	}
 
 	/**
-	 * Register Marker Icon's size field with the rest API.
+	 * Register Icon Type's size field with the rest API.
 	 *
 	 * @since 0.1.0
 	 **/
@@ -103,7 +103,7 @@ class MarkerIcon {
 	}
 
 	/**
-	 * Register Marker Icon's location field with the rest API.
+	 * Register Icon Type's location field with the rest API.
 	 *
 	 * @since 0.1.0
 	 **/

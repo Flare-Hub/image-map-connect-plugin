@@ -1,10 +1,5 @@
 import { Flex, FlexItem, Card, CardBody, Spinner } from '@wordpress/components';
-import {
-	useEffect,
-	useLayoutEffect,
-	useMemo,
-	useState,
-} from '@wordpress/element';
+import { useEffect, useMemo, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -39,10 +34,10 @@ export function MarkerForm( {
 			status: 'publish',
 			title: { raw: '' },
 			excerpt: { raw: '' },
-			layers: [ +query.layer ],
-			'marker-icons': selected[ 'marker-icons' ] ?? [ 0 ],
-			flare_loc: selected.flare_loc ?? { lng: 0, lat: 0 },
-			type: selected.type ?? 'marker',
+			imc_layers: [ +query.layer ],
+			imc_icons: selected.imc_icons ?? [ 0 ],
+			imc_loc: selected.imc_loc ?? { lng: 0, lat: 0 },
+			type: selected.type ?? 'imc-marker',
 		} ),
 		[ selected, query.layer ]
 	);
@@ -66,22 +61,29 @@ export function MarkerForm( {
 		const sub = form.watch( ( value, { type } ) => {
 			if (
 				! type &&
-				Array.isArray( value.layers ) &&
-				! value.layers.includes( +query.layer )
+				Array.isArray( value.imc_layers ) &&
+				! value.imc_layers.includes( +query.layer )
 			) {
-				form.setValue( 'layers', [ ...value.layers, +query.layer ] );
+				form.setValue( 'imc_layers', [
+					...value.imc_layers,
+					+query.layer,
+				] );
 			}
 		} );
 		return () => sub.unsubscribe();
 	}, [ form, form.watch, query.layer ] );
 
 	// Reset form if the marker is updated
-	useLayoutEffect( () => {
+	useEffect( () => {
 		if ( status === 'new' || status === 'loaded' ) {
 			setShowForm( true );
 			form.reset( marker );
 		}
 	}, [ form, marker, status ] );
+
+	useEffect( () => {
+		if ( status === 'loading' ) setShowForm( false );
+	}, [ status ] );
 
 	// Reset form after successful submission.
 	useEffect( () => {
@@ -118,23 +120,22 @@ export function MarkerForm( {
 									} }
 								/>
 							) }
-							{ ( status === 'new' || status === 'loaded' ) &&
-								showForm && (
-									<>
-										<EditMarker
-											markerType={ marker.type }
-											title={ marker.title.raw }
+							{ showForm && (
+								<>
+									<EditMarker
+										markerType={ marker.type }
+										title={ marker.title.raw }
+									/>
+									<div className="col-xs-3">
+										<MarkerLifecycle
+											marker={ marker }
+											save={ saveRecord }
+											delete={ delRecord }
+											listQuery={ listQuery }
 										/>
-										<div className="col-xs-3">
-											<MarkerLifecycle
-												marker={ marker }
-												save={ saveRecord }
-												delete={ delRecord }
-												listQuery={ listQuery }
-											/>
-										</div>
-									</>
-								) }
+									</div>
+								</>
+							) }
 						</CardBody>
 					</Card>
 				</FlexItem>

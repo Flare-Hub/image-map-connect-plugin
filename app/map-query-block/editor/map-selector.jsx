@@ -52,7 +52,9 @@ export default function MapSelector( {
 	const [ fetchCount, setFetchCount ] = useState( 1 );
 
 	// Get maps from backend
-	const maps = useEntityRecords( 'postType', 'map', { enabled: fetchCount } );
+	const maps = useEntityRecords( 'postType', 'imc-map', {
+		enabled: fetchCount,
+	} );
 
 	// Display error if maps cannot be fetched
 	useNotice(

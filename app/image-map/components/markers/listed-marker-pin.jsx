@@ -16,15 +16,15 @@ import cls from './listed-marker-pin.module.scss';
 export default function ListedMarkerPin( { marker, icons } ) {
 	// Marker icon for the current marker
 	const mi = useMemo( () => {
-		const iconId = marker[ 'marker-icons' ][ 0 ];
+		const iconId = marker.imc_icons[ 0 ];
 		return icons.find( ( i ) => i.id === iconId );
-	}, [ icons, marker[ 'marker-icons' ] ] ); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [ icons, marker.imc_icons ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	if ( ! mi ) return null;
 
 	return (
 		<Marker
-			position={ marker.flare_loc }
+			position={ marker.imc_loc }
 			anchor={ [
 				-mi.img.iconAnchor.x * mi.size,
 				-mi.img.iconAnchor.y * mi.size,

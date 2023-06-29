@@ -27,7 +27,7 @@ export default function EditMarker( { markerType, title } ) {
 		<>
 			<h2>{ __( 'Edit Marker', 'flare-imc' ) }</h2>
 			<div className="col-xs-9">
-				{ /* <BaseControl label={__('Layer', 'flare-imc')} className={cls.field}>{watch('layers')}</BaseControl> */ }
+				{ /* <BaseControl label={__('Layer', 'flare-imc')} className={cls.field}>{watch('imc_layers')}</BaseControl> */ }
 				{ postTypes && markerType && (
 					<BaseControl
 						label={
@@ -42,13 +42,13 @@ export default function EditMarker( { markerType, title } ) {
 						className={ cls.field }
 						id="no-input-to-focus-on"
 					>
-						{ markerType === 'marker'
+						{ markerType === 'imc-marker'
 							? __( 'Standalone marker', 'flare-imc' )
 							: postTypes.find( ( pt ) => pt.slug === markerType )
 									?.name }
 					</BaseControl>
 				) }
-				{ markerType !== 'marker' && (
+				{ markerType !== 'imc-marker' && (
 					<BaseControl
 						label={ __( 'Post', 'flare-imc' ) }
 						className={ cls.field }
@@ -58,7 +58,7 @@ export default function EditMarker( { markerType, title } ) {
 					</BaseControl>
 				) }
 				<Controller
-					name="marker-icons.0"
+					name="imc_icons.0"
 					rules={ { required: true } }
 					render={ ( { field, fieldState } ) => (
 						<MarkerIconSelect
@@ -78,7 +78,7 @@ export default function EditMarker( { markerType, title } ) {
 						/>
 					) }
 				/>
-				{ markerType === 'marker' && (
+				{ markerType === 'imc-marker' && (
 					<>
 						<Controller
 							name="title.raw"

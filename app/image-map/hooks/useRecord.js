@@ -16,12 +16,12 @@ import useNotice from './useNotice';
 /**
  * Get controlled state for an item selected from a collection.
  *
- * @param {number}                                     id          ID of the item to fetch from the collection.
- * @param {'postType' | 'taxonomy'}                    type        Type of WP entity record.
- * @param {'map' | 'layer' | 'marker' | 'marker-icon'} name        Name of the WP entity record.
- * @param {Object<string, unknown>}                    query       Search query passed to the REST API.
- * @param {EntityRecord}                               placeholder Empty object as placeholder for a new item.
- * @param {Array<unknown>}                             deps        Dependencies other than id, type and name.
+ * @param {number}                                              id          ID of the item to fetch from the collection.
+ * @param {'postType' | 'taxonomy'}                             type        Type of WP entity record.
+ * @param {'imc-map' | 'imc-layer' | 'imc-marker' | 'imc-icon'} name        Name of the WP entity record.
+ * @param {Object<string, unknown>}                             query       Search query passed to the REST API.
+ * @param {EntityRecord}                                        placeholder Empty object as placeholder for a new item.
+ * @param {Array<unknown>}                                      deps        Dependencies other than id, type and name.
  * @return {RecordHandler} Item state
  */
 export default function useRecord(

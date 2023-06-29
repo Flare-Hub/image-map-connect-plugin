@@ -27,20 +27,20 @@ export default function MarkerLocations( { onMapLoaded, markers, selected } ) {
 	const { record: layer, status } = useRecord(
 		[ query.layer ],
 		'taxonomy',
-		'layer',
+		'imc-layer',
 		{ _fields: 'id,name,meta,image_source' },
 		{ meta: {} }
 	);
 
 	// Fetch marker icons from Wordpress.
-	const { record: wpMap } = useRecord( query.map, 'postType', 'map', {
+	const { record: wpMap } = useRecord( query.map, 'postType', 'imc-map', {
 		_fields: 'icon_details',
 	} );
 	const icons = wpMap?.icon_details;
 
 	return (
 		<Controller
-			name="flare_loc"
+			name="imc_loc"
 			rules={ { validate: ( val ) => val && val.lat > 0 && val.lng > 0 } }
 			render={ ( { field, fieldState } ) => (
 				<Card className={ fieldState.invalid && cls.invalid }>
@@ -70,7 +70,7 @@ export default function MarkerLocations( { onMapLoaded, markers, selected } ) {
 											<SelectedMarkerPin
 												key={ mk.id }
 												icons={ icons }
-												newPosition={ mk.flare_loc }
+												newPosition={ mk.imc_loc }
 												onMove={ field.onChange }
 											/>
 										)

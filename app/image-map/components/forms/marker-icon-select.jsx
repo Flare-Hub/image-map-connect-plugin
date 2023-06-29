@@ -26,7 +26,7 @@ export default function MarkerIconSelect( {
 	const { query } = useRouter();
 
 	// Get icons from WordPress.
-	const { record, status } = useRecord( query.map, 'postType', 'map', {
+	const { record, status } = useRecord( query.map, 'postType', 'imc-map', {
 		_fields: 'icon_details',
 	} );
 

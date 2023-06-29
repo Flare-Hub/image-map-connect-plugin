@@ -39,7 +39,7 @@ export default function EditMap() {
 	} = useRecord(
 		query.map,
 		'postType',
-		'map',
+		'imc-map',
 		{ _fields: 'id,title,excerpt,meta,icon_details,status' },
 		EMPTY_MAP
 	);
