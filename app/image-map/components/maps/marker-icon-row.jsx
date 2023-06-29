@@ -35,7 +35,7 @@ export default function MarkerIconRow( { name } ) {
 				style: 'error',
 				message: __(
 					'Cannot delete icon that is used by markers.',
-					'flare'
+					'flare-imc'
 				),
 				timeout: 10,
 			} );

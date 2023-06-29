@@ -51,7 +51,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 			{ mapId && (
 				<BlockControls group="inline">
 					<ToolbarButton
-						text={ __( 'Replace map', 'flare-im' ) }
+						text={ __( 'Replace map', 'flare-imc' ) }
 						onClick={ handleReplace }
 					/>
 				</BlockControls>

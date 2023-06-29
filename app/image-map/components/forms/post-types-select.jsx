@@ -36,7 +36,7 @@ function PostTypesSelect(
 				createNotice( {
 					message: __(
 						'Unable to load post types. Please refresh to try again.',
-						'flare'
+						'flare-imc'
 					),
 					style: 'error',
 				} );

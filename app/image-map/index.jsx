@@ -7,7 +7,7 @@ import './styles.scss';
 import 'ol/ol.css';
 import 'ol-ext/dist/ol-ext.css';
 
-const appDiv = document.getElementById( 'image-map' );
+const appDiv = document.getElementById( 'image-map-connect' );
 const el = (
 	<RouterProvider>
 		<App />

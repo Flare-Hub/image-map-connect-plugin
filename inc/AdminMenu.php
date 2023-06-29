@@ -45,13 +45,13 @@ class AdminMenu {
 	 **/
 	public function init() {
 		add_menu_page(
-			__( 'Image Maps', 'flare-im' ),
-			__( 'Image Maps', 'flare-im' ),
+			__( 'Image Maps', 'flare-imc' ),
+			__( 'Image Maps', 'flare-imc' ),
 			self::CAPABILITY,
 			$this->id,
 			array( $this, 'load_app' ),
 			'dashicons-location-alt',
-			6
+			30
 		);
 	}
 
@@ -69,9 +69,40 @@ class AdminMenu {
 
 		?>
 			<div <?php echo wp_kses_data( $div_attr ); ?>>
-				<img src="/wp-admin/images/spinner-2x.gif" alt="Loading" class="center-img">
+				<div><i class="ri-loader-4-line flare-loader-spin"></i></div>
 			</div>
-			<noscript><?php esc_html_e( 'This metabox requires javascript', 'flare-im' ); ?></noscript>
+			<noscript><?php esc_html_e( 'This metabox requires javascript', 'flare-imc' ); ?></noscript>
 		<?php
+	}
+
+	/**
+	 * Add getting started link to plugin in plugins list.
+	 *
+	 * @param array $actions An array of plugin action links.
+	 * @return type Description
+	 * @since 0.1.0
+	 **/
+	public function add_start_link( $actions ) {
+		// Build and escape the URL.
+		$url = esc_url(
+			add_query_arg(
+				array(
+					'page' => $this->id,
+					'tab'  => 'info',
+				),
+				get_admin_url() . 'admin.php'
+			)
+		);
+
+		// Create the link.
+		$start_link = "<a href='$url'>" . __( 'Getting started', 'flare-imc' ) . '</a>';
+
+		// Adds the link to the end of the array.
+		array_unshift(
+			$actions,
+			$start_link
+		);
+
+		return $actions;
 	}
 }

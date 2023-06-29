@@ -32,10 +32,10 @@ export default function MarkerLifecycle( {
 	async function handleSave( fields ) {
 		const post = await save( fields );
 
-		if ( post?.type !== 'marker' ) {
+		if ( post?.type !== 'imc-marker' ) {
 			select( dataStore ).getEntityRecords(
 				'postType',
-				'marker',
+				'imc-marker',
 				listQuery,
 				{},
 				true
@@ -49,16 +49,16 @@ export default function MarkerLifecycle( {
 	async function handleDelete() {
 		let success;
 
-		if ( marker.type === 'marker' ) {
+		if ( marker.type === 'imc-marker' ) {
 			// Delete marker from WordPress.
 			success = await delMarker();
 		} else {
 			// Remove marker fields from post in WordPress.
 			success = await handleSave( {
 				id: marker.id,
-				flare_loc: {},
-				'marker-icons': [],
-				layers: [],
+				imc_loc: {},
+				imc_icons: [],
+				imc_layers: [],
 			} );
 		}
 
@@ -73,16 +73,19 @@ export default function MarkerLifecycle( {
 			onDelete={ handleDelete }
 			onSave={ handleSave }
 			confirmDeleteText={
-				__( 'Are you sure you want to delete this marker?', 'flare' ) +
+				__(
+					'Are you sure you want to delete this marker?',
+					'flare-imc'
+				) +
 				' ' +
-				( marker.type === 'marker'
+				( marker.type === 'imc-marker'
 					? __(
 							'This will remove the marker and all its content.',
-							'flare'
+							'flare-imc'
 					  )
 					: __(
 							'This will remove the marker. The related post will not be removed',
-							'flare'
+							'flare-imc'
 					  ) )
 			}
 		/>

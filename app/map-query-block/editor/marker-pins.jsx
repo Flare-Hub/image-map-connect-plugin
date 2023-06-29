@@ -22,7 +22,7 @@ export default function MarkerPins( { mapId, markers } ) {
 	/** Icon settings for the selected map. */
 	const { records: markerIcons, status } = useEntityRecords(
 		'taxonomy',
-		'marker-icon',
+		'imc-icon',
 		{ post: mapId }
 	);
 
@@ -30,7 +30,7 @@ export default function MarkerPins( { mapId, markers } ) {
 		status === 'ERROR',
 		__(
 			'Error loading icons. Please refresh the application to try again.',
-			'flare'
+			'flare-imc'
 		),
 		[ status ]
 	);
@@ -83,14 +83,14 @@ export default function MarkerPins( { mapId, markers } ) {
 		// Create list of features from the list of markers, skipping the ones without an icon.
 		const features = markers.reduce( ( fts, marker ) => {
 			const icon = markerIcons.find(
-				( mi ) => mi.id === marker[ 'marker-icons' ][ 0 ]
+				( mi ) => mi.id === marker.imc_icons[ 0 ]
 			);
 			if ( icon ) {
 				fts.push(
 					new Feature( {
 						geometry: new Point( [
-							marker.flare_loc.lng,
-							marker.flare_loc.lat,
+							marker.imc_loc.lng,
+							marker.imc_loc.lat,
 						] ),
 						icon: { ...icon.meta },
 					} )

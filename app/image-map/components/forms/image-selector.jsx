@@ -53,7 +53,10 @@ function ImageSelector( { label, value, onChange, className }, ref ) {
 			} )
 			.catch( () =>
 				createNotice( {
-					message: __( 'Unable to load featured image.', 'flare' ),
+					message: __(
+						'Unable to load featured image.',
+						'flare-imc'
+					),
 					style: 'error',
 				} )
 			);

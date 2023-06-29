@@ -39,7 +39,7 @@ export default function EditMap() {
 	} = useRecord(
 		query.map,
 		'postType',
-		'map',
+		'imc-map',
 		{ _fields: 'id,title,excerpt,meta,icon_details,status' },
 		EMPTY_MAP
 	);
@@ -75,7 +75,7 @@ export default function EditMap() {
 					<h3>
 						{ __(
 							'Select a map from the list or add a new one.',
-							'flare-im'
+							'flare-imc'
 						) }
 					</h3>
 				) }
@@ -84,7 +84,7 @@ export default function EditMap() {
 				) }
 				{ ( mapStatus === 'new' || mapStatus === 'loaded' ) && (
 					<FormProvider { ...form }>
-						<h2>{ __( 'Edit Map', 'flare-im' ) }</h2>
+						<h2>{ __( 'Edit Map', 'flare-imc' ) }</h2>
 						<div className="col-xs-9">
 							<Controller
 								name="title.raw"
@@ -93,7 +93,10 @@ export default function EditMap() {
 									<TextControl
 										label={
 											<div className={ cls.plainLabel }>
-												{ __( 'Map name', 'flare' ) }
+												{ __(
+													'Map name',
+													'flare-imc'
+												) }
 											</div>
 										}
 										{ ...field }
@@ -112,11 +115,11 @@ export default function EditMap() {
 											<Label
 												name={ __(
 													'Description',
-													'flare'
+													'flare-imc'
 												) }
 												tooltip={ __(
 													'Used for internal clarification only.',
-													'flare-im'
+													'flare-imc'
 												) }
 											/>
 										}
@@ -136,11 +139,11 @@ export default function EditMap() {
 											<Label
 												name={ __(
 													'Post Types',
-													'flare-im'
+													'flare-imc'
 												) }
 												tooltip={ __(
 													'Select the types of posts that can be referenced on this image map.',
-													'flare-im'
+													'flare-imc'
 												) }
 											/>
 										}
@@ -163,10 +166,10 @@ export default function EditMap() {
 							<BaseControl
 								label={
 									<Label
-										name={ __( 'Icon types', 'flare' ) }
+										name={ __( 'Icon types', 'flare-imc' ) }
 										tooltip={ __(
 											'Icon options for each marker on the map.',
-											'flare-im'
+											'flare-imc'
 										) }
 									/>
 								}
@@ -188,7 +191,7 @@ export default function EditMap() {
 								onDelete={ deleteMap }
 								confirmDeleteText={ __(
 									'Are you sure you want to delete this map?',
-									'flare-im'
+									'flare-imc'
 								) }
 							/>
 						</div>

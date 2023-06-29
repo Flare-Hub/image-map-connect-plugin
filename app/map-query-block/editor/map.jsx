@@ -57,7 +57,7 @@ export default function Map( {
 			<ControlBar position="top-right" className={ cls.withSwitcher }>
 				<BaseLayerGroup
 					mapId={ mapId }
-					title={ __( 'Initial layer', 'flare-im' ) }
+					title={ __( 'Initial layer', 'flare-imc' ) }
 					selLayerId={ selLayer }
 					setSelLayerId={ setSelLayer }
 				/>

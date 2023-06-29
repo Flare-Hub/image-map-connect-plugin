@@ -12,7 +12,7 @@ class Plugin {
 	use \Flare\ImageMap\Traits\Singleton;
 
 	/** @var string name */
-	const NAME = 'flare-image-map';
+	const NAME = 'image-map-connect';
 
 	/** @var string version */
 	const VERSION = '0.1.0';
@@ -89,10 +89,11 @@ class Plugin {
 		$remix_icons = new WpScriptsAsset( 'remixicon/remixicon', 'remixicon', self::VERSION );
 		add_action( 'admin_enqueue_scripts', array( $remix_icons, 'register_style' ) );
 
-		$map_menu = new AdminMenu( 'image-map', array( 'wp-components', 'remixicon' ) );
+		$map_menu = new AdminMenu( 'image-map-connect', array( 'wp-components', 'remixicon' ) );
 		$map_menu->init();
 		add_action( 'admin_enqueue_scripts', array( $map_menu->assets, 'register_script' ) );
 		add_action( 'admin_enqueue_scripts', array( $map_menu->assets, 'register_style' ) );
+		add_filter( 'plugin_action_links_image-map-connect/index.php', array( $map_menu, 'add_start_link' ) );
 	}
 
 	/**

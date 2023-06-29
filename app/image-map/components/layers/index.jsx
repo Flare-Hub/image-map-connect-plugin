@@ -15,7 +15,7 @@ export default function Layers() {
 	// Load layers into global state
 	const { list, loading } = useCollection(
 		'taxonomy',
-		'layer',
+		'imc-layer',
 		{ post: +query.map ?? 0, _fields: 'name,id' },
 		[ query.map ]
 	);

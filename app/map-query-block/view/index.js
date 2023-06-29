@@ -7,7 +7,9 @@ import Map from './map';
 
 // Load all maps on current page.
 addEventListener( 'DOMContentLoaded', () => {
-	const mapQueries = document.querySelectorAll( '.wp-block-flare-image-map' );
+	const mapQueries = document.querySelectorAll(
+		'.wp-block-flare-hub-image-map'
+	);
 
 	mapQueries.forEach( async ( blockEl ) => {
 		const map = new Map( blockEl );

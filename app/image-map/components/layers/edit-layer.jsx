@@ -44,7 +44,7 @@ export default function EditLayer() {
 	} = useRecord(
 		query.layer,
 		'taxonomy',
-		'layer',
+		'imc-layer',
 		{ _fields: 'id,name,meta,image_source' },
 		emptyLayer
 	);
@@ -77,7 +77,7 @@ export default function EditLayer() {
 					<h3>
 						{ __(
 							'Select a layer from the list or add a new one.',
-							'flare'
+							'flare-imc'
 						) }
 					</h3>
 				) }
@@ -86,7 +86,7 @@ export default function EditLayer() {
 				) }
 				{ ( status === 'new' || status === 'loaded' ) && (
 					<FormProvider { ...form }>
-						<h2>{ __( 'Edit Layer', 'flare' ) }</h2>
+						<h2>{ __( 'Edit Layer', 'flare-imc' ) }</h2>
 						<div className="col-xs-9">
 							<Controller
 								name="name"
@@ -95,7 +95,7 @@ export default function EditLayer() {
 									<TextControl
 										label={
 											<div className={ cls.plainLabel }>
-												{ __( 'Name', 'flare' ) }
+												{ __( 'Name', 'flare-imc' ) }
 											</div>
 										}
 										{ ...field }
@@ -112,7 +112,7 @@ export default function EditLayer() {
 									<BaseControl
 										label={
 											<div className={ cls.plainLabel }>
-												{ __( 'Image', 'flare' ) }
+												{ __( 'Image', 'flare-imc' ) }
 											</div>
 										}
 										className={ cls.field }
@@ -135,11 +135,11 @@ export default function EditLayer() {
 											<Label
 												name={ __(
 													'Minimum zoom',
-													'flare'
+													'flare-imc'
 												) }
 												tooltip={ __(
 													'The amount you can zoom in on the image. Check the preview to see the effect of your selection.',
-													'flare'
+													'flare-imc'
 												) }
 											/>
 										}
@@ -161,11 +161,11 @@ export default function EditLayer() {
 											<Label
 												name={ __(
 													'Maximum zoom',
-													'flare'
+													'flare-imc'
 												) }
 												tooltip={ __(
 													'The amount you can zoom out on the image. Check the preview to see the effect of your selection.',
-													'flare'
+													'flare-imc'
 												) }
 											/>
 										}
@@ -181,7 +181,7 @@ export default function EditLayer() {
 							<BaseControl
 								label={
 									<div className={ cls.plainLabel }>
-										{ __( 'Preview', 'flare' ) }
+										{ __( 'Preview', 'flare-imc' ) }
 									</div>
 								}
 								className={ `${ cls.field } ${ cls.map }` }

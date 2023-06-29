@@ -14,7 +14,7 @@ export default function Maps() {
 	const { query, navigate } = useRouter();
 	const { list, loading } = useCollection(
 		'postType',
-		'map',
+		'imc-map',
 		{ _fields: 'id,title' },
 		[]
 	);

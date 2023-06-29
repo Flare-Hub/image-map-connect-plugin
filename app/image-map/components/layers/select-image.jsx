@@ -58,7 +58,7 @@ export default function SelectImage( { onChange, invalid, id } ) {
 			isDestructive={ invalid }
 			onClick={ () => mediaMgr.open() }
 		>
-			{ __( 'Select image', 'flare' ) }
+			{ __( 'Select image', 'flare-imc' ) }
 		</Button>
 	);
 }

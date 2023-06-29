@@ -1,7 +1,5 @@
 {
-  "name": "flare-image-map",
-  "version": "1.0.0",
-  "description": "Template for developing a wordpress plugin in a docker container using wp-scripts and react.",
+  "name": "image-map-connect",
   "scripts": {
     "start": "npm-run-all --parallel dockerup watch sync",
     "sync": "node browser-sync.js",
@@ -12,15 +10,7 @@
     "wp": "docker compose --env-file docker.env --file ./docker/docker-compose.yml exec wordpress wp",
     "lint": "eslint app/**/*.{js,jsx} && stylelint app/**/*.{css,scss}"
   },
-  "keywords": [
-    "wordpress",
-    "docker",
-    "docker-compose",
-    "react",
-    "wp-scripts"
-  ],
-  "author": "Igor Honhoff",
-  "license": "MIT",
+  "license": "GPLv3",
   "devDependencies": {
     "@svgr/webpack": "^8.0.1",
     "@types/ol-ext": "npm:@siedlerchr/types-ol-ext@^3.0.9",

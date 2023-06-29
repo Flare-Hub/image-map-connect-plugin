@@ -1,8 +1,8 @@
-import { registerBlockType } from '@wordpress/blocks'
-import Edit from './edit'
+import { registerBlockType } from '@wordpress/blocks';
+import Edit from './edit';
 
-import './editor.scss'
+import './editor.scss';
 
-registerBlockType('flare/image-map', {
-	edit: Edit
-})
+registerBlockType( 'flare-hub/image-map', {
+	edit: Edit,
+} );

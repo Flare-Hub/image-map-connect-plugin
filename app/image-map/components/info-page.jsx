@@ -234,7 +234,7 @@ export default function InfoPage() {
 								'flare-imc'
 							) + ' ' }
 							<a
-								href="https://github.com/Flare-Hub/flare-image-map-plugin/issues"
+								href="https://github.com/Flare-Hub/image-map-connect-plugin/issues"
 								target="_blank"
 								rel="noreferrer"
 							>

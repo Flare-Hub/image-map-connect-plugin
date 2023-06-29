@@ -9,7 +9,7 @@ namespace Flare\ImageMap;
  */
 class Map {
 	/** @var string NAME The post type name for maps. */
-	public const NAME = 'map';
+	public const NAME = 'imc-map';
 
 	/**
 	 * Register map post type.
@@ -18,46 +18,44 @@ class Map {
 	 **/
 	public function register_map_cpt() {
 		$labels = array(
-			'name'                  => _x( 'Maps', 'Post Type General Name', 'flare-im' ),
-			'singular_name'         => _x( 'Map', 'Post Type Singular Name', 'flare-im' ),
-			'menu_name'             => _x( 'Maps', 'Admin Menu text', 'flare-im' ),
-			'name_admin_bar'        => _x( 'Map', 'Add New on Toolbar', 'flare-im' ),
-			'archives'              => __( 'Map Archives', 'flare-im' ),
-			'attributes'            => __( 'Map Attributes', 'flare-im' ),
-			'parent_item_colon'     => __( 'Parent Map:', 'flare-im' ),
-			'all_items'             => __( 'All Maps', 'flare-im' ),
-			'add_new_item'          => __( 'Add New Map', 'flare-im' ),
-			'add_new'               => __( 'Add New', 'flare-im' ),
-			'new_item'              => __( 'New Map', 'flare-im' ),
-			'edit_item'             => __( 'Edit Map', 'flare-im' ),
-			'update_item'           => __( 'Update Map', 'flare-im' ),
-			'view_item'             => __( 'View Map', 'flare-im' ),
-			'view_items'            => __( 'View Maps', 'flare-im' ),
-			'search_items'          => __( 'Search Map', 'flare-im' ),
-			'not_found'             => __( 'Not found', 'flare-im' ),
-			'not_found_in_trash'    => __( 'Not found in Trash', 'flare-im' ),
-			'featured_image'        => __( 'Featured Image', 'flare-im' ),
-			'set_featured_image'    => __( 'Set featured image', 'flare-im' ),
-			'remove_featured_image' => __( 'Remove featured image', 'flare-im' ),
-			'use_featured_image'    => __( 'Use as featured image', 'flare-im' ),
-			'insert_into_item'      => __( 'Insert into Map', 'flare-im' ),
-			'uploaded_to_this_item' => __( 'Uploaded to this Map', 'flare-im' ),
-			'items_list'            => __( 'Maps list', 'flare-im' ),
-			'items_list_navigation' => __( 'Maps list navigation', 'flare-im' ),
-			'filter_items_list'     => __( 'Filter Maps list', 'flare-im' ),
+			'name'                  => _x( 'Maps', 'Post Type General Name', 'flare-imc' ),
+			'singular_name'         => _x( 'Map', 'Post Type Singular Name', 'flare-imc' ),
+			'menu_name'             => _x( 'Maps', 'Admin Menu text', 'flare-imc' ),
+			'name_admin_bar'        => _x( 'Map', 'Add New on Toolbar', 'flare-imc' ),
+			'archives'              => __( 'Map Archives', 'flare-imc' ),
+			'attributes'            => __( 'Map Attributes', 'flare-imc' ),
+			'parent_item_colon'     => __( 'Parent Map:', 'flare-imc' ),
+			'all_items'             => __( 'All Maps', 'flare-imc' ),
+			'add_new_item'          => __( 'Add New Map', 'flare-imc' ),
+			'add_new'               => __( 'Add New', 'flare-imc' ),
+			'new_item'              => __( 'New Map', 'flare-imc' ),
+			'edit_item'             => __( 'Edit Map', 'flare-imc' ),
+			'update_item'           => __( 'Update Map', 'flare-imc' ),
+			'view_item'             => __( 'View Map', 'flare-imc' ),
+			'view_items'            => __( 'View Maps', 'flare-imc' ),
+			'search_items'          => __( 'Search Map', 'flare-imc' ),
+			'not_found'             => __( 'Not found', 'flare-imc' ),
+			'not_found_in_trash'    => __( 'Not found in Trash', 'flare-imc' ),
+			'featured_image'        => __( 'Featured Image', 'flare-imc' ),
+			'set_featured_image'    => __( 'Set featured image', 'flare-imc' ),
+			'remove_featured_image' => __( 'Remove featured image', 'flare-imc' ),
+			'use_featured_image'    => __( 'Use as featured image', 'flare-imc' ),
+			'insert_into_item'      => __( 'Insert into Map', 'flare-imc' ),
+			'uploaded_to_this_item' => __( 'Uploaded to this Map', 'flare-imc' ),
+			'items_list'            => __( 'Maps list', 'flare-imc' ),
+			'items_list_navigation' => __( 'Maps list navigation', 'flare-imc' ),
+			'filter_items_list'     => __( 'Filter Maps list', 'flare-imc' ),
 		);
 
 		$args = array(
-			'label'                 => __( 'Map', 'flare-im' ),
-			'description'           => __( 'Base image map', 'flare-im' ),
+			'label'                 => __( 'Map', 'flare-imc' ),
+			'description'           => __( 'Base image map', 'flare-imc' ),
 			'labels'                => $labels,
-			'menu_icon'             => 'dashicons-palmtree',
 			'supports'              => array( 'title', 'excerpt', 'author', 'custom-fields' ),
 			'taxonomies'            => array( Layer::NAME, MarkerIcon::NAME ),
 			'public'                => false,
-			'show_ui'               => true,
-			'show_in_menu'          => true,
-			'menu_position'         => 5,
+			'show_ui'               => false,
+			'show_in_menu'          => false,
 			'show_in_admin_bar'     => false,
 			'show_in_nav_menus'     => false,
 			'can_export'            => true,
@@ -65,13 +63,13 @@ class Map {
 			'hierarchical'          => false,
 			'exclude_from_search'   => false,
 			'show_in_rest'          => true,
-			'rest_base'             => 'maps',
+			'rest_base'             => 'imc_maps',
 			'rest_controller_class' => 'Flare\ImageMap\RestMapsController',
 			'publicly_queryable'    => true,
 			'capability_type'       => 'post',
 		);
 
-		register_post_type( 'map', $args );
+		register_post_type( self::NAME, $args );
 	}
 
 	/**
@@ -206,7 +204,7 @@ class Map {
 	/**
 	 * Update meta fields included in the updated icon.
 	 *
-	 * @param string $id id of the marker-icon term.
+	 * @param string $id id of the Icon Type term.
 	 * @param array  $icon updated icon.
 	 * @since 0.1.0
 	 **/

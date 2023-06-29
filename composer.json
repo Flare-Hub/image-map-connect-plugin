@@ -1,7 +1,6 @@
 {
-  "name": "flare/image-map",
+  "name": "flare-hub/image-map-connect",
   "type": "wordpress-plugin",
-  "license": "MIT",
   "autoload": {
     "psr-4": {
       "Flare\\ImageMap\\": "inc/"
