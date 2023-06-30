@@ -113,6 +113,7 @@
 
 		.flare-popup-thumbnail {
 			width: 100%;
+			aspect-ratio: 1 / 1;
 		}
 
 		.flare-popup-desc {
@@ -137,5 +138,10 @@
 		color: var(--wp--preset--color--vivid-red);
 		padding: 2em;
 		font-size: large;
+	}
+
+	/* stylelint-disable-next-line selector-class-pattern */
+	.ol-popup .closeBox {
+		margin: 8px 12px;
 	}
 }

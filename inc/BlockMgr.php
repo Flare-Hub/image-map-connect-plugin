@@ -62,16 +62,15 @@ class BlockMgr {
 			$block_attr['data-initial-center-x'] = $attributes['initialView']['center'][0];
 			$block_attr['data-initial-center-y'] = $attributes['initialView']['center'][1];
 
-		// Default marker popup template.
-		$template = apply_filters( 'flare_marker_popup_template', '', $attributes['mapId'] );
-
 		// Return div to place map in with post IDs of markers to include.
 		ob_start();
+
+		$save_tags             = wp_kses_allowed_html( 'post' );
+		$save_tags['template'] = array( 'class' => true );
+
 		?>
 		<div <?php echo wp_kses_data( get_block_wrapper_attributes( $block_attr ) ); ?>>
-			<template>
-				<?php echo wp_kses_post( $template ); ?>
-			</template>
+				<?php echo wp_kses( $content, $save_tags ); ?>
 		</div>
 		<?php
 		return ob_get_clean();
@@ -115,46 +114,5 @@ class BlockMgr {
 		$query = new \WP_Query( $query_args );
 
 		return implode( ',', $query->get_posts() );
-	}
-
-	/**
-	 * Get default popup template. This is a mustache template that is processed on the frontend.
-	 *
-	 * @param string $template the template passed by the filter.
-	 * @return string The Mustache template.
-	 * @since 0.1.0
-	 **/
-	public function get_popup_template( string $template ) {
-		ob_start();
-		?>
-		{{ ^standalone }}
-			<a class="flare-popup-link" href="{{ link }}">
-		{{ /standalone }}
-		{{ #featured_media.media_details.sizes.thumbnail }}
-			<img
-				class="flare-popup-thumbnail"
-				src="{{ featured_media.media_details.sizes.thumbnail.source_url }}"
-				alt="{{ featured_media.alt_text }}"
-			/>
-		{{ /featured_media.media_details.sizes.thumbnail }}
-		<div class="flare-popup-desc">
-			<div class="flare-popup-title">
-				<strong>{{ title.rendered }}</strong>
-			</div>
-			{{ #excerpt.rendered }}
-				<div class="flare-popup-excerpt">
-					{{{ excerpt.rendered }}}
-				</div>
-			{{ /excerpt.rendered }}
-			{{ ^standalone }}
-				<div class="flare-popup-readmore"><?php /* phpcs:ignore */ _e( 'Read more' ); ?>...</div>
-			{{ /standalone }}
-		</div>
-		{{ ^standalone }}
-			</a>
-		{{ /standalone }}
-		<?php
-
-		return ob_get_clean();
 	}
 }

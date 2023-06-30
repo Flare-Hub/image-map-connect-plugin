@@ -10,6 +10,7 @@ import { Feature } from 'ol';
 import { Point } from 'ol/geom';
 
 import remixMap from 'common/remix-unicode.json';
+import usePopup from './use-popup';
 
 /**
  * Add markers in query to map.
@@ -74,6 +75,8 @@ export default function MarkerPins( { mapId, markers } ) {
 		[ mkSource ]
 	);
 
+	usePopup( mkLayer );
+
 	const { map } = useMap();
 
 	// Create a point feature for each marker and add it to the map.
@@ -93,6 +96,8 @@ export default function MarkerPins( { mapId, markers } ) {
 							marker.imc_loc.lat,
 						] ),
 						icon: { ...icon.meta },
+						postType: marker.type,
+						markerId: marker.id,
 					} )
 				);
 			}
