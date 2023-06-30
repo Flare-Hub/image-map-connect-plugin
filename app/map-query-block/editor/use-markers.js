@@ -27,7 +27,7 @@ export default function useMarkers( map, layer, posts, showStandAlone ) {
 	const linkedQuery = posts
 		? {
 				layers: layer,
-				_fields: 'id,imc_icons,imc_loc',
+				_fields: 'id,imc_icons,imc_loc,type',
 				post_types: 'linked',
 				include: posts,
 				map,
@@ -43,7 +43,7 @@ export default function useMarkers( map, layer, posts, showStandAlone ) {
 	const saQuery = showStandAlone
 		? {
 				layers: layer,
-				_fields: 'id,imc_icons,imc_loc',
+				_fields: 'id,imc_icons,imc_loc,type',
 				post_types: 'standalone',
 				map,
 		  }

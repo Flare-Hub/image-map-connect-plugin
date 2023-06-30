@@ -171,7 +171,9 @@ export default class Map {
 		if ( point ) {
 			this.popup.show(
 				point,
-				'<p class="flare-popup-desc flare-popup-title"><strong>Loading...</string></p>'
+				`<p class="flare-popup-desc flare-popup-title"><strong>${ __(
+					'Loading'
+				) }...</string></p>`
 			);
 		}
 
