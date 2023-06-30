@@ -285,6 +285,7 @@ export default class Map {
 			new LayerSwitcher( {
 				reordering: false,
 				noScroll: true,
+				mouseover: true,
 				displayInLayerSwitcher: ( layer ) => layer.get( 'baseLayer' ),
 				onchangeCheck: ( layer ) =>
 					this.setFeatures( layer.get( 'blockLayer' ) ),
