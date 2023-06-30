@@ -1,10 +1,11 @@
-import { Icon } from '@wordpress/components';
+import { Icon, Tooltip } from '@wordpress/components';
 import { lock } from '@wordpress/icons';
 import { useCallback, useEffect } from '@wordpress/element';
 import { useMap } from 'common/components/ol/context';
 import Control from 'common/components/ol/control';
 
 import cls from './save-view.module.scss';
+import { __ } from '@wordpress/i18n';
 
 /**
  * @typedef MapView
@@ -50,9 +51,13 @@ export default function SaveView( { layer, setView } ) {
 
 	return (
 		<Control>
-			<button className={ cls.saveButton } onClick={ save }>
-				<Icon icon={ lock } size="40" />
-			</button>
+			<Tooltip
+				text={ __( 'Set current frame as initial frame', 'flare-imc' ) }
+			>
+				<button className={ cls.saveButton } onClick={ save }>
+					<Icon icon={ lock } size="40" />
+				</button>
+			</Tooltip>
 		</Control>
 	);
 }

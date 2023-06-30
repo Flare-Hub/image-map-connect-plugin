@@ -1,12 +1,10 @@
-import { useEffect, useMemo } from '@wordpress/element';
+import { useEffect } from '@wordpress/element';
 import { useEntityRecords } from '@wordpress/core-data';
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
 import { __ } from '@wordpress/i18n';
 import useNotice from 'common/utils/use-notice';
 import { useMap } from './context';
 import ImageLayer from './image-layer';
-
-import cls from './ol.module.scss';
 
 /**
  * Add OpenLayers layer group with base layers, and layer switcher, to map.
@@ -39,38 +37,22 @@ export default function BaseLayerGroup( { mapId, selLayerId, setSelLayerId } ) {
 		[ status ]
 	);
 
-	// Layer switcher control to switch base layers.
-	const switcher = useMemo(
-		() =>
-			new LayerSwitcher( {
-				reordering: false,
-				noScroll: true,
-				displayInLayerSwitcher: ( layer ) => layer.get( 'baseLayer' ),
-				// Propagate the selected layer.
-				onchangeCheck: ( layer ) =>
-					setSelLayerId( layer.get( 'wpId' ) ),
-			} ),
-		[ setSelLayerId ]
-	);
-
-	// Get the list of layers for the provided map.
+	// Add layer switcher control to switch base layers.
 	useEffect( () => {
-		controlBar.element.classList.remove( cls.oneLayer );
-		controlBar.element.classList.add( cls.oneLayer );
-		controlBar.addControl( switcher );
-	}, [ controlBar, mapId, switcher ] );
+		const switcher = new LayerSwitcher( {
+			reordering: false,
+			noScroll: true,
+			mouseover: true,
+			displayInLayerSwitcher: ( layer ) => layer.get( 'baseLayer' ),
+			// Propagate the selected layer.
+			onchangeCheck: ( layer ) => setSelLayerId( layer.get( 'wpId' ) ),
+		} );
 
-	// Conditionally hide the layer switcher through a class on the control bar.
-	// Ticket raised to handle this properly: https://github.com/Viglino/ol-ext/issues/951
-	useEffect( () => {
-		if ( controlBar.element ) {
-			if ( layers && layers.length > 1 ) {
-				controlBar.element.classList.remove( cls.oneLayer );
-			} else {
-				controlBar.element.classList.add( cls.oneLayer );
-			}
-		}
-	}, [ controlBar.element, layers ] );
+		// Only add the control if there is more than 1 layer.
+		if ( layers?.length > 1 ) controlBar.addControl( switcher );
+
+		return () => controlBar.removeControl( switcher );
+	}, [ controlBar, setSelLayerId, layers ] );
 
 	if ( ! layers ) return null;
 
