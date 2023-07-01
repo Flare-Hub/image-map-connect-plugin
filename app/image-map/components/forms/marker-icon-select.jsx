@@ -1,8 +1,5 @@
 import { CustomSelectControl } from '@wordpress/components';
-import { useEffect, useMemo } from '@wordpress/element';
-
-import { useRouter } from '../../contexts/router';
-import useRecord from '../../hooks/useRecord';
+import { useMemo } from '@wordpress/element';
 
 import cls from './edit-form.module.scss';
 
@@ -14,6 +11,7 @@ import cls from './edit-form.module.scss';
  * @param {number}                                                  props.value     The selected marker icon.
  * @param {(icon: number) => any}                                   props.onSelect  Callback that is called when a post type is selected.
  * @param {(event: FocusEvent<HTMLSelectElement, Element>) => void} props.onBlur    Callback that is called when the dropdown is blurred.
+ * @param {Array<Object<string, any>>}                              props.icons     Icon types for the map.
  * @param {string}                                                  props.className
  */
 export default function MarkerIconSelect( {
@@ -21,19 +19,13 @@ export default function MarkerIconSelect( {
 	value,
 	onSelect,
 	onBlur,
+	icons,
 	className,
 } ) {
-	const { query } = useRouter();
-
-	// Get icons from WordPress.
-	const { record, status } = useRecord( query.map, 'postType', 'imc-map', {
-		_fields: 'icon_details',
-	} );
-
 	// Format icon for dropdown.
-	const icons = useMemo(
+	const iconOptions = useMemo(
 		() =>
-			record?.icon_details?.map( ( icon ) => ( {
+			icons?.map( ( icon ) => ( {
 				key: icon.id,
 				name: (
 					<span>
@@ -45,26 +37,17 @@ export default function MarkerIconSelect( {
 					</span>
 				),
 			} ) ) ?? [],
-		[ record ]
+		[ icons ]
 	);
-
-	// Set first icon in list by default if no icon is provided.
-	useEffect( () => {
-		if ( ! value && icons && icons.length ) {
-			onSelect( icons[ 0 ].key );
-		}
-	}, [ value, icons, onSelect ] );
 
 	return (
 		<div className={ className }>
 			<CustomSelectControl
 				label={ label }
-				value={ icons.find( ( icon ) => icon.key === value ) }
+				value={ iconOptions.find( ( icon ) => icon.key === value ) }
 				onChange={ ( item ) => onSelect( item.selectedItem.key ) }
 				onBlur={ onBlur }
-				options={
-					status === 'loading' ? { name: 'Loading...' } : icons
-				}
+				options={ iconOptions ? { name: 'Loading...' } : iconOptions }
 				__nextUnconstrainedWidth
 			/>
 		</div>

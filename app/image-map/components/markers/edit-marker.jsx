@@ -12,11 +12,12 @@ import Label from '../forms/label';
 /**
  * Marker details form.
  *
- * @param {Object} props
- * @param {string} props.markerType Post Type of the marker.
- * @param {string} props.title      Marker title.
+ * @param {Object}                     props
+ * @param {string}                     props.markerType Post Type of the marker.
+ * @param {string}                     props.title      Marker title.
+ * @param {Array<Object<string, any>>} props.icons      Icon types for the map.
  */
-export default function EditMarker( { markerType, title } ) {
+export default function EditMarker( { markerType, title, icons } ) {
 	// Get all post types applicable to markers.
 	const postTypes = useSelect( ( select ) =>
 		select( 'core' ).getPostTypes()
@@ -74,6 +75,7 @@ export default function EditMarker( { markerType, title } ) {
 							value={ field.value }
 							onSelect={ field.onChange }
 							onBlur={ field.onBlur }
+							icons={ icons }
 							className={ getControlClass( fieldState ) }
 						/>
 					) }
