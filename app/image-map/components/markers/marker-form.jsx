@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Flex, FlexItem, Card, CardBody, Spinner } from '@wordpress/components';
 import { useEffect, useMemo, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
@@ -27,19 +28,28 @@ export function MarkerForm( {
 	listQuery,
 } ) {
 	const { query } = useRouter();
-
 	const [ showForm, setShowForm ] = useState( false );
+
+	// Get icons from WordPress.
+	const {
+		record: { icon_details },
+	} = useRecord( query.map, 'postType', 'imc-map', {
+		_fields: 'icon_details',
+	} );
+
 	const newMarker = useMemo(
 		() => ( {
 			status: 'publish',
 			title: { raw: '' },
 			excerpt: { raw: '' },
 			imc_layers: [ +query.layer ],
-			imc_icons: selected.imc_icons ?? [ 0 ],
+			imc_icons: selected.imc_icons ?? [
+				icon_details ? icon_details[ 0 ].id : 0,
+			],
 			imc_loc: selected.imc_loc ?? { lng: 0, lat: 0 },
 			type: selected.type ?? 'imc-marker',
 		} ),
-		[ selected, query.layer ]
+		[ selected, query.layer, icon_details ]
 	);
 
 	// Fetch selected marker from Wordpress.
@@ -125,6 +135,7 @@ export function MarkerForm( {
 									<EditMarker
 										markerType={ marker.type }
 										title={ marker.title.raw }
+										icons={ icon_details }
 									/>
 									<div className="col-xs-3">
 										<MarkerLifecycle

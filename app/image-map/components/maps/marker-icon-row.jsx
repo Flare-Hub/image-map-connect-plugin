@@ -8,6 +8,7 @@ import {
 	FlexItem,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { useEffect } from '@wordpress/element';
 import { Controller, useFormContext } from 'react-hook-form';
 import ColorSelect from '../forms/color-select';
 import IconToolbarButtons from '../forms/icon-toolbar-buttons';
@@ -46,6 +47,11 @@ export default function MarkerIconRow( { name } ) {
 		setValue( name + '.delete', true, { shouldDirty: true } );
 	}
 
+	useEffect( () => {
+		if ( ! getValues( name + '.img.ref' ) )
+			setValue( name + '.img', icons[ 0 ] );
+	}, [ getValues, name, setValue ] );
+
 	return (
 		<>
 			<CardDivider />
@@ -70,8 +76,7 @@ export default function MarkerIconRow( { name } ) {
 							render={ ( { field, fieldState } ) => (
 								<IconToolbarButtons
 									icons={ icons }
-									// selected={ field.value }
-									fieldName={ name + '.img' }
+									selected={ field.value }
 									size={ getValues( name + '.size' ) }
 									colour={ watch( name + '.colour' ) }
 									onSelect={ ( img, size ) => {
