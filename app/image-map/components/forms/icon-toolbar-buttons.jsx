@@ -4,10 +4,9 @@ import {
 	ToolbarGroup,
 	Dropdown,
 } from '@wordpress/components';
-import { forwardRef, useEffect, useRef } from '@wordpress/element';
+import { forwardRef, useRef } from '@wordpress/element';
 
 import cls from './edit-form.module.scss';
-import { useFormContext } from 'react-hook-form';
 
 /** @typedef {import('../../utils/marker-icons').IconImg} Icon */
 
@@ -17,7 +16,7 @@ import { useFormContext } from 'react-hook-form';
  * @param {Object}                            props
  * @param {string}                            props.label     The label for the field.
  * @param {Array<Icon>}                       props.icons     A list of icons to select from.
- * @param {string}                            props.fieldName Name of the icon field in RHF.
+ * @param {string}                            props.selected  The selected icon.
  * @param {string}                            props.colour    The selected colour.
  * @param {number}                            props.size      The default icon size.
  * @param {(img: Icon, size: number) => void} props.onSelect  The callback to call when a button is clicked, passing the name of the icon.
@@ -26,16 +25,10 @@ import { useFormContext } from 'react-hook-form';
  * @param {import('react').Ref}               ref
  */
 function IconToolbarButtons(
-	{ label, icons, fieldName, colour, size, onSelect, onBlur, className },
+	{ label, icons, selected, colour, size, onSelect, onBlur, className },
 	ref
 ) {
-	const { watch } = useFormContext();
-	const selected = watch( fieldName );
 	const btnId = useRef( 'btn-' + Math.floor( Math.random() * 100000000 ) );
-
-	useEffect( () => {
-		if ( ! selected.ref ) onSelect( icons[ 0 ], size );
-	}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<BaseControl
