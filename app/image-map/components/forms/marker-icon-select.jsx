@@ -14,40 +14,40 @@ import cls from './edit-form.module.scss';
  * @param {Array<Object<string, any>>}                              props.icons     Icon types for the map.
  * @param {string}                                                  props.className
  */
-export default function MarkerIconSelect( {
+export default function MarkerIconSelect({
 	label,
 	value,
 	onSelect,
 	onBlur,
 	icons,
 	className,
-} ) {
+}) {
 	// Format icon for dropdown.
 	const iconOptions = useMemo(
 		() =>
-			icons?.map( ( icon ) => ( {
+			icons?.map((icon) => ({
 				key: icon.id,
 				name: (
 					<span>
 						<i
-							className={ icon.img.ref }
-							style={ { color: icon.colour } }
+							className={icon.img.ref}
+							style={{ color: icon.colour }}
 						/>
-						<span className={ cls.iconName }>{ icon.name }</span>
+						<span className={cls.iconName}>{icon.name}</span>
 					</span>
 				),
-			} ) ) ?? [],
-		[ icons ]
+			})) ?? [],
+		[icons]
 	);
 
 	return (
-		<div className={ className }>
+		<div className={className}>
 			<CustomSelectControl
-				label={ label }
-				value={ iconOptions.find( ( icon ) => icon.key === value ) }
-				onChange={ ( item ) => onSelect( item.selectedItem.key ) }
-				onBlur={ onBlur }
-				options={ iconOptions ? { name: 'Loading...' } : iconOptions }
+				label={label}
+				value={iconOptions.find((icon) => icon.key === value)}
+				onChange={(item) => onSelect(item.selectedItem.key)}
+				onBlur={onBlur}
+				options={iconOptions ?? { name: 'Loading...' }}
 				__nextUnconstrainedWidth
 			/>
 		</div>
