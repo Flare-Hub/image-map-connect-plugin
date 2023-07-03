@@ -28,7 +28,7 @@
     },
     {
       "label": "MVP Milestone",
-      "query": "state:open repo:${owner}/${repository} milestone:\"MVP\""
+      "query": "state:open repo:${owner}/${repository} milestone:\"v0.1.0 MVP\""
     },
     {
       "label": "Created Issues",
