@@ -15,5 +15,27 @@
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
     }
+  },
+  "archive": {
+    "name": "image-map-connect",
+    "exclude": [
+      "/.vscode",
+      "/app",
+      "/docker",
+      "/node_modules",
+      "/wp_data",
+      ".editorconfig",
+      ".eslintrc",
+      ".gitattributes",
+      ".gitignore",
+      ".stylelint",
+      "browser_sync.js",
+      "docker.env",
+      "jsconfig.json",
+      "package-lock.json",
+      "package.json",
+      "phpcs.xml.dist",
+      "webpack.config.js"
+    ]
   }
 }
