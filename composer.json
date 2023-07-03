@@ -33,7 +33,6 @@
       "docker.env",
       "jsconfig.json",
       "package-lock.json",
-      "package.json",
       "phpcs.xml.dist",
       "webpack.config.js"
     ]
