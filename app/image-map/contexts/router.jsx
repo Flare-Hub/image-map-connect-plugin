@@ -1,5 +1,5 @@
 import {
-	useReducer,
+	useState,
 	useEffect,
 	useMemo,
 	useContext,
@@ -15,33 +15,33 @@ const globalHistory = createBrowserHistory();
  * @typedef Query
  * @property {string|null} [map]    The selected map ID.
  * @property {string|null} [layer]  The selected layer ID.
- * @property {string|null} [marker] THe selected marker ID.
+ * @property {string|null} [marker] The selected marker ID.
+ * @property {string|null} [tab]    The active tab.
  */
 
 /**
  * @typedef RouteContext
  * @property {Query}                            query     The Query parameters currently in the url.
- * @property {import('history').BrowserHistory} history
- *                                                        See https://github.com/remix-run/history/blob/main/docs/api-reference.md
+ * @property {import('history').BrowserHistory} history   See https://github.com/remix-run/history/blob/main/docs/api-reference.md
  * @property {navigate}                         navigate  Function to navigate to new query parameters.
  * @property {createUrl}                        createUrl Function to generate url with updated query parameters
  */
 
 /** @type {import('react').Context<RouteContext>} Create router context */
-const routeContext = createContext( null );
+const routeContext = createContext(null);
 
 /**
  * Create a URL with updated query parameters.
  *
  * @param {Query} query The query parameters to change.
  */
-function createUrl( query ) {
-	const search = new URLSearchParams( globalHistory.location.search );
-	for ( const param in query ) {
-		if ( query[ param ] === null ) {
-			search.delete( param );
+function createUrl(query) {
+	const search = new URLSearchParams(globalHistory.location.search);
+	for (const param in query) {
+		if (query[param] === null) {
+			search.delete(param);
 		} else {
-			search.set( param, query[ param ] );
+			search.set(param, query[param]);
 		}
 	}
 	return '?' + search.toString();
@@ -54,12 +54,12 @@ function createUrl( query ) {
  * @param {Object}  state   Any state to pass to the next page.
  * @param {boolean} replace Replace url in history instead of pushing a new entry.
  */
-export function navigate( query, state, replace = false ) {
-	const route = createUrl( query );
-	if ( replace ) {
-		globalHistory.replace( route, state );
+export function navigate(query, state, replace = false) {
+	const route = createUrl(query);
+	if (replace) {
+		globalHistory.replace(route, state);
 	} else {
-		globalHistory.push( route, state );
+		globalHistory.push(route, state);
 	}
 }
 
@@ -69,45 +69,33 @@ export function navigate( query, state, replace = false ) {
  * @param {Object}                    props
  * @param {import('react').ReactNode} props.children Child nodes.
  */
-export function RouterProvider( { children } ) {
-	// Filter the child Route components to provide only the route matching the routing parameter.
-	// Fall back to the error route if no route can be found.
-	function reducer( _, newQuery ) {
-		const queryObj = {};
-		for ( const [ key, val ] of Array.from( newQuery.entries() ) ) {
-			queryObj[ key ] = val;
-		}
+export function RouterProvider({ children }) {
+	// Current search parameter string
+	const [search, setSearch] = useState(globalHistory.location.search);
 
-		return { query: queryObj, history: globalHistory };
-	}
-
-	// Get current query parameters.
-	const query = new URLSearchParams( globalHistory.location.search );
-
-	// Set the content to show in the router
-	const [ state, dispatch ] = useReducer(
-		reducer,
-		query,
-		reducer.bind( null, null )
+	// Current search parameter query
+	const query = useMemo(
+		() => Object.fromEntries(new URLSearchParams(search)),
+		[search]
 	);
 
-	// Update the router content if the routing parameter value has changed.
-	useEffect( () => {
-		return globalHistory.listen( ( { location } ) => {
-			dispatch( new URLSearchParams( location.search ) );
-		} );
-	}, [] );
+	// Update the router context if the query parameter has changed.
+	useEffect(() => {
+		return globalHistory.listen(({ location }) => {
+			setSearch(location.search);
+		});
+	}, []);
 
 	return (
 		<routeContext.Provider
-			value={ {
-				query: state.query,
-				history: state.history,
+			value={{
+				query,
+				history: globalHistory,
 				navigate,
 				createUrl,
-			} }
+			}}
 		>
-			{ children }
+			{children}
 		</routeContext.Provider>
 	);
 }
@@ -116,7 +104,7 @@ export function RouterProvider( { children } ) {
  * Get the context provided by the router.
  */
 export function useRouter() {
-	return useContext( routeContext );
+	return useContext(routeContext);
 }
 
 /**
@@ -128,30 +116,30 @@ export function useRouter() {
  * @param {string}                    props.errorPath The path to route to if the query parameter value can not be matched to a path.
  * @param {import('react').ReactNode} props.children  Child nodes.
  */
-export function Router( { param, rootPath, errorPath, children } ) {
+export function Router({ param, rootPath, errorPath, children }) {
 	// Get current query parameters.
 	const { query } = useRouter();
 
 	// Set routing query parameter to the root parameter if it has no value.
-	useEffect( () => {
-		if ( ! query[ param ] ) {
-			navigate( { [ param ]: rootPath }, null, true );
+	useEffect(() => {
+		if (!query[param]) {
+			navigate({ [param]: rootPath }, null, true);
 		}
-	}, [ param, query, rootPath ] );
+	}, [param, query, rootPath]);
 
 	// Get route component that corresponds to the route in the current query.
-	const route = useMemo( () => {
-		const routeParam = query[ param ] ?? rootPath;
-		const childArr = Children.toArray( children );
+	const route = useMemo(() => {
+		const routeParam = query[param] ?? rootPath;
+		const childArr = Children.toArray(children);
 		return (
 			childArr.find(
-				( child ) => child.props.path && child.props.path === routeParam
+				(child) => child.props.path && child.props.path === routeParam
 			) ??
 			childArr.find(
-				( child ) => child.props.path && child.props.path === errorPath
+				(child) => child.props.path && child.props.path === errorPath
 			)
 		);
-	}, [ children, errorPath, param, query, rootPath ] );
+	}, [children, errorPath, param, query, rootPath]);
 
 	return route.props.children;
 }
@@ -163,6 +151,6 @@ export function Router( { param, rootPath, errorPath, children } ) {
  * @param {string} props.path The route to filter by
  */
 // eslint-disable-next-line no-unused-vars
-export function Route( props ) {
+export function Route(props) {
 	return <></>;
 }

@@ -2,10 +2,11 @@
 import { Flex, FlexItem, Card, CardBody, Spinner } from '@wordpress/components';
 import { useEffect, useMemo, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { useRouter } from '../../contexts/router';
 import useRecord from '../../hooks/useRecord';
+import Form from '../forms/form';
 import MarkerLifecycle from './marker-lifecycle';
 import EditMarker from './edit-marker';
 import MarkerLocations from './marker-locations';
@@ -100,7 +101,7 @@ export function MarkerForm({ selected = {}, markers, onMapLoaded, listQuery }) {
 	}, [form.formState.isSubmitSuccessful]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
-		<FormProvider {...form}>
+		<Form form={form}>
 			<Flex direction="column" gap="1px" className="full-height">
 				<FlexItem>
 					<MarkerLocations
@@ -150,6 +151,6 @@ export function MarkerForm({ selected = {}, markers, onMapLoaded, listQuery }) {
 					</Card>
 				</FlexItem>
 			</Flex>
-		</FormProvider>
+		</Form>
 	);
 }
