@@ -1,6 +1,7 @@
 import { BaseControl, TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
+import { useRef } from '@wordpress/element';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import MarkerIconSelect from '../forms/marker-icon-select';
@@ -21,6 +22,10 @@ export default function EditMarker({ markerType, title, icons }) {
 	// Get all post types applicable to markers.
 	const postTypes = useSelect((select) => select('core').getPostTypes());
 	const { watch } = useFormContext();
+
+	const placeMarkerRef = useRef(
+		'place-marker-' + Math.floor(Math.random() * 100000000)
+	);
 
 	return (
 		<>
@@ -47,6 +52,27 @@ export default function EditMarker({ markerType, title, icons }) {
 									?.name}
 					</BaseControl>
 				)}
+				<BaseControl
+					className={cls.field}
+					label={
+						<div className={cls.plainLabel}>
+							{__('Marker placement', 'flare-imc')}
+						</div>
+					}
+					id={placeMarkerRef}
+				>
+					<div id={placeMarkerRef}>
+						{watch('imc_loc.lat')
+							? __(
+									"Drag the marker to change it's position.",
+									'flare-imc'
+							  )
+							: __(
+									'Click on the image to set the location of the marker',
+									'flare-imc'
+							  )}
+					</div>
+				</BaseControl>
 				{markerType !== 'imc-marker' && (
 					<BaseControl
 						label={
