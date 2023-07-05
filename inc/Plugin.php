@@ -109,8 +109,7 @@ class Plugin {
 		// Hook Layer functions.
 		$this->layer->register_image_meta();
 		$this->layer->register_image_source();
-		$this->layer->register_max_zoom();
-		$this->layer->register_min_zoom();
+		$this->layer->register_zoom();
 		$this->layer->register_map();
 
 		// Hook marker functions.

@@ -1,7 +1,6 @@
 import {
 	TextControl,
 	BaseControl,
-	RangeControl,
 	Card,
 	CardBody,
 	Spinner,
@@ -21,6 +20,7 @@ import SelectImage from './select-image';
 
 import mapCls from '../map.module.scss';
 import Label from '../forms/label';
+import RangeSlider from '../forms/range-slider';
 
 /** Map details form. */
 export default function EditLayer() {
@@ -30,7 +30,7 @@ export default function EditLayer() {
 		() => ({
 			name: '',
 			description: '',
-			meta: { initial_bounds: [] },
+			meta: { initial_bounds: [], zoom: { min: 1, max: 2 } },
 			map: +query.map,
 		}),
 		[query.map]
@@ -126,54 +126,52 @@ export default function EditLayer() {
 								)}
 							/>
 							<Controller
-								name="meta.min_zoom"
+								name="meta.zoom"
 								rules={{ required: true }}
 								render={({ field, fieldState }) => (
-									<RangeControl
+									<RangeSlider
+										baseClass={getControlClass(fieldState)}
 										label={
 											<Label
 												name={__(
-													'Minimum zoom',
+													'Zoom range',
 													'flare-imc'
 												)}
-												tooltip={__(
-													'The amount you can zoom in on the image. Check the preview to see the effect of your selection.',
-													'flare-imc'
-												)}
+												tooltip={
+													<>
+														{__(
+															'The zoom range defines the amount you can zoom in and out on the image.',
+															'flare-imc'
+														)}
+														<br />
+														{__(
+															'Check the preview to see the effect of your selection.',
+															'flare-imc'
+														)}
+														<br />
+														{__(
+															'The initial zoom level, will be set in each block where this map is used, along with the center.',
+															'flare-imc'
+														)}
+													</>
+												}
 											/>
 										}
-										min="0"
-										max="10"
-										{...field}
-										className={`${getControlClass(
-											fieldState
-										)} ${cls.center}`}
-									/>
-								)}
-							/>
-							<Controller
-								name="meta.max_zoom"
-								rules={{ required: true }}
-								render={({ field, fieldState }) => (
-									<RangeControl
-										label={
-											<Label
-												name={__(
-													'Maximum zoom',
-													'flare-imc'
-												)}
-												tooltip={__(
-													'The amount you can zoom out on the image. Check the preview to see the effect of your selection.',
-													'flare-imc'
-												)}
-											/>
+										min={0}
+										max={10}
+										allowCross={false}
+										value={[
+											field.value?.min,
+											field.value?.max,
+										]}
+										onChange={(val) =>
+											field.onChange({
+												min: val[0],
+												max: val[1],
+											})
 										}
-										min="0"
-										max="10"
-										{...field}
-										className={`${getControlClass(
-											fieldState
-										)} ${cls.center}`}
+										onBlur={field.onBlur}
+										ref={field.ref}
 									/>
 								)}
 							/>

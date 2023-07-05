@@ -33,11 +33,11 @@ export default class Layer {
 	 * @param {OlMap}               map   Open Layers map.
 	 * @param {Object<string, any>} layer WordPress layer
 	 */
-	constructor( map, layer ) {
+	constructor(map, layer) {
 		this.map = map;
 		this.wpLayer = layer;
 		this.postIds = map.blockAttr?.postIds
-			? map.blockAttr.postIds.split( ',' )
+			? map.blockAttr.postIds.split(',')
 			: [];
 
 		// The layer is visible if it is the initial layer in the block attributes.
@@ -52,54 +52,54 @@ export default class Layer {
 		];
 
 		// Map coordinates one-to-one with image pixels.
-		this.projection = new Projection( {
+		this.projection = new Projection({
 			code: 'layer-image',
 			units: 'pixels',
 			extent: this.extent,
-		} );
+		});
 
 		// Take full sized image from WordPress.
-		this.source = new Static( {
+		this.source = new Static({
 			url: layer.image_source?.url,
 			projection: this.projection,
 			imageExtent: this.extent,
-		} );
+		});
 
 		// Bring it all together.
-		this.baseLayer = new ImageLayer( {
+		this.baseLayer = new ImageLayer({
 			source: this.source,
 			title: layer.slug,
 			baseLayer: true,
 			visible: this.visible,
 			blockLayer: this,
 			zIndex: 0,
-		} );
+		});
 	}
 
 	/** Add base layer to the instance's map. */
 	addToMap() {
-		if ( ! this.source.getUrl() ) {
+		if (!this.source.getUrl()) {
 			this.map.setError(
-				__( 'Unable to load layer image.', 'flare-imc' ) +
+				__('Unable to load layer image.', 'flare-imc') +
 					' ' +
-					__( 'Please refresh this page to try again.', 'flare-imc' )
+					__('Please refresh this page to try again.', 'flare-imc')
 			);
 		}
-		this.map.olMap.addLayer( this.baseLayer );
+		this.map.olMap.addLayer(this.baseLayer);
 	}
 
 	/** Get marker icons from WordPress for the instance's map. */
 	fetchMarkerIcons() {
 		try {
-			return getFullCollection( 'imc_icons', {
+			return getFullCollection('imc_icons', {
 				map: this.map.blockAttr.mapId,
-			} );
-		} catch ( error ) {
-			console.error( error ); // eslint-disable-line no-console
+			});
+		} catch (error) {
+			console.error(error); // eslint-disable-line no-console
 			this.map.setError(
-				__( 'Unable to load marker icons.', 'flare-imc' ) +
+				__('Unable to load marker icons.', 'flare-imc') +
 					' ' +
-					__( 'Please refresh this page to try again.', 'flare-imc' )
+					__('Please refresh this page to try again.', 'flare-imc')
 			);
 		}
 	}
@@ -108,68 +108,66 @@ export default class Layer {
 	async fetchMarkers() {
 		try {
 			// Get linked markers based on post IDs in the current query.
-			const linkedMarkers = getFullCollection( 'imc_markers', {
+			const linkedMarkers = getFullCollection('imc_markers', {
 				layers: this.wpLayer.id,
 				map: this.map.blockAttr.mapId,
 				_fields: 'id,type,imc_icons,imc_loc',
 				post_types: 'linked',
 				include: this.postIds,
-			} );
+			});
 
 			// Get standalone markers.
 			const saMarkers = this.map.blockAttr.showStandalone
-				? getFullCollection( 'imc_markers', {
+				? getFullCollection('imc_markers', {
 						layers: this.wpLayer.id,
 						map: this.map.blockAttr.mapId,
 						_fields: 'id,type,imc_icons,imc_loc',
 						post_types: 'standalone',
-				  } )
+				  })
 				: [];
 
 			// Merge post and standalone markers once both have been fetched.
-			const markers = await Promise.all( [ linkedMarkers, saMarkers ] );
+			const markers = await Promise.all([linkedMarkers, saMarkers]);
 
 			return markers.flat();
-		} catch ( error ) {
-			console.error( error ); // eslint-disable-line no-console
+		} catch (error) {
+			console.error(error); // eslint-disable-line no-console
 			this.map.setError(
-				__( 'Unable to load markers.', 'flare-imc' ) +
+				__('Unable to load markers.', 'flare-imc') +
 					' ' +
-					__( 'Please refresh this page to try again.', 'flare-imc' )
+					__('Please refresh this page to try again.', 'flare-imc')
 			);
 		}
 	}
 
 	/** Get point features for the instance's layer, creating them if needed. */
 	async getFeatures() {
-		if ( this.features ) return this.features;
+		if (this.features) return this.features;
 
 		// Fetch markers and icons from WordPress.
-		const [ markers, icons ] = await Promise.all( [
+		const [markers, icons] = await Promise.all([
 			this.fetchMarkers(),
 			this.fetchMarkerIcons(),
-		] );
+		]);
 
 		// Create list that includes a feature for each marker with a valid icon.
-		const features = markers.reduce( ( fts, marker ) => {
-			const icon = icons.find(
-				( mi ) => mi.id === marker.imc_icons[ 0 ]
-			);
-			if ( icon ) {
+		const features = markers.reduce((fts, marker) => {
+			const icon = icons.find((mi) => mi.id === marker.imc_icons[0]);
+			if (icon) {
 				fts.push(
-					new Feature( {
-						geometry: new Point( [
+					new Feature({
+						geometry: new Point([
 							marker.imc_loc?.lng,
 							marker.imc_loc?.lat,
-						] ),
+						]),
 						icon: { ...icon.meta },
 						markerId: marker.id,
 						postType: marker.type,
-					} )
+					})
 				);
 			}
 			return fts;
-		}, [] );
+		}, []);
 
 		this.features = features;
 
@@ -178,11 +176,11 @@ export default class Layer {
 
 	/** Set map interactions based on the visible view. */
 	setMapView() {
-		if ( this.visible )
+		if (this.visible)
 			this.map.olMap.setView(
-				new View( {
-					minZoom: this.wpLayer.meta?.min_zoom,
-					maxZoom: this.wpLayer.meta?.max_zoom,
+				new View({
+					minZoom: this.wpLayer.meta?.zoom?.min,
+					maxZoom: this.wpLayer.meta?.zoom?.max,
 					projection: this.projection,
 					extent: this.extent,
 					constrainOnlyCenter: true,
@@ -191,7 +189,7 @@ export default class Layer {
 						this.map.blockAttr?.initialCenterY,
 					],
 					zoom: this.map.blockAttr?.initialZoom,
-				} )
+				})
 			);
 	}
 }
