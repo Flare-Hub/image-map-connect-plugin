@@ -6,19 +6,42 @@ import 'rc-slider/assets/index.css';
 import cls from './range-slider.module.scss';
 
 /**
- * @typedef RangeSliderProps
- * @property {string}                    baseClass Class name on the base slider div.
- * @property {import('react').ReactNode} label     The input label
+ * @typedef Range
+ * @property {number} low  Smallest value of the range.
+ * @property {number} high Largest value of the range.
  */
+
+/**
+ * @typedef RangeSliderProps
+ * @property {string}                        baseClass Class name on the base slider div.
+ * @property {import('react').ReactNode}     label     The input label
+ * @property {Range}                         value     The current range.
+ * @property {(val: Partial<Range>) => void} onChange  Change handler taking in the changed range value.
+ */
+
+/** @typedef {import('rc-slider').SliderProps<number[]>} SliderProps */
 
 /**
  * A slider component with start and end values.
  *
- * @param {import('rc-slider').SliderProps<number[]> & RangeSliderProps} props
- * @param {import('react').Ref}                                          ref
+ * @param {SliderProps & RangeSliderProps} props
+ * @param {import('react').Ref}            ref
  */
-function RangeSlider({ baseClass, label, ...sliderProps }, ref) {
+function RangeSlider(
+	{ baseClass, label, value, onChange, ...sliderProps },
+	ref
+) {
 	const id = useRef('slider-' + Math.floor(Math.random() * 100000000));
+
+	/**
+	 * Determine if the high or low value was changed and pass that on to the parent's change handler.
+	 *
+	 * @type {SliderProps['onChange']}
+	 */
+	function handleChange(newVal) {
+		if (value.high !== newVal[1]) onChange({ high: newVal[1] });
+		if (value.low !== newVal[0]) onChange({ low: newVal[0] });
+	}
 
 	/** @type {import('react').CSSProperties} */
 	const railStyle = {
@@ -48,10 +71,8 @@ function RangeSlider({ baseClass, label, ...sliderProps }, ref) {
 		<BaseControl className={baseClass} label={label} id={id}>
 			<TextControl
 				className={cls.number}
-				value={sliderProps.value[0]}
-				onChange={(val) =>
-					sliderProps.onChange([val, sliderProps.value[1]])
-				}
+				value={value.low}
+				onChange={(val) => onChange({ low: val })}
 				type="number"
 			/>
 			<Slider
@@ -60,15 +81,15 @@ function RangeSlider({ baseClass, label, ...sliderProps }, ref) {
 				railStyle={railStyle}
 				trackStyle={trackStyle}
 				handleStyle={handleStyle}
+				value={[value.low, value.high]}
+				onChange={handleChange}
 				{...sliderProps}
 				ref={ref}
 			/>
 			<TextControl
 				className={cls.number}
-				value={sliderProps.value[1]}
-				onChange={(val) =>
-					sliderProps.onChange([sliderProps.value[0], val])
-				}
+				value={value.high}
+				onChange={(val) => onChange({ high: val })}
 				type="number"
 			/>
 		</BaseControl>

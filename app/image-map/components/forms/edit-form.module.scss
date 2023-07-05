@@ -50,10 +50,11 @@
 		>label,
 		>.label,
 		>:global(.components-base-control__label) {
+			text-align: end;
 
 			.plainLabel {
 				text-align: right;
-				margin-right: 28px;
+				margin-right: 30px;
 			}
 
 			.infoLabel {
@@ -61,7 +62,7 @@
 				align-items: center;
 				justify-content: flex-end;
 				gap: 4px;
-				margin-right: 8px;
+				margin-right: 6px;
 
 				:global(.components-tooltip) {
 					text-transform: none;

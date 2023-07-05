@@ -10,11 +10,17 @@ import { useMap, MapProvider } from './context';
  * Add Image layer to map.
  *
  * @param {Object}                    props
- * @param {Object<string, any>}       props.layer    The Wordpress layer.
- * @param {boolean}                   props.visible  Whether to show the layer.
- * @param {import('react').ReactNode} props.children Child nodes.
+ * @param {Object<string, any>}       props.layer     The Wordpress layer.
+ * @param {boolean}                   props.visible   Whether to show the layer.
+ * @param {number}                    props.watchZoom Zoom level to zoom to when changed.
+ * @param {import('react').ReactNode} props.children  Child nodes.
  */
-export default function ImageLayer({ layer = {}, visible = true, children }) {
+export default function ImageLayer({
+	layer = {},
+	visible = true,
+	watchZoom,
+	children,
+}) {
 	// Get OpenLayer objects
 	const context = useMap();
 
@@ -102,6 +108,13 @@ export default function ImageLayer({ layer = {}, visible = true, children }) {
 			view?.setMaxZoom(layer.meta.zoom?.max);
 		}
 	}, [layer.meta.zoom, visible, context.map]);
+
+	// Allow manual zooming but overwrite it when it is changed in the props.
+	useEffect(() => {
+		if (typeof watchZoom === 'number') {
+			context.map?.getView().setZoom(watchZoom);
+		}
+	}, [context.map, watchZoom]);
 
 	return (
 		<MapProvider value={{ ...context, projection, imgLayer }}>

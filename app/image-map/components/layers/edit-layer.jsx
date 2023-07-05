@@ -6,7 +6,7 @@ import {
 	Spinner,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useEffect, useMemo, useRef } from '@wordpress/element';
+import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { Controller, useForm } from 'react-hook-form';
 
 import { useRouter } from '../../contexts/router';
@@ -66,6 +66,9 @@ export default function EditLayer() {
 			form.reset(layer);
 		}
 	}, [status, form.formState.isSubmitSuccessful, form, layer]);
+
+	// Latest selected zoom level
+	const [zoomLevel, setZoomLevel] = useState();
 
 	// Define ids to map the base controls to.
 	const imgId = useRef('img-' + Math.floor(Math.random() * 100000000));
@@ -145,11 +148,6 @@ export default function EditLayer() {
 														)}
 														<br />
 														{__(
-															'Check the preview to see the effect of your selection.',
-															'flare-imc'
-														)}
-														<br />
-														{__(
 															'The initial zoom level, will be set in each block where this map is used, along with the center.',
 															'flare-imc'
 														)}
@@ -160,16 +158,18 @@ export default function EditLayer() {
 										min={0}
 										max={10}
 										allowCross={false}
-										value={[
-											field.value?.min,
-											field.value?.max,
-										]}
-										onChange={(val) =>
+										value={{
+											low: field.value.min,
+											high: field.value.max,
+										}}
+										onChange={(val) => {
 											field.onChange({
-												min: val[0],
-												max: val[1],
-											})
-										}
+												min: val.low ?? field.value.min,
+												max:
+													val.high ?? field.value.max,
+											});
+											setZoomLevel(Object.values(val)[0]);
+										}}
 										onBlur={field.onBlur}
 										ref={field.ref}
 									/>
@@ -177,9 +177,22 @@ export default function EditLayer() {
 							/>
 							<BaseControl
 								label={
-									<div className={cls.plainLabel}>
-										{__('Preview', 'flare-imc')}
-									</div>
+									<Label
+										name={__('Preview', 'flare-imc')}
+										tooltip={
+											<>
+												{__(
+													'You can pan and zoom the image preview to validate the current settings.',
+													'flare-imc'
+												)}
+												<br />
+												{__(
+													'When you change the minimum or maximum zoom, this preview will automatically update',
+													'flare-imc'
+												)}
+											</>
+										}
+									/>
 								}
 								className={`${cls.field} ${cls.map}`}
 								id={mapDivId.current}
@@ -188,7 +201,10 @@ export default function EditLayer() {
 									className={`${cls.border} ${cls.input} ${mapCls.canvas}`}
 									id={mapDivId.current}
 								>
-									<ImageLayer layer={form.watch()} />
+									<ImageLayer
+										layer={form.watch()}
+										watchZoom={zoomLevel}
+									/>
 								</OlMap>
 							</BaseControl>
 						</div>
