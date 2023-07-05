@@ -19,14 +19,16 @@ export default function Form({ form, children }) {
 
 	useEffect(() => {
 		if (form.formState.isDirty) {
-			const unblock = history.block(({ retry }) => {
-				// eslint-disable-next-line no-alert
-				const confirm = window.confirm(
-					__(
-						'Your record is not saved. Are you sure you want to cancel your changes?',
-						'flare-imc'
-					)
-				);
+			const unblock = history.block(({ retry, location }) => {
+				const confirm =
+					location.state?.force ||
+					// eslint-disable-next-line no-alert
+					window.confirm(
+						__(
+							'Your record is not saved. Are you sure you want to cancel your changes?',
+							'flare-imc'
+						)
+					);
 				if (confirm) {
 					unblock();
 					retry();
