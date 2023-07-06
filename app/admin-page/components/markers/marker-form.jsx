@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { Flex, FlexItem, Card, CardBody, Spinner } from '@wordpress/components';
-import { useEffect, useMemo, useState } from '@wordpress/element';
+import { useEffect, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useForm } from 'react-hook-form';
 
@@ -13,6 +13,8 @@ import MarkerLocations from './marker-locations';
 
 import cls from '../forms/edit-form.module.scss';
 
+const emptyObj = {};
+
 /**
  * Context provider for the selected marker state.
  *
@@ -22,22 +24,35 @@ import cls from '../forms/edit-form.module.scss';
  * @param {Object<string, unknown>}                        props.listQuery   Query for refreshing the markers list.
  * @param {(map: import('ol').Map) => void}                props.onMapLoaded Callback triggered when the map is rendered.
  */
-export function MarkerForm({ selected = {}, markers, onMapLoaded, listQuery }) {
+export function MarkerForm({
+	selected = emptyObj,
+	markers,
+	onMapLoaded,
+	listQuery,
+}) {
 	const { query } = useRouter();
-	const [showForm, setShowForm] = useState(false);
 
-	const newMarker = useMemo(
-		() => ({
+	// Get icons from WordPress.
+	const {
+		record: { icon_details },
+	} = useRecord(query.map, 'postType', 'imc-map', {
+		_fields: 'icon_details',
+	});
+
+	const newMarker = useMemo(() => {
+		const listedIcons = selected.imc_icons?.length && selected.imc_icons;
+		const icons =
+			listedIcons || (icon_details ? [icon_details[0]?.id] : []);
+		return {
 			status: 'publish',
 			title: { raw: '' },
 			excerpt: { raw: '' },
 			imc_layers: [+query.layer],
-			imc_icons: selected.imc_icons ?? [],
+			imc_icons: icons,
 			imc_loc: selected.imc_loc ?? { lng: 0, lat: 0 },
 			type: selected.type ?? 'imc-marker',
-		}),
-		[selected, query.layer]
-	);
+		};
+	}, [selected, query.layer, icon_details]);
 
 	// Fetch selected marker from Wordpress.
 	const {
@@ -51,13 +66,6 @@ export function MarkerForm({ selected = {}, markers, onMapLoaded, listQuery }) {
 	const form = useForm({
 		mode: 'onTouched',
 		defaultValues: marker,
-	});
-
-	// Get icons from WordPress.
-	const {
-		record: { icon_details },
-	} = useRecord(query.map, 'postType', 'imc-map', {
-		_fields: 'icon_details',
 	});
 
 	// Add current layer to post if it's not already connected.
@@ -79,21 +87,13 @@ export function MarkerForm({ selected = {}, markers, onMapLoaded, listQuery }) {
 
 	// Reset form if the marker is updated
 	useEffect(() => {
-		if (status === 'new' || status === 'loaded') {
-			setShowForm(true);
-
-			const defaults = { ...marker };
-			if (icon_details?.length && !marker.imc_icons?.length) {
-				defaults.imc_icons = [icon_details[0].id];
-			}
-
-			form.reset(defaults);
+		const defaults = { ...marker };
+		if (icon_details?.length && !marker.imc_icons?.length) {
+			defaults.imc_icons = [icon_details[0].id];
 		}
-	}, [form, icon_details, marker, status]);
 
-	useEffect(() => {
-		if (status === 'loading' || status === 'none') setShowForm(false);
-	}, [status]);
+		form.reset(defaults);
+	}, [form, icon_details, marker]);
 
 	// Reset form after successful submission.
 	useEffect(() => {
@@ -108,6 +108,7 @@ export function MarkerForm({ selected = {}, markers, onMapLoaded, listQuery }) {
 						onMapLoaded={onMapLoaded}
 						markers={markers}
 						selected={selected}
+						icons={icon_details}
 					/>
 				</FlexItem>
 				<FlexItem isBlock>
@@ -130,7 +131,7 @@ export function MarkerForm({ selected = {}, markers, onMapLoaded, listQuery }) {
 									}}
 								/>
 							)}
-							{showForm && (
+							{(status === 'new' || status === 'loaded') && (
 								<>
 									<EditMarker
 										markerType={marker.type}

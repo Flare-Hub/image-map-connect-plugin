@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from '@wordpress/element';
+import { useState, useEffect, useCallback, useMemo } from '@wordpress/element';
 import { DragPan } from 'ol/interaction';
 
 import Marker from 'common/components/ol/marker';
@@ -6,20 +6,29 @@ import { useMap } from 'common/components/ol/context';
 import { getStyles } from '../../utils/marker-icons';
 
 import cls from './selected-marker-pin.module.scss';
+import { useWatch } from 'react-hook-form';
 
 /** @typedef {import ('.').Position} Position */
 
 /**
  * Set marker coordinates for a new marker
  *
- * @param {Object}                                     props
- * @param {import('../../utils/marker-icons').IconImg} props.icon        Icon details.
- * @param {Position}                                   props.newPosition Position where a new marker is added.
- * @param {(pos: Position) => void}                    props.onMove      Called when a pin move is complete.
+ * @param {Object}                     props
+ * @param {Array<object<string, any>>} props.icons       The icons available on the current map.
+ * @param {Position}                   props.newPosition Position where a new marker is added.
+ * @param {(pos: Position) => void}    props.onMove      Called when a pin move is complete.
  */
-export default function SelectedMarkerPin({ icon, newPosition, onMove }) {
+export default function SelectedMarkerPin({ icons, newPosition, onMove }) {
 	// Set up state
 	const { map } = useMap();
+
+	const iconId = useWatch({ name: 'imc_icons.0' });
+
+	/** Icon details of the selected marker. */
+	const icon = useMemo(() => {
+		if (!icons) return null;
+		return icons?.find((i) => i.id === iconId) ?? icons[0];
+	}, [icons, iconId]);
 
 	/** @type {[Position, (pos: Position) => void]} Coordinates of the marker */
 	const [position, setPosition] = useState({});

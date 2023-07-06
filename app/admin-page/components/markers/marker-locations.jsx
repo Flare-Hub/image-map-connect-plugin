@@ -11,7 +11,6 @@ import NewMarkerPin from './new-marker-pin';
 
 import cls from './markers.module.scss';
 import mapCls from '../map.module.scss';
-import { useMemo } from '@wordpress/element';
 
 /**
  * Map displaying icons for all markers in the list.
@@ -20,8 +19,14 @@ import { useMemo } from '@wordpress/element';
  * @param {(map: import('ol').Map) => void}                props.onMapLoaded Callback triggered when the map is rendered.
  * @param {import('../../hooks/useCollection').Collection} props.markers     Marker list.
  * @param {import('.').WpMarker}                           props.selected    List fields from the selected marker.
+ * @param {Array<object<string, any>>}                     props.icons       The icons available on the current map.
  */
-export default function MarkerLocations({ onMapLoaded, markers, selected }) {
+export default function MarkerLocations({
+	onMapLoaded,
+	markers,
+	selected,
+	icons,
+}) {
 	const { query } = useRouter();
 
 	// Fetch selected layer from Wordpress.
@@ -32,21 +37,6 @@ export default function MarkerLocations({ onMapLoaded, markers, selected }) {
 		{ _fields: 'id,name,meta,image_source' },
 		{ meta: {} }
 	);
-
-	// Fetch marker icons from Wordpress.
-	const { record: wpMap } = useRecord(query.map, 'postType', 'imc-map', {
-		_fields: 'icon_details',
-	});
-
-	/** @type {Array<import('../../utils/marker-icons').IconImg>} */
-	const icons = wpMap?.icon_details;
-
-	/** Icon details of the selected marker. */
-	const selectedIcon = useMemo(() => {
-		if (!icons) return null;
-		if (!selected.imc_icons) return icons[0];
-		return icons?.find((i) => i.id === selected.imc_icons[0]) ?? icons[0];
-	}, [icons, selected.imc_icons]);
 
 	return (
 		<Controller
@@ -79,7 +69,7 @@ export default function MarkerLocations({ onMapLoaded, markers, selected }) {
 										) : (
 											<SelectedMarkerPin
 												key={mk.id}
-												icon={selectedIcon}
+												icons={icons}
 												newPosition={mk.imc_loc}
 												onMove={field.onChange}
 											/>
@@ -91,7 +81,7 @@ export default function MarkerLocations({ onMapLoaded, markers, selected }) {
 									field.value.lat &&
 									field.value.lng ? (
 										<SelectedMarkerPin
-											icon={selectedIcon}
+											icons={icons}
 											newPosition={field.value}
 											onMove={field.onChange}
 										/>
