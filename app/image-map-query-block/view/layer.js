@@ -109,7 +109,7 @@ export default class Layer {
 		try {
 			// Get linked markers based on post IDs in the current query.
 			const linkedMarkers = getFullCollection('imc_markers', {
-				layers: this.wpLayer.id,
+				imc_layers: this.wpLayer.id,
 				map: this.map.blockAttr.mapId,
 				_fields: 'id,type,imc_icons,imc_loc',
 				post_types: 'linked',
@@ -119,7 +119,7 @@ export default class Layer {
 			// Get standalone markers.
 			const saMarkers = this.map.blockAttr.showStandalone
 				? getFullCollection('imc_markers', {
-						layers: this.wpLayer.id,
+						imc_layers: this.wpLayer.id,
 						map: this.map.blockAttr.mapId,
 						_fields: 'id,type,imc_icons,imc_loc',
 						post_types: 'standalone',
