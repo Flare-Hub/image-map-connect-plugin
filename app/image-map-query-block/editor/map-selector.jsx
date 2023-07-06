@@ -17,19 +17,19 @@ import useNotice from 'common/utils/use-notice';
  *
  * @param {ReturnType<import('@wordpress/core-data').useEntityRecords>} maps
  */
-function getMapOptions( { status, records: maps } ) {
-	switch ( status ) {
+function getMapOptions({ status, records: maps }) {
+	switch (status) {
 		case 'ERROR':
 			return [];
 
 		case 'SUCCESS':
-			return maps.map( ( map ) => ( {
+			return maps.map((map) => ({
 				label: map.title.rendered,
 				value: map.id,
-			} ) );
+			}));
 
 		default:
-			return [ { label: __( 'Loading…', 'flare-imc' ), value: '' } ];
+			return [{ label: __('Loading…', 'flare-imc'), value: '' }];
 	}
 }
 
@@ -42,19 +42,14 @@ function getMapOptions( { status, records: maps } ) {
  * @param {Object<string, any>|null}     props.prevAttr    Map Id of the previously selected map when replacing.
  * @param {(mapId: string|null) => void} props.setPrevAttr Setter for prevMapId.
  */
-export default function MapSelector( {
-	mapId,
-	setAttr,
-	prevAttr,
-	setPrevAttr,
-} ) {
+export default function MapSelector({ mapId, setAttr, prevAttr, setPrevAttr }) {
 	// Use counter to ensure imagemaps are fetched from backend whenever counter is updated.
-	const [ fetchCount, setFetchCount ] = useState( 1 );
+	const [fetchCount, setFetchCount] = useState(1);
 
 	// Get maps from backend
-	const maps = useEntityRecords( 'postType', 'imc-map', {
+	const maps = useEntityRecords('postType', 'imc-map', {
 		enabled: fetchCount,
-	} );
+	});
 
 	// Display error if maps cannot be fetched
 	useNotice(
@@ -63,82 +58,80 @@ export default function MapSelector( {
 			'An error occurred retrieving the maps. Please refresh the page to try again.',
 			'flare-imc'
 		),
-		[ maps.status ]
+		[maps.status]
 	);
 
-	const [ baseUrl ] = useEntityProp( 'root', 'site', 'url' );
+	const [baseUrl] = useEntityProp('root', 'site', 'url');
 
 	/**
 	 * Update mapId and clear previous mapId (disables cancel)
 	 *
 	 * @param {number} newMapId
 	 */
-	function handleSelectMap( newMapId ) {
-		setAttr( { mapId: newMapId } );
-		setPrevAttr( null );
+	function handleSelectMap(newMapId) {
+		setAttr({ mapId: newMapId });
+		setPrevAttr(null);
 	}
 
 	/** Open Add Map page in new tab. */
 	function handleAddMap() {
-		if ( ! baseUrl ) return;
-		const url = new URL( '/wp-admin/admin.php', baseUrl );
-		url.searchParams.set( 'page', 'image-map' );
-		url.searchParams.set( 'tab', 'maps' );
-		url.searchParams.set( 'map', 'new' );
-		window.open( url, '_blank' ).focus();
+		if (!baseUrl) return;
+		const url = new URL('/wp-admin/admin.php', baseUrl);
+		url.searchParams.set('page', 'image-map-connect');
+		url.searchParams.set('tab', 'maps');
+		url.searchParams.set('map', 'new');
+		window.open(url, '_blank').focus();
 	}
 
 	/** Set mapId back to what it was before replacing. */
 	function handleCancelReplace() {
-		setAttr( prevAttr );
-		setPrevAttr( null );
+		setAttr(prevAttr);
+		setPrevAttr(null);
 	}
 
-	const addBtnId = useRef(
-		'add-btn-' + Math.floor( Math.random() * 100000000 )
-	);
+	const addBtnId = useRef('add-btn-' + Math.floor(Math.random() * 100000000));
 
 	return (
 		<Placeholder
 			icon="location-alt"
-			label={ __( 'Image map', 'flare-imc' ) }
-			instructions={ __(
+			label={__('Image map', 'flare-imc')}
+			instructions={__(
 				'Select a map or add a new map to display in this block.'
-			) }
+			)}
 		>
-			<div className={ cls.controls }>
-				<div className={ cls.select }>
+			<div className={cls.controls}>
+				<div className={cls.select}>
 					<ComboboxControl
-						label={ __( 'Select map', 'flare-imc' ) }
-						value={ mapId }
-						onChange={ handleSelectMap }
-						options={ getMapOptions( maps ) }
+						label={__('Select map', 'flare-imc')}
+						value={mapId}
+						onChange={handleSelectMap}
+						options={getMapOptions(maps)}
 					/>
 					<Button
-						icon={ update }
-						onClick={ () => setFetchCount( fetchCount + 1 ) }
-						label={ __( 'Refresh map list', 'flare-imc' ) }
+						icon={update}
+						onClick={() => setFetchCount(fetchCount + 1)}
+						label={__('Refresh map list', 'flare-imc')}
 					/>
 				</div>
 				<BaseControl
-					label={ __( 'Or add new map', 'flare-imc' ) }
-					id={ addBtnId.current }
+					label={__('Or add new map', 'flare-imc')}
+					id={addBtnId.current}
 				>
-					<div className={ cls.buttons }>
+					<div className={cls.buttons}>
 						<Button
 							variant="primary"
-							onClick={ handleAddMap }
-							text={ __( 'Add map', 'flare-imc' ) }
-							id={ addBtnId.current }
+							onClick={handleAddMap}
+							text={__('Add map', 'flare-imc')}
+							id={addBtnId.current}
 						/>
-						{ prevAttr && (
+						{prevAttr && (
 							<Button
 								variant="primary"
 								isDestructive
-								text={ __( 'Cancel', 'flare-imc' ) }
-								onClick={ handleCancelReplace }
+								text={__('Cancel', 'flare-imc')}
+								onClick={handleCancelReplace}
 							/>
-						) }
+						)}
 					</div>
 				</BaseControl>
 			</div>

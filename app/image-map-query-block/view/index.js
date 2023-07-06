@@ -6,14 +6,14 @@ import Map from './map';
 /* global addEventListener */
 
 // Load all maps on current page.
-addEventListener( 'DOMContentLoaded', () => {
+addEventListener('DOMContentLoaded', () => {
 	const mapQueries = document.querySelectorAll(
-		'.wp-block-flare-hub-image-map'
+		'.wp-block-flare-hub-image-map-query'
 	);
 
-	mapQueries.forEach( async ( blockEl ) => {
-		const map = new Map( blockEl );
+	mapQueries.forEach(async (blockEl) => {
+		const map = new Map(blockEl);
 		map.addMarkerSupport();
-		map.initBaseLayers( +blockEl.dataset.mapId );
-	} );
-} );
+		map.initBaseLayers(+blockEl.dataset.mapId);
+	});
+});

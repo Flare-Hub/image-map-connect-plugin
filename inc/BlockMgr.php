@@ -26,7 +26,7 @@ class BlockMgr {
 	 **/
 	public function register_blocks() {
 		register_block_type(
-			$this->plugin_dir . 'map-query-block',
+			$this->plugin_dir . 'image-map-query-block',
 			array( 'render_callback' => array( $this, 'render_map_query' ) )
 		);
 	}

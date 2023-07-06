@@ -6,9 +6,9 @@ import Save from './save';
 
 import './editor.scss';
 
-addFilter( 'marker_popup', 'flare-imc', getPopupContent );
+addFilter('marker_popup', 'flare-imc', getPopupContent);
 
-registerBlockType( 'flare-hub/image-map', {
+registerBlockType('flare-hub/image-map-query', {
 	edit: Edit,
 	save: Save,
-} );
+});
