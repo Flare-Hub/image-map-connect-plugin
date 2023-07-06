@@ -55,6 +55,7 @@ class BlockMgr {
 		}
 
 			// Set data attributes for the map div.
+			$block_attr['style']                 = sprintf( 'height: %s;', $attributes['style']['height'], );
 			$block_attr['data-map-id']           = $attributes['mapId'];
 			$block_attr['data-show-standalone']  = $attributes['showStandAlone'];
 			$block_attr['data-initial-layer']    = $attributes['initialView']['layer'];

@@ -26,8 +26,7 @@
       "default": true
     },
     "initialView": {
-      "type": "object",
-      "default": {}
+      "type": "object"
     },
     "style": {
       "type": "object",
@@ -35,9 +34,7 @@
         "color": {
           "background": "#d1d1d1"
         },
-        "dimensions": {
-          "minHeight": "400px"
-        }
+        "height": "400px"
       }
     }
   },
@@ -57,9 +54,6 @@
     "color": {
       "text": false,
       "background": true
-    },
-    "dimensions": {
-      "minHeight": true
     },
     "html": false,
     "spacing": {

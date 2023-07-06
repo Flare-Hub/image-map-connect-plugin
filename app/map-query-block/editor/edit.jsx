@@ -3,7 +3,11 @@ import {
 	InspectorControls,
 	useBlockProps,
 } from '@wordpress/block-editor';
-import { ToolbarButton } from '@wordpress/components';
+import {
+	ToolbarButton,
+	__experimentalToolsPanelItem as ToolsPanelItem, // eslint-disable-line @wordpress/no-unsafe-wp-apis
+	__experimentalUnitControl as UnitControl, // eslint-disable-line @wordpress/no-unsafe-wp-apis
+} from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
@@ -18,22 +22,23 @@ import Map from './map';
  * @param {Object<string, any>}          props.attributes
  * @param {(attrs: Partial<{}>) => void} props.setAttributes
  * @param {Object<string, any>}          props.context
+ * @param {string}                       props.clientId
  */
-export default function Edit( { attributes, setAttributes, context } ) {
-	const { mapId, queryType, showStandAlone, initialView } = attributes;
+export default function Edit({ attributes, setAttributes, context, clientId }) {
+	const { mapId, queryType, showStandAlone, initialView, style } = attributes;
 	const {
 		query,
 		templateSlug,
 		previewPostType,
-		queryContext: [ { page } ] = [ {} ],
+		queryContext: [{ page }] = [{}],
 	} = context;
 
-	const [ prevAttr, setPrevAttr ] = useState( null );
+	const [prevAttr, setPrevAttr] = useState(null);
 
 	/** Store backup of mapId (to enable cancel) and clear value. */
 	function handleReplace() {
-		setAttributes( { mapId: null, initialView: {} } );
-		setPrevAttr( { mapId, initialView } );
+		setAttributes({ mapId: null, initialView: {} });
+		setPrevAttr({ mapId, initialView });
 	}
 
 	/**
@@ -42,54 +47,71 @@ export default function Edit( { attributes, setAttributes, context } ) {
 	 * @param {string} attr
 	 * @param {any}    val
 	 */
-	function setAttr( attr, val ) {
-		setAttributes( { [ attr ]: val } );
+	function setAttr(attr, val) {
+		setAttributes({ [attr]: val });
 	}
 
 	return (
-		<div { ...useBlockProps() }>
-			{ mapId && (
+		<div {...useBlockProps({ style: { height: style.height } })}>
+			{mapId && (
 				<BlockControls group="inline">
 					<ToolbarButton
-						label={ __(
+						label={__(
 							'Select another image map to display',
 							'flare-imc'
-						) }
-						text={ __( 'Replace map', 'flare-imc' ) }
-						onClick={ handleReplace }
+						)}
+						text={__('Replace map', 'flare-imc')}
+						onClick={handleReplace}
 						showTooltip
 					/>
 				</BlockControls>
-			) }
+			)}
 			<InspectorControls>
 				<MarkerQueryPanel
-					hasQuery={ !! query }
-					queryType={ queryType }
-					setQueryType={ setAttr.bind( null, 'queryType' ) }
-					showStandAlone={ showStandAlone }
-					setShowStandAlone={ setAttr.bind( null, 'showStandAlone' ) }
+					hasQuery={!!query}
+					queryType={queryType}
+					setQueryType={setAttr.bind(null, 'queryType')}
+					showStandAlone={showStandAlone}
+					setShowStandAlone={setAttr.bind(null, 'showStandAlone')}
 				/>
 			</InspectorControls>
-			{ mapId ? (
+			<InspectorControls group="dimensions">
+				<ToolsPanelItem
+					panelId={clientId}
+					label={__('Map Height', 'flare-imc')}
+					hasValue={() => style.height !== undefined}
+				>
+					<UnitControl
+						label={__('Map Height', 'flare-imc')}
+						value={style.height}
+						onChange={(val) =>
+							setAttributes({
+								style: { ...style, height: val },
+							})
+						}
+					/>
+				</ToolsPanelItem>
+			</InspectorControls>
+			{mapId ? (
 				<Map
-					mapId={ mapId }
-					queryType={ queryType }
-					queryParams={ query }
-					templateSlug={ templateSlug }
-					previewPostType={ previewPostType }
-					showStandAlone={ showStandAlone }
-					page={ page }
-					initialView={ initialView }
-					setView={ setAttr.bind( null, 'initialView' ) }
+					mapId={mapId}
+					queryType={queryType}
+					queryParams={query}
+					templateSlug={templateSlug}
+					previewPostType={previewPostType}
+					showStandAlone={showStandAlone}
+					page={page}
+					initialView={initialView}
+					setView={setAttr.bind(null, 'initialView')}
 				/>
 			) : (
 				<MapSelector
-					mapId={ mapId }
-					setAttr={ setAttributes }
-					prevAttr={ prevAttr }
-					setPrevAttr={ setPrevAttr }
+					mapId={mapId}
+					setAttr={setAttributes}
+					prevAttr={prevAttr}
+					setPrevAttr={setPrevAttr}
 				/>
-			) }
+			)}
 		</div>
 	);
 }
