@@ -55,7 +55,8 @@ export default function useMarkers(map, layer, posts, showStandAlone) {
 	);
 
 	// Merge post and standalone markers once both have been fetched.
-	if (linked.status === 'ERROR' || standAlone.status === 'ERROR') return [];
+	if (!layer || linked.status === 'ERROR' || standAlone.status === 'ERROR')
+		return [];
 
 	return [...linkedMarkerRecords, ...saMarkerRecords];
 }

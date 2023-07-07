@@ -15,6 +15,9 @@ import MapSelector from './map-selector';
 import MarkerQueryPanel from './marker-query';
 import Map from './map';
 
+import { attributes as attrSettings } from '../block.json';
+import InitialViewPanel from './initial-view';
+
 /**
  * Edit map query block.
  *
@@ -25,7 +28,8 @@ import Map from './map';
  * @param {string}                       props.clientId
  */
 export default function Edit({ attributes, setAttributes, context, clientId }) {
-	const { mapId, queryType, showStandAlone, initialView, style } = attributes;
+	const { mapId, queryType, showStandAlone, initialViews, style } =
+		attributes;
 	const {
 		query,
 		templateSlug,
@@ -37,8 +41,11 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 	/** Store backup of mapId (to enable cancel) and clear value. */
 	function handleReplace() {
-		setAttributes({ mapId: null, initialView: {} });
-		setPrevAttr({ mapId, initialView });
+		setAttributes({
+			mapId: null,
+			initialView: attrSettings.initialViews.default,
+		});
+		setPrevAttr({ mapId, initialViews });
 	}
 
 	/**
@@ -67,6 +74,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				</BlockControls>
 			)}
 			<InspectorControls>
+				<InitialViewPanel />
 				<MarkerQueryPanel
 					hasQuery={!!query}
 					queryType={queryType}
@@ -101,8 +109,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					previewPostType={previewPostType}
 					showStandAlone={showStandAlone}
 					page={page}
-					initialView={initialView}
-					setView={setAttr.bind(null, 'initialView')}
+					initialViews={initialViews}
+					setView={setAttr.bind(null, 'initialViews')}
 				/>
 			) : (
 				<MapSelector

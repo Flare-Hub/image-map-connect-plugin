@@ -55,13 +55,10 @@ class BlockMgr {
 		}
 
 			// Set data attributes for the map div.
-			$block_attr['style']                 = sprintf( 'height: %s;', $attributes['style']['height'], );
-			$block_attr['data-map-id']           = $attributes['mapId'];
-			$block_attr['data-show-standalone']  = $attributes['showStandAlone'];
-			$block_attr['data-initial-layer']    = $attributes['initialView']['layer'];
-			$block_attr['data-initial-zoom']     = $attributes['initialView']['zoom'];
-			$block_attr['data-initial-center-x'] = $attributes['initialView']['center'][0];
-			$block_attr['data-initial-center-y'] = $attributes['initialView']['center'][1];
+			$block_attr['style']                = sprintf( 'height: %s;', $attributes['style']['height'], );
+			$block_attr['data-map-id']          = $attributes['mapId'];
+			$block_attr['data-show-standalone'] = $attributes['showStandAlone'];
+			$block_attr['data-initial-views']   = wp_json_encode( $attributes['initialViews'], JSON_NUMERIC_CHECK );
 
 		// Return div to place map in with post IDs of markers to include.
 		ob_start();

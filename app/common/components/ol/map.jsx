@@ -27,65 +27,73 @@ import { MapProvider } from './context';
  * @param {import('react').ReactNode}          props.children      Child nodes.
  * @param {string}                             props.id
  */
-export default function OlMap( {
+export default function OlMap({
 	eventHandlers = [],
 	center,
 	zoom,
 	className,
 	id,
 	children,
-} ) {
+}) {
 	// Div to add the map to.
 	const mapTarget = useRef();
 
 	// OpenLayers Map with initial view.
-	const map = useMemo( () => new Map(), [] );
+	const map = useMemo(() => new Map(), []);
 
 	// After mounting the component.
-	useLayoutEffect( () => {
+	useLayoutEffect(() => {
 		// Register event handlers.
-		eventHandlers.forEach( ( { event, handler, once } ) => {
+		eventHandlers.forEach(({ event, handler, once }) => {
 			const register = once ? 'once' : 'on';
-			map[ register ].call( map, event, handler );
-		} );
+			map[register].call(map, event, handler);
+		});
 
 		/**
 		 * Set the initial position of the map
 		 *
 		 * @param {import('ol').MapEvent} e Event
 		 */
-		function setPosition( e ) {
+		function setPosition(e) {
 			const view = e.target.getView();
-			if ( ! view )
+			if (!view)
 				throw new Error(
 					'No view found for map. Has a visible base layer been provided?'
 				);
 			const extent = view.getProjection().getExtent();
-			view.setCenter( center ?? getCenter( extent ) );
-			if ( ! view.getZoom() ) view.setZoom( zoom ?? view.getMinZoom() );
+			view.setCenter(center ?? getCenter(extent));
+			if (!view.getZoom()) view.setZoom(zoom ?? view.getMinZoom());
 		}
 
-		map.on( 'change:view', setPosition );
+		map.on('change:view', setPosition);
 
 		// Remove event handlers on unmount
 		return () => {
-			eventHandlers.forEach( ( { event, handler, once } ) => {
-				if ( ! once ) map.un( event, handler );
-			} );
+			eventHandlers.forEach(({ event, handler, once }) => {
+				if (!once) map.un(event, handler);
+			});
 
-			map.un( 'change:view', setPosition );
+			map.un('change:view', setPosition);
 		};
-	}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-	useEffect( () => {
+	useEffect(() => {
+		if (center) map.getView().setCenter(center);
+	}, [center, map]);
+
+	useEffect(() => {
+		if (!isNaN(zoom)) map.getView().setZoom(zoom);
+	}, [map, zoom]);
+
+	useEffect(() => {
 		// Add the map to the dom.
-		map.setTarget( mapTarget.current );
-	}, [ map ] );
+		map.setTarget(mapTarget.current);
+	}, [map]);
 
 	return (
-		<MapProvider value={ { map } }>
-			<div className={ className } ref={ mapTarget } id={ id }>
-				{ children }
+		<MapProvider value={{ map }}>
+			<div className={className} ref={mapTarget} id={id}>
+				{children}
 			</div>
 		</MapProvider>
 	);

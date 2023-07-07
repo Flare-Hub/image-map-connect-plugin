@@ -1,11 +1,12 @@
-import { Icon, Tooltip } from '@wordpress/components';
-import { lock } from '@wordpress/icons';
-import { useCallback, useEffect } from '@wordpress/element';
+import { Tooltip } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 import { useMap } from 'common/components/ol/context';
 import Control from 'common/components/ol/control';
 
 import cls from './save-view.module.scss';
-import { __ } from '@wordpress/i18n';
+import { ReactComponent as Desktop } from './icons/macbook-fill.svg';
+import { ReactComponent as Tablet } from './icons/tablet-fill.svg';
+import { ReactComponent as Mobile } from './icons/smartphone-fill.svg';
 
 /**
  * @typedef MapView
@@ -14,48 +15,41 @@ import { __ } from '@wordpress/i18n';
  * @property {number}                             zoom   Map zoom level.
  */
 
+const DEVICE = { Desktop, Tablet, Mobile };
+
 /**
  * Save initial setting for the map view.
  *
- * @param {Object}                     props
- * @param {MapView}                    props.layer   Initial layer.
- * @param {(mapView: MapView) => void} props.setView Update the initialView attribute.
+ * @param {Object}                  props
+ * @param {string}                  props.preview Name of device type currently previewed.
+ * @param {number}                  props.layer   Initial layer.
+ * @param {(view: MapView) => void} props.setView Update the initialView attribute.
  */
-export default function SaveView( { layer, setView } ) {
+export default function SaveView({ preview, layer, setView }) {
 	const { map } = useMap();
+
+	const Icon = DEVICE[preview];
 
 	/** Save map position and layer to block attributes */
 	function save() {
 		const mapView = map?.getView();
-		setView( {
+		setView({
 			center: mapView?.getCenter(),
 			zoom: mapView?.getZoom(),
-			layer: map
-				?.getLayers()
-				?.getArray()
-				?.find( ( l ) => l.getVisible() && l.get( 'baseLayer' ) )
-				.get( 'wpId' ),
-		} );
+			layer,
+		});
 	}
-
-	const setInitialView = useCallback(
-		() => ! layer && map?.getLayers()?.getLength() && save(),
-		[ layer ] // eslint-disable-line react-hooks/exhaustive-deps
-	);
-
-	useEffect( () => {
-		map?.on( 'loadend', setInitialView );
-
-		return () => map?.un( 'loadend', setInitialView );
-	}, [ map, setInitialView ] );
 
 	return (
 		<Control>
 			<Tooltip
-				text={ __( 'Set current frame as initial frame', 'flare-imc' ) }
+				text={__(
+					'See instructions in the Initial Image Frame panel',
+					'flare-imc'
+				)}
 			>
-				<button className={ cls.saveButton } onClick={ save }>
-					<Icon icon={ lock } size="40" />
+				<button className={cls.saveButton} onClick={save}>
+					<Icon width="30px" height="30px" />
 				</button>
 			</Tooltip>
 		</Control>

@@ -1,27 +1,18 @@
 import { __ } from '@wordpress/i18n';
-import { Feature, Map as OlMap, View } from 'ol';
+import { Feature, View } from 'ol';
 import ImageLayer from 'ol/layer/Image';
 import Projection from 'ol/proj/Projection';
 import Static from 'ol/source/ImageStatic';
 import { getFullCollection } from './wp-fetch';
 import { Point } from 'ol/geom';
+import { getCenter } from 'ol/extent';
 
-/**
- * @typedef BlockAttr
- * @property {string} mapId          Map ID.
- * @property {string} initialLayer   Layer on first render.
- * @property {string} initialZoom    Map zoom level on first render.
- * @property {string} initialCenterX Map center x coordinate on first render.
- * @property {string} initialCenterY Map center y coordinate on first render.
- * @property {string} postIds        IDs of posts to show on the map.
- * @property {string} showStandalone Show stand-alone markers, as well as linked posts.
- */
+/** @typedef {import('./map').default} Map */
 
 /** Open Layers layer from WordPress Imagemap. */
 export default class Layer {
-	/** @type {import('./map').default} Flare map instance. */ map;
+	/** @type {Map} Flare map instance. */ map;
 	/** @type {Object<string, any>} WordPress imagemap. */ wpLayer;
-	/** @type {Array<string>} List of post IDs in the current query. */ postIds;
 	/** @type {boolean} Whether the layer is visible on the map. */ visible;
 	/** @type {import('ol/extent')} boundaries of the layer.  */ extent;
 	/** @type {Projection} Coordinate system to use in the map. */ projection;
@@ -30,18 +21,19 @@ export default class Layer {
 	/** @type {Array<Feature>} Marker features from WordPress markers on this layer. */ features;
 
 	/**
-	 * @param {OlMap}               map   Open Layers map.
+	 * @param {Map}                 map   Open Layers map.
 	 * @param {Object<string, any>} layer WordPress layer
+	 * @param {number}              index Layer index in the Open Layers map
 	 */
-	constructor(map, layer) {
+	constructor(map, layer, index) {
 		this.map = map;
 		this.wpLayer = layer;
-		this.postIds = map.blockAttr?.postIds
-			? map.blockAttr.postIds.split(',')
-			: [];
 
-		// The layer is visible if it is the initial layer in the block attributes.
-		this.visible = layer.id === +map.blockAttr.initialLayer;
+		// The layer is visible if it is the initial layer in the block attributes,
+		// or if no initial layer is set and it is the first layer in the list
+		this.visible =
+			layer.id === map.initialView.layer ||
+			(index === 0 && !map.initialView.layer);
 
 		// The size of the layer's image.
 		this.extent = [
@@ -92,7 +84,7 @@ export default class Layer {
 	fetchMarkerIcons() {
 		try {
 			return getFullCollection('imc_icons', {
-				map: this.map.blockAttr.mapId,
+				map: this.map.mapId,
 			});
 		} catch (error) {
 			console.error(error); // eslint-disable-line no-console
@@ -110,17 +102,17 @@ export default class Layer {
 			// Get linked markers based on post IDs in the current query.
 			const linkedMarkers = getFullCollection('imc_markers', {
 				imc_layers: this.wpLayer.id,
-				map: this.map.blockAttr.mapId,
+				map: this.map.mapId,
 				_fields: 'id,type,imc_icons,imc_loc',
 				post_types: 'linked',
-				include: this.postIds,
+				include: this.map.postIds,
 			});
 
 			// Get standalone markers.
-			const saMarkers = this.map.blockAttr.showStandalone
+			const saMarkers = this.map.showStandalone
 				? getFullCollection('imc_markers', {
 						imc_layers: this.wpLayer.id,
-						map: this.map.blockAttr.mapId,
+						map: this.map.mapId,
 						_fields: 'id,type,imc_icons,imc_loc',
 						post_types: 'standalone',
 				  })
@@ -184,11 +176,11 @@ export default class Layer {
 					projection: this.projection,
 					extent: this.extent,
 					constrainOnlyCenter: true,
-					center: [
-						this.map.blockAttr?.initialCenterX,
-						this.map.blockAttr?.initialCenterY,
-					],
-					zoom: this.map.blockAttr?.initialZoom,
+					center:
+						this.map.initialView.center ?? getCenter(this.extent),
+					zoom:
+						this.map.initialView.zoom ??
+						this.wpLayer.meta?.zoom?.min,
 				})
 			);
 	}

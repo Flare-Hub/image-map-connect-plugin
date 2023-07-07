@@ -1,5 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 
 import OlMap from 'common/components/ol/map';
 import BaseLayerGroup from 'common/components/ol/base-layer-group';
@@ -24,10 +25,10 @@ import cls from './map.module.scss';
  * @param {string}                     props.queryType         Whether to use pagination.
  * @param {boolean}                    props.showStandAlone    Whether to show standalone markers.
  * @param {number}                     [props.page]            Current page in the query loop.
- * @param {MapView}                    [props.initialView]     Initial settings for the map view.
+ * @param {MapView}                    [props.initialViews]    Initial settings for the map view.
  * @param {(mapView: MapView) => void} props.setView           Update the initialView attribute.
  */
-export default function Map( {
+export default function Map({
 	mapId,
 	queryParams,
 	templateSlug,
@@ -35,10 +36,16 @@ export default function Map( {
 	queryType,
 	showStandAlone,
 	page,
-	initialView,
+	initialViews,
 	setView,
-} ) {
-	const [ selLayer, setSelLayer ] = useState( initialView?.layer );
+}) {
+	const preview = useSelect((select) =>
+		select('core/edit-post').__experimentalGetPreviewDeviceType()
+	);
+
+	const deviceView = initialViews[preview];
+
+	const [selLayer, setSelLayer] = useState(deviceView?.layer);
 	const posts = useMarkerPosts(
 		queryParams,
 		templateSlug,
@@ -46,24 +53,30 @@ export default function Map( {
 		queryType,
 		page
 	);
-	const markers = useMarkers( mapId, selLayer, posts, showStandAlone );
+	const markers = useMarkers(mapId, selLayer, posts, showStandAlone);
 
 	return (
 		<OlMap
-			center={ initialView?.center }
-			zoom={ initialView?.zoom }
-			className={ cls.canvas }
+			center={deviceView?.center}
+			zoom={deviceView?.zoom}
+			className={cls.canvas}
 		>
-			<ControlBar position="top-right" className={ cls.withSwitcher }>
+			<ControlBar position="top-right" className={cls.withSwitcher}>
 				<BaseLayerGroup
-					mapId={ mapId }
-					title={ __( 'Initial layer', 'flare-imc' ) }
-					selLayerId={ selLayer }
-					setSelLayerId={ setSelLayer }
+					mapId={mapId}
+					title={__('Initial layer', 'flare-imc')}
+					selLayerId={selLayer}
+					setSelLayerId={setSelLayer}
 				/>
-				<SaveView layer={ initialView?.layer } setView={ setView } />
+				<SaveView
+					layer={selLayer}
+					setView={(val) =>
+						setView({ ...initialViews, [preview]: val })
+					}
+					preview={preview}
+				/>
 			</ControlBar>
-			<MarkerPins mapId={ mapId } markers={ markers } />
+			<MarkerPins mapId={mapId} markers={markers} />
 		</OlMap>
 	);
 }
