@@ -17,6 +17,7 @@ import Map from './map';
 
 import { attributes as attrSettings } from '../block.json';
 import InitialViewPanel from './initial-view';
+import PopupPanel from './popup-panel';
 
 /**
  * Edit map query block.
@@ -28,7 +29,7 @@ import InitialViewPanel from './initial-view';
  * @param {string}                       props.clientId
  */
 export default function Edit({ attributes, setAttributes, context, clientId }) {
-	const { mapId, queryType, showStandAlone, initialViews, style } =
+	const { mapId, queryType, showStandAlone, initialViews, popup, style } =
 		attributes;
 	const {
 		query,
@@ -73,7 +74,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					/>
 				</BlockControls>
 			)}
-			<InspectorControls>
+			<InspectorControls group="settings">
 				<InitialViewPanel />
 				<MarkerQueryPanel
 					hasQuery={!!query}
@@ -81,6 +82,10 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					setQueryType={setAttr.bind(null, 'queryType')}
 					showStandAlone={showStandAlone}
 					setShowStandAlone={setAttr.bind(null, 'showStandAlone')}
+				/>
+				<PopupPanel
+					popup={popup}
+					setPopup={setAttr.bind(null, 'popup')}
 				/>
 			</InspectorControls>
 			<InspectorControls group="dimensions">

@@ -41,6 +41,49 @@
         },
         "height": "400px"
       }
+    },
+    "popup": {
+      "type": "object",
+      "default": {
+        "dimensions": {
+          "height": "300px",
+          "width": "200px"
+        },
+        "image": {
+          "show": true,
+          "height": 1,
+          "width": 1
+        },
+        "title": {
+          "show": true,
+          "margins": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "tag": "h3"
+        },
+        "meta": {
+          "show": false,
+          "margins": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "size": "0.9em"
+        },
+        "excerpt": {
+          "show": false,
+          "margins": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        }
+      }
     }
   },
   "usesContext": [

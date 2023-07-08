@@ -1,0 +1,39 @@
+.panel {
+
+	.columns {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		align-items: baseline;
+		gap: 1em;
+		position: relative;
+	}
+
+	.imageRatio::after {
+		content: "/";
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		top: 8px;
+		line-height: 1;
+	}
+
+	:global(.components-border-control) :global(.components-h-stack) {
+		align-items: start;
+	}
+
+	.include {
+		font-size: 12px;
+		font-weight: 500;
+		padding-top: 1em;
+		border-top: 1px solid #e0e0e0;
+	}
+
+	>:global(.components-base-control),
+	>:global(.components-border-box-control) {
+		margin-bottom: 24px;
+
+		:global(.components-base-control) {
+			margin-bottom: 0;
+		}
+	}
+}
