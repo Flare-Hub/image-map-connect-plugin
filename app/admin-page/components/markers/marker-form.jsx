@@ -13,6 +13,18 @@ import MarkerLocations from './marker-locations';
 
 import cls from '../forms/edit-form.module.scss';
 
+/**
+ * @typedef LocationMeta
+ * @property {Object} imc_loc     Location data.
+ * @property {number} lat         Marker latitude.
+ * @property {number} lng         Marker longitude.
+ * @property {string} imc_img_tag Featured image responsive tag.
+ */
+
+/**
+ * @typedef {import('@wordpress/core-data').Post & LocationMeta} Marker
+ */
+
 const emptyObj = {};
 
 /**
@@ -54,7 +66,11 @@ export function MarkerForm({
 		};
 	}, [selected, query.layer, icon_details]);
 
-	// Fetch selected marker from Wordpress.
+	/**
+	 * Fetch selected marker from Wordpress.
+	 *
+	 * @type {import('../../hooks/useRecord').RecordHandler<Marker>}
+	 */
 	const {
 		record: marker,
 		status,

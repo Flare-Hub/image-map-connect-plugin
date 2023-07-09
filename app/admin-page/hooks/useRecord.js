@@ -3,14 +3,17 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { store as coreDataStore } from '@wordpress/core-data';
 import useNotice from './useNotice';
 
-/** @typedef {import('@wordpress/core-data').EntityRecord} EntityRecord */
+/**
+ * @typedef {import('@wordpress/core-data').EntityRecord} EntityRecord
+ */
 
 /**
+ * @template T
  * @typedef RecordHandler
- * @property {EntityRecord}                                    record     Fetched WordPress record.
- * @property {'none'|'new'|'loading'|'loaded'}                 status     Loading status for the record.
- * @property {(values: EntityRecord) => Promise<EntityRecord>} saveRecord Save record changes to WordPress.
- * @property {() => Promise<boolean>}                          delRecord  Delete record from WordPress.
+ * @property {T}                               record     Fetched WordPress record.
+ * @property {'none'|'new'|'loading'|'loaded'} status     Loading status for the record.
+ * @property {(values: T) => Promise<T>}       saveRecord Save record changes to WordPress.
+ * @property {() => Promise<boolean>}          delRecord  Delete record from WordPress.
  */
 
 /**
@@ -22,7 +25,7 @@ import useNotice from './useNotice';
  * @param {Object<string, unknown>}                             query       Search query passed to the REST API.
  * @param {EntityRecord}                                        placeholder Empty object as placeholder for a new item.
  * @param {Array<unknown>}                                      deps        Dependencies other than id, type and name.
- * @return {RecordHandler} Item state
+ * @return {RecordHandler<EntityRecord>} Item state
  */
 export default function useRecord(
 	id,
@@ -34,8 +37,8 @@ export default function useRecord(
 ) {
 	// Get record details and loading status.
 	const { record, status } = useSelect(
-		( select ) => {
-			switch ( id ) {
+		(select) => {
+			switch (id) {
 				// No record selected.
 				case undefined:
 					return {
@@ -53,67 +56,65 @@ export default function useRecord(
 				// Get record from WordPress.
 				default:
 					const { hasFinishedResolution, getEntityRecord } =
-						select( coreDataStore );
+						select(coreDataStore);
 					return {
-						status: hasFinishedResolution( 'getEntityRecord', [
+						status: hasFinishedResolution('getEntityRecord', [
 							type,
 							name,
 							id,
 							query,
-						] )
+						])
 							? 'loaded'
 							: 'loading',
 						record:
-							getEntityRecord( type, name, id, query ) ??
+							getEntityRecord(type, name, id, query) ??
 							placeholder,
 					};
 			}
 		},
-		[ type, name, id, ...deps ] // eslint-disable-line react-hooks/exhaustive-deps
+		[type, name, id, ...deps] // eslint-disable-line react-hooks/exhaustive-deps
 	);
 
-	const { saveEntityRecord, deleteEntityRecord } =
-		useDispatch( coreDataStore );
+	const { saveEntityRecord, deleteEntityRecord } = useDispatch(coreDataStore);
 
 	/**
 	 * Save record changes to WordPress.
 	 *
 	 * @param {Object<string, any>} values
 	 */
-	function saveRecord( values ) {
-		return saveEntityRecord( type, name, values );
+	function saveRecord(values) {
+		return saveEntityRecord(type, name, values);
 	}
 
 	/** Delete record from WordPress. */
 	function delRecord() {
-		return deleteEntityRecord( type, name, id, { force: true } );
+		return deleteEntityRecord(type, name, id, { force: true });
 	}
 
 	/** Get syncing errors for the record. */
 	const { saveError, delError } = useSelect(
-		( select ) => {
+		(select) => {
 			const { getLastEntitySaveError, getLastEntityDeleteError } =
-				select( coreDataStore );
+				select(coreDataStore);
 
 			return {
-				saveError: getLastEntitySaveError( type, name, id ),
-				delError: getLastEntityDeleteError( type, name, id ),
+				saveError: getLastEntitySaveError(type, name, id),
+				delError: getLastEntityDeleteError(type, name, id),
 			};
 		},
-		[ type, name, id ]
+		[type, name, id]
 	);
 
 	// Notify user of any syncing errors.
 	const notice = useNotice();
 
-	useEffect( () => {
-		if ( saveError )
-			notice( { message: saveError.message, style: 'error' } );
-	}, [ notice, saveError ] );
+	useEffect(() => {
+		if (saveError) notice({ message: saveError.message, style: 'error' });
+	}, [notice, saveError]);
 
-	useEffect( () => {
-		if ( delError ) notice( { message: delError.message, style: 'error' } );
-	}, [ delError, notice ] );
+	useEffect(() => {
+		if (delError) notice({ message: delError.message, style: 'error' });
+	}, [delError, notice]);
 
 	return { record, status, saveRecord, delRecord };
 }
