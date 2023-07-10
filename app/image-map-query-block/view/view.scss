@@ -13,19 +13,7 @@
 	}
 
 	.flare-marker-popup {
-		width: 200px;
 		max-width: 80%;
-
-		>div {
-			background-color: var(--wp--preset--color--white);
-			border-radius: 5px;
-			box-shadow: 1px 1px 3px 1px rgba($color: #000, $alpha: 0.5);
-			overflow: hidden;
-		}
-
-		.ol-scroll {
-			z-index: 20;
-		}
 
 		.closeBox { // stylelint-disable-line selector-class-pattern
 			position: absolute;
@@ -83,48 +71,11 @@
 		.ol-popup-content {
 			position: relative;
 			padding: 0;
-			width: 100%;
-			max-height: 300px;
-			overflow: overlay;
-			scrollbar-width: thin;
-			scrollbar-color: #a1a1a1 #f0f0f0;
-
-			&::-webkit-scrollbar {
-				background-color: transparent;
-				width: 12px;
-			}
-
-			&::-webkit-scrollbar-button {
-				display: none;
-			}
-
-			&::-webkit-scrollbar-track {
-				background-color: #f0f0f0;
-			}
-
-			&::-webkit-scrollbar-thumb {
-				background-color: #a1a1a1;
-				border: 2px solid transparent;
-				border-radius: 6px;
-				background-clip: content-box;
-			}
-
-			&::-webkit-scrollbar-thumb:hover {
-				background-color: #7f7f7f;
-			}
+			margin: 0;
 		}
 
-		.flare-popup-thumbnail {
-			width: 100%;
-			aspect-ratio: 1 / 1;
-		}
-
-		.flare-popup-desc {
-			margin: 0.7rem 0.7rem 1rem 0.7rem;
-		}
-
-		.flare-popup-title {
-			font-size: 1.2em;
+		&.ol-popup.hasclosebox .ol-popup-content {
+			margin-right: 0;
 		}
 
 		.flare-popup-link {

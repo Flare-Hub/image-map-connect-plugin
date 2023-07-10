@@ -1,11 +1,12 @@
 import { useEffect, useState, createPortal, useRef } from '@wordpress/element';
 import { store as dataStore } from '@wordpress/core-data';
 import { applyFilters } from '@wordpress/hooks';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Select } from 'ol/interaction';
 import Popup from 'ol-ext/overlay/Popup';
 import { useMap } from 'common/components/ol/context';
-import { useSelect } from '@wordpress/data';
+import { useBlockContext } from './block-context';
 
 /** @typedef {import('ol-ext/overlay/Popup').default} Popup */
 
@@ -28,7 +29,7 @@ export default function MarkerPopup({ layer }) {
 	/** The target container for the popup content. */
 	const content = useRef(document.createElement('div'));
 
-	// Ge the marker from WordPress.
+	// Get the marker from WordPress.
 	const [{ postType, id }, setMarker] = useState({});
 
 	/** @type {import('../../admin-page/components/markers/marker-form').Marker} */
@@ -109,18 +110,32 @@ export default function MarkerPopup({ layer }) {
 		}
 	}, [marker?.status, popup]);
 
+	// Get block attributes
+	const {
+		attributes: { popup: popupSettings },
+	} = useBlockContext();
+
 	/**
 	 * Use WordPress hook to get marker popup content.
 	 *
-	 * @type {import('./popup-content').PopupContent}
+	 * @type {import('./popup-content-preview').PopupContent}
 	 */
 	const PopupTemplate = applyFilters('edit_marker_popup');
 
 	return createPortal(
 		marker?.status ? (
-			<PopupTemplate marker={marker} />
+			<PopupTemplate marker={marker} settings={popupSettings} />
 		) : (
-			<p className="flare-popup-desc flare-popup-title">
+			<p
+				style={{
+					marginTop: popupSettings.margins.top,
+					marginRight: popupSettings.margins.right,
+					marginBottom: popupSettings.margins.bottom,
+					marginLeft: popupSettings.margins.left,
+					fontSize: popupSettings.excerpt.size,
+					lineHeight: popupSettings.excerpt.line,
+				}}
+			>
 				<strong>{__('Loading')}...</strong>
 			</p>
 		),

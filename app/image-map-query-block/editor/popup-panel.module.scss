@@ -8,13 +8,10 @@
 		position: relative;
 	}
 
-	.imageRatio::after {
-		content: "/";
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
-		top: 8px;
-		line-height: 1;
+	.imageRatio {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5em;
 	}
 
 	:global(.components-border-control) :global(.components-h-stack) {

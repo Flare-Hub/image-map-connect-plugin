@@ -45,9 +45,16 @@
     "popup": {
       "type": "object",
       "default": {
+        "blankTarget": true,
         "dimensions": {
-          "height": "300px",
-          "width": "200px"
+          "height": 300,
+          "width": 200
+        },
+        "margins": {
+          "top": "1em",
+          "right": "1em",
+          "bottom": "1em",
+          "left": "1em"
         },
         "image": {
           "show": true,
@@ -56,32 +63,16 @@
         },
         "title": {
           "show": true,
-          "margins": {
-            "top": 0,
-            "right": 0,
-            "bottom": 0,
-            "left": 0
-          },
           "tag": "h3"
         },
         "meta": {
           "show": false,
-          "margins": {
-            "top": 0,
-            "right": 0,
-            "bottom": 0,
-            "left": 0
-          },
-          "size": "0.9em"
+          "size": "0.9em",
+          "marginTop": "1em"
         },
         "excerpt": {
           "show": false,
-          "margins": {
-            "top": 0,
-            "right": 0,
-            "bottom": 0,
-            "left": 0
-          }
+          "marginTop": "1em"
         }
       }
     }
