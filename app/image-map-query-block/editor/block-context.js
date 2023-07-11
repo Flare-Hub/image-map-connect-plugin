@@ -1,4 +1,4 @@
-const { createContext, useContext } = require('@wordpress/element');
+import { createContext, useContext } from '@wordpress/element';
 
 /** @typedef {import('./edit').BlockAttributes} BlockAttributes */
 

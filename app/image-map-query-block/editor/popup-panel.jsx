@@ -75,14 +75,14 @@ export default function PopupPanel() {
 			initialOpen={false}
 			className={cls.panel}
 		>
-			<BaseControl label={__('Height')} id="flare-popup-height">
+			<BaseControl label={__('Maximum Height')} id="flare-popup-height">
 				<RangeControl
 					value={popup.dimensions.height}
 					onChange={(val) => setDimensions({ height: val })}
 					{...sizeLimits.height}
 				/>
 			</BaseControl>
-			<BaseControl label={__('Width')} id="flare-popup-width">
+			<BaseControl label={__('Maximum Width')} id="flare-popup-width">
 				<RangeControl
 					value={popup.dimensions.width}
 					onChange={(val) => setDimensions({ width: val })}

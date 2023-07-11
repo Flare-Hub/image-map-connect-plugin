@@ -208,8 +208,8 @@ export default class Map {
 				e.element.get('markerId'),
 				{
 					_fields:
-						'date,modified,slug,type,link,title,excerpt,author,meta,imc_icons,_embedded',
-					_embed: 'author,wp:featuredmedia',
+						'date,modified,slug,type,link,title,excerpt,author,featured_media,imc_icons,imc_img_tag,meta,_embedded',
+					_embed: 'author',
 				}
 			);
 
@@ -219,11 +219,6 @@ export default class Map {
 				author: marker.body._embedded.author[0],
 				standalone: marker.body.type === 'imc-marker',
 			};
-
-			if (marker.body._embedded['wp:featuredmedia']) {
-				view.featured_media =
-					marker.body._embedded['wp:featuredmedia'][0];
-			}
 
 			// Create popup content from Mustache template.
 			const content = Mustache.render(this.template.innerHTML, view);

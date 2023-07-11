@@ -7,6 +7,7 @@ import { Select } from 'ol/interaction';
 import Popup from 'ol-ext/overlay/Popup';
 import { useMap } from 'common/components/ol/context';
 import { useBlockContext } from './block-context';
+import PopupContent from './popup-content';
 
 /** @typedef {import('ol-ext/overlay/Popup').default} Popup */
 
@@ -118,13 +119,17 @@ export default function MarkerPopup({ layer }) {
 	/**
 	 * Use WordPress hook to get marker popup content.
 	 *
-	 * @type {import('./popup-content-preview').PopupContent}
+	 * @type {typeof PopupContent}
 	 */
-	const PopupTemplate = applyFilters('edit_marker_popup');
+	const PopupTemplate = applyFilters('edit_marker_popup', PopupContent);
 
 	return createPortal(
 		marker?.status ? (
-			<PopupTemplate marker={marker} settings={popupSettings} />
+			<PopupTemplate
+				marker={marker}
+				settings={popupSettings}
+				mode="edit"
+			/>
 		) : (
 			<p
 				style={{
