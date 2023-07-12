@@ -1,5 +1,5 @@
 .content {
-	max-width: 800px;
+	max-width: 700px;
 	margin: auto;
 	font-size: 1.2em;
 
@@ -9,8 +9,7 @@
 	}
 
 	h2,
-	h3,
-	h4 {
+	h3 {
 		margin-top: 2em;
 		margin-bottom: 1em;
 	}
@@ -27,6 +26,7 @@
 }
 
 .diagram {
+	margin: 0;
 	padding-top: 6px;
 
 	img {
@@ -41,4 +41,8 @@
 
 .toc ul ul {
 	padding-left: 1.5em;
+}
+
+.panel :global(.components-button) {
+	justify-content: flex-start;
 }
