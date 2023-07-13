@@ -114,8 +114,10 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		setAttributes({ [attr]: val });
 	}
 
+	const blockProps = useBlockProps({ style: { height: style.height } });
+
 	return (
-		<div {...useBlockProps({ style: { height: style.height } })}>
+		<div {...blockProps}>
 			<BlockProvider
 				value={{ attributes, setAttributes, context, clientId }}
 			>

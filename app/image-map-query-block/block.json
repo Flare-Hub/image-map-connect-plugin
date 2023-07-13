@@ -97,6 +97,12 @@
     },
     "spacing": {
       "margin": true
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true
     }
   },
   "editorScript": "file:./editor/index.js",
