@@ -29,35 +29,38 @@ function Icon({ icon, active, size, onClick }) {
  * Toggle responsiveness and explain how the initial view works for different devices.
  */
 export default function InitialViewPanel() {
-	const preview = useSelect((select) =>
-		select('core/edit-post').__experimentalGetPreviewDeviceType()
-	);
+	const preview = useSelect((select) => {
+		const editPost = select('core/edit-post');
+		return editPost ? editPost.__experimentalGetPreviewDeviceType() : null;
+	});
 
-	const { __experimentalSetPreviewDeviceType: setPreview } =
-		useDispatch('core/edit-post');
+	const dispatchPost = useDispatch('core/edit-post');
+	const setPreview = dispatchPost?.__experimentalSetPreviewDeviceType;
 
 	return (
 		<PanelBody title={__('Initial Image Frame')} initialOpen={false}>
-			<div className={cls.buttons}>
-				<Icon
-					icon={'macbook-fill'}
-					active={preview === 'Desktop'}
-					onClick={() => setPreview('Desktop')}
-					size={24}
-				/>
-				<Icon
-					icon={'tablet-fill'}
-					active={preview === 'Tablet'}
-					onClick={() => setPreview('Tablet')}
-					size={24}
-				/>
-				<Icon
-					icon={'smartphone-fill'}
-					active={preview === 'Mobile'}
-					onClick={() => setPreview('Mobile')}
-					size={22}
-				/>
-			</div>
+			{preview && (
+				<div className={cls.buttons}>
+					<Icon
+						icon={'macbook-fill'}
+						active={preview === 'Desktop'}
+						onClick={() => setPreview('Desktop')}
+						size={24}
+					/>
+					<Icon
+						icon={'tablet-fill'}
+						active={preview === 'Tablet'}
+						onClick={() => setPreview('Tablet')}
+						size={24}
+					/>
+					<Icon
+						icon={'smartphone-fill'}
+						active={preview === 'Mobile'}
+						onClick={() => setPreview('Mobile')}
+						size={22}
+					/>
+				</div>
+			)}
 			{__(
 				'To set the initial layer, position and zoom level:',
 				'flare-imc'
@@ -78,12 +81,14 @@ export default function InitialViewPanel() {
 						'flare-imc'
 					)}
 				</li>
-				<li>
-					{__(
-						'Change the preview mode using the buttons above and repeat the process to change the image frame on different device types.',
-						'flare-imc'
-					)}
-				</li>
+				{preview && (
+					<li>
+						{__(
+							'Change the preview mode using the buttons above and repeat the process to change the image frame on different device types.',
+							'flare-imc'
+						)}
+					</li>
+				)}
 			</ol>
 		</PanelBody>
 	);

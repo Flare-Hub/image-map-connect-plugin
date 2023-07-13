@@ -39,11 +39,12 @@ export default function Map({
 	initialViews,
 	setView,
 }) {
-	const preview = useSelect((select) =>
-		select('core/edit-post').__experimentalGetPreviewDeviceType()
-	);
+	const preview = useSelect((select) => {
+		const editPost = select('core/edit-post');
+		return editPost ? editPost.__experimentalGetPreviewDeviceType() : null;
+	});
 
-	const deviceView = initialViews[preview];
+	const deviceView = initialViews[preview ?? 'Desktop'];
 
 	const [selLayer, setSelLayer] = useState(deviceView?.layer);
 	const posts = useMarkerPosts(
@@ -71,7 +72,10 @@ export default function Map({
 				<SaveView
 					layer={selLayer}
 					setView={(val) =>
-						setView({ ...initialViews, [preview]: val })
+						setView({
+							...initialViews,
+							[preview ?? 'Desktop']: val,
+						})
 					}
 					preview={preview}
 				/>

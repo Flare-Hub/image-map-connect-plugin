@@ -49,7 +49,11 @@ export default function SaveView({ preview, layer, setView }) {
 				)}
 			>
 				<button className={cls.saveButton} onClick={save}>
-					<Icon width="30px" height="30px" />
+					{Icon ? (
+						<Icon width="30px" height="30px" />
+					) : (
+						<i className={cls.saveButton + ' ri-lock-fill'} />
+					)}
 				</button>
 			</Tooltip>
 		</Control>
