@@ -10,12 +10,16 @@ class BlockMgr {
 	/** @var string $plugin_dir Directory of this plugin. */
 	protected $plugin_dir;
 
+	/** @var string $version Plugin version number */
+	protected $version;
+
 	/**
 	 * Constructor.
 	 *
+	 * @param string $version Plugin version number.
 	 * @since 0.1.0
 	 **/
-	public function __construct() {
+	public function __construct( string $version ) {
 		$this->plugin_dir = plugin_dir_path( __DIR__ ) . self::ASSETDIR;
 	}
 
@@ -27,7 +31,10 @@ class BlockMgr {
 	public function register_blocks() {
 		register_block_type(
 			$this->plugin_dir . 'image-map-query-block',
-			array( 'render_callback' => array( $this, 'render_map_query' ) )
+			array(
+				'render_callback' => array( $this, 'render_map_query' ),
+				'version'         => $this->version,
+			)
 		);
 	}
 
