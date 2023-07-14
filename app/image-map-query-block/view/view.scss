@@ -23,9 +23,11 @@
 			background-color: rgba($color: #000, $alpha: 0.6);
 			border-radius: 50%;
 			z-index: 20;
+			color: var(--wp--preset--color--white);
 
 			&::after {
-				line-height: 1.1;
+				font-size: 1.7em;
+				font-family: Arial, sans-serif;
 			}
 		}
 
