@@ -1,5 +1,7 @@
 import { Tooltip } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { useDispatch } from '@wordpress/data';
+import { store as noticesStore } from '@wordpress/notices';
 import { useMap } from 'common/components/ol/context';
 import Control from 'common/components/ol/control';
 
@@ -30,6 +32,8 @@ export default function SaveView({ preview, layer, setView }) {
 
 	const Icon = DEVICE[preview];
 
+	const { createNotice } = useDispatch(noticesStore);
+
 	/** Save map position and layer to block attributes */
 	function save() {
 		const mapView = map?.getView();
@@ -38,6 +42,14 @@ export default function SaveView({ preview, layer, setView }) {
 			zoom: mapView?.getZoom(),
 			layer,
 		});
+		createNotice(
+			'success',
+			__(
+				'Image has been framed. Update will take effect after saving.',
+				'flare-imc'
+			),
+			{ type: 'snackbar' }
+		);
 	}
 
 	return (

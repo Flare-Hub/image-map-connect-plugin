@@ -46,13 +46,13 @@ export default function InitialViewPanel() {
 				</div>
 			)}
 			{__(
-				'To set the initial layer, position and zoom level:',
+				'To set the default layer, and its position and zoom level:',
 				'flare-imc'
 			)}
 			<ol>
 				<li>
 					{__(
-						'Select the layer from the layer selector.',
+						'If the map has multiple layers, select the default layer from the layer selector.',
 						'flare-imc'
 					)}
 				</li>
