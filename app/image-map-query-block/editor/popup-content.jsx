@@ -15,7 +15,7 @@ import cls from './style.module.scss';
 export default function PopupContent({
 	mode,
 	marker,
-	settings: { dimensions, excerpt, image, margins, meta, title },
+	settings: { dimensions, excerpt, image, margins, meta, title, blankTarget },
 }) {
 	// Get human readable publish date of the marker.
 	const publishDate =
@@ -33,7 +33,12 @@ export default function PopupContent({
 			mustache={(children) => (
 				<>
 					{'{{ ^standalone }}'}
-					<a className={cls.link} href={marker.link}>
+					<a
+						className={cls.link}
+						href={marker.link}
+						target={blankTarget ? '_blank' : null}
+						rel="noreferrer"
+					>
 						{'{{ /standalone }}'}
 						{children}
 						{'{{ ^standalone }}'}
