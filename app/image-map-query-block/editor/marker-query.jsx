@@ -34,54 +34,53 @@ export default function MarkerQueryPanel({
 
 	return (
 		<PanelBody title={__('Marker query')}>
-			{hasQuery ||
-				(isWidget && (
-					<>
-						<BaseControl
-							label={__('Show markers for', 'flare-imc')}
-							help={__(
-								'Whether to respect pagination in the markers displayed on the map.',
-								'flare-imc'
-							)}
-							id={btnGroupId.current}
-						>
-							<ButtonGroup id={btnGroupId.current}>
-								<Button
-									variant={
-										queryType === 'page'
-											? 'primary'
-											: 'secondary'
-									}
-									onClick={() => setQueryType('page')}
-								>
-									{__('Current page')}
-								</Button>
-								<Button
-									variant={
-										queryType === 'query'
-											? 'primary'
-											: 'secondary'
-									}
-									onClick={() => setQueryType('query')}
-								>
-									{__('Whole query loop')}
-								</Button>
-							</ButtonGroup>
-						</BaseControl>
-						<ToggleControl
-							label={__(
-								'Also display standalone markers',
-								'flare-imc'
-							)}
-							checked={showStandAlone}
-							onChange={() => setShowStandAlone(!showStandAlone)}
-							help={__(
-								'Show only markers from the query loop or also markers not linked to any posts.',
-								'flare-imc'
-							)}
-						/>
-					</>
-				))}
+			{(hasQuery || isWidget) && (
+				<>
+					<BaseControl
+						label={__('Show markers for', 'flare-imc')}
+						help={__(
+							'Whether to respect pagination in the markers displayed on the map.',
+							'flare-imc'
+						)}
+						id={btnGroupId.current}
+					>
+						<ButtonGroup id={btnGroupId.current}>
+							<Button
+								variant={
+									queryType === 'page'
+										? 'primary'
+										: 'secondary'
+								}
+								onClick={() => setQueryType('page')}
+							>
+								{__('Current page')}
+							</Button>
+							<Button
+								variant={
+									queryType === 'query'
+										? 'primary'
+										: 'secondary'
+								}
+								onClick={() => setQueryType('query')}
+							>
+								{__('Whole query loop')}
+							</Button>
+						</ButtonGroup>
+					</BaseControl>
+					<ToggleControl
+						label={__(
+							'Also display standalone markers',
+							'flare-imc'
+						)}
+						checked={showStandAlone}
+						onChange={() => setShowStandAlone(!showStandAlone)}
+						help={__(
+							'Show only markers from the query loop or also markers not linked to any posts.',
+							'flare-imc'
+						)}
+					/>
+				</>
+			)}
 			{!hasQuery && !isWidget && (
 				<p>
 					{__(

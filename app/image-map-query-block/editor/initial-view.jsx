@@ -5,27 +5,6 @@ import { __ } from '@wordpress/i18n';
 import cls from './initial-view.module.scss';
 
 /**
- *
- * @param {Object}     props
- * @param {string}     props.icon    Remixicon name.
- * @param {boolean}    props.active  Whether the icon is displayed as active.
- * @param {() => void} props.onClick Click handler.
- * @param {number}     props.size    Icon size in pixels.
- */
-function Icon({ icon, active, size, onClick }) {
-	return (
-		<Button onClick={onClick}>
-			<i
-				className={'ri-' + icon}
-				style={{
-					fontSize: size,
-					color: active ? '#000' : '#d1d1d1',
-				}}
-			/>
-		</Button>
-	);
-}
-/**
  * Toggle responsiveness and explain how the initial view works for different devices.
  */
 export default function InitialViewPanel() {
@@ -37,28 +16,33 @@ export default function InitialViewPanel() {
 	const dispatchPost = useDispatch('core/edit-post');
 	const setPreview = dispatchPost?.__experimentalSetPreviewDeviceType;
 
+	const devices = [
+		{ name: 'Desktop', icon: 'macbook-fill', size: 24 },
+		{ name: 'Tablet', icon: 'tablet-fill', size: 24 },
+		{ name: 'Mobile', icon: 'smartphone-fill', size: 22 },
+	];
+
 	return (
 		<PanelBody title={__('Initial Image Frame')} initialOpen={false}>
 			{preview && (
 				<div className={cls.buttons}>
-					<Icon
-						icon={'macbook-fill'}
-						active={preview === 'Desktop'}
-						onClick={() => setPreview('Desktop')}
-						size={24}
-					/>
-					<Icon
-						icon={'tablet-fill'}
-						active={preview === 'Tablet'}
-						onClick={() => setPreview('Tablet')}
-						size={24}
-					/>
-					<Icon
-						icon={'smartphone-fill'}
-						active={preview === 'Mobile'}
-						onClick={() => setPreview('Mobile')}
-						size={22}
-					/>
+					{devices.map((device) => (
+						<Button
+							key={device.name}
+							onClick={() => setPreview(device.name)}
+						>
+							<i
+								className={'ri-' + device.icon}
+								style={{
+									fontSize: device.size,
+									color:
+										preview === device.name
+											? '#000'
+											: '#d1d1d1',
+								}}
+							/>
+						</Button>
+					))}
 				</div>
 			)}
 			{__(

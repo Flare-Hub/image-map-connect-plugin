@@ -3,6 +3,7 @@
 	// Bug in wordpress prevents background-color
 	// from coming from the default in block.json.
 	background-color: #d1d1d1;
+	overflow: hidden;
 
 	.ol-viewport {
 		min-height: inherit;
