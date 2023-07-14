@@ -12,4 +12,8 @@
 	.wp-block-post-content .flare-marker-popup .closeBox::after {
 		line-height: 1.1;
 	}
+
+	.ol-control.ol-layerswitcher .panel-container {
+		box-shadow: 1px 1px 2px var(--ol-subtle-background-color);
+	}
 }

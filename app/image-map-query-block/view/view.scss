@@ -148,4 +148,11 @@
 		padding: 2em;
 		font-size: large;
 	}
+
+	.ol-control.ol-layerswitcher .panel-container {
+		margin: 1px;
+		border-radius: 3px;
+		border: 1px solid var(--ol-subtle-foreground-color);
+		overflow: hidden;
+	}
 }
