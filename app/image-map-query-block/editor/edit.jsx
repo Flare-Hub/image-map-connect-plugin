@@ -94,6 +94,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	} = context;
 
 	const [prevAttr, setPrevAttr] = useState(null);
+	const [mapSize, setMapSize] = useState();
 
 	/** Store backup of mapId (to enable cancel) and clear value. */
 	function handleReplace() {
@@ -119,7 +120,12 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	return (
 		<div {...blockProps}>
 			<BlockProvider
-				value={{ attributes, setAttributes, context, clientId }}
+				value={{
+					attributes,
+					setAttributes,
+					context,
+					setMapSize,
+				}}
 			>
 				{mapId && (
 					<BlockControls group="inline">
@@ -143,7 +149,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						showStandAlone={showStandAlone}
 						setShowStandAlone={setAttr.bind(null, 'showStandAlone')}
 					/>
-					<PopupPanel />
+					<PopupPanel mapSize={mapSize} />
 				</InspectorControls>
 				<InspectorControls group="dimensions">
 					<ToolsPanelItem

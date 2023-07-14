@@ -9,6 +9,7 @@ import SaveView from './save-view';
 import MarkerPins from './marker-pins';
 import useMarkerPosts from './use-marker-posts';
 import useMarkers from './use-markers';
+import MapSize from './map-size';
 
 import cls from './map.module.scss';
 
@@ -54,6 +55,7 @@ export default function Map({
 		queryType,
 		page
 	);
+
 	const markers = useMarkers(mapId, selLayer, posts, showStandAlone);
 
 	return (
@@ -63,6 +65,7 @@ export default function Map({
 			className={cls.canvas}
 		>
 			<ControlBar position="top-right" className={cls.withSwitcher}>
+				<MapSize />
 				<BaseLayerGroup
 					mapId={mapId}
 					title={__('Initial layer', 'flare-imc')}

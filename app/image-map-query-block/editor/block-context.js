@@ -4,10 +4,10 @@ import { createContext, useContext } from '@wordpress/element';
 
 /**
  * @typedef BlockContext
- * @property {BlockAttributes}                  attributes    Block attributes.
- * @property {(attrs: BlockAttributes) => void} setAttributes Attribute change handler.
- * @property {import('./edit').EditorContext}   context       Block context coming from the editor.
- * @property {string}                           clientId      Block ID.
+ * @property {BlockAttributes}                                   attributes    Block attributes.
+ * @property {(attrs: BlockAttributes) => void}                  setAttributes Attribute change handler.
+ * @property {import('./edit').EditorContext}                    context       Block context coming from the editor.
+ * @property {(size: { height: number, width: number }) => void} setMapSize    Store the map size.
  */
 
 /** @type {import('react').Context<BlockContext>} */

@@ -13,31 +13,35 @@ import {
 	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { useMemo } from '@wordpress/element';
+import { useBlockContext } from './block-context';
 
 import cls from './popup-panel.module.scss';
-import { __ } from '@wordpress/i18n';
-import { useBlockContext } from './block-context';
-import { useMemo } from '@wordpress/element';
 
 /** @typedef {import('./edit').Popup} Popup */
 
-/** Sidebar panel to manage the marker popup settings. */
-export default function PopupPanel() {
+/**
+ * Sidebar panel to manage the marker popup settings.
+ *
+ * @param {Object}                           props
+ * @param {{width: number, height: number }} props.mapSize Dimensions of the map canvas
+ */
+export default function PopupPanel({ mapSize }) {
 	// Bet block attributes
 	const {
-		attributes: { popup, style },
+		attributes: { popup },
 		setAttributes,
-		clientId,
 	} = useBlockContext();
 
 	// Determine maximum popup dimensions based on block size.
 	const sizeLimits = useMemo(() => {
-		const blockEl = document.getElementById('block-' + clientId);
+		if (!mapSize) return { width: 2000, height: 2000 };
 		return {
-			width: { min: 150, max: blockEl.offsetWidth - 20 },
-			height: { min: 150, max: blockEl.offsetHeight - 20 },
+			width: { min: 150, max: mapSize.width - 20 },
+			height: { min: 150, max: mapSize.height - 20 },
 		};
-	}, [clientId, style.height]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [mapSize]);
 
 	/** @param {Popup} val */
 	function setPopup(val) {
