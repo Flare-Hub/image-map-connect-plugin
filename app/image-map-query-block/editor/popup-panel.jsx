@@ -147,25 +147,40 @@ export default function PopupPanel({ mapSize }) {
 				__nextHasNoMarginBottom
 			/>
 			{popup.title.show && (
-				<BaseControl
-					label={__('Tag')}
-					id="imc-header-tag-selector"
-					__nextHasNoMarginBottom
-				>
-					<ButtonGroup>
-						{['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].map((heading) => (
-							<Button
-								key={heading}
-								variant={
-									heading === popup.title.tag && 'primary'
-								}
-								onClick={() => setTitle({ tag: heading })}
-							>
-								{heading.toUpperCase()}
-							</Button>
-						))}
-					</ButtonGroup>
-				</BaseControl>
+				<>
+					<BaseControl
+						label={__('Tag')}
+						id="imc-header-tag-selector"
+						__nextHasNoMarginBottom
+					>
+						<ButtonGroup>
+							{['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].map(
+								(heading) => (
+									<Button
+										key={heading}
+										variant={
+											heading === popup.title.tag &&
+											'primary'
+										}
+										onClick={() =>
+											setTitle({ tag: heading })
+										}
+									>
+										{heading.toUpperCase()}
+									</Button>
+								)
+							)}
+						</ButtonGroup>
+					</BaseControl>
+					<div className={cls.columns}>
+						<UnitControl
+							label={__('Bottom Margin')}
+							value={popup.title.marginBottom}
+							onChange={(val) => setTitle({ marginBottom: val })}
+						/>
+						<div />
+					</div>
+				</>
 			)}
 			<ToggleControl
 				label={__('Display metadata', 'flare-imc')}
@@ -182,9 +197,9 @@ export default function PopupPanel({ mapSize }) {
 						onChange={(val) => setMeta({ size: val })}
 					/>
 					<UnitControl
-						label={__('Top Margin')}
-						value={popup.meta.marginTop}
-						onChange={(val) => setMeta({ marginTop: val })}
+						label={__('Bottom Margin')}
+						value={popup.meta.marginBottom}
+						onChange={(val) => setMeta({ marginBottom: val })}
 					/>
 				</div>
 			)}
@@ -211,9 +226,11 @@ export default function PopupPanel({ mapSize }) {
 					</div>
 					<div className={cls.columns}>
 						<UnitControl
-							label={__('Top Margin')}
-							value={popup.excerpt.marginTop}
-							onChange={(val) => setExcerpt({ marginTop: val })}
+							label={__('Bottom Margin')}
+							value={popup.excerpt.marginBottom}
+							onChange={(val) =>
+								setExcerpt({ marginBottom: val })
+							}
 						/>
 					</div>
 				</>

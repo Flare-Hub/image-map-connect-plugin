@@ -64,16 +64,17 @@
         },
         "title": {
           "show": true,
-          "tag": "h3"
+          "tag": "h3",
+          "marginBottom": "1em"
         },
         "meta": {
           "show": false,
           "size": "0.9em",
-          "marginTop": "1em"
+          "marginBottom": "1em"
         },
         "excerpt": {
           "show": false,
-          "marginTop": "1em"
+          "marginBottom": "1em"
         }
       }
     }

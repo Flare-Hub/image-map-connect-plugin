@@ -84,7 +84,10 @@ export default function PopupContent({
 					}}
 				>
 					{title.show && (
-						<title.tag className={cls.title}>
+						<title.tag
+							className={cls.title}
+							style={{ marginBottom: title.marginBottom }}
+						>
 							{marker.title.rendered}
 						</title.tag>
 					)}
@@ -92,7 +95,7 @@ export default function PopupContent({
 						<div
 							style={{
 								fontSize: meta.size,
-								marginTop: meta.marginTop,
+								marginBottom: meta.marginBottom,
 							}}
 						>
 							{marker._embedded?.author?.[0].name} | {publishDate}
@@ -114,7 +117,7 @@ export default function PopupContent({
 								style={{
 									fontSize: excerpt.size,
 									lineHeight: excerpt.line,
-									marginTop: excerpt.marginTop,
+									marginBottom: excerpt.marginBottom,
 								}}
 								dangerouslySetInnerHTML={{
 									__html: marker.excerpt.rendered,

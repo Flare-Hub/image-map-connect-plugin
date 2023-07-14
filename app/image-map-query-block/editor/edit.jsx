@@ -55,13 +55,14 @@ import { BlockProvider } from './block-context';
  * @property {Object}  title
  * @property {boolean} title.show
  * @property {string}  title.tag
+ * @property {string}  title.marginBottom
  * @property {Object}  meta
  * @property {boolean} meta.show
  * @property {string}  meta.size
- * @property {string}  meta.marginTop
+ * @property {string}  meta.marginBottom
  * @property {Object}  excerpt
  * @property {boolean} excerpt.show
- * @property {string}  excerpt.marginTop
+ * @property {string}  excerpt.marginBottom
  * @property {string}  excerpt.size
  * @property {number}  excerpt.line
  */
