@@ -52,7 +52,7 @@ export default function InitialViewPanel() {
 			<ol>
 				<li>
 					{__(
-						'If the map has multiple layers, select the default layer from the layer selector.',
+						'If the map has multiple layers, select the layer to set as default from the layer selector.',
 						'flare-imc'
 					)}
 				</li>
@@ -61,7 +61,7 @@ export default function InitialViewPanel() {
 				</li>
 				<li>
 					{__(
-						'Press the device icon with the lock. This will set the initial view for the selected device type.',
+						'Press the device icon with the lock. This will set the selected view and layer as the default for the selected device type.',
 						'flare-imc'
 					)}
 				</li>

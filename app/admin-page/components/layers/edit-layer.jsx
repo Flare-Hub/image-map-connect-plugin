@@ -17,13 +17,20 @@ import ImageLayer from 'common/components/ol/image-layer';
 import Form from '../forms/form';
 import LifeCycleButtons from '../forms/lifecycle-buttons';
 import SelectImage from './select-image';
-
-import mapCls from '../map.module.scss';
 import Label from '../forms/label';
 import RangeSlider from '../forms/range-slider';
 
-/** Map details form. */
-export default function EditLayer() {
+import mapCls from '../map.module.scss';
+
+/** @typedef {import('./index').ImageSize} ImageSize */
+
+/**
+ * Map details form.
+ *
+ * @param {Object}    props
+ * @param {ImageSize} props.imgSize
+ */
+export default function EditLayer({ imgSize }) {
 	const { query } = useRouter();
 
 	const emptyLayer = useMemo(
@@ -90,7 +97,11 @@ export default function EditLayer() {
 				)}
 				{(status === 'new' || status === 'loaded') && (
 					<Form form={form}>
-						<h2>{__('Edit Layer', 'flare-imc')}</h2>
+						<h2>
+							{query.layer === 'new'
+								? __('Add Layer', 'flare-imc')
+								: __('Edit Layer', 'flare-imc')}
+						</h2>
 						<div className="col-xs-9">
 							<Controller
 								name="name"
@@ -98,9 +109,13 @@ export default function EditLayer() {
 								render={({ field, fieldState }) => (
 									<TextControl
 										label={
-											<div className={cls.plainLabel}>
-												{__('Name', 'flare-imc')}
-											</div>
+											<Label
+												name={__('Name', 'flare-imc')}
+												tooltip={__(
+													'If the map has multiple layers, this name will show for the users in the layer selector.',
+													'flare-imc'
+												)}
+											/>
 										}
 										{...field}
 										className={getControlClass(fieldState)}
@@ -113,9 +128,13 @@ export default function EditLayer() {
 								render={({ field, fieldState }) => (
 									<BaseControl
 										label={
-											<div className={cls.plainLabel}>
-												{__('Image', 'flare-imc')}
-											</div>
+											<Label
+												name={__('Image', 'flare-imc')}
+												tooltip={__(
+													'If the map has multiple layers, make sure all the layer images are the same size.',
+													'flare-imc'
+												)}
+											/>
 										}
 										className={cls.field}
 										id={imgId.current}
@@ -124,6 +143,7 @@ export default function EditLayer() {
 											onChange={field.onChange}
 											invalid={fieldState.invalid}
 											id={imgId.current}
+											matchSize={imgSize}
 										/>
 									</BaseControl>
 								)}
@@ -187,7 +207,7 @@ export default function EditLayer() {
 												)}
 												<br />
 												{__(
-													'When you change the minimum or maximum zoom, this preview will automatically update',
+													'When you change the minimum or maximum zoom, this preview will automatically update.',
 													'flare-imc'
 												)}
 											</>
