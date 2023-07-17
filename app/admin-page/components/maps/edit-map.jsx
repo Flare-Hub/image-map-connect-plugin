@@ -93,9 +93,16 @@ export default function EditMap() {
 								render={({ field, fieldState }) => (
 									<TextControl
 										label={
-											<div className={cls.plainLabel}>
-												{__('Map name', 'flare-imc')}
-											</div>
+											<Label
+												name={__(
+													'Map name',
+													'flare-imc'
+												)}
+												tooltip={__(
+													'Used for internal clarification only.',
+													'flare-imc'
+												)}
+											/>
 										}
 										{...field}
 										className={getControlClass(fieldState)}

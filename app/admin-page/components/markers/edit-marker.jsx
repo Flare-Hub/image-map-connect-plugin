@@ -55,9 +55,13 @@ export default function EditMarker({ markerType, title, icons }) {
 				<BaseControl
 					className={cls.field}
 					label={
-						<div className={cls.plainLabel}>
-							{__('Marker placement', 'flare-imc')}
-						</div>
+						<Label
+							name={__('Marker placement', 'flare-imc')}
+							tooltip={__(
+								'Marker position can be updated at any time.',
+								'flare-imc'
+							)}
+						/>
 					}
 					id={placeMarkerRef}
 				>
@@ -76,9 +80,13 @@ export default function EditMarker({ markerType, title, icons }) {
 				{markerType !== 'imc-marker' && (
 					<BaseControl
 						label={
-							<span className={cls.plainLabel}>
-								{__('Title')}
-							</span>
+							<Label
+								name={__('Title', 'flare-imc')}
+								tooltip={__(
+									'Post title, can be shown in the popup when selecting a marker on the public user interface.',
+									'flare-imc'
+								)}
+							/>
 						}
 						className={cls.field}
 						id="no-input-to-focus-on"
@@ -119,7 +127,7 @@ export default function EditMarker({ markerType, title, icons }) {
 										<Label
 											name={__('Title')}
 											tooltip={__(
-												'Shows in the popup when selecting the marker on the public user interface.',
+												'Can be shown in the popup when selecting a marker on the public user interface.',
 												'flare-imc'
 											)}
 										/>
@@ -137,7 +145,7 @@ export default function EditMarker({ markerType, title, icons }) {
 										<Label
 											name={__('Content', 'flare-imc')}
 											tooltip={__(
-												'Shows in the popup when selecting the marker on the public user interface.',
+												'Can be shown in the popup when selecting the marker on the public user interface.',
 												'flare-imc'
 											)}
 										/>
@@ -159,7 +167,7 @@ export default function EditMarker({ markerType, title, icons }) {
 												'flare-imc'
 											)}
 											tooltip={__(
-												'Shows in the popup when selecting the marker on the public user interface. Note that the image will be cropped in the popup as shown here.',
+												'Can be shown in the popup when selecting a marker on the public user interface.',
 												'flare-imc'
 											)}
 										/>

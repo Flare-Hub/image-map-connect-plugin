@@ -67,6 +67,10 @@
 				:global(.components-tooltip) {
 					text-transform: none;
 				}
+
+				:global(.components-popover__content) {
+					text-align: start;
+				}
 			}
 		}
 
@@ -164,7 +168,7 @@
 	}
 
 	.featuredButtons {
-		margin: 0 8px;
+		margin-left: 8px;
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
