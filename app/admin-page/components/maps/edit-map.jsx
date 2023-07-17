@@ -85,7 +85,11 @@ export default function EditMap() {
 				)}
 				{(mapStatus === 'new' || mapStatus === 'loaded') && (
 					<Form form={form}>
-						<h2>{__('Edit Map', 'flare-imc')}</h2>
+						<h2>
+							{query.map === 'new'
+								? __('Add Map', 'flare-imc')
+								: __('Edit Map', 'flare-imc')}
+						</h2>
 						<div className="col-xs-9">
 							<Controller
 								name="title.raw"

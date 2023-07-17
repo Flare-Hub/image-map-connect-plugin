@@ -23,8 +23,9 @@ wait({ resources: [server] })
 			// Refresh on js, css or php changes
 			files: [
 				'inc/**/*.php',
-				'assets/build/**.js',
-				'assets/build/**.css',
+				'assets/build/**/*.js',
+				'assets/build/**/*.jsx',
+				'assets/build/**/*.css',
 			],
 			// Don't open a browser if browsers is set to none
 			open: process.env.BROWSER !== 'none',

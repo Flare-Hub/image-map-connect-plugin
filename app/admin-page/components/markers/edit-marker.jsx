@@ -9,6 +9,7 @@ import RichTextEditor from '../forms/rich-text-editor';
 import ImageSelector from '../forms/image-selector';
 import { getControlClass, cls } from '../../utils/form-control';
 import Label from '../forms/label';
+import { useRouter } from '../../contexts/router';
 
 /**
  * Marker details form.
@@ -22,6 +23,7 @@ export default function EditMarker({ markerType, title, icons }) {
 	// Get all post types applicable to markers.
 	const postTypes = useSelect((select) => select('core').getPostTypes());
 	const { watch } = useFormContext();
+	const { query } = useRouter();
 
 	const placeMarkerRef = useRef(
 		'place-marker-' + Math.floor(Math.random() * 100000000)
@@ -29,7 +31,11 @@ export default function EditMarker({ markerType, title, icons }) {
 
 	return (
 		<>
-			<h2>{__('Edit Marker', 'flare-imc')}</h2>
+			<h2>
+				{query.marker === 'new'
+					? __('Add Marker', 'flare-imc')
+					: __('Edit Marker', 'flare-imc')}
+			</h2>
 			<div className="col-xs-9">
 				{/* <BaseControl label={__('Layer', 'flare-imc')} className={cls.field}>{watch('imc_layers')}</BaseControl> */}
 				{postTypes && markerType && (
