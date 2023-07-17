@@ -37,7 +37,7 @@ export default function PopupContent({
 						className={cls.link}
 						href={marker.link}
 						target={blankTarget ? '_blank' : null}
-						rel="noreferrer"
+						rel={blankTarget ? 'noreferrer noopener' : ''}
 					>
 						{'{{ /standalone }}'}
 						{children}
