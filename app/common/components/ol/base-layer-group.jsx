@@ -1,5 +1,5 @@
-import { useEffect } from '@wordpress/element';
-import { useEntityRecords } from '@wordpress/core-data';
+import { useEffect, useMemo } from '@wordpress/element';
+import { useEntityRecord, useEntityRecords } from '@wordpress/core-data';
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
 import { __ } from '@wordpress/i18n';
 import useNotice from 'common/utils/use-notice';
@@ -17,16 +17,14 @@ import ImageLayer from './image-layer';
 export default function BaseLayerGroup({ mapId, selLayerId, setSelLayerId }) {
 	const { controlBar } = useMap();
 
+	const { record: map } = useEntityRecord('postType', 'imc-map', mapId);
+
 	// Get layers for selected map from WordPress.
-	const { records: layers, status } = useEntityRecords(
-		'taxonomy',
-		'imc-layer',
-		{
-			post: mapId,
-			per_page: -1,
-			_embed: true,
-		}
-	);
+	const { records, status } = useEntityRecords('taxonomy', 'imc-layer', {
+		post: mapId,
+		per_page: -1,
+		_embed: true,
+	});
 
 	useNotice(
 		status === 'ERROR',
@@ -36,6 +34,15 @@ export default function BaseLayerGroup({ mapId, selLayerId, setSelLayerId }) {
 		),
 		[status]
 	);
+
+	// Sort layers by the sorting order on the map.
+	const layers = useMemo(() => {
+		if (!records || !map?.meta?.layer_order) return [];
+		const ids = map.meta.layer_order;
+		return [...records].sort(
+			(a, b) => ids?.indexOf(b.id) - ids?.indexOf(a.id)
+		);
+	}, [map?.meta?.layer_order, records]);
 
 	useEffect(() => {
 		if (layers && !selLayerId) setSelLayerId(layers[0].id);

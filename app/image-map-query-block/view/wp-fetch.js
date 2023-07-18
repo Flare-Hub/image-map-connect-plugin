@@ -21,17 +21,17 @@ import apiFetch from '@wordpress/api-fetch';
  * @param {Object.<string, string>}     query  Query parameters to append to the endpoint.
  * @return {Promise<WpResponse>} The response from Wordpress.
  */
-export async function wpFetch( path, method = 'GET', body, query = {} ) {
+export async function wpFetch(path, method = 'GET', body, query = {}) {
 	// Create the full query path
-	const params = new URLSearchParams( query );
+	const params = new URLSearchParams(query);
 
 	// Send request
-	const response = await apiFetch( {
+	const response = await apiFetch({
 		path: path + '?' + params.toString(),
 		parse: false,
 		method,
 		data: body,
-	} );
+	});
 
 	// Return response parsed
 	const data = await response.json();
@@ -48,14 +48,14 @@ export async function wpFetch( path, method = 'GET', body, query = {} ) {
  * @param {Object.<string, string>} query      Query parameters to append to the endpoint.
  * @return {Promise<WpResponse & CollectionResponse>} The response from Wordpress.
  */
-export async function getCollection( collection, query ) {
-	const path = `/wp/v2/${ collection }/`;
-	const { body, response } = await wpFetch( path, 'GET', null, query );
+export async function getCollection(collection, query) {
+	const path = `/wp/v2/${collection}/`;
+	const { body, response } = await wpFetch(path, 'GET', null, query);
 
 	return {
 		body,
-		total: Number( response.headers.get( 'X-WP-TotalPages' ) ),
-		totalPages: Number( response.headers.get( 'X-WP-TotalPages' ) ),
+		total: Number(response.headers.get('X-WP-TotalPages')),
+		totalPages: Number(response.headers.get('X-WP-TotalPages')),
 		response,
 	};
 }
@@ -67,30 +67,25 @@ export async function getCollection( collection, query ) {
  * @param {Object.<string, string>} query      Query parameters to append to the endpoint.
  * @return {Promise<Array<object>>} The response from Wordpress.
  */
-export async function getFullCollection( collection, query = {} ) {
+export async function getFullCollection(collection, query = {}) {
 	/** @type {Array<Promise<WpResponse & CollectionResponse>>} */
 	const requests = [];
 	const q = { ...query };
 
 	q.page = 1;
-	if ( ! query.per_page ) q.per_page = 100;
-	const firstReq = getCollection( collection, q );
-	requests.push( firstReq );
+	if (!query.per_page) q.per_page = 100;
+	const firstReq = getCollection(collection, q);
+	requests.push(firstReq);
 
-	const totalPages = ( await firstReq ).totalPages;
+	const totalPages = (await firstReq).totalPages;
 
-	while ( q.page < totalPages ) {
+	while (q.page < totalPages) {
 		q.page++;
-		requests.push( getCollection( collection, q ) );
+		requests.push(getCollection(collection, q));
 	}
 
-	try {
-		const responses = await Promise.all( requests );
-		return responses.reduce( ( acc, res ) => [ ...acc, ...res.body ], [] );
-	} catch ( error ) {
-		console.error( error ); // eslint-disable-line no-console
-		return [];
-	}
+	const responses = await Promise.all(requests);
+	return responses.reduce((acc, res) => [...acc, ...res.body], []);
 }
 
 /**
@@ -100,7 +95,7 @@ export async function getFullCollection( collection, query = {} ) {
  * @param {string}                  id         The ID of the object.
  * @param {Object.<string, string>} query      Query parameters to append to the endpoint.
  */
-export function getItem( collection, id, query ) {
-	const path = `/wp/v2/${ collection }/${ id }`;
-	return wpFetch( path, 'GET', null, query );
+export function getItem(collection, id, query) {
+	const path = `/wp/v2/${collection}/${id}`;
+	return wpFetch(path, 'GET', null, query);
 }

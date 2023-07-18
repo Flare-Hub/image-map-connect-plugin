@@ -31,6 +31,7 @@ export default class Map {
 	/** @type {OlMap} Open Layers map to add the layer to. */ olMap;
 	/** @type {VectorLayer} Layer to display the features */ ftLayer;
 	/** @type {Array<Object<string, any>>} WordPress layers. */ wpLayers;
+	/** @type {Array<Object<string, any>>} WordPress map. */ wpMap;
 	/** @type {Popup} Marker popup. */ popup;
 	/** @type {Select} Marker selection handler */ selector;
 	/** @type {{slug: string, rest_base: string }} Post types that can be linked to markers */ postTypes;
@@ -76,6 +77,7 @@ export default class Map {
 			autoPan: { animation: { duration: 500 } },
 		});
 
+		// Map post type slugs to their REST API endpoints.
 		wpFetch('/wp/v2/types')
 			.then((types) => {
 				this.postTypes = Object.values(types.body).reduce(
@@ -265,15 +267,36 @@ export default class Map {
 	 * @param {number} mapId
 	 */
 	async initBaseLayers(mapId) {
+		const apiCalls = [];
+
+		// Get map from WordPress
+		const map = getItem('imc_maps', mapId, { _fields: 'id,meta' });
+		apiCalls.push(map);
+
+		// Get layers from WordPress.
+		const layers = getFullCollection('imc_layers', {
+			_fields: 'id,slug,meta,image_source',
+			post: mapId,
+		});
+		apiCalls.push(layers);
+
 		try {
-			// Get layers from WordPress.
-			this.wpLayers = await getFullCollection('imc_layers', {
-				_fields: 'id,slug,meta,image_source',
-				post: mapId,
-			});
+			// When all records have been fetched, sort the layers by order on the map.
+			const records = await Promise.all(apiCalls);
+
+			this.wpMap = records.find((record) => record.body)?.body;
+			const sortOrder = this.wpMap?.meta?.layer_order;
+
+			this.wpLayers = records
+				.find((record) => Array.isArray(record))
+				.sort(
+					(a, b) =>
+						sortOrder?.indexOf(b.id) - sortOrder?.indexOf(a.id)
+				);
 		} catch (error) {
+			const body = await error.json();
 			this.setError(
-				__('Unable to load layers.', 'flare-imc') +
+				body.message +
 					' ' +
 					__('Please refresh this page to try again.', 'flare-imc')
 			);
