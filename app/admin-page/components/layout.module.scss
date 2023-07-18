@@ -8,6 +8,12 @@
 
 .menuItem {
 	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+
+	i {
+		cursor: grab;
+	}
 }
 
 .addContainer {
@@ -23,4 +29,14 @@
 
 .empty {
 	text-align: center;
+}
+
+.dragging {
+	background-color: rgb(240, 240, 240);
+	border: 1px solid rgb(80, 80, 80);
+	opacity: 0.5;
+}
+
+.hovering {
+	border: 1px solid var(--wp-admin-theme-color);
 }

@@ -219,4 +219,26 @@ class Map {
 			update_term_meta( $id, 'img', $icon['img'] );
 		}
 	}
+
+	/**
+	 * Register meta field to store the order of the map layers.
+	 *
+	 * @since 0.1.2
+	 **/
+	public function register_layer_order_meta() {
+		register_post_meta(
+			self::NAME,
+			'layer_order',
+			array(
+				'type'         => 'array',
+				'single'       => true,
+				'show_in_rest' => array(
+					'schema' => array(
+						'type'  => 'array',
+						'items' => array( 'type' => 'number' ),
+					),
+				),
+			)
+		);
+	}
 }

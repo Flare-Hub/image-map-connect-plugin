@@ -106,6 +106,7 @@ class Plugin {
 		// Hook Map functions.
 		$this->map->register_connected_post_types();
 		$this->map->register_icons();
+		$this->map->register_layer_order_meta();
 
 		// Hook Layer functions.
 		$this->layer->register_image_meta();

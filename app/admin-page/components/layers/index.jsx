@@ -1,11 +1,14 @@
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useEffect, useRef } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
+import { useDispatch } from '@wordpress/data';
+import { store as dataStore } from '@wordpress/core-data';
 
 import useCollection from '../../hooks/useCollection';
 import { useRouter } from '../../contexts/router';
 import Layout from '../layout';
 import EditLayer from './edit-layer';
+import useRecord from '../../hooks/useRecord';
 
 /**
  * @typedef {import('react').MutableRefObject<{
@@ -15,10 +18,24 @@ import EditLayer from './edit-layer';
  */
 
 /**
+ * Sort layer by provided ids.
+ *
+ * @param {Array<Object<string, any>>} list
+ * @param {Array<number>}              ids  Ordered list if layer ids.
+ */
+function sortLayers(list, ids) {
+	return [...list].sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+}
+
+/**
  * List of maps with details of selected map
  */
 export default function Layers() {
 	const { query, navigate } = useRouter();
+
+	const { record: map } = useRecord(query.map, 'postType', 'imc-map', {
+		_fields: 'id,meta',
+	});
 
 	// Load layers into global state
 	const { list, loading } = useCollection(
@@ -27,6 +44,23 @@ export default function Layers() {
 		{ post: +query.map ?? 0, _fields: 'name,id,meta,image_source' },
 		[query.map]
 	);
+
+	const [layers, setLayers] = useState([]);
+
+	useEffect(() => {
+		if (map?.meta?.layer_order) {
+			setLayers(sortLayers(list, map?.meta?.layer_order));
+		}
+	}, [list, map?.meta?.layer_order]);
+
+	const { saveEntityRecord } = useDispatch(dataStore);
+	function handleDrag(ids) {
+		setLayers(sortLayers(list, ids));
+		saveEntityRecord('postType', 'imc-map', {
+			id: map.id,
+			meta: { layer_order: ids },
+		});
+	}
 
 	/**
 	 * common image size for all layers in map.
@@ -59,7 +93,7 @@ export default function Layers() {
 
 	return (
 		<Layout
-			list={list}
+			list={layers}
 			titleAttr="name"
 			selected={+query.layer}
 			selectItem={setLayer}
@@ -73,6 +107,8 @@ export default function Layers() {
 					{__('Add Layer')}
 				</Button>
 			}
+			sortable
+			onChangeOrder={handleDrag}
 		>
 			<EditLayer imgSize={imgSize} />
 		</Layout>
