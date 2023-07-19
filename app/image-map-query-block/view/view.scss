@@ -1,7 +1,6 @@
 .wp-block-flare-hub-image-map-query {
-	width: 100%;
-	// Bug in wordpress prevents background-color
-	// from coming from the default in block.json.
+	// Bug in wordpress prevents background-color from coming from the default
+	// in block.json. See: https://github.com/WordPress/gutenberg/issues/50229
 	background-color: #d1d1d1;
 	overflow: hidden;
 
