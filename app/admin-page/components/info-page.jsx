@@ -10,8 +10,56 @@ import processDiagram from '../images/process-diagram.svg';
 export default function InfoPage() {
 	return (
 		<Card>
-			<CardBody>
-				<div className="col-9">
+			<CardBody className="grid direction-row-reverse">
+				<div className={cls.toc + ' col-12 col-md-3'}>
+					<h2 id="toc">{__('Page contents', 'flare-imc')}</h2>
+					<ul>
+						<li>
+							<a href="#about">
+								{__('About the Plugin', 'flare-imc')}
+							</a>
+						</li>
+						<li>
+							<a href="#use">
+								{__('How to Use the Plugin', 'flare-imc')}
+							</a>
+							<ul>
+								<li>
+									<a href="#admin">
+										{__('Admin Page', 'flare-imc')}
+									</a>
+								</li>
+								<li>
+									<a href="#block">
+										{__(
+											'Image Map Connect block',
+											'flare-imc'
+										)}
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#faq">
+								{__('Frequently Asked Questions', 'flare-imc')}
+							</a>
+						</li>
+						<li>
+							<a href="#support">
+								{__(
+									'Support and Enhancement Requests',
+									'flare-imc'
+								)}
+							</a>
+						</li>
+						<li>
+							<a href="#author">
+								{__('About the Plugin Author', 'flare-imc')}
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div className="col-12 col-md-9">
 					<div className={cls.content}>
 						<h2 id="about">
 							{__('About the Plugin', 'flare-imc')}
@@ -48,10 +96,12 @@ export default function InfoPage() {
 								{__('Image Map Connect steps', 'flare-imc')}
 							</figcaption>
 						</figure>
-						<h3 id="admin">{__('Admin Page', 'flare-imc')}</h3>
+						<h3 id="admin">
+							{__('"Image Maps" admin Page', 'flare-imc')}
+						</h3>
 						<p>
 							{__(
-								'The Admin page is the page you are currently on and has 4 tabs:',
+								'The "Image Maps" admin page is the page in the admin menu that you are currently on and has 4 tabs:',
 								'flare-imc'
 							)}
 						</p>
@@ -195,11 +245,11 @@ export default function InfoPage() {
 							</PanelBody>
 						</Panel>
 						<h3 id="block">
-							{__('Interactive Image Map block', 'flare-imc')}
+							{__('Image Map Connect block', 'flare-imc')}
 						</h3>
 						<p>
 							{__(
-								'Image Map Connect includes the Interactive Image Map block. This block will show the image map in the public user interface (UI).',
+								'Image Map Connect includes the Image Map Connect block. This block will show the image map in the public user interface (UI).',
 								'flare-imc'
 							)}
 						</p>
@@ -313,54 +363,6 @@ export default function InfoPage() {
 							}}
 						/>
 					</div>
-				</div>
-				<div className={cls.toc + ' col-3'}>
-					<h2 id="toc">{__('Page contents', 'flare-imc')}</h2>
-					<ul>
-						<li>
-							<a href="#about">
-								{__('About the Plugin', 'flare-imc')}
-							</a>
-						</li>
-						<li>
-							<a href="#use">
-								{__('How to Use the Plugin', 'flare-imc')}
-							</a>
-							<ul>
-								<li>
-									<a href="#admin">
-										{__('Admin Page', 'flare-imc')}
-									</a>
-								</li>
-								<li>
-									<a href="#block">
-										{__(
-											'Interactive Image Map block',
-											'flare-imc'
-										)}
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="#faq">
-								{__('Frequently Asked Questions', 'flare-imc')}
-							</a>
-						</li>
-						<li>
-							<a href="#support">
-								{__(
-									'Support and Enhancement Requests',
-									'flare-imc'
-								)}
-							</a>
-						</li>
-						<li>
-							<a href="#author">
-								{__('About the Plugin Author', 'flare-imc')}
-							</a>
-						</li>
-					</ul>
 				</div>
 			</CardBody>
 		</Card>
