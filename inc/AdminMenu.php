@@ -69,7 +69,10 @@ class AdminMenu {
 
 		?>
 			<div <?php echo wp_kses_data( $div_attr ); ?>>
-				<div><i class="ri-loader-4-line flare-loader-spin"></i></div>
+				<svg class="flare-loader-spin" viewBox="0 0 100 100" width="16" height="16" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false" style="width: 100px; height: 100px; margin: 30px; color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba)); overflow: visible;">
+					<circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke" style="fill: transparent; stroke-width: 1.5px; stroke: rgb(221, 221, 221);"></circle>
+					<path d="m 50 0 a 50 50 0 0 1 50 50" vector-effect="non-scaling-stroke" style="fill: transparent; stroke-width: 1.5px; stroke: currentcolor; stroke-linecap: round; transform-origin: 50% 50%; animation: 1.4s linear 0s infinite normal both running flare-spin;"></path>
+				</svg>
 			</div>
 			<noscript><?php esc_html_e( 'This metabox requires javascript', 'flare-imc' ); ?></noscript>
 		<?php
