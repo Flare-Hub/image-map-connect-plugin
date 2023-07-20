@@ -275,7 +275,7 @@ export default class Map {
 
 		// Get layers from WordPress.
 		const layers = getFullCollection('imc_layers', {
-			_fields: 'id,slug,meta,image_source',
+			_fields: 'id,slug,name,meta,image_source',
 			post: mapId,
 		});
 		apiCalls.push(layers);

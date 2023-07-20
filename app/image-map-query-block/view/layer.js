@@ -60,7 +60,7 @@ export default class Layer {
 		// Bring it all together.
 		this.baseLayer = new ImageLayer({
 			source: this.source,
-			title: layer.slug,
+			title: layer.name,
 			baseLayer: true,
 			visible: this.visible,
 			blockLayer: this,
