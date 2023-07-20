@@ -45,7 +45,7 @@ export default function BaseLayerGroup({ mapId, selLayerId, setSelLayerId }) {
 	}, [map?.meta?.layer_order, records]);
 
 	useEffect(() => {
-		if (layers && !selLayerId) setSelLayerId(layers[0].id);
+		if (layers?.length && !selLayerId) setSelLayerId(layers[0].id);
 	}, [layers, selLayerId, setSelLayerId]);
 
 	// Add layer switcher control to switch base layers.
