@@ -159,13 +159,17 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						hasValue={() => style.height !== undefined}
 					>
 						<UnitControl
-							label={__('Map Height', 'flare-imc')}
+							label={__('Height', 'flare-imc')}
 							value={style.height}
 							onChange={(val) =>
 								setAttributes({
 									style: { ...style, height: val },
 								})
 							}
+							help={__(
+								'Image will never show larger than 92% of the viewport height.',
+								'flare-imc'
+							)}
 						/>
 					</ToolsPanelItem>
 				</InspectorControls>

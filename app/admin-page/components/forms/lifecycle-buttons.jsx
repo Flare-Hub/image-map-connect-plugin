@@ -70,7 +70,10 @@ export default function LifeCycleButtons({
 					className="medium"
 					type="button"
 					onClick={handleSubmit(saveRecord, handleValidationError)}
-					disabled={!formState.isDirty || formState.isSubmitting}
+					disabled={
+						!Object.keys(formState.dirtyFields).length ||
+						formState.isSubmitting
+					}
 				>
 					{__('Save')}
 				</Button>

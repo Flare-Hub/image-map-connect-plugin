@@ -1,4 +1,5 @@
 .wp-block-flare-hub-image-map-query {
+	max-height: 92vh;
 	// Bug in wordpress prevents background-color from coming from the default
 	// in block.json. See: https://github.com/WordPress/gutenberg/issues/50229
 	background-color: #d1d1d1;
@@ -15,20 +16,6 @@
 	.flare-marker-popup {
 		max-width: 90%;
 		max-height: 90%;
-
-		.closeBox { // stylelint-disable-line selector-class-pattern
-			position: absolute;
-			right: 0;
-			background-color: rgba($color: #000, $alpha: 0.6);
-			border-radius: 50%;
-			z-index: 20;
-			color: var(--wp--preset--color--white);
-
-			&::after {
-				font-size: 1.7em;
-				font-family: Arial, sans-serif;
-			}
-		}
 
 		.ol-popup-content {
 			position: relative;
@@ -49,7 +36,25 @@
 
 		/* stylelint-disable-next-line selector-class-pattern */
 		&.ol-popup .closeBox {
-			margin: 8px 12px;
+			position: absolute;
+			background-color: var(--wp--preset--color--white);
+			z-index: 20;
+			color: #4b4b4b;
+			font-size: 36px;
+			top: 10px;
+			right: 10px;
+			width: 26px;
+			height: 26px;
+
+			&::after {
+				/* stylelint-disable-next-line max-line-length */
+				/* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
+				font-family: remixicon;
+				content: "\eb96";
+				font-weight: 100;
+				margin: -14px;
+				top: 0;
+			}
 		}
 
 		@media screen and (max-width: 600px) {
@@ -81,15 +86,6 @@
 					height: 90%;
 				}
 			}
-
-			/* stylelint-disable-next-line selector-class-pattern */
-			&.ol-popup .closeBox {
-				width: 36px;
-				height: 36px;
-				font-size: 28px;
-				margin: 8px;
-			}
-
 		}
 
 		@media screen and (min-width: 601px) {
@@ -137,6 +133,19 @@
 
 				.anchor {
 					box-shadow: 2px 2px 2px rgba($color: #000, $alpha: 0.4);
+				}
+			}
+
+			/* stylelint-disable-next-line selector-class-pattern */
+			&.ol-popup .closeBox {
+				top: 6px;
+				right: 10px;
+				width: 10px;
+				height: 10px;
+				font-size: 16px;
+
+				&::after {
+					margin: -7px;
 				}
 			}
 		}

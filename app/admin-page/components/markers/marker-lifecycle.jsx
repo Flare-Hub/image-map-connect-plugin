@@ -1,9 +1,9 @@
-import { select } from '@wordpress/data';
-import { store as dataStore } from '@wordpress/core-data';
+import { dispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 
 import { useRouter } from '../../contexts/router';
 import LifeCycleButtons from '../forms/lifecycle-buttons';
+import { store } from '@wordpress/core-data';
 
 /** @typedef {import('@wordpress/core-data').EntityRecord} EntityRecord */
 
@@ -11,17 +11,11 @@ import LifeCycleButtons from '../forms/lifecycle-buttons';
  * Buttons to save or delete a marker
  *
  * @param {Object}                                  props
- * @param {EntityRecord}                            props.marker    Selected marker.
- * @param {(values: EntityRecord) => Promise<void>} props.save      Action to take when clicking save.
- * @param {() => Promise<void>}                     props.delete    Action to take when clicking delete
- * @param {Object<string, unknown>}                 props.listQuery Query for refreshing the markers list.
+ * @param {EntityRecord}                            props.marker Selected marker.
+ * @param {(values: EntityRecord) => Promise<void>} props.save   Action to take when clicking save.
+ * @param {() => Promise<void>}                     props.delete Action to take when clicking delete
  */
-export default function MarkerLifecycle( {
-	marker,
-	save,
-	delete: delMarker,
-	listQuery,
-} ) {
+export default function MarkerLifecycle({ marker, save, delete: delMarker }) {
 	const { query } = useRouter();
 
 	/**
@@ -29,14 +23,14 @@ export default function MarkerLifecycle( {
 	 *
 	 * @param {Object<string, any>} fields
 	 */
-	async function handleSave( fields ) {
-		const post = await save( fields );
+	async function handleSave(fields) {
+		const post = await save(fields);
 
-		if ( post?.type !== 'imc-marker' ) {
-			select( dataStore ).getEntityRecords(
+		if (post?.type !== 'imc-marker') {
+			dispatch(store).receiveEntityRecords(
 				'postType',
 				'imc-marker',
-				listQuery,
+				[],
 				{},
 				true
 			);
@@ -49,17 +43,17 @@ export default function MarkerLifecycle( {
 	async function handleDelete() {
 		let success;
 
-		if ( marker.type === 'imc-marker' ) {
+		if (marker.type === 'imc-marker') {
 			// Delete marker from WordPress.
 			success = await delMarker();
 		} else {
 			// Remove marker fields from post in WordPress.
-			success = await handleSave( {
+			success = await handleSave({
 				id: marker.id,
 				imc_loc: {},
 				imc_icons: [],
 				imc_layers: [],
-			} );
+			});
 		}
 
 		// Return WordPress response.
@@ -69,16 +63,16 @@ export default function MarkerLifecycle( {
 	return (
 		<LifeCycleButtons
 			model="marker"
-			id={ query.marker }
-			onDelete={ handleDelete }
-			onSave={ handleSave }
+			id={query.marker}
+			onDelete={handleDelete}
+			onSave={handleSave}
 			confirmDeleteText={
 				__(
 					'Are you sure you want to delete this marker?',
 					'flare-imc'
 				) +
 				' ' +
-				( marker.type === 'imc-marker'
+				(marker.type === 'imc-marker'
 					? __(
 							'This will remove the marker and all its content.',
 							'flare-imc'
@@ -86,7 +80,7 @@ export default function MarkerLifecycle( {
 					: __(
 							'This will remove the marker. The related post will not be removed',
 							'flare-imc'
-					  ) )
+					  ))
 			}
 		/>
 	);
