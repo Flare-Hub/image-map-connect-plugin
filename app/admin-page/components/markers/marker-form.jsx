@@ -15,15 +15,14 @@ import cls from '../forms/edit-form.module.scss';
 
 /**
  * @typedef LocationMeta
- * @property {Object} imc_loc     Location data.
- * @property {number} lat         Marker latitude.
- * @property {number} lng         Marker longitude.
- * @property {string} imc_img_tag Featured image responsive tag.
+ * @property {Object}        imc_loc     Location data.
+ * @property {number}        lat         Marker latitude.
+ * @property {number}        lng         Marker longitude.
+ * @property {string}        imc_img_tag Featured image responsive tag.
+ * @property {Array<number>} imc_icons   Marker icon IDs
  */
 
-/**
- * @typedef {import('@wordpress/core-data').Post & LocationMeta} Marker
- */
+/** @typedef {import('@wordpress/core-data').Post & LocationMeta} Marker */
 
 const emptyObj = {};
 
@@ -31,7 +30,7 @@ const emptyObj = {};
  * Context provider for the selected marker state.
  *
  * @param {Object}                                         props
- * @param {import('.').WpMarker}                           props.selected    List fields from the selected marker.
+ * @param {Marker}                                         props.selected    List fields from the selected marker.
  * @param {import('../../hooks/useCollection').Collection} props.markers     Marker list.
  * @param {Object<string, unknown>}                        props.listQuery   Query for refreshing the markers list.
  * @param {(map: import('ol').Map) => void}                props.onMapLoaded Callback triggered when the map is rendered.
