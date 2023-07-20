@@ -10,7 +10,8 @@
  * Author URI:          https://flarehub.io
  * Text Domain:         flare-imc
  * Domain Path:         /languages
- * Version:             0.1.0
+ * Version:             0.1.4
+ *                      (Also update block.json when updating version number)
  * Requires at least:   5.0
  * License:             GPLv3
  * License URI:         https://github.com/Flare-Hub/image-map-connect-plugin/blob/main/LICENSE

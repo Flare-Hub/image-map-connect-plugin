@@ -1,0 +1,52 @@
+.content {
+	max-width: 700px;
+	margin: auto;
+	font-size: 1.2em;
+
+	ul {
+		list-style: inherit;
+		padding-left: 2em;
+		margin: 0 0.5em;
+
+		ul {
+			list-style: circle;
+		}
+	}
+}
+
+.toc,
+.content {
+
+	p {
+		font-size: 1em;
+		margin-bottom: 0.5em;
+	}
+
+	h2,
+	h3 {
+		margin-top: 2em;
+		margin-bottom: 1em;
+	}
+}
+
+.diagram {
+	margin: 0;
+	padding-top: 6px;
+
+	img {
+		width: 100%;
+	}
+
+	figcaption {
+		font-size: 0.8em;
+		text-align: center;
+	}
+}
+
+.toc ul ul {
+	padding-left: 1.5em;
+}
+
+.panel :global(.components-button) {
+	justify-content: flex-start;
+}

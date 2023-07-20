@@ -1,0 +1,19 @@
+/* stylelint-disable selector-class-pattern */
+.wp-block-flare-hub-image-map-query.wp-block {
+
+	.components-placeholder__label .dashicon {
+		margin-right: 1em;
+	}
+
+	.components-placeholder__fieldset {
+		display: block;
+	}
+
+	.wp-block-post-content .flare-marker-popup .closeBox::after {
+		line-height: 1.1;
+	}
+
+	.ol-control.ol-layerswitcher .panel-container {
+		box-shadow: 1px 1px 2px var(--ol-subtle-background-color);
+	}
+}

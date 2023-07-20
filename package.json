@@ -9,7 +9,7 @@
     "dockerdown": "docker compose --env-file docker.env --file ./docker/docker-compose.yml down",
     "wp": "docker compose --env-file docker.env --file ./docker/docker-compose.yml exec wordpress wp",
     "lint": "eslint app/**/*.{js,jsx} && stylelint app/**/*.{css,scss}",
-    "package": "npm run build && composer archive -f zip --file image-map-connect"
+    "package": "npm install && npm run build && composer archive -f zip --file image-map-connect"
   },
   "license": "GPLv3",
   "devDependencies": {
@@ -48,6 +48,7 @@
     "mustache": "^4.2.0",
     "ol": "^7.4.0",
     "ol-ext": "^4.0.9",
+    "rc-slider": "^10.2.1",
     "react-hook-form": "^7.45.1",
     "reflex-grid": "^2.0.7",
     "remixicon": "^3.4.0"

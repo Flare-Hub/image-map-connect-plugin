@@ -34,7 +34,8 @@
       "jsconfig.json",
       "package-lock.json",
       "phpcs.xml.dist",
-      "webpack.config.js"
+      "webpack.config.js",
+      "image-map-connect.zip"
     ]
   }
 }

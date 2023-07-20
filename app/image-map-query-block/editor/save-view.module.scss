@@ -1,0 +1,20 @@
+:global(.ol-control) {
+
+	button {
+
+		&.saveButton {
+			width: 1.375em;
+			height: 1.375em;
+			font-size: 1.7em;
+			text-align: center;
+
+			i {
+				font-size: 30px;
+			}
+		}
+
+		&:active {
+			background-color: var(--ol-accent-background-color);
+		}
+	}
+}

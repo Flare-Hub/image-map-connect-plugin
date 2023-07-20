@@ -89,7 +89,7 @@ class Marker {
 				$args['meta_query'] = array(); //phpcs:ignore
 				}
 				$args['meta_query'][] = array(
-					'key'     => LocationMeta::FIELD_NAME,
+					'key'     => LocationMeta::LOC_FIELD,
 					'compare' => 'NOT EXISTS',
 				);
 				// If no layer is provided, update query to include posts with any layer set.

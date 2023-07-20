@@ -35,7 +35,7 @@ class AdminMenu {
 		$this->id          = $id;
 		$this->style_deps  = $style_deps;
 		$this->script_deps = $script_deps;
-		$this->assets      = new WpScriptsAsset( 'image-map/index', $id, false, $this->style_deps );
+		$this->assets      = new WpScriptsAsset( 'admin-page/index', $id, false, $this->style_deps );
 	}
 
 	/**

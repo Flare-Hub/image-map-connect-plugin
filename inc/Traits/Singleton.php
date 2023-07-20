@@ -24,12 +24,14 @@ trait Singleton {
 	 * To return new or existing Singleton instance of the class from which it is called.
 	 * As it sets to final it can't be overridden.
 	 *
+	 * @param array ...$params the parameters to construct the instance with.
 	 * @return object Singleton instance of the class.
 	 */
-	final public static function get_instance() {
-		$called_class   = get_called_class();
-		$params         = func_get_args();
-		self::$instance = new $called_class( ...$params );
+	final public static function get_instance( ...$params ) {
+		if ( ! self::$instance ) {
+			$called_class   = get_called_class();
+			self::$instance = new $called_class( ...$params );
+		}
 
 		return self::$instance;
 	}

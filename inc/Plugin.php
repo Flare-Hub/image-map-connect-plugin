@@ -14,8 +14,8 @@ class Plugin {
 	/** @var string name */
 	const NAME = 'image-map-connect';
 
-	/** @var string version */
-	const VERSION = '0.1.0';
+		/** @var string Plugin version */
+	public $version;
 
 	/** @var Map The map Post Type management object. */
 	protected $map;
@@ -41,6 +41,7 @@ class Plugin {
 	 * @since 0.1.0
 	 **/
 	public function __construct() {
+		$this->version = get_file_data( dirname( __DIR__ ) . '/index.php', array( 'version' => 'Version' ) )['version'];
 		// Register primary hooks.
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
@@ -58,7 +59,7 @@ class Plugin {
 		$this->layer       = new Layer();
 		$this->marker_icon = new MarkerIcon();
 		$this->marker      = new Marker();
-		$this->block_mgr   = new BlockMgr();
+		$this->block_mgr   = new BlockMgr( $this->version );
 
 		add_action( 'init', array( $this, 'init' ) );
 	}
@@ -86,7 +87,7 @@ class Plugin {
 	 **/
 	public function admin_menu() {
 		// Hook admin menu functions.
-		$remix_icons = new WpScriptsAsset( 'remixicon/remixicon', 'remixicon', self::VERSION );
+		$remix_icons = new WpScriptsAsset( 'remixicon/remixicon', 'remixicon', $this->version );
 		add_action( 'admin_enqueue_scripts', array( $remix_icons, 'register_style' ) );
 
 		$map_menu = new AdminMenu( 'image-map-connect', array( 'wp-components', 'remixicon' ) );
@@ -105,12 +106,12 @@ class Plugin {
 		// Hook Map functions.
 		$this->map->register_connected_post_types();
 		$this->map->register_icons();
+		$this->map->register_layer_order_meta();
 
 		// Hook Layer functions.
 		$this->layer->register_image_meta();
 		$this->layer->register_image_source();
-		$this->layer->register_max_zoom();
-		$this->layer->register_min_zoom();
+		$this->layer->register_zoom();
 		$this->layer->register_map();
 
 		// Hook marker functions.

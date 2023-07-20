@@ -102,29 +102,22 @@ class Layer {
 	 *
 	 * @since 0.1.0
 	 **/
-	public function register_max_zoom() {
+	public function register_zoom() {
 		$meta_args = array(
 			'object_subtype' => self::NAME,
-			'type'           => 'number',
+			'type'           => 'object',
 			'single'         => true,
-			'show_in_rest'   => true,
+			'show_in_rest'   => array(
+				'schema' => array(
+					'type'       => 'object',
+					'properties' => array(
+						'min' => array( 'type' => 'integer' ),
+						'max' => array( 'type' => 'integer' ),
+					),
+				),
+			),
 		);
-		register_meta( 'term', 'max_zoom', $meta_args );
-	}
-
-	/**
-	 * Register Layer's max zoom level field with the rest API.
-	 *
-	 * @since 0.1.0
-	 **/
-	public function register_min_zoom() {
-		$meta_args = array(
-			'object_subtype' => self::NAME,
-			'type'           => 'number',
-			'single'         => true,
-			'show_in_rest'   => true,
-		);
-		register_meta( 'term', 'min_zoom', $meta_args );
+		register_meta( 'term', 'zoom', $meta_args );
 	}
 
 	/**

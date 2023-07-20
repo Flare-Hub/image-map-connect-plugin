@@ -1,0 +1,42 @@
+.tab {
+	height: 100%;
+}
+
+.menu {
+	height: 100%;
+}
+
+.menuItem {
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+
+	i {
+		cursor: grab;
+	}
+}
+
+.addContainer {
+	text-align: center;
+	padding-top: 16px;
+}
+
+.placeholder {
+	height: 1.4em;
+	width: 50%;
+	background-color: #d1d1d1;
+}
+
+.empty {
+	text-align: center;
+}
+
+.dragging {
+	background-color: rgb(240, 240, 240);
+	border: 1px solid rgb(80, 80, 80);
+	opacity: 0.5;
+}
+
+.hovering {
+	border: 1px solid var(--wp-admin-theme-color);
+}
