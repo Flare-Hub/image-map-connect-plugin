@@ -87,11 +87,13 @@ class Layer {
 	public function get_image_source( array $layer ) {
 		if ( isset( $layer['meta']['image'] ) ) {
 			$image = wp_get_attachment_image_src( $layer['meta']['image'], 'full' );
-			return array(
-				'url'    => $image[0],
-				'width'  => $image[1],
-				'height' => $image[2],
-			);
+			if ( $image ) {
+				return array(
+					'url'    => $image[0],
+					'width'  => $image[1],
+					'height' => $image[2],
+				);
+			}
 		}
 
 		return array();

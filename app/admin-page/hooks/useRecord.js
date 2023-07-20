@@ -1,4 +1,3 @@
-import { useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { store as coreDataStore } from '@wordpress/core-data';
 import useNotice from './useNotice';
@@ -75,46 +74,41 @@ export default function useRecord(
 		[type, name, id, ...deps] // eslint-disable-line react-hooks/exhaustive-deps
 	);
 
+	// Get edit functions
 	const { saveEntityRecord, deleteEntityRecord } = useDispatch(coreDataStore);
+	const notice = useNotice();
 
 	/**
 	 * Save record changes to WordPress.
 	 *
 	 * @param {Object<string, any>} values
 	 */
-	function saveRecord(values) {
-		return saveEntityRecord(type, name, values);
+	async function saveRecord(values) {
+		try {
+			return await saveEntityRecord(type, name, values, {
+				throwOnError: true,
+			});
+		} catch (e) {
+			notice({ message: e.message, style: 'error' });
+			return false;
+		}
 	}
 
 	/** Delete record from WordPress. */
-	function delRecord() {
-		return deleteEntityRecord(type, name, id, { force: true });
+	async function delRecord() {
+		try {
+			return await deleteEntityRecord(
+				type,
+				name,
+				id,
+				{ force: true },
+				{ throwOnError: true }
+			);
+		} catch (e) {
+			notice({ message: e.message, style: 'error' });
+			return false;
+		}
 	}
-
-	/** Get syncing errors for the record. */
-	const { saveError, delError } = useSelect(
-		(select) => {
-			const { getLastEntitySaveError, getLastEntityDeleteError } =
-				select(coreDataStore);
-
-			return {
-				saveError: getLastEntitySaveError(type, name, id),
-				delError: getLastEntityDeleteError(type, name, id),
-			};
-		},
-		[type, name, id]
-	);
-
-	// Notify user of any syncing errors.
-	const notice = useNotice();
-
-	useEffect(() => {
-		if (saveError) notice({ message: saveError.message, style: 'error' });
-	}, [notice, saveError]);
-
-	useEffect(() => {
-		if (delError) notice({ message: delError.message, style: 'error' });
-	}, [delError, notice]);
 
 	return { record, status, saveRecord, delRecord };
 }
