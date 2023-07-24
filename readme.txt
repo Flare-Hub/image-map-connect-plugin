@@ -19,11 +19,19 @@ Image Map Connect allows you to add any image to your WordPress website and make
 
 1.	Display your existing and/or new posts as markers, including custom post types
 2.	Show post details in a popup
-3.	Filter markers
+3.  Filter markers
 4.	Switch between layers
 5.	Zoom in and out
+6.	Use block settings to visually configure it
 
 This plugin uses built-in WordPress features where possible, for example it extends the current posts and makes use of the default blocks like the query block. 
+
+
+
+
+xxxx
+Image Map Connect in Action - DRAFT!
+
 
 
 
@@ -87,27 +95,26 @@ Yes. The image map size, borders and background color are configurable. The popu
 
 == Screenshots ==
 
+![The Plugin Setup Process](/releases/assets/plugin-process.png)
 The Plugin Setup Process
 
-![Image Map Connect plugin process steps](/releases/assets/plugin-process.png)
-
+![Plugin Admin Page / Maps Tab](/releases/assets/1.1-admin-maps.png)
 Plugin Admin Page / Maps Tab
 
+![Plugin Admin Page / Layers Tab](/releases/assets/1.2-admin-layers.png)
 Plugin Admin Page / Layers Tab
 
+![Plugin Admin Page / Markers Tab (Type: Posts)](/releases/assets/1.2a-admin-post-marker.png)
 Plugin Admin Page / Markers Tab (Type: Posts)
 
+![Plugin Admin Page / Markers Tab (Type: Standalone marker)](/releases/assets/1.2b-admin-standalone-marker.png)
 Plugin Admin Page / Markers Tab (Type: Standalone marker)
 
+![Block / Styling](/releases/assets/2.1-block-styling.png)
 Block / Styling
 
-Block / Settings
-
-Frontend giff
-
-
-
-
+![Block / Settings](/releases/assets/2.2-block-settings.png)
+Block / Settings - DRAFT!
 
 
 
