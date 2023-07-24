@@ -4,9 +4,8 @@
  *
  * @wordpress-plugin
  * Plugin Name:         Image Map Connect - Display posts as image hotspots
- * Plugin URI:          https://github.com/Flare-Hub/image-map-connect-plugin
  * Description:         Provides a block to display image maps on a post or template. Markers on the map can reference your posts.
- * Author:              Flare Hub team
+ * Author:              Flare Hub
  * Author URI:          https://flarehub.io
  * Text Domain:         flare-imc
  * Domain Path:         /languages
