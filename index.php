@@ -10,7 +10,7 @@
  * Author URI:          https://flarehub.io
  * Text Domain:         flare-imc
  * Domain Path:         /languages
- * Version:             0.1.4
+ * Version:             0.1.5
  *                      (Also update block.json when updating version number)
  * Requires at least:   5.0
  * License:             GPLv3
