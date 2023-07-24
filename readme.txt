@@ -1,5 +1,5 @@
 === Image Map Connect ===
-Contributors: dutchigor,
+Contributors: dutchigor, daniela2017
 Tags: Image map, Interactive image, Indoor map, Image hotspot, Floor plan, Custom map, Stylized map, Event map, Infographic, Map markers, Map filters, Dynamic map
 Requires at least: 4.7
 Tested up to: 6.2
@@ -13,7 +13,7 @@ Add any image to your WordPress posts, pages, or archives and make it interactiv
 
 == Description ==
 
-## What is Image Map Connect Plugin?
+## What is Image Map Connect Plugin? ##
 
 Image Map Connect allows you to add any image to your WordPress website and make it an interactive image map. On the image map you can:
 
@@ -27,40 +27,39 @@ This plugin uses built-in WordPress features where possible, for example it exte
 
 
 
-## What Can You Use the Plugin for?
+## What Can You Use the Plugin for? ##
 
 Among other things, you can use the plugin provide an interactive
 
-- **Indoor map** (e.g. for campus facilities, grocery stores, hotels, conferences, museums, and exhibitions)
-- **Simplified or stylised outdoor map** (e.g. for events, routes, towns and villages)
-- **Infographic** to introduce a complex concept (e.g. technical frameworks)
-- **Technical drawing** to provide context
-- **Product image** with highlighted product features
+- **Indoor maps** (e.g. for campus facilities, grocery stores, hotels, conferences, museums, and exhibitions)
+- **Simplified or stylised outdoor maps** (e.g. for events, routes, towns and villages)
+- **Infographics** to introduce a complex concept (e.g. technical frameworks)
+- **Technical drawings** to provide context
+- **Product images** with highlighted product features
 
 
 
-## Features
+## Key Features ##
 
 - Create unlimited amount of image maps, layers, and markers
 - Embed the image map in block theme templates
 - Add the image map to block-based widget area in classic themes
 - Embed the image map in any pages or (custom) posts
 - Display your existing and new posts as markers, including custom post types
+- Show post details in a popup
 - Define image map center, height and zoom level
 - Modify marker and popup styling
-- Show post details in a popup
 - Filter markers based on query loop or archive
 - Add multiple layers
 - The image map is responsive
 
 
 
-## How to Use the Plugin?
+## How to Use the Plugin? ##
 
 The plugin is easy to set up following these four steps:
 
-**ADD IMAGE**
-![Image Map Connect plugin process steps](/path/to/img.jpg)
+![Image Map Connect plugin process steps](/releases/assets/plugin-process.png)
 
 
 
@@ -87,6 +86,26 @@ Yes. The image map size, borders and background color are configurable. The popu
 
 
 == Screenshots ==
+
+The Plugin Setup Process
+
+![Image Map Connect plugin process steps](/releases/assets/plugin-process.png)
+
+Plugin Admin Page / Maps Tab
+
+Plugin Admin Page / Layers Tab
+
+Plugin Admin Page / Markers Tab (Type: Posts)
+
+Plugin Admin Page / Markers Tab (Type: Standalone marker)
+
+Block / Styling
+
+Block / Settings
+
+Frontend giff
+
+
 
 
 
@@ -115,8 +134,24 @@ Yes. The image map size, borders and background color are configurable. The popu
 1. Click 'Image Maps' in WordPress sidebar menu
 2. You can find more instructions on the 'Info' tab
 3. Set up the plugin for your site by creating a map and adding layer(s) and markers. Tooltips included in the Maps/Layers/Markers tabs help you when filling in the details.
+4. Add Image Map Connect block to your page or template.
 
 
 
 
-== Change log ==
+== Development ==
+
+The code can be found on [Github](https://github.com/Flare-Hub/image-map-connect-plugin)
+
+
+
+
+== Changelog ==
+
+
+
+
+== Upgrade Notice ==
+
+= 0.0.1 =
+Thanks for using Image Map Connect! This realease includes...
