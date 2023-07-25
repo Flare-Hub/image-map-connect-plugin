@@ -1,11 +1,11 @@
-=== Image Map Connect ===
+=== Image Map Connect - Display Posts as Image Hotspots ===
 Contributors: dutchigor, daniela2017
 Tags: Image map, Interactive image, Indoor map, Image hotspot, Floor plan, Custom map, Stylized map, Event map, Infographic, Map markers, Map filters, Dynamic map
-Requires at least: 4.7
+Requires at least: 5.8
 Tested up to: 6.2
 Stable tag: 1.0.0
-Requires PHP: 
-License: GNUGPLv3
+Requires PHP: 7.4
+License: GPL-3.0-or-later
 Add any image to your WordPress posts, pages, or archives and make it interactive: display your existing and new posts as markers.
 
 
@@ -22,15 +22,15 @@ Image Map Connect allows you to add any image to your WordPress website and make
 3.  Filter markers
 4.	Switch between layers
 5.	Zoom in and out
-6.	Use block settings to visually configure it
+6.	Use block settings to visually configure the plugin
 
-This plugin uses built-in WordPress features where possible, for example it extends the current posts and makes use of the default blocks like the query block. 
-
-
+The plugin uses built-in WordPress features where possible, for example it extends the current posts and makes use of the default blocks like the query block. 
 
 
-xxxx
-Image Map Connect in Action - DRAFT!
+
+
+TODO: insert plugin gif
+Image Map Connect in Action
 
 
 
@@ -67,7 +67,7 @@ Among other things, you can use the plugin provide an interactive
 
 The plugin is easy to set up following these four steps:
 
-![Image Map Connect plugin process steps](/releases/assets/plugin-process.png)
+TODO: Add Image Map Connect plugin process steps image
 
 
 
@@ -95,26 +95,12 @@ Yes. The image map size, borders and background color are configurable. The popu
 
 == Screenshots ==
 
-![The Plugin Setup Process](/releases/assets/plugin-process.png)
-The Plugin Setup Process
-
-![Plugin Admin Page / Maps Tab](/releases/assets/1.1-admin-maps.png)
-Plugin Admin Page / Maps Tab
-
-![Plugin Admin Page / Layers Tab](/releases/assets/1.2-admin-layers.png)
-Plugin Admin Page / Layers Tab
-
-![Plugin Admin Page / Markers Tab (Type: Posts)](/releases/assets/1.2a-admin-post-marker.png)
-Plugin Admin Page / Markers Tab (Type: Posts)
-
-![Plugin Admin Page / Markers Tab (Type: Standalone marker)](/releases/assets/1.2b-admin-standalone-marker.png)
-Plugin Admin Page / Markers Tab (Type: Standalone marker)
-
-![Block / Styling](/releases/assets/2.1-block-styling.png)
-Block / Styling
-
-![Block / Settings](/releases/assets/2.2-block-settings.png)
-Block / Settings - DRAFT!
+1. Plugin Admin Page / Maps Tab
+2. Plugin Admin Page / Layers Tab
+3. Plugin Admin Page / Markers Tab (Type: Posts)
+4. Plugin Admin Page / Markers Tab (Type: Standalone marker)
+5. Block / Styling
+6. Block / Settings - TODO: update
 
 
 
@@ -157,8 +143,3 @@ The code can be found on [Github](https://github.com/Flare-Hub/image-map-connect
 
 
 
-
-== Upgrade Notice ==
-
-= 0.0.1 =
-Thanks for using Image Map Connect! This realease includes...

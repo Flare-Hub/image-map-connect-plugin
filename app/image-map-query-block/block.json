@@ -8,10 +8,18 @@
   "icon": "location-alt",
   "description": "An image map displaying the selected map with it's markers.",
   "keywords": [
-    "image",
-    "map",
-    "markers",
-    "list"
+    "Image map",
+    "Interactive image",
+    "Indoor map",
+    "Image hotspot",
+    "Floor plan",
+    "Custom map",
+    "Stylized map",
+    "Event map",
+    "Infographic",
+    "Map markers",
+    "Map filters",
+    "Dynamic map"
   ],
   "textdomain": "flare-imc",
   "attributes": {
