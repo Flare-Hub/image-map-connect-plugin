@@ -6,7 +6,7 @@
   "version": "0.1.5",
   "category": "widgets",
   "icon": "location-alt",
-  "description": "An image map displaying the selected map with it's markers.",
+  "description": "Display image map with markers.",
   "keywords": [
     "image",
     "map",
