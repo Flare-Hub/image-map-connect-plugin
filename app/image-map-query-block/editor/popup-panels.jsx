@@ -17,7 +17,7 @@ import { __ } from '@wordpress/i18n';
 import { useMemo } from '@wordpress/element';
 import { useBlockContext } from './block-context';
 
-import cls from './popup-panel.module.scss';
+import cls from './popup-panels.module.scss';
 
 /** @typedef {import('./edit').Popup} Popup */
 
