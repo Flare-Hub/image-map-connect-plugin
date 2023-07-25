@@ -17,12 +17,12 @@ Add any image to your WordPress posts, pages, or archives and make it interactiv
 
 Image Map Connect allows you to add any image to your WordPress website and make it an interactive image map. On the image map you can:
 
-1.	Display your existing and/or new posts as markers, including custom post types
-2.	Show post details in a popup
-3.  Filter markers
-4.	Switch between layers
-5.	Zoom in and out
-6.	Use block settings to visually configure the plugin
+1. Display your existing and/or new posts as markers, including custom post types
+2. Show post details in a popup
+3. Filter markers
+4. Switch between layers
+5. Zoom in and out
+6. Use block settings to visually configure the plugin
 
 The plugin uses built-in WordPress features where possible, for example it extends the current posts and makes use of the default blocks like the query block. 
 
