@@ -14,8 +14,11 @@ class Plugin {
 	/** @var string name */
 	const NAME = 'image-map-connect';
 
-		/** @var string Plugin version */
-	public $version;
+	/** @var string Plugin version */
+	public static $version;
+
+	/** @var string $slug Plugin slug coming from the plugin text domain. */
+	public static $slug;
 
 	/** @var Map The map Post Type management object. */
 	protected $map;
@@ -41,7 +44,16 @@ class Plugin {
 	 * @since 0.1.0
 	 **/
 	public function __construct() {
-		$this->version = get_file_data( dirname( __DIR__ ) . '/index.php', array( 'version' => 'Version' ) )['version'];
+		$meta          = get_file_data(
+			dirname( __DIR__ ) . '/index.php',
+			array(
+				'version' => 'Version',
+				'slug'    => 'Text Domain',
+			)
+		);
+		self::$version = $meta['version'];
+		self::$slug    = $meta['slug'];
+
 		// Register primary hooks.
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
@@ -59,7 +71,7 @@ class Plugin {
 		$this->layer       = new Layer();
 		$this->marker_icon = new MarkerIcon();
 		$this->marker      = new Marker();
-		$this->block_mgr   = new BlockMgr( $this->version );
+		$this->block_mgr   = new BlockMgr();
 
 		add_action( 'init', array( $this, 'init' ) );
 	}
@@ -87,7 +99,7 @@ class Plugin {
 	 **/
 	public function admin_menu() {
 		// Hook admin menu functions.
-		$remix_icons = new WpScriptsAsset( 'remixicon/remixicon', 'remixicon', $this->version );
+		$remix_icons = new WpScriptsAsset( 'remixicon/remixicon', 'remixicon', self::$version );
 		add_action( 'admin_enqueue_scripts', array( $remix_icons, 'register_style' ) );
 
 		$map_menu = new AdminMenu( 'image-map-connect', array( 'wp-components', 'remixicon' ) );

@@ -62,6 +62,7 @@ class AdminMenu {
 	 **/
 	public function load_app() {
 		wp_enqueue_media();
+		$this->assets->register_translations();
 		wp_enqueue_script( $this->id );
 		wp_enqueue_style( $this->id );
 
