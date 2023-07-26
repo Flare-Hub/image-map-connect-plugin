@@ -30,7 +30,7 @@ class RestMapsController extends \WP_REST_Posts_Controller {
 		if ( count( $layers ) > 0 ) {
 			return new \WP_Error(
 				'has_layers',
-				__( 'You can not delete a map that has related layers.', 'flare-imc' ),
+				__( 'You can not delete a map that has related layers.', 'image-map-connect' ),
 				array( 'status' => 409 )
 			);
 		}

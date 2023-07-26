@@ -38,29 +38,32 @@ export default function DefaultViewPanel() {
 			)}
 			{__(
 				'To set the default layer, and its position and zoom level:',
-				'flare-imc'
+				'image-map-connect'
 			)}
 			<ol>
 				<li>
 					{__(
 						'If the map has multiple layers, select the layer to set as default from the layer selector.',
-						'flare-imc'
+						'image-map-connect'
 					)}
 				</li>
 				<li>
-					{__('Pan/zoom to frame the image as desired.', 'flare-imc')}
+					{__(
+						'Pan/zoom to frame the image as desired.',
+						'image-map-connect'
+					)}
 				</li>
 				<li>
 					{__(
 						'Press the device icon with the lock. This will set the selected view and layer as the default for the selected device type.',
-						'flare-imc'
+						'image-map-connect'
 					)}
 				</li>
 				{preview && (
 					<li>
 						{__(
 							'Change the preview mode using the buttons above and repeat the process to change the image frame on different device types.',
-							'flare-imc'
+							'image-map-connect'
 						)}
 					</li>
 				)}

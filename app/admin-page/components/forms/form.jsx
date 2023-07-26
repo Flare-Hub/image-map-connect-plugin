@@ -26,7 +26,7 @@ export default function Form({ form, children }) {
 					window.confirm(
 						__(
 							'Your record is not saved. Are you sure you want to cancel your changes?',
-							'flare-imc'
+							'image-map-connect'
 						)
 					);
 				if (confirm) {

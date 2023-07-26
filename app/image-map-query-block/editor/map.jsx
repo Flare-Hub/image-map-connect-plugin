@@ -68,7 +68,7 @@ export default function Map({
 				<MapSize />
 				<BaseLayerGroup
 					mapId={mapId}
-					title={__('Initial layer', 'flare-imc')}
+					title={__('Initial layer', 'image-map-connect')}
 					selLayerId={selLayer}
 					setSelLayerId={setSelLayer}
 				/>

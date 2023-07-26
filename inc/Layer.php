@@ -19,22 +19,22 @@ class Layer {
 	 **/
 	public function register_image_map( array $post_types ) {
 		$labels = array(
-			'name'              => _x( 'Image Map Layers', 'taxonomy general name', 'flare-imc' ),
-			'singular_name'     => _x( 'Image Map Layer', 'taxonomy singular name', 'flare-imc' ),
-			'search_items'      => __( 'Search Layers', 'flare-imc' ),
-			'all_items'         => __( 'All Layers', 'flare-imc' ),
-			'parent_item'       => __( 'Parent Layer', 'flare-imc' ),
-			'parent_item_colon' => __( 'Parent Layer:', 'flare-imc' ),
-			'edit_item'         => __( 'Edit Layer', 'flare-imc' ),
-			'update_item'       => __( 'Update Layer', 'flare-imc' ),
-			'add_new_item'      => __( 'Add New Layer', 'flare-imc' ),
-			'new_item_name'     => __( 'New Layer Name', 'flare-imc' ),
-			'menu_name'         => __( 'Layer', 'flare-imc' ),
+			'name'              => _x( 'Image Map Layers', 'taxonomy general name', 'image-map-connect' ),
+			'singular_name'     => _x( 'Image Map Layer', 'taxonomy singular name', 'image-map-connect' ),
+			'search_items'      => __( 'Search Layers', 'image-map-connect' ),
+			'all_items'         => __( 'All Layers', 'image-map-connect' ),
+			'parent_item'       => __( 'Parent Layer', 'image-map-connect' ),
+			'parent_item_colon' => __( 'Parent Layer:', 'image-map-connect' ),
+			'edit_item'         => __( 'Edit Layer', 'image-map-connect' ),
+			'update_item'       => __( 'Update Layer', 'image-map-connect' ),
+			'add_new_item'      => __( 'Add New Layer', 'image-map-connect' ),
+			'new_item_name'     => __( 'New Layer Name', 'image-map-connect' ),
+			'menu_name'         => __( 'Layer', 'image-map-connect' ),
 		);
 
 		$args = array(
 			'labels'                => $labels,
-			'description'           => __( 'Image Map Layers', 'flare-imc' ),
+			'description'           => __( 'Image Map Layers', 'image-map-connect' ),
 			'hierarchical'          => false,
 			'public'                => false,
 			'publicly_queryable'    => false,

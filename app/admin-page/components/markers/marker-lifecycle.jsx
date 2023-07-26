@@ -69,17 +69,17 @@ export default function MarkerLifecycle({ marker, save, delete: delMarker }) {
 			confirmDeleteText={
 				__(
 					'Are you sure you want to delete this marker?',
-					'flare-imc'
+					'image-map-connect'
 				) +
 				' ' +
 				(marker.type === 'imc-marker'
 					? __(
 							'This will remove the marker and all its content.',
-							'flare-imc'
+							'image-map-connect'
 					  )
 					: __(
 							'This will remove the marker. The related post will not be removed',
-							'flare-imc'
+							'image-map-connect'
 					  ))
 			}
 		/>

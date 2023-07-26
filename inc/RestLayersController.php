@@ -24,7 +24,7 @@ class RestLayersController extends \WP_REST_Terms_Controller {
 		if ( $layer->count > 1 ) {
 			return new \WP_Error(
 				'has_markers',
-				__( 'You can not delete a layer that has related markers.', 'flare-imc' ),
+				__( 'You can not delete a layer that has related markers.', 'image-map-connect' ),
 				array( 'status' => 409 )
 			);
 		}

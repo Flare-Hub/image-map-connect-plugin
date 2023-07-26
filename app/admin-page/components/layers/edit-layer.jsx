@@ -88,7 +88,7 @@ export default function EditLayer({ imgSize }) {
 					<h3>
 						{__(
 							'Select a layer from the list or add a new one.',
-							'flare-imc'
+							'image-map-connect'
 						)}
 					</h3>
 				)}
@@ -99,8 +99,8 @@ export default function EditLayer({ imgSize }) {
 					<Form form={form}>
 						<h2>
 							{query.layer === 'new'
-								? __('Add Layer', 'flare-imc')
-								: __('Edit Layer', 'flare-imc')}
+								? __('Add Layer', 'image-map-connect')
+								: __('Edit Layer', 'image-map-connect')}
 						</h2>
 						<div className="col-xs-9">
 							<Controller
@@ -110,10 +110,13 @@ export default function EditLayer({ imgSize }) {
 									<TextControl
 										label={
 											<Label
-												name={__('Name', 'flare-imc')}
+												name={__(
+													'Name',
+													'image-map-connect'
+												)}
 												tooltip={__(
 													'If the map has multiple layers, this name will show for the users in the layer selector.',
-													'flare-imc'
+													'image-map-connect'
 												)}
 											/>
 										}
@@ -129,10 +132,13 @@ export default function EditLayer({ imgSize }) {
 									<BaseControl
 										label={
 											<Label
-												name={__('Image', 'flare-imc')}
+												name={__(
+													'Image',
+													'image-map-connect'
+												)}
 												tooltip={__(
 													'If the map has multiple layers, make sure all the layer images are the same size.',
-													'flare-imc'
+													'image-map-connect'
 												)}
 											/>
 										}
@@ -158,18 +164,18 @@ export default function EditLayer({ imgSize }) {
 											<Label
 												name={__(
 													'Zoom range',
-													'flare-imc'
+													'image-map-connect'
 												)}
 												tooltip={
 													<>
 														{__(
 															'The zoom range defines the amount you can zoom in and out on the image.',
-															'flare-imc'
+															'image-map-connect'
 														)}
 														<br />
 														{__(
 															'The initial zoom level, will be set in each block where this map is used, along with the center.',
-															'flare-imc'
+															'image-map-connect'
 														)}
 													</>
 												}
@@ -198,17 +204,20 @@ export default function EditLayer({ imgSize }) {
 							<BaseControl
 								label={
 									<Label
-										name={__('Preview', 'flare-imc')}
+										name={__(
+											'Preview',
+											'image-map-connect'
+										)}
 										tooltip={
 											<>
 												{__(
 													'You can pan and zoom the image preview to validate the current settings.',
-													'flare-imc'
+													'image-map-connect'
 												)}
 												<br />
 												{__(
 													'When you change the minimum or maximum zoom, this preview will automatically update.',
-													'flare-imc'
+													'image-map-connect'
 												)}
 											</>
 										}

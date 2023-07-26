@@ -37,10 +37,10 @@ export default function MarkerQueryPanel({
 			{(hasQuery || isWidget) && (
 				<>
 					<BaseControl
-						label={__('Show markers for', 'flare-imc')}
+						label={__('Show markers for', 'image-map-connect')}
 						help={__(
 							'Whether to respect pagination in the markers displayed on the map.',
-							'flare-imc'
+							'image-map-connect'
 						)}
 						id={btnGroupId.current}
 					>
@@ -70,13 +70,13 @@ export default function MarkerQueryPanel({
 					<ToggleControl
 						label={__(
 							'Also display standalone markers',
-							'flare-imc'
+							'image-map-connect'
 						)}
 						checked={showStandAlone}
 						onChange={() => setShowStandAlone(!showStandAlone)}
 						help={__(
 							'Show only markers from the query loop or also markers not linked to any posts.',
-							'flare-imc'
+							'image-map-connect'
 						)}
 					/>
 				</>
@@ -85,12 +85,12 @@ export default function MarkerQueryPanel({
 				<p>
 					{__(
 						'This block will show all posts on the selected map.',
-						'flare-imc'
+						'image-map-connect'
 					) +
 						' ' +
 						__(
 							'To filter the posts, place this block inside a Query Loop block.',
-							'flare-imc'
+							'image-map-connect'
 						)}
 				</p>
 			)}

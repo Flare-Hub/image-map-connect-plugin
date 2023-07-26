@@ -46,7 +46,7 @@ export default function SaveView({ preview, layer, setView }) {
 			'success',
 			__(
 				'Image has been framed. Update will take effect after saving.',
-				'flare-imc'
+				'image-map-connect'
 			),
 			{ type: 'snackbar' }
 		);
@@ -57,7 +57,7 @@ export default function SaveView({ preview, layer, setView }) {
 			<Tooltip
 				text={__(
 					'See instructions in the Initial Image Frame panel',
-					'flare-imc'
+					'image-map-connect'
 				)}
 			>
 				<button className={cls.saveButton} onClick={save}>

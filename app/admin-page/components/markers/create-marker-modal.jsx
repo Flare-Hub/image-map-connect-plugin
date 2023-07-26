@@ -22,14 +22,14 @@ import mdlCls from './create-marker-modal.module.scss';
  * @param {Object}                       props
  * @param {{type: string, slug: string}} props.item
  */
-function PostItem( { item } ) {
+function PostItem({ item }) {
 	return (
 		<>
-			<div>{ item.label }</div>
+			<div>{item.label}</div>
 			<small>
 				<div>
-					{ __( 'Type', 'flare-imc' ) }: { item.type } |{ ' ' }
-					{ __( 'Slug', 'flare-imc' ) }: { item.slug }
+					{__('Type', 'image-map-connect')}: {item.type} |{' '}
+					{__('Slug', 'image-map-connect')}: {item.slug}
 				</div>
 			</small>
 		</>
@@ -45,19 +45,19 @@ function PostItem( { item } ) {
  * @param {number}                         props.map              ID of the selected map.
  * @param {(marker: EntityRecord) => void} props.onRegisterMarker Callback to register existing post as marker.
  */
-export default function CreateMarkerModal( {
+export default function CreateMarkerModal({
 	onRequestClose,
 	layer,
 	map,
 	onRegisterMarker,
-} ) {
-	const { handleSubmit, control, watch } = useForm( {
+}) {
+	const { handleSubmit, control, watch } = useForm({
 		defaultValues: { type: 'standalone', post: 0 },
-	} );
+	});
 
 	// Debounce the post combobox filter update.
 	const debounceId = useRef();
-	const [ debouncedSearch, setDebouncedSearch ] = useState();
+	const [debouncedSearch, setDebouncedSearch] = useState();
 
 	// Get all posts not yet on the selected layer.
 	const { list: posts, loading } = useCollection(
@@ -71,32 +71,32 @@ export default function CreateMarkerModal( {
 			per_page: 100,
 			search: debouncedSearch,
 		},
-		[ layer, map, debouncedSearch ]
+		[layer, map, debouncedSearch]
 	);
 
 	const postOptions = loading
 		? [
 				{
-					label: __( 'Loading', 'flare-imc' ) + '...',
+					label: __('Loading', 'image-map-connect') + '...',
 				},
 		  ]
-		: posts.map( ( post ) => ( {
+		: posts.map((post) => ({
 				value: post.id,
 				label: post.title.rendered,
 				type: post.type,
 				slug: post.slug,
-		  } ) );
+		  }));
 
 	/**
 	 * Debounce the post filter based on the search.
 	 *
 	 * @param {string} input Search value.
 	 */
-	function handleFilter( input ) {
-		clearTimeout( debounceId.current );
-		debounceId.current = setTimeout( () => {
-			setDebouncedSearch( input );
-		}, 300 );
+	function handleFilter(input) {
+		clearTimeout(debounceId.current);
+		debounceId.current = setTimeout(() => {
+			setDebouncedSearch(input);
+		}, 300);
 	}
 
 	/**
@@ -104,65 +104,65 @@ export default function CreateMarkerModal( {
 	 *
 	 * @param {Object<string, any>} fields
 	 */
-	function handleAdd( fields ) {
+	function handleAdd(fields) {
 		const post =
 			fields.type === 'post'
-				? posts.find( ( p ) => p.id === fields.post )
+				? posts.find((p) => p.id === fields.post)
 				: { id: 'new' };
 
-		navigate( { marker: 'new' } );
-		onRegisterMarker( post );
+		navigate({ marker: 'new' });
+		onRegisterMarker(post);
 		onRequestClose();
 	}
 
 	return (
 		<Modal
-			onRequestClose={ onRequestClose }
+			onRequestClose={onRequestClose}
 			title="Add Marker"
-			overlayClassName={ mdlCls.overlay }
-			className={ mdlCls.modal }
+			overlayClassName={mdlCls.overlay}
+			className={mdlCls.modal}
 		>
 			<Controller
 				name="type"
-				control={ control }
-				render={ ( { field } ) => (
+				control={control}
+				render={({ field }) => (
 					<RadioControl
 						label="Type"
-						options={ [
+						options={[
 							{ label: 'Standalone marker', value: 'standalone' },
 							{ label: 'Existing post', value: 'post' },
-						] }
-						selected={ field.value }
-						onChange={ field.onChange }
-						className={ cls.field }
+						]}
+						selected={field.value}
+						onChange={field.onChange}
+						className={cls.field}
 					/>
-				) }
+				)}
 			/>
-			{ watch( 'type' ) === 'post' && (
+			{watch('type') === 'post' && (
 				<Controller
 					name="post"
-					rules={ { min: 1 } }
-					control={ control }
-					render={ ( { field, fieldState } ) => (
+					rules={{ min: 1 }}
+					control={control}
+					render={({ field, fieldState }) => (
 						<ComboboxControl
 							label="Post"
-							options={ postOptions }
-							value={ field.value }
-							onChange={ field.onChange }
-							onFilterValueChange={ handleFilter }
-							className={ getControlClass( fieldState ) }
-							__experimentalRenderItem={ PostItem }
+							options={postOptions}
+							value={field.value}
+							onChange={field.onChange}
+							onFilterValueChange={handleFilter}
+							className={getControlClass(fieldState)}
+							__experimentalRenderItem={PostItem}
 						/>
-					) }
+					)}
 				/>
-			) }
-			<div className={ mdlCls.right }>
+			)}
+			<div className={mdlCls.right}>
 				<Button
 					className="short"
-					onClick={ handleSubmit( handleAdd ) }
+					onClick={handleSubmit(handleAdd)}
 					variant="primary"
 				>
-					{ __( 'Add', 'flare-imc' ) }
+					{__('Add', 'image-map-connect')}
 				</Button>
 			</div>
 		</Modal>

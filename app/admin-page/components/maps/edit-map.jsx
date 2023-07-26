@@ -76,7 +76,7 @@ export default function EditMap() {
 					<h3>
 						{__(
 							'Select a map from the list or add a new one.',
-							'flare-imc'
+							'image-map-connect'
 						)}
 					</h3>
 				)}
@@ -87,8 +87,8 @@ export default function EditMap() {
 					<Form form={form}>
 						<h2>
 							{query.map === 'new'
-								? __('Add Map', 'flare-imc')
-								: __('Edit Map', 'flare-imc')}
+								? __('Add Map', 'image-map-connect')
+								: __('Edit Map', 'image-map-connect')}
 						</h2>
 						<div className="col-xs-9">
 							<Controller
@@ -100,11 +100,11 @@ export default function EditMap() {
 											<Label
 												name={__(
 													'Map name',
-													'flare-imc'
+													'image-map-connect'
 												)}
 												tooltip={__(
 													'Used for internal clarification only.',
-													'flare-imc'
+													'image-map-connect'
 												)}
 											/>
 										}
@@ -122,11 +122,11 @@ export default function EditMap() {
 											<Label
 												name={__(
 													'Description',
-													'flare-imc'
+													'image-map-connect'
 												)}
 												tooltip={__(
 													'Used for internal clarification only.',
-													'flare-imc'
+													'image-map-connect'
 												)}
 											/>
 										}
@@ -144,11 +144,11 @@ export default function EditMap() {
 											<Label
 												name={__(
 													'Post Types',
-													'flare-imc'
+													'image-map-connect'
 												)}
 												tooltip={__(
 													'Select the types of posts that can be referenced on this image map.',
-													'flare-imc'
+													'image-map-connect'
 												)}
 											/>
 										}
@@ -169,10 +169,13 @@ export default function EditMap() {
 							<BaseControl
 								label={
 									<Label
-										name={__('Icon types', 'flare-imc')}
+										name={__(
+											'Icon types',
+											'image-map-connect'
+										)}
 										tooltip={__(
 											'Icon options for each marker on the map.',
-											'flare-imc'
+											'image-map-connect'
 										)}
 									/>
 								}
@@ -194,7 +197,7 @@ export default function EditMap() {
 								onDelete={deleteMap}
 								confirmDeleteText={__(
 									'Are you sure you want to delete this map?',
-									'flare-imc'
+									'image-map-connect'
 								)}
 							/>
 						</div>

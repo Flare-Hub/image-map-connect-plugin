@@ -33,19 +33,19 @@ export default function EditMarker({ markerType, title, icons }) {
 		<>
 			<h2>
 				{query.marker === 'new'
-					? __('Add Marker', 'flare-imc')
-					: __('Edit Marker', 'flare-imc')}
+					? __('Add Marker', 'image-map-connect')
+					: __('Edit Marker', 'image-map-connect')}
 			</h2>
 			<div className="col-xs-9">
-				{/* <BaseControl label={__('Layer', 'flare-imc')} className={cls.field}>{watch('imc_layers')}</BaseControl> */}
+				{/* <BaseControl label={__('Layer', 'image-map-connect')} className={cls.field}>{watch('imc_layers')}</BaseControl> */}
 				{postTypes && markerType && (
 					<BaseControl
 						label={
 							<Label
-								name={__('Type', 'flare-imc')}
+								name={__('Type', 'image-map-connect')}
 								tooltip={__(
 									'Post type linked to the marker, or standalone marker if not linked.',
-									'flare-imc'
+									'image-map-connect'
 								)}
 							/>
 						}
@@ -53,7 +53,7 @@ export default function EditMarker({ markerType, title, icons }) {
 						id="no-input-to-focus-on"
 					>
 						{markerType === 'imc-marker'
-							? __('Standalone marker', 'flare-imc')
+							? __('Standalone marker', 'image-map-connect')
 							: postTypes.find((pt) => pt.slug === markerType)
 									?.name}
 					</BaseControl>
@@ -62,10 +62,10 @@ export default function EditMarker({ markerType, title, icons }) {
 					className={cls.field}
 					label={
 						<Label
-							name={__('Marker placement', 'flare-imc')}
+							name={__('Marker placement', 'image-map-connect')}
 							tooltip={__(
 								'Marker position can be updated at any time.',
-								'flare-imc'
+								'image-map-connect'
 							)}
 						/>
 					}
@@ -75,11 +75,11 @@ export default function EditMarker({ markerType, title, icons }) {
 						{watch('imc_loc.lat')
 							? __(
 									"Drag the marker to change it's position.",
-									'flare-imc'
+									'image-map-connect'
 							  )
 							: __(
 									'Click on the image to set the location of the marker',
-									'flare-imc'
+									'image-map-connect'
 							  )}
 					</div>
 				</BaseControl>
@@ -87,10 +87,10 @@ export default function EditMarker({ markerType, title, icons }) {
 					<BaseControl
 						label={
 							<Label
-								name={__('Title', 'flare-imc')}
+								name={__('Title', 'image-map-connect')}
 								tooltip={__(
 									'Post title, can be shown in the popup when selecting a marker on the public user interface.',
-									'flare-imc'
+									'image-map-connect'
 								)}
 							/>
 						}
@@ -107,10 +107,10 @@ export default function EditMarker({ markerType, title, icons }) {
 						<MarkerIconSelect
 							label={
 								<Label
-									name={__('Icon', 'flare-imc')}
+									name={__('Icon', 'image-map-connect')}
 									tooltip={__(
 										'Select from the icon types defined on the map.',
-										'flare-imc'
+										'image-map-connect'
 									)}
 								/>
 							}
@@ -134,7 +134,7 @@ export default function EditMarker({ markerType, title, icons }) {
 											name={__('Title')}
 											tooltip={__(
 												'Can be shown in the popup when selecting a marker on the public user interface.',
-												'flare-imc'
+												'image-map-connect'
 											)}
 										/>
 									}
@@ -149,10 +149,13 @@ export default function EditMarker({ markerType, title, icons }) {
 								<RichTextEditor
 									label={
 										<Label
-											name={__('Content', 'flare-imc')}
+											name={__(
+												'Content',
+												'image-map-connect'
+											)}
 											tooltip={__(
 												'Can be shown in the popup when selecting the marker on the public user interface.',
-												'flare-imc'
+												'image-map-connect'
 											)}
 										/>
 									}
@@ -170,11 +173,11 @@ export default function EditMarker({ markerType, title, icons }) {
 										<Label
 											name={__(
 												'Featured Image',
-												'flare-imc'
+												'image-map-connect'
 											)}
 											tooltip={__(
 												'Can be shown in the popup when selecting a marker on the public user interface.',
-												'flare-imc'
+												'image-map-connect'
 											)}
 										/>
 									}

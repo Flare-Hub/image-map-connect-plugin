@@ -21,7 +21,7 @@
     "Map filters",
     "Dynamic map"
   ],
-  "textdomain": "flare-imc",
+  "textdomain": "image-map-connect",
   "attributes": {
     "mapId": {
       "type": "number"
