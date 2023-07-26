@@ -1,3 +1,7 @@
 .buttons {
 	margin-bottom: 16px;
+
+	:global(.components-button):hover:not(:disabled) {
+		box-shadow: none;
+	}
 }
