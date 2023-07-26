@@ -2,12 +2,12 @@ import { PanelBody, Button } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 
-import cls from './initial-view.module.scss';
+import cls from './default-view.module.scss';
 
 /**
  * Toggle responsiveness and explain how the initial view works for different devices.
  */
-export default function InitialViewPanel() {
+export default function DefaultViewPanel() {
 	const preview = useSelect((select) => {
 		const editPost = select('core/edit-post');
 		return editPost ? editPost.__experimentalGetPreviewDeviceType() : null;
@@ -17,9 +17,9 @@ export default function InitialViewPanel() {
 	const setPreview = dispatchPost?.__experimentalSetPreviewDeviceType;
 
 	const devices = [
-		{ name: 'Desktop', icon: 'macbook-fill', size: 24 },
-		{ name: 'Tablet', icon: 'tablet-fill', size: 24 },
-		{ name: 'Mobile', icon: 'smartphone-fill', size: 22 },
+		{ name: 'Desktop', icon: 'desktop' },
+		{ name: 'Tablet', icon: 'tablet' },
+		{ name: 'Mobile', icon: 'smartphone' },
 	];
 
 	return (
@@ -30,18 +30,9 @@ export default function InitialViewPanel() {
 						<Button
 							key={device.name}
 							onClick={() => setPreview(device.name)}
-						>
-							<i
-								className={'ri-' + device.icon}
-								style={{
-									fontSize: device.size,
-									color:
-										preview === device.name
-											? '#000'
-											: '#d1d1d1',
-								}}
-							/>
-						</Button>
+							icon={device.icon}
+							variant={device.name === preview ? 'tertiary' : ''}
+						/>
 					))}
 				</div>
 			)}

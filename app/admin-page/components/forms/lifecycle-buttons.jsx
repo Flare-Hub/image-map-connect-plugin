@@ -37,9 +37,9 @@ export default function LifeCycleButtons({
 	 * @param {Object<string, any>} values
 	 */
 	async function saveRecord(values) {
-		const { id } = await onSave(values);
-		if (recordId === 'new' && id)
-			navigate({ [model]: id }, { force: true });
+		const res = await onSave(values);
+		if (recordId === 'new' && res?.id)
+			navigate({ [model]: res.id }, { force: true });
 	}
 
 	/** Delete record from wordpress and deselect it. */

@@ -1,4 +1,5 @@
 import { Card, CardBody, Panel, PanelBody } from '@wordpress/components';
+import { createInterpolateElement } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 import cls from './info-page.module.scss';
@@ -66,7 +67,7 @@ export default function InfoPage() {
 						</h2>
 						<p>
 							{__(
-								`Image Map Connect allows you to add any image to your website as an image map, and make it interactive. On the image map you can:`,
+								`Image Map Connect allows you to add any image to your WordPress website and make it an interactive image map. On the image map you can:`,
 								'flare-imc'
 							)}
 						</p>
@@ -97,11 +98,11 @@ export default function InfoPage() {
 							</figcaption>
 						</figure>
 						<h3 id="admin">
-							{__('"Image Maps" admin Page', 'flare-imc')}
+							{__('"Image Map Connect" admin Page', 'flare-imc')}
 						</h3>
 						<p>
 							{__(
-								'The "Image Maps" admin page is the page in the admin menu that you are currently on and has 4 tabs:',
+								'The "Image Map Connect" admin page is the page in the admin menu that you are currently on and has 4 tabs:',
 								'flare-imc'
 							)}
 						</p>
@@ -260,10 +261,72 @@ export default function InfoPage() {
 							>
 								<p>
 									{__(
-										'The block can be added to any page. Additionally, this block supports block themes so it can be added to templates or template parts.',
+										'The simplest option is to place the block on any page or post to display an image map.',
 										'flare-imc'
 									)}
 								</p>
+								<p>
+									{__(
+										'It can also be added to page templates, post type templates or archives. How this is done depends on your theme.',
+										'flare-imc'
+									)}
+								</p>
+								<ul>
+									<li>
+										{createInterpolateElement(
+											sprintf(
+												// translators: %s: Link to the wordpress documentation.
+												__(
+													'For block themes: Add the block to the relevant template in the site editor. For details, see %s.',
+													'flare-imc'
+												),
+												'<a>' +
+													__(
+														'the WordPress documentation',
+														'flare-imc'
+													) +
+													'</a>'
+											),
+											{
+												a: (
+													// eslint-disable-next-line jsx-a11y/anchor-has-content
+													<a
+														href="https://wordpress.org/documentation/article/template-editor/"
+														target="_blank"
+														rel="noreferrer"
+													/>
+												),
+											}
+										)}
+									</li>
+									<li>
+										{createInterpolateElement(
+											sprintf(
+												// translators: %s: Link to the Block Visibility plugin.
+												__(
+													'For classic themes: Add the block to the widget area. Check with your theme which widget areas show up where. If more control is needed, you can use a plugin like %s.',
+													'flare-imc'
+												),
+												'<a>' +
+													__(
+														'Block Visibility',
+														'flare-imc'
+													) +
+													'</a>'
+											),
+											{
+												a: (
+													// eslint-disable-next-line jsx-a11y/anchor-has-content
+													<a
+														href="https://wordpress.org/plugins/block-visibility/"
+														target="_blank"
+														rel="noreferrer"
+													/>
+												),
+											}
+										)}
+									</li>
+								</ul>
 							</PanelBody>
 							<PanelBody
 								title={__('Framing the image in the block')}
@@ -293,24 +356,16 @@ export default function InfoPage() {
 									)}
 								</p>
 							</PanelBody>
-						</Panel>
-						<h2 id="faq">
-							{__('Frequently Asked Questions', 'flare-imc')}
-						</h2>
-						<Panel className={cls.panel}>
-							<PanelBody title="Question 1" initialOpen={false}>
-								Lorem ipsum dolor sit amet consectetur
-								adipisicing elit. Sapiente corporis, natus saepe
-								quaerat aliquid eum, rem voluptatum ratione
-								tempora ea maxime cum libero fugit tenetur
-								eligendi minima et quisquam vel.
-							</PanelBody>
-							<PanelBody title="Question 2" initialOpen={false}>
-								Lorem ipsum dolor sit amet consectetur
-								adipisicing elit. Sapiente corporis, natus saepe
-								quaerat aliquid eum, rem voluptatum ratione
-								tempora ea maxime cum libero fugit tenetur
-								eligendi minima et quisquam vel.
+							<PanelBody
+								title={__('Map and popup styling', 'flare-imc')}
+								initialOpen={false}
+							>
+								<p>
+									{__(
+										"The image map size, borders and background color are configurable in the block's Style tab. The popup text styling is taken from your theme by default and you can further modify the popup settings and style in the Settings tab.",
+										'flare-imc'
+									)}
+								</p>
 							</PanelBody>
 						</Panel>
 						<h2 id="support">
@@ -320,7 +375,6 @@ export default function InfoPage() {
 							)}
 						</h2>
 						<p>
-							{/* TODO: Specify proper license in the below paragraph */}
 							{__(
 								'Image Map Connect is an open-source plugin with a GNU General Public License v3.0 license. As such we do not provide any warranty. Of course, we like to see our plugin used and want to keep our users happy. As such we do our best to fix any issues that you might encounter.',
 								'flare-imc'
@@ -332,36 +386,54 @@ export default function InfoPage() {
 								'flare-imc'
 							)}
 						</p>
-						<p
-							dangerouslySetInnerHTML={{
-								__html: sprintf(
+						<p>
+							{createInterpolateElement(
+								sprintf(
 									// translators: %s: Link to the issues page.
 									__(
 										'To manage the plugin and track these tickets we make use of Github. Any issues or request can be reported %s. Please just make sure to search the existing issues and only report new ones.',
 										'flare-imc'
 									),
-									`<a href="https://github.com/Flare-Hub/image-map-connect-plugin/issues" target="_blank" rel="noreferrer"> ${__(
-										'there',
-										'flare-imc'
-									)}</a>`
+									'<a>' + __('there', 'flare-imc') + '</a>'
 								),
-							}}
-						/>
+								{
+									a: (
+										// eslint-disable-next-line jsx-a11y/anchor-has-content
+										<a
+											href="https://github.com/Flare-Hub/image-map-connect-plugin/issues"
+											target="_blank"
+											rel="noreferrer"
+										/>
+									),
+								}
+							)}
+						</p>
 						<h2 id="author">
 							{__('About the Plugin Author', 'flare-imc')}
 						</h2>
-						<p
-							dangerouslySetInnerHTML={{
-								__html: sprintf(
-									// translators: %s: Link to our homepage with company name as link text.
+						<p>
+							{createInterpolateElement(
+								sprintf(
+									// translators: %s: Link to our homepage with the text Flare Hub.
 									__(
 										'We are a couple who enjoy working with solutions that smoothen user experience and processes, and offer informative and useful content. Through our company %s we help organisations to design and build intuitive digital products.',
 										'flare-imc'
 									),
-									'<a href="https://flarehub.io" target="_blank" rel="noreferrer">Flare Hub</a>'
+									'<a/>'
 								),
-							}}
-						/>
+								{
+									a: (
+										<a
+											href="https://flarehub.io"
+											target="_blank"
+											rel="noreferrer"
+										>
+											Flare Hub
+										</a>
+									),
+								}
+							)}
+						</p>
 					</div>
 				</div>
 			</CardBody>

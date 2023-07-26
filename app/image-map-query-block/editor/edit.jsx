@@ -17,8 +17,8 @@ import MarkerQueryPanel from './marker-query';
 import Map from './map';
 
 import { attributes as attrSettings } from '../block.json';
-import InitialViewPanel from './initial-view';
-import PopupPanel from './popup-panel';
+import DefaultViewPanel from './default-view';
+import PopupPanels from './popup-panels';
 import { BlockProvider } from './block-context';
 
 /**
@@ -142,7 +142,6 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					</BlockControls>
 				)}
 				<InspectorControls group="settings">
-					<InitialViewPanel />
 					<MarkerQueryPanel
 						hasQuery={!!query}
 						queryType={queryType}
@@ -150,7 +149,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						showStandAlone={showStandAlone}
 						setShowStandAlone={setAttr.bind(null, 'showStandAlone')}
 					/>
-					<PopupPanel mapSize={mapSize} />
+					<DefaultViewPanel />
+					<PopupPanels mapSize={mapSize} />
 				</InspectorControls>
 				<InspectorControls group="dimensions">
 					<ToolsPanelItem

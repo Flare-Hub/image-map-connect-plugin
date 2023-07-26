@@ -41,7 +41,7 @@ export default function MarkerLocations({
 	return (
 		<Controller
 			name="imc_loc"
-			rules={{ validate: (val) => val && val.lat > 0 && val.lng > 0 }}
+			rules={{ validate: (val) => val && val.lat !== 0 && val.lng !== 0 }}
 			render={({ field, fieldState }) => (
 				<Card className={fieldState.invalid && cls.invalid}>
 					<OlMap
