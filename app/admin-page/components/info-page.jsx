@@ -41,11 +41,6 @@ export default function InfoPage() {
 							</ul>
 						</li>
 						<li>
-							<a href="#faq">
-								{__('Frequently Asked Questions', 'flare-imc')}
-							</a>
-						</li>
-						<li>
 							<a href="#support">
 								{__(
 									'Support and Enhancement Requests',
