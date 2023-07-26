@@ -4,6 +4,8 @@
 		overflow: auto;
 		scrollbar-width: thin;
 		scrollbar-color: #a1a1a1 #f0f0f0;
+		position: relative;
+		z-index: 20;
 
 		@media screen and (max-width: 600px) {
 			max-width: none !important;
