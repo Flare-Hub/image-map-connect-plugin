@@ -1,11 +1,11 @@
-:global(.wp-block-flare-hub-image-map-query) {
+:global(.flare-marker-popup) {
 
 	.container {
 		overflow: auto;
 		scrollbar-width: thin;
 		scrollbar-color: #a1a1a1 #f0f0f0;
 		position: relative;
-		z-index: 20;
+		z-index: 10;
 
 		@media screen and (max-width: 600px) {
 			max-width: none !important;

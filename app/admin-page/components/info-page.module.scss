@@ -2,6 +2,10 @@
 	max-width: 700px;
 	margin: auto;
 	font-size: 1.2em;
+}
+
+.toc,
+.content {
 
 	ul {
 		list-style: disc;
@@ -9,13 +13,10 @@
 		margin: 0 0.5em;
 
 		ul {
+			margin-top: 6px;
 			list-style: circle;
 		}
 	}
-}
-
-.toc,
-.content {
 
 	p {
 		font-size: 1em;

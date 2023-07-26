@@ -133,6 +133,15 @@ class WpScriptsAsset {
 	}
 
 	/**
+	 * Register translations for the script.
+	 *
+	 * @since 0.1.6
+	 **/
+	public function register_translations() {
+		wp_set_script_translations( $this->handle, Plugin::$slug );
+	}
+
+	/**
 	 * Register the stylesheet.
 	 *
 	 * @return boolean Whether the registration was successful.

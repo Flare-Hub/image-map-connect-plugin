@@ -19,29 +19,26 @@ import cls from './post-types-select.module.scss';
  * @param {string}                         props.id         ID of the container div.
  * @param {import('react').Ref}            ref
  */
-function PostTypesSelect(
-	{ selected, onSelect, onBlur, inputClass, id },
-	ref
-) {
-	const [ types, setAll ] = useState( [] );
+function PostTypesSelect({ selected, onSelect, onBlur, inputClass, id }, ref) {
+	const [types, setAll] = useState([]);
 	const createNotice = useNotice();
 
 	// Get public post types from WordPress.
-	useEffect( () => {
-		apiFetch( { path: 'flare/v1/post-types' } )
-			.then( ( res ) => {
-				setAll( Object.values( res ) );
-			} )
-			.catch( () => {
-				createNotice( {
+	useEffect(() => {
+		apiFetch({ path: 'flare/v1/post-types' })
+			.then((res) => {
+				setAll(Object.values(res));
+			})
+			.catch(() => {
+				createNotice({
 					message: __(
 						'Unable to load post types. Please refresh to try again.',
-						'flare-imc'
+						'image-map-connect'
 					),
 					style: 'error',
-				} );
-			} );
-	}, [ createNotice ] );
+				});
+			});
+	}, [createNotice]);
 
 	/**
 	 * Update the selected post types.
@@ -49,27 +46,27 @@ function PostTypesSelect(
 	 * @param {boolean}             checked Whether the checkbox is checked.
 	 * @param {Object<any, string>} type    Post type details.
 	 */
-	function handleChange( checked, type ) {
+	function handleChange(checked, type) {
 		const updSelected = checked
-			? [ ...selected, type ]
-			: selected.filter( ( sel ) => sel !== type );
-		onSelect( updSelected );
+			? [...selected, type]
+			: selected.filter((sel) => sel !== type);
+		onSelect(updSelected);
 	}
 
 	return (
-		<div className={ inputClass } ref={ ref } id={ id }>
-			{ types.map( ( type ) => (
+		<div className={inputClass} ref={ref} id={id}>
+			{types.map((type) => (
 				<CheckboxControl
-					key={ type }
-					label={ type }
-					checked={ selected.includes( type ) }
-					onChange={ ( checked ) => handleChange( checked, type ) }
-					className={ cls.checkbox }
-					onBlur={ onBlur }
+					key={type}
+					label={type}
+					checked={selected.includes(type)}
+					onChange={(checked) => handleChange(checked, type)}
+					className={cls.checkbox}
+					onBlur={onBlur}
 				/>
-			) ) }
+			))}
 		</div>
 	);
 }
 
-export default forwardRef( PostTypesSelect );
+export default forwardRef(PostTypesSelect);

@@ -36,67 +36,67 @@ export default function Markers() {
 		per_page: -1,
 	};
 
-	const markers = useCollection( 'postType', 'imc-marker', apiQuery, [
+	const markers = useCollection('postType', 'imc-marker', apiQuery, [
 		query.layer,
 		query.map,
-	] );
+	]);
 
 	// Get selected marker from marker list or create marker popup.
-	const [ selected, setSelected ] = useState();
+	const [selected, setSelected] = useState();
 
-	useEffect( () => {
-		if ( query.marker === 'new' ) return;
+	useEffect(() => {
+		if (query.marker === 'new') return;
 
-		setSelected( markers.list.find( ( mk ) => mk.id === +query.marker ) );
-	}, [ markers.list, query.marker ] );
+		setSelected(markers.list.find((mk) => mk.id === +query.marker));
+	}, [markers.list, query.marker]);
 
 	// Center map when selecting a marker from the list.
 	/**@type {[Map, React.Dispatch<React.SetStateAction<Map>>]} */
-	const [ map, setMap ] = useState();
+	const [map, setMap] = useState();
 
-	function selectMarker( id ) {
-		navigate( { marker: id } );
-		const marker = markers.list.find( ( m ) => m.id === id );
-		map?.getView().animate( {
-			center: [ marker.imc_loc.lng, marker.imc_loc.lat ],
+	function selectMarker(id) {
+		navigate({ marker: id });
+		const marker = markers.list.find((m) => m.id === id);
+		map?.getView().animate({
+			center: [marker.imc_loc.lng, marker.imc_loc.lat],
 			duration: 500,
-		} );
+		});
 	}
 
 	// Control add new marker modal state
-	const [ showModal, setShowModal ] = useState( false );
+	const [showModal, setShowModal] = useState(false);
 
 	return (
 		<Layout
-			list={ markers.list }
+			list={markers.list}
 			titleAttr="title.rendered"
-			selected={ +query.marker }
-			selectItem={ selectMarker }
-			loading={ markers.loading && ! markers.list.length }
+			selected={+query.marker}
+			selectItem={selectMarker}
+			loading={markers.loading && !markers.list.length}
 			addButton={
 				<Button
 					variant="primary"
 					className="medium"
-					onClick={ () => setShowModal( true ) }
+					onClick={() => setShowModal(true)}
 				>
-					{ __( 'Add Marker', 'flare-imc' ) }
+					{__('Add Marker', 'image-map-connect')}
 				</Button>
 			}
 		>
 			<MarkerForm
-				listQuery={ apiQuery }
-				selected={ selected }
-				markers={ markers }
-				onMapLoaded={ setMap }
+				listQuery={apiQuery}
+				selected={selected}
+				markers={markers}
+				onMapLoaded={setMap}
 			/>
-			{ showModal && (
+			{showModal && (
 				<CreateMarkerModal
-					onRequestClose={ () => setShowModal( false ) }
-					layer={ +query.layer }
-					map={ +query.map }
-					onRegisterMarker={ setSelected }
+					onRequestClose={() => setShowModal(false)}
+					layer={+query.layer}
+					map={+query.map}
+					onRegisterMarker={setSelected}
 				/>
-			) }
+			)}
 		</Layout>
 	);
 }

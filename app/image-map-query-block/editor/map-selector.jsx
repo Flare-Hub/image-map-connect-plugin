@@ -29,7 +29,7 @@ function getMapOptions({ status, records: maps }) {
 			}));
 
 		default:
-			return [{ label: __('Loading…', 'flare-imc'), value: '' }];
+			return [{ label: __('Loading…', 'image-map-connect'), value: '' }];
 	}
 }
 
@@ -56,7 +56,7 @@ export default function MapSelector({ mapId, setAttr, prevAttr, setPrevAttr }) {
 		maps.status === 'ERROR',
 		__(
 			'An error occurred retrieving the maps. Please refresh the page to try again.',
-			'flare-imc'
+			'image-map-connect'
 		),
 		[maps.status]
 	);
@@ -94,7 +94,7 @@ export default function MapSelector({ mapId, setAttr, prevAttr, setPrevAttr }) {
 	return (
 		<Placeholder
 			icon="location-alt"
-			label={__('Image map', 'flare-imc')}
+			label={__('Image map', 'image-map-connect')}
 			instructions={__(
 				'Select a map or add a new map to display in this block.'
 			)}
@@ -102,7 +102,7 @@ export default function MapSelector({ mapId, setAttr, prevAttr, setPrevAttr }) {
 			<div className={cls.controls}>
 				<div className={cls.select}>
 					<ComboboxControl
-						label={__('Select map', 'flare-imc')}
+						label={__('Select map', 'image-map-connect')}
 						value={mapId}
 						onChange={handleSelectMap}
 						options={getMapOptions(maps)}
@@ -110,25 +110,25 @@ export default function MapSelector({ mapId, setAttr, prevAttr, setPrevAttr }) {
 					<Button
 						icon={update}
 						onClick={() => setFetchCount(fetchCount + 1)}
-						label={__('Refresh map list', 'flare-imc')}
+						label={__('Refresh map list', 'image-map-connect')}
 					/>
 				</div>
 				<BaseControl
-					label={__('Or add new map', 'flare-imc')}
+					label={__('Or add new map', 'image-map-connect')}
 					id={addBtnId.current}
 				>
 					<div className={cls.buttons}>
 						<Button
 							variant="primary"
 							onClick={handleAddMap}
-							text={__('Add map', 'flare-imc')}
+							text={__('Add map', 'image-map-connect')}
 							id={addBtnId.current}
 						/>
 						{prevAttr && (
 							<Button
 								variant="primary"
 								isDestructive
-								text={__('Cancel', 'flare-imc')}
+								text={__('Cancel', 'image-map-connect')}
 								onClick={handleCancelReplace}
 							/>
 						)}

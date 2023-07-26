@@ -27,23 +27,18 @@ export default function InfoPage() {
 							<ul>
 								<li>
 									<a href="#admin">
-										{__('Admin Page', 'flare-imc')}
+										{__('Plugin Admin Page', 'flare-imc')}
 									</a>
 								</li>
 								<li>
 									<a href="#block">
 										{__(
-											'Image Map Connect block',
+											'Image Map Connect Block',
 											'flare-imc'
 										)}
 									</a>
 								</li>
 							</ul>
-						</li>
-						<li>
-							<a href="#faq">
-								{__('Frequently Asked Questions', 'flare-imc')}
-							</a>
 						</li>
 						<li>
 							<a href="#support">
@@ -87,66 +82,57 @@ export default function InfoPage() {
 							<li>{__('Filter markers', 'flare-imc')}</li>
 							<li>{__('Switch between layers', 'flare-imc')}</li>
 							<li>{__('Zoom in and out', 'flare-imc')}</li>
+							<li>
+								{__(
+									'Use block settings to visually configure the plugin',
+									'flare-imc'
+								)}
+							</li>
 						</ul>
 						<h2 id="use">
 							{__('How to Use the Plugin', 'flare-imc')}
 						</h2>
+						<p>
+							{__(
+								'The plugin is easy to set up following these four steps:',
+								'flare-imc'
+							)}
+						</p>
 						<figure className={cls.diagram}>
 							<img src={processDiagram} alt="Process diagram" />
 							<figcaption>
 								{__('Image Map Connect steps', 'flare-imc')}
 							</figcaption>
 						</figure>
-						<h3 id="admin">
-							{__('"Image Map Connect" admin Page', 'flare-imc')}
-						</h3>
 						<p>
 							{__(
-								'The "Image Map Connect" admin page is the page in the admin menu that you are currently on and has 4 tabs:',
+								'The tooltips in the Admin page and in the block editor will give you more information on the required fields.',
+								'flare-imc'
+							)}
+						</p>
+						<h4 id="admin">
+							{__('Plugin Admin Page', 'flare-imc')}
+						</h4>
+						<p>
+							{__(
+								'The "Image Maps" admin page is the page in the admin menu that you are currently on and has 4 tabs:',
 								'flare-imc'
 							)}
 						</p>
 						<Panel className={cls.panel}>
 							<PanelBody
-								title={__('Maps', 'flare-imc')}
+								title={__('Maps tab', 'flare-imc')}
 								initialOpen={false}
 							>
 								<p>
 									{__(
-										'On the Maps tab you can manage your image map details. An image map can be added to a page or template in a block.',
+										'On the Maps tab you can manage your image map details like the image map name, description, and post and icon types.',
 										'flare-imc'
 									)}
 								</p>
-								<p>
-									{__(
-										'Image map details include:',
-										'flare-imc'
-									)}
-								</p>
-								<ul>
-									<li>{__('A name', 'flare-imc')}</li>
-									<li>
-										{__(
-											'A description. This is not used anywhere else and is just for your own clarification.',
-											'flare-imc'
-										)}
-									</li>
-									<li>
-										{__(
-											'Post types. The post types that markers on this map can reference, e.g. Page, Post or a custom post type.',
-											'flare-imc'
-										)}
-									</li>
-									<li>
-										{__(
-											'Icon types. The icons that the markers will use. This keeps the style of each map consistent.',
-											'flare-imc'
-										)}
-									</li>
-								</ul>
 							</PanelBody>
 							<PanelBody
-								title={__('Layers', 'flare-imc')}
+								title={__('Layers tab', 'flare-imc')}
 								initialOpen={false}
 							>
 								<p>
@@ -155,86 +141,26 @@ export default function InfoPage() {
 										'flare-imc'
 									)}
 								</p>
-								<p>{__('All layers have:', 'flare-imc')}</p>
-								<ul>
-									<li>
-										{__(
-											'A name. The user sees this name in the public interface when selecting a layer on the map.',
-											'flare-imc'
-										)}
-									</li>
-									<li>{__('An image.', 'flare-imc')}</li>
-									<li>
-										{__(
-											'A minimum and maximum zoom level.',
-											'flare-imc'
-										)}
-									</li>
-								</ul>
 							</PanelBody>
 							<PanelBody
-								title={__('Markers', 'flare-imc')}
+								title={__('Markers tab', 'flare-imc')}
 								initialOpen={false}
 							>
 								<p>
 									{__(
-										'On the Markers tab you can manage the markers of the selected layer. Markers are placed at specific coordinates on a layer and reference a post or content.',
+										'On the Markers tab you can manage the markers of the selected layer. Markers are placed at specific coordinates on a layer and reference a post or other content.',
 										'flare-imc'
 									)}
 								</p>
 								<p>
 									{__(
-										'When a marker is clicked, it displays a popup with marker specific details (featured image, title and excerpt). These details can either be taken from a related post or defined directly in this tab.',
+										'When a marker is clicked, it displays a popup with marker specific details (e.g. featured image, title and excerpt). These details can either be taken from a related post or defined directly in this tab.',
 										'flare-imc'
 									)}
 								</p>
-								<p>{__('All markers have:', 'flare-imc')}</p>
-								<ul>
-									<li>
-										{__(
-											'Coordinates. Its location on the image',
-											'flare-imc'
-										)}
-										<ul>
-											<li>
-												{__(
-													'For new markers, these are provided by clicking on the map on the desired location.',
-													'flare-imc'
-												)}
-											</li>
-											<li>
-												{__(
-													'For existing markers, the marker can be dragged to change the location.',
-													'flare-imc'
-												)}
-											</li>
-										</ul>
-									</li>
-									<li>
-										{__(
-											'An icon. Displayed at the given coordinates on the map.',
-											'flare-imc'
-										)}
-									</li>
-								</ul>
-								<p>
-									{__(
-										'A standalone marker is a marker that is not related to any post type. For these you also have to enter the following details:',
-										'flare-imc'
-									)}
-								</p>
-								<ul>
-									<li>{__('A title.', 'flare-imc')}</li>
-									<li>
-										{__('Rich text content.', 'flare-imc')}
-									</li>
-									<li>
-										{__('A featured image.', 'flare-imc')}
-									</li>
-								</ul>
 							</PanelBody>
 							<PanelBody
-								title={__('Info', 'flare-imc')}
+								title={__('Info tab', 'flare-imc')}
 								initialOpen={false}
 							>
 								<p>
@@ -245,9 +171,9 @@ export default function InfoPage() {
 								</p>
 							</PanelBody>
 						</Panel>
-						<h3 id="block">
-							{__('Image Map Connect block', 'flare-imc')}
-						</h3>
+						<h4 id="block">
+							{__('Image Map Connect Block', 'flare-imc')}
+						</h4>
 						<p>
 							{__(
 								'Image Map Connect includes the Image Map Connect block. This block will show the image map in the public user interface (UI).',
@@ -334,7 +260,7 @@ export default function InfoPage() {
 							>
 								<p>
 									{__(
-										'The initial layer, zoom level and position in the public UI is based on the selected layer, position and zoom level defined in the block editor. To fix this position, press the device with lock icon on the map.',
+										'The default layer and its position and zoom level in the public user interface is based on the selected layer, position and zoom level defined in the block editor.',
 										'flare-imc'
 									)}
 								</p>
@@ -357,12 +283,15 @@ export default function InfoPage() {
 								</p>
 							</PanelBody>
 							<PanelBody
-								title={__('Map and popup styling', 'flare-imc')}
+								title={__(
+									'Image Map and popup styling',
+									'flare-imc'
+								)}
 								initialOpen={false}
 							>
 								<p>
 									{__(
-										"The image map size, borders and background color are configurable in the block's Style tab. The popup text styling is taken from your theme by default and you can further modify the popup settings and style in the Settings tab.",
+										"The image map size, borders and background color are configurable in the block's Style tab. The popup text styling is taken from your theme by default and you can further modify the popup settings and style in the block's Settings tab.",
 										'flare-imc'
 									)}
 								</p>
@@ -387,27 +316,49 @@ export default function InfoPage() {
 							)}
 						</p>
 						<p>
-							{createInterpolateElement(
-								sprintf(
-									// translators: %s: Link to the issues page.
-									__(
-										'To manage the plugin and track these tickets we make use of Github. Any issues or request can be reported %s. Please just make sure to search the existing issues and only report new ones.',
-										'flare-imc'
-									),
-									'<a>' + __('there', 'flare-imc') + '</a>'
-								),
-								{
-									a: (
-										// eslint-disable-next-line jsx-a11y/anchor-has-content
-										<a
-											href="https://github.com/Flare-Hub/image-map-connect-plugin/issues"
-											target="_blank"
-											rel="noreferrer"
-										/>
-									),
-								}
+							{__(
+								'You can contact us in two ways at the moment:',
+								'flare-imc'
 							)}
 						</p>
+						<ul>
+							<li>
+								{createInterpolateElement(
+									sprintf(
+										// translators: %s: mailto link to info@flarehub.io
+										__('Send email to %s', 'flare-imc'),
+										'<a>info@flarehub.io</a>'
+									),
+									// eslint-disable-next-line jsx-a11y/anchor-has-content
+									{ a: <a href="mailto:info@flarehub.io" /> }
+								)}
+							</li>
+							<li>
+								{createInterpolateElement(
+									sprintf(
+										// translators: %s: mailto link to info@flarehub.io
+										__(
+											'Or you can report an issue in our %s. Please just make sure to search the existing issues and only report new ones.',
+											'flare-imc'
+										),
+										__(
+											'<a>Github repository</a>',
+											'flare-imc'
+										)
+									),
+									{
+										a: (
+											// eslint-disable-next-line jsx-a11y/anchor-has-content
+											<a
+												href="https://github.com/Flare-Hub/image-map-connect-plugin/issues"
+												target="_blank"
+												rel="noreferrer"
+											/>
+										),
+									}
+								)}
+							</li>
+						</ul>
 						<h2 id="author">
 							{__('About the Plugin Author', 'flare-imc')}
 						</h2>

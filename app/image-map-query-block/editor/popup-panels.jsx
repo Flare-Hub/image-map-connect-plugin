@@ -76,11 +76,14 @@ export default function PopupPanels({ mapSize }) {
 	return (
 		<>
 			<PanelBody
-				title={__('Popup / Size and Spacing', 'flare-imc')}
+				title={__('Popup / Size and Spacing', 'image-map-connect')}
 				initialOpen={false}
 				className={cls.panel}
 			>
-				<BaseControl label={__('Maximum Height')} id="flare-popup-height">
+				<BaseControl
+					label={__('Maximum Height')}
+					id="flare-popup-height"
+				>
 					<RangeControl
 						value={popup.dimensions.height}
 						onChange={(val) => setDimensions({ height: val })}
@@ -95,30 +98,30 @@ export default function PopupPanels({ mapSize }) {
 					/>
 				</BaseControl>
 				<BoxControl
-					label={__('Text margins', 'flare-imc')}
+					label={__('Text margins', 'image-map-connect')}
 					values={popup.margins}
 					onChange={(val) => setPopup({ margins: val })}
 				/>
 			</PanelBody>
 			<PanelBody
-				title={__('Popup / Onset', 'flare-imc')}
+				title={__('Popup / Onset', 'image-map-connect')}
 				initialOpen={false}
 				className={cls.panel}
 			>
 				<CheckboxControl
-					label={__('Open post in new tab', 'flare-imc')}
+					label={__('Open post in new tab', 'image-map-connect')}
 					checked={popup.blankTarget}
 					onChange={(val) => setPopup({ blankTarget: val })}
 					__nextHasNoMarginBottom
 				/>
 			</PanelBody>
 			<PanelBody
-				title={__('Popup / Content', 'flare-imc')}
+				title={__('Popup / Content', 'image-map-connect')}
 				initialOpen={false}
 				className={cls.panel}
 			>
 				<ToggleControl
-					label={__('Display Featured Image', 'flare-imc')}
+					label={__('Display Featured Image', 'image-map-connect')}
 					className={cls.include}
 					checked={popup.image.show}
 					onChange={(val) => setImage({ show: val })}
@@ -126,7 +129,7 @@ export default function PopupPanels({ mapSize }) {
 				/>
 				{popup.image.show && (
 					<BaseControl
-						label={__('Image Ratio', 'flare-imc')}
+						label={__('Image Ratio', 'image-map-connect')}
 						id="imc-image-ratio"
 						__nextHasNoMarginBottom
 					>
@@ -153,7 +156,7 @@ export default function PopupPanels({ mapSize }) {
 					</BaseControl>
 				)}
 				<ToggleControl
-					label={__('Display Title', 'flare-imc')}
+					label={__('Display Title', 'image-map-connect')}
 					className={cls.include}
 					checked={popup.title.show}
 					onChange={(val) => setTitle({ show: val })}
@@ -189,14 +192,16 @@ export default function PopupPanels({ mapSize }) {
 							<UnitControl
 								label={__('Bottom Margin')}
 								value={popup.title.marginBottom}
-								onChange={(val) => setTitle({ marginBottom: val })}
+								onChange={(val) =>
+									setTitle({ marginBottom: val })
+								}
 							/>
 							<div />
 						</div>
 					</>
 				)}
 				<ToggleControl
-					label={__('Display metadata', 'flare-imc')}
+					label={__('Display metadata', 'image-map-connect')}
 					className={cls.include}
 					checked={popup.meta.show}
 					onChange={(val) => setMeta({ show: val })}
@@ -217,7 +222,7 @@ export default function PopupPanels({ mapSize }) {
 					</div>
 				)}
 				<ToggleControl
-					label={__('Display excerpt', 'flare-imc')}
+					label={__('Display excerpt', 'image-map-connect')}
 					className={cls.include}
 					checked={popup.excerpt.show}
 					onChange={(val) => setExcerpt({ show: val })}

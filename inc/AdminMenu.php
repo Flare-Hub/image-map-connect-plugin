@@ -45,8 +45,8 @@ class AdminMenu {
 	 **/
 	public function init() {
 		add_menu_page(
-			__( 'Image Maps', 'flare-imc' ),
-			__( 'Image Maps', 'flare-imc' ),
+			__( 'Image Maps', 'image-map-connect' ),
+			__( 'Image Maps', 'image-map-connect' ),
 			self::CAPABILITY,
 			$this->id,
 			array( $this, 'load_app' ),
@@ -62,6 +62,7 @@ class AdminMenu {
 	 **/
 	public function load_app() {
 		wp_enqueue_media();
+		$this->assets->register_translations();
 		wp_enqueue_script( $this->id );
 		wp_enqueue_style( $this->id );
 
@@ -74,7 +75,7 @@ class AdminMenu {
 					<path d="m 50 0 a 50 50 0 0 1 50 50" vector-effect="non-scaling-stroke" style="fill: transparent; stroke-width: 1.5px; stroke: currentcolor; stroke-linecap: round; transform-origin: 50% 50%; animation: 1.4s linear 0s infinite normal both running flare-spin;"></path>
 				</svg>
 			</div>
-			<noscript><?php esc_html_e( 'This metabox requires javascript', 'flare-imc' ); ?></noscript>
+			<noscript><?php esc_html_e( 'This metabox requires javascript', 'image-map-connect' ); ?></noscript>
 		<?php
 	}
 
@@ -98,7 +99,7 @@ class AdminMenu {
 		);
 
 		// Create the link.
-		$start_link = "<a href='$url'>" . __( 'Getting started', 'flare-imc' ) . '</a>';
+		$start_link = "<a href='$url'>" . __( 'Getting started', 'image-map-connect' ) . '</a>';
 
 		// Adds the link to the end of the array.
 		array_unshift(

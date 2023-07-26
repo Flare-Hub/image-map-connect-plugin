@@ -57,7 +57,7 @@ export default function SelectImage({ onChange, invalid, matchSize, id }) {
 				style: 'warning',
 				message: __(
 					'The dimensions of the selected image are not the same as the first image. This might effect the usability for a visitor when switching layers.',
-					'flare-imc'
+					'image-map-connect'
 				),
 			});
 		}
@@ -75,7 +75,7 @@ export default function SelectImage({ onChange, invalid, matchSize, id }) {
 			isDestructive={invalid}
 			onClick={() => mediaMgr.open()}
 		>
-			{__('Select image', 'flare-imc')}
+			{__('Select image', 'image-map-connect')}
 		</Button>
 	);
 }

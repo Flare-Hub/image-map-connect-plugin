@@ -36,41 +36,41 @@ export default function useMarkerPosts(
 	} = queryParams ?? {};
 
 	// Get query post type.
-	const tplPostType = templateSlug && templateSlug.replace( 'archive-', '' );
+	const tplPostType = templateSlug && templateSlug.replace('archive-', '');
 	const entityPostType = previewPostType ?? inherit ? tplPostType : postType;
 
 	// Get all taxonomies that can be applied to the entity's post type.
 	const taxonomies = useSelect(
-		( select ) => {
+		(select) => {
 			// Only needed if there is a tax query.
-			if ( ! taxQuery ) return false;
+			if (!taxQuery) return false;
 
-			return select( 'core' ).getTaxonomies( {
+			return select('core').getTaxonomies({
 				type: entityPostType,
 				per_page: -1,
 				context: 'view',
-			} );
+			});
 		},
-		[ entityPostType, taxQuery ]
+		[entityPostType, taxQuery]
 	);
 
 	// Contruct the query used to fetch the post IDs to include in the map.
-	const postQuery = useMemo( () => {
+	const postQuery = useMemo(() => {
 		// Only relevant in there are query parameters
 		// and there is no mismatch between the taxonomies and tax query.
-		if ( ! queryParams || ( taxQuery && ! taxonomies ) ) {
+		if (!queryParams || (taxQuery && !taxonomies)) {
 			return false;
 		}
 
 		// Base query
-		const query = { _fields: [ 'id' ], context: 'view' };
+		const query = { _fields: ['id'], context: 'view' };
 
 		// Add pagination if needed, ensuring correct ordering.
-		if ( queryType === 'page' ) {
-			if ( perPage ) query.per_page = perPage;
-			if ( offset ) query.offset = offset;
-			if ( order ) query.order = order;
-			if ( orderBy ) query.orderby = orderBy;
+		if (queryType === 'page') {
+			if (perPage) query.per_page = perPage;
+			if (offset) query.offset = offset;
+			if (order) query.order = order;
+			if (orderBy) query.orderby = orderBy;
 			query.page = page ?? 1;
 		} else {
 			query.per_page = -1;
@@ -78,26 +78,21 @@ export default function useMarkerPosts(
 
 		// If the query is not inherited from the main query, set the query parameters
 		// as defined in the query loop block.
-		if ( ! inherit ) {
-			if ( search ) query.search = search;
-			if ( author ) query.author = author;
-			if ( exclude.length ) query.exclude = exclude;
-			if ( sticky ) query.sticky = sticky === 'only';
+		if (!inherit) {
+			if (search) query.search = search;
+			if (author) query.author = author;
+			if (exclude.length) query.exclude = exclude;
+			if (sticky) query.sticky = sticky === 'only';
 
 			// taxQuery contains an entry with terms to query for each slug.
 			// This should be transformed to use the taxonomy rest base instead of slug in the query.
-			if ( taxQuery ) {
-				Object.entries( taxQuery ).forEach(
-					( [ querySlug, terms ] ) => {
-						const tax =
-							taxonomies &&
-							taxonomies.find(
-								( { slug } ) => slug === querySlug
-							);
-						if ( tax && tax.rest_base )
-							query[ tax.rest_base ] = terms;
-					}
-				);
+			if (taxQuery) {
+				Object.entries(taxQuery).forEach(([querySlug, terms]) => {
+					const tax =
+						taxonomies &&
+						taxonomies.find(({ slug }) => slug === querySlug);
+					if (tax && tax.rest_base) query[tax.rest_base] = terms;
+				});
 			}
 		}
 
@@ -118,7 +113,7 @@ export default function useMarkerPosts(
 		sticky,
 		taxonomies,
 		taxQuery,
-	] );
+	]);
 
 	// Get all post IDs matching the query above.
 	const { records, status } = useEntityRecords(
@@ -132,12 +127,10 @@ export default function useMarkerPosts(
 		postQuery && status === 'ERROR',
 		__(
 			'Error loading correct markers. Please refresh the application to try again.',
-			'flare-imc'
+			'image-map-connect'
 		),
-		[ postQuery, status ]
+		[postQuery, status]
 	);
 
-	return records
-		? records.reduce( ( acc, p ) => acc + ',' + p.id, '' )
-		: false;
+	return records ? records.reduce((acc, p) => acc + ',' + p.id, '') : false;
 }

@@ -133,9 +133,9 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						<ToolbarButton
 							label={__(
 								'Select another image map to display',
-								'flare-imc'
+								'image-map-connect'
 							)}
-							text={__('Replace map', 'flare-imc')}
+							text={__('Replace map', 'image-map-connect')}
 							onClick={handleReplace}
 							showTooltip
 						/>
@@ -155,11 +155,11 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				<InspectorControls group="dimensions">
 					<ToolsPanelItem
 						panelId={clientId}
-						label={__('Map Height', 'flare-imc')}
+						label={__('Map Height', 'image-map-connect')}
 						hasValue={() => style.height !== undefined}
 					>
 						<UnitControl
-							label={__('Height', 'flare-imc')}
+							label={__('Height', 'image-map-connect')}
 							value={style.height}
 							onChange={(val) =>
 								setAttributes({
@@ -168,7 +168,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 							}
 							help={__(
 								'Image will never show larger than 92% of the viewport height.',
-								'flare-imc'
+								'image-map-connect'
 							)}
 						/>
 					</ToolsPanelItem>

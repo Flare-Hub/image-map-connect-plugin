@@ -7,10 +7,9 @@
  * Description:         Add any image to your WordPress posts, pages, or archives and make it interactive: display your existing and new posts as markers.
  * Author:              Flare Hub
  * Author URI:          https://flarehub.io
- * Text Domain:         flare-imc
- * Domain Path:         /languages
- * Version:             0.1.5
- *                      (Also update block.json when updating version number)
+ * Text Domain:         image-map-connect
+ * Version:             0.1.6
+ *                      (Also update block.json and possibly readme.txt when updating version number)
  * Requires at least:   5.8
  * License:             GPL-3.0-or-later
  * License URI:         https://github.com/Flare-Hub/image-map-connect-plugin/blob/main/LICENSE

@@ -42,21 +42,21 @@ class MarkerIcon {
 	 **/
 	public function register_marker_icon( array $post_types ) {
 		$labels = array(
-			'name'              => _x( 'Icon Types', 'taxonomy general name', 'flare-imc' ),
-			'singular_name'     => _x( 'Icon Type', 'taxonomy singular name', 'flare-imc' ),
-			'search_items'      => __( 'Search Icon Types', 'flare-imc' ),
-			'all_items'         => __( 'All Icon Types', 'flare-imc' ),
-			'parent_item'       => __( 'Parent Icon Type', 'flare-imc' ),
-			'parent_item_colon' => __( 'Parent Icon Type:', 'flare-imc' ),
-			'edit_item'         => __( 'Edit Icon Type', 'flare-imc' ),
-			'update_item'       => __( 'Update Icon Type', 'flare-imc' ),
-			'add_new_item'      => __( 'Add New Icon Type', 'flare-imc' ),
-			'new_item_name'     => __( 'New Icon Type Name', 'flare-imc' ),
-			'menu_name'         => __( 'Icon Type', 'flare-imc' ),
+			'name'              => _x( 'Icon Types', 'taxonomy general name', 'image-map-connect' ),
+			'singular_name'     => _x( 'Icon Type', 'taxonomy singular name', 'image-map-connect' ),
+			'search_items'      => __( 'Search Icon Types', 'image-map-connect' ),
+			'all_items'         => __( 'All Icon Types', 'image-map-connect' ),
+			'parent_item'       => __( 'Parent Icon Type', 'image-map-connect' ),
+			'parent_item_colon' => __( 'Parent Icon Type:', 'image-map-connect' ),
+			'edit_item'         => __( 'Edit Icon Type', 'image-map-connect' ),
+			'update_item'       => __( 'Update Icon Type', 'image-map-connect' ),
+			'add_new_item'      => __( 'Add New Icon Type', 'image-map-connect' ),
+			'new_item_name'     => __( 'New Icon Type Name', 'image-map-connect' ),
+			'menu_name'         => __( 'Icon Type', 'image-map-connect' ),
 		);
 		$args   = array(
 			'labels'             => $labels,
-			'description'        => __( 'Icon Types', 'flare-imc' ),
+			'description'        => __( 'Icon Types', 'image-map-connect' ),
 			'hierarchical'       => false,
 			'public'             => false,
 			'publicly_queryable' => false,

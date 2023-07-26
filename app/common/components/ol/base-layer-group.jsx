@@ -30,7 +30,7 @@ export default function BaseLayerGroup({ mapId, selLayerId, setSelLayerId }) {
 		status === 'ERROR',
 		__(
 			'Error loading layers. Please refresh the application to try again.',
-			'flare-imc'
+			'image-map-connect'
 		),
 		[status]
 	);
