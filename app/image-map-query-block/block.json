@@ -3,7 +3,7 @@
   "apiVersion": 2,
   "name": "flare-hub/image-map-query",
   "title": "Image Map Connect",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "category": "widgets",
   "icon": "location-alt",
   "description": "Display image map with markers.",

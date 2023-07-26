@@ -8,8 +8,8 @@
  * Author:              Flare Hub
  * Author URI:          https://flarehub.io
  * Text Domain:         image-map-connect
- * Version:             0.1.5
- *                      (Also update block.json when updating version number)
+ * Version:             0.1.6
+ *                      (Also update block.json and possibly readme.txt when updating version number)
  * Requires at least:   5.8
  * License:             GPL-3.0-or-later
  * License URI:         https://github.com/Flare-Hub/image-map-connect-plugin/blob/main/LICENSE
