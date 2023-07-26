@@ -28,13 +28,6 @@ The plugin uses built-in WordPress features where possible, for example it exten
 
 
 
-
-TODO: insert plugin gif
-Image Map Connect in Action
-
-
-
-
 ## What Can You Use the Plugin for? ##
 
 Among other things, you can use the plugin provide an interactive
@@ -63,11 +56,12 @@ Among other things, you can use the plugin provide an interactive
 
 
 
-## How to Use the Plugin? ##
+## Help and Support ##
 
-The plugin is easy to set up following these four steps:
+You can contact us in two ways at the moment:
 
-TODO: Add Image Map Connect plugin process steps image
+- If you have any questions, you can send an email to [info@flarehub.io](mailto:info@flarehub.io)
+- If you find a bug or have a feature request, you can send an email or report an issue in our [Github repository](https://github.com/Flare-Hub/image-map-connect-plugin/issues). Please just make sure to search the existing issues and only report new ones.
 
 
 
@@ -95,12 +89,14 @@ Yes. The image map size, borders and background color are configurable. The popu
 
 == Screenshots ==
 
-1. Plugin Admin Page / Maps Tab
-2. Plugin Admin Page / Layers Tab
-3. Plugin Admin Page / Markers Tab (Type: Posts)
-4. Plugin Admin Page / Markers Tab (Type: Standalone marker)
-5. Block / Styling
-6. Block / Settings - TODO: update
+1. Example of image map in action
+2. Process to set up the plugin
+3. Plugin Admin Page / Maps Tab
+4. Plugin Admin Page / Layers Tab
+5. Plugin Admin Page / Markers Tab - type: Posts
+6. Plugin Admin Page / Markers Tab - type: Standalone marker
+7. Block / Styling
+8. Block / Settings
 
 
 
