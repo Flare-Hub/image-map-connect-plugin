@@ -1,10 +1,10 @@
 === Image Map Connect - Display Posts as Image Hotspots ===
 Contributors: dutchigor, daniela2017
 Tags: Image map, Interactive image, Indoor map, Image hotspot, Floor plan, Custom map, Stylized map, Event map, Infographic, Map markers, Map filters, Dynamic map
-Requires at least: 5.8
+Requires at least: 6.2
 Tested up to: 6.2
 Stable tag: 1.0.0
-Requires PHP: 7.4
+Requires PHP: 7.2
 License: GPL-3.0-or-later
 Add any image to your WordPress posts, pages, or archives and make it interactive: display your existing and new posts as markers.
 
@@ -24,7 +24,7 @@ Image Map Connect allows you to add any image to your WordPress website and make
 5. Zoom in and out
 6. Use block settings to visually configure the plugin
 
-The plugin uses built-in WordPress features where possible, for example it extends the current posts and makes use of the default blocks like the query block. 
+The plugin uses built-in WordPress features where possible, for example it extends the current posts and makes use of the default blocks like the query block.
 
 
 

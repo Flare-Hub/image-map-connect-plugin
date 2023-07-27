@@ -1,4 +1,4 @@
-FROM wordpress:latest
+FROM wordpress:php7.4
 
 # Install WP-cli
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \

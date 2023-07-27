@@ -10,7 +10,8 @@
  * Text Domain:         image-map-connect
  * Version:             0.1.6
  *                      (Also update block.json and possibly readme.txt when updating version number)
- * Requires at least:   5.8
+ * Requires at least:   6.2
+ * Requires PHP:        7.2
  * License:             GPL-3.0-or-later
  * License URI:         https://github.com/Flare-Hub/image-map-connect-plugin/blob/main/LICENSE
  */

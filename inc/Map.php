@@ -115,7 +115,7 @@ class Map {
 						),
 					),
 				),
-			),
+			)
 		);
 	}
 
@@ -136,16 +136,18 @@ class Map {
 
 		$icons = array_map(
 			/** @param \WP_Term $term */
-			fn ( $term) => array(
-				'id'     => $term->term_id,
-				'name'   => $term->name,
-				'slug'   => $term->slug,
-				'count'  => $term->count,
-				'colour' => get_term_meta( $term->term_id, 'colour', true ),
-				'size'   => (int) get_term_meta( $term->term_id, 'size', true ),
-				'img'    => get_term_meta( $term->term_id, 'img', true ),
-				'delete' => false,
-			),
+			function ( $term ) {
+				return array(
+					'id'     => $term->term_id,
+					'name'   => $term->name,
+					'slug'   => $term->slug,
+					'count'  => $term->count,
+					'colour' => get_term_meta( $term->term_id, 'colour', true ),
+					'size'   => (int) get_term_meta( $term->term_id, 'size', true ),
+					'img'    => get_term_meta( $term->term_id, 'img', true ),
+					'delete' => false,
+				);
+			},
 			$terms
 		);
 
