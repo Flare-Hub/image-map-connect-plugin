@@ -11,4 +11,6 @@ node_modules/
 vendor
 assets/build
 wp-data/
+releases/*
+!releases/assets
 image-map-connect.zip
