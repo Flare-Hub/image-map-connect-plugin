@@ -79,10 +79,11 @@ class Map {
 	 **/
 	public function register_connected_post_types() {
 		$meta_args = array(
-			'object_subtype' => self::NAME,
-			'type'           => 'string',
-			'single'         => false,
-			'show_in_rest'   => true,
+			'object_subtype'    => self::NAME,
+			'type'              => 'string',
+			'single'            => false,
+			'show_in_rest'      => true,
+			'sanitize_callback' => 'sanitize_text_field',
 		);
 		register_meta( 'post', 'post_types', $meta_args );
 	}
@@ -163,6 +164,10 @@ class Map {
 	 **/
 	public function update_icons( array $icons, \WP_Post $map ) {
 		foreach ( $icons as $icon ) {
+			$icon['slug']   = sanitize_text_field( $icon['slug'] );
+			$icon['colour'] = sanitize_text_field( $icon['colour'] );
+			$icon['img']    = MarkerIcon::sanitize_img( $icon['img'] );
+
 			$id = $icon['id'];
 
 			switch ( true ) {
@@ -184,7 +189,7 @@ class Map {
 					// Get unique slug for the icon.
 					$term_args = array(
 						'slug' => wp_unique_term_slug(
-							sanitize_title( $icon['name'] ),
+							$icon['name'],
 							(object) array(
 								'taxonomy' => MarkerIcon::NAME,
 								'parent'   => 0,

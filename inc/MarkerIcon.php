@@ -79,10 +79,11 @@ class MarkerIcon {
 	 **/
 	public function register_colour() {
 		$meta_args = array(
-			'object_subtype' => self::NAME,
-			'type'           => 'string',
-			'single'         => true,
-			'show_in_rest'   => true,
+			'object_subtype'    => self::NAME,
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'sanitize_callback' => 'sanitize_text_field',
 		);
 		register_meta( 'term', 'colour', $meta_args );
 	}
@@ -109,13 +110,28 @@ class MarkerIcon {
 	 **/
 	public function register_img() {
 		$meta_args = array(
-			'object_subtype' => self::NAME,
-			'type'           => 'object',
-			'single'         => true,
-			'show_in_rest'   => array(
+			'object_subtype'    => self::NAME,
+			'type'              => 'object',
+			'single'            => true,
+			'show_in_rest'      => array(
 				'schema' => self::IMG_SCHEMA,
 			),
+			'sanitize_callback' => 'MarkerIcon::sanitize_img',
 		);
 		register_meta( 'term', 'img', $meta_args );
+	}
+
+	/**
+	 * Sanitize Icon Type image meta.
+	 *
+	 * @param array $img Field meta.
+	 * @return array The sanitized meta
+	 * @since 0.1.0
+	 **/
+	public static function sanitize_img( array $img ) {
+		$img['ref']  = sanitize_text_field( $img['ref'] );
+		$img['type'] = sanitize_text_field( $img['type'] );
+
+		return $img;
 	}
 }
