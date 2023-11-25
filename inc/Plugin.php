@@ -45,7 +45,7 @@ class Plugin {
 	 **/
 	public function __construct() {
 		$meta          = get_file_data(
-			dirname( __DIR__ ) . '/index.php',
+			dirname( __DIR__ ) . '/image-map-connect.php',
 			array(
 				'version' => 'Version',
 				'slug'    => 'Text Domain',
