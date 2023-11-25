@@ -3,7 +3,7 @@ Contributors: dutchigor, daniela2017
 Tags: Image map, Interactive image, Indoor map, Image hotspot, Floor plan, Custom map, Stylized map, Event map, Infographic, Map markers, Map filters, Dynamic map
 Requires at least: 6.2
 Tested up to: 6.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.2
 License: GPL-3.0-or-later
 Add any image to your WordPress posts, pages, or archives and make it interactive: display your existing and new posts as markers.

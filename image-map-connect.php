@@ -8,7 +8,7 @@
  * Author:              Flare Hub
  * Author URI:          https://flarehub.io
  * Text Domain:         image-map-connect
- * Version:             1.0.1
+ * Version:             1.0.2
  *                      (Also update block.json and possibly readme.txt when updating version number)
  * Requires at least:   6.2
  * Requires PHP:        7.2
