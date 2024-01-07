@@ -130,7 +130,62 @@ Yes. The image map size, borders and background color are configurable. The popu
 
 == Development ==
 
+## Source Code
+
 The code can be found on [Github](https://github.com/Flare-Hub/image-map-connect-plugin)
+
+
+## Development environment setup ##
+
+This plugin makes use of both Node and Composer as development tools. For this reason, ensure both are installed and execute the following commands after cloning the project:
+- `npm install`
+- `composer install`
+
+The javascript for this plugin is built with the [wordpress scripts](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/) package, which requires the javascript to be built. To build the corresponding assets, run one of the following:
+- `npm run build` to execute wp-scripts build with the correct configuration
+- `npm run watch` to execute wp-scripts start with the correct configuration
+
+There is also a Docker configuration included to aid the development. If you wish to use this, make sure docker in installed and run `npm run start` to:
+- Start the docker containers
+- Execute wp-scripts start
+- Start browser sync to refresh the browser on code updates
+
+
+## Folder structure ##
+
+This is a brief description of the folder structure used in this plugin.
+
+### .vscode ###
+plugin recommendations, settings and debug configuration for VS Code.
+
+### app ###
+The javascript source code.
+
+### docker ###
+The docker configuration and setup files.
+
+### inc ###
+The php classes and helper files.
+
+### releases ###
+The files to send to the wordpress plugin library.
+
+### scripts ###
+javascript development scripts
+
+### root ###
+The root folder contains all the necessary configuration files for all the development tools used in this plugin:
+- Git
+- ESLint
+- Browsersync
+- Composer
+- NPM
+- Webpack
+
+
+## Dependencies ##
+
+This plugin makes use of multiple independent open source packages, both from NPM and from Packagist. You can find a list of all the projects we have the pleasure of including on this plugin in the composer.json and package.json files. For a more comprehensive list, including all the packages that these packages use, see composer.lock and package-lock.json.
 
 
 
